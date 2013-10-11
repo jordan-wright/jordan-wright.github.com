@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2013-10-10T00:09:27-05:00</updated>
+  <updated>2013-10-11T02:57:19-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,5 +12,26 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello World!]]></title>
+    <link href="http://jordan-wright.github.io/blog/2013/10/11/hello-world/"/>
+    <updated>2013-10-11T02:25:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2013/10/11/hello-world</id>
+    <content type="html"><![CDATA[<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/env python
+</span><span class='line'>print 'Hello, World!'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.</p>
+
+<p>For the past few years, I created and maintained a blog for an organization I started called <a href="http://raidersec.blogspot.com">Raidersec</a>. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</p>
+
+<p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="http://jordan-wright.github.io/projects">existing projects</a>, and <a href="http://jordan-wright.github.io/contact">let me know</a> if you have any questions or comments!</p>
+
+<p>-J</p>
+]]></content>
+  </entry>
   
 </feed>
