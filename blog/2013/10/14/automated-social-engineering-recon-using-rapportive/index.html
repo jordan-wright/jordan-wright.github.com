@@ -129,7 +129,7 @@
 
 <p>Here are the requests made when using the extension:</p>
 
-<p><a href="/images/blog/rapportive/burp.png" target="_blank"><img src="/images/blog/rapportive/burp.png"/></a></p>
+<p><a href="/images/blog/rapportive/burp.PNG" target="_blank"><img src="/images/blog/rapportive/burp.png"/></a></p>
 
 <p>There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&rsquo;s <a href="https://developers.google.com/accounts/docs/OpenID">OpenID</a>. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&rsquo;ve only removed unneccessary data for brevity):</p>
 
@@ -223,7 +223,7 @@
 
 <p>Let&rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:</p>
 
-<p><a href="/images/blog/rapportive/contact_email_headers.png" target="_blank"><img src="/images/blog/rapportive/contact_email_headers.png"/></a></p>
+<p><a href="/images/blog/rapportive/contact_email_headers.PNG" target="_blank"><img src="/images/blog/rapportive/contact_email_headers.png"/></a></p>
 
 <p>We can immediately see an interesting header being sent with the request titled &ldquo;X-Session-Token&rdquo;. It turns out that <strong>the entire authentication of the request relies on sending this token</strong>. We can test this using an API console like <a href="https://apigee.com/console/others">this one</a>.</p>
 
