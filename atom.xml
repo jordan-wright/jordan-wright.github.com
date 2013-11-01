@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2013-11-01T17:52:17-05:00</updated>
+  <updated>2013-11-01T17:53:42-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -70,19 +70,6 @@
 <li><em>October 28, 2013 approx. 2:40 PM PDT</em> &ndash; Hotfix released</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Protect Your Users and Reputation - Setup SPF and DKIM]]></title>
-    <link href="http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/"/>
-    <updated>2013-10-29T10:25:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/spf_dkim.png"/></p>
-
-<h3>The Problem with Email</h3>
-
-<p>Before talking about SPF and DKIM, it&rsquo;s important to first understand a little bit about how email works.</p>
 ]]></content>
   </entry>
   
