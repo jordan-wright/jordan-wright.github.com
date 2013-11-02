@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Linkedin's Response to My "Phishing with Intro" Post - jordan-wright</title>
+  <title>Protect Your Users and Reputation - Setup SPF and DKIM - jordan-wright</title>
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="The Initial Post I recently published a blog post which showed a practical attack against Linkedin&rsquo;s Intro. The post reached the front page of &hellip;">
+  <meta name="description" content=" The Problem with Email Before talking about SPF and DKIM, it&rsquo;s important to first understand a little bit about how email works.
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post">
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
@@ -85,7 +86,7 @@
   
   <header>
     
-      <h1 class="entry-title">Linkedin's Response to My "Phishing With Intro" Post</h1>
+      <h1 class="entry-title">Protect Your Users and Reputation - Setup SPF and DKIM</h1>
     
     
       <p class="meta">
@@ -101,7 +102,7 @@
   
 
 
-<time datetime="2013-11-01T17:55:00-05:00" pubdate data-updated="true">Nov 1<span>st</span>, 2013</time>
+<time datetime="2013-10-29T10:25:00-05:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
@@ -111,58 +112,11 @@
   </header>
 
 
-<div class="entry-content"><p><img src="/images/headers/linkedin_gift.png"/></p>
+<div class="entry-content"><p><img src="/images/headers/spf_dkim.png"/></p>
 
-<h3>The Initial Post</h3>
+<h3>The Problem with Email</h3>
 
-<p>I recently published a <a href="/blog/2013/10/26/phishing-with-linkedins-intro/">blog post</a> which showed a practical attack against Linkedin&rsquo;s Intro. The post reached the front page of <a href="http://news.ycombinator.com">Hacker News</a> (a full writeup of my experience with the &ldquo;Hacker News Effect&rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&rsquo;s security team. This was their response.</p>
-
-<!--more-->
-
-
-<h3>Linkedin&rsquo;s Response</h3>
-
-<p>I was initially contacted via email by David Cintz, a member of Linkedin&rsquo;s security team, wanting to talk with me about the post. While talking with him on the phone, he made it immediately clear that he didn&rsquo;t call to ask me to take down the post &ndash; &ldquo;Linkedin isn&rsquo;t that kind of company&rdquo;. Instead, he simply wanted to see if I would be willing to provide him with any additional information about the vulnerability so that they could provide the most effective fix as soon as possible.</p>
-
-<p>We stayed in contact via phone and email throughout the day, and a hotfix (see the update at the top of the original post) was released in the early evening. I was asked to verify the fix to make sure that it adequately addressed the vulnerability I found. After verifying the fix, the member of the security team told me that he wanted to thank me for my help. He told me that, while they normally don&rsquo;t reward vulnerabilities disclosed without previously notifying them, he appreciated my help and wanted to send me a small token of thanks.</p>
-
-<h3>I&rsquo;ve Got Mail!</h3>
-
-<p>I received the following package today:</p>
-
-<p><a href="/images/blog/phish_response/gift.png" target="_blank"><img src="/images/blog/phish_response/gift.png"/></a></p>
-
-<p>Here are the contents:</p>
-
-<ul>
-<li>T-Shirt
-
-<ul>
-<li>Front: &ldquo;in&#8221;FORMANT</li>
-<li>Back: &lt;script&gt;alert(document.cookie);&lt;/script&gt;</li>
-<li>Side: security@in</li>
-</ul>
-</li>
-<li>Hand-written letter from David</li>
-<li>2 Linkedin stickers</li>
-<li>Linkedin-branded &ldquo;2 in 1&rdquo; Tumbler</li>
-</ul>
-
-
-<h3>Conclusion</h3>
-
-<p>While I still believe that the security risks of using Intro will always outweigh the benefits of using it, I do think Linkedin&rsquo;s security team handled the situation very well. They approached the problem quickly and professionally, while going above and beyond to show appreciation for my help. I&rsquo;m a fan of giving credit where it&rsquo;s due and, in this case, Linkedin&rsquo;s security team certainly earned it.</p>
-
-<p>Thanks, Linkedin.</p>
-
-<h3>Full Timeline</h3>
-
-<ul>
-<li><em>October 27, 2013</em> &ndash; Blog Post Published</li>
-<li><em>October 28, 2013 9:53 AM PDT</em> &ndash; Contacted by Linkedin Security Team</li>
-<li><em>October 28, 2013 approx. 2:40 PM PDT</em> &ndash; Hotfix released</li>
-</ul>
-
+<p>Before talking about SPF and DKIM, it&rsquo;s important to first understand a little bit about how email works.</p>
 </div>
 
 
@@ -185,7 +139,7 @@
   
 
 
-<time datetime="2013-11-01T17:55:00-05:00" pubdate data-updated="true">Nov 1<span>st</span>, 2013</time>
+<time datetime="2013-10-29T10:25:00-05:00" pubdate data-updated="true">Oct 29<span>th</span>, 2013</time>
       
 
 
@@ -193,7 +147,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -204,8 +158,10 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/" title="Previous Post: Protect Your Users and Reputation - Setup SPF and DKIM">&laquo; Protect Your Users and Reputation - Setup SPF and DKIM</a>
+        <a class="basic-alignment left" href="/blog/2013/10/26/phishing-with-linkedins-intro/" title="Previous Post: Phishing with Linkedin's Intro">&laquo; Phishing with Linkedin's Intro</a>
       
+      
+        <a class="basic-alignment right" href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/" title="Next Post: Linkedin's Response to My "Phishing with Intro" Post">Linkedin's Response to My "Phishing with Intro" Post &raquo;</a>
       
     </p>
   </footer>
@@ -271,8 +227,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/';
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2013/10/29/protect-your-users-and-reputation-setup-spf-and-dkim/';
         var disqus_script = 'embed.js';
       
     (function () {
