@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Phishing with Linkedin's Intro - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Phishing With Linkedin's Intro</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T19:21:00-05:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/linkedin_phish.png"/></p>
+
+<p><em>Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.</em></p>
+
+<p><em>I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) &ndash; <a href="/contact">email me</a> if you know of one! I will be continuing my work with Linkedin&rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.</em></p>
+
+<p><em>I would also like to thank Linkedin&rsquo;s security team for their quick and effective response to these findings.</em></p>
+
+<h3>&ldquo;Intro&#8221;duction</h3>
+
+<p>On October 23, Linkedin introduced an application called <a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/">&ldquo;Intro&rdquo;</a>. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think <a href="http://rapportive.com/">Rapportive</a> for the iPhone Mail App, because that&rsquo;s <em>essentially</em> what this is (and made by the same people).</p>
+
+<p>However, when reading the initial description of Intro, there was one part that caught my eye:</p>
+
+<blockquote><p>David says Crosswise would love to work with you. Is this spam, or the real deal?</p>
+
+<p>With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.</p></blockquote>
+
+<p>This is not much different than Linkedin saying &ldquo;we&rsquo;ve put a picture of a lock in your email, so you know for sure it&rsquo;s secure&rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&rsquo;ll take a look and see what <em>exactly</em> Linkedin is doing to its users&#8217; email, as well as how we can spoof this information, gaining full control of the information shown to the user.</p>
+
+<!-- more -->
+
+
+<h3>What Linkedin Does to Your Email</h3>
+
+<p>While I am currently performing a much more in-depth analysis of Intro which will give a much better look into its behavior (to be posted soon), for now we will just take a look at the basics of how Intro works, and look specifically into how it manipulates user&rsquo;s email.</p>
+
+<p>Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since <a href="https://developers.google.com/gmail/oauth_overview">Google implemented OAuth support into Gmail&rsquo;s IMAP and SMTP</a>. After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin&rsquo;s IMAP and SMTP servers. I&rsquo;m not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dict&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadDisplayName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Email Settings<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadType<span class="nt">&lt;/key&gt;&lt;string&gt;</span>com.apple.mail.managed<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadVersion<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>1<span class="nt">&lt;/integer&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadUUID<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadIdentifier<span class="nt">&lt;/key&gt;&lt;string&gt;</span>com.rapportive.iphone.settings.email.[redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Test Account<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountType<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailTypeIMAP<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAddress<span class="nt">&lt;/key&gt;&lt;string&gt;</span>linkedin.intro.test@gmail.com<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountDescription<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Gmail +Intro<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerAuthentication<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailAuthPassword<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerHostName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>imap.intro.linkedin.com<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerPortNumber<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>143<span class="nt">&lt;/integer&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerUseSSL<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerUsername<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[username_redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingPassword<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[password_redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingPasswordSameAsIncomingPassword<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerAuthentication<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailAuthPassword<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerHostName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>smtp.intro.linkedin.com<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerPortNumber<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>587<span class="nt">&lt;/integer&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerUseSSL<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerUsername<span class="nt">&lt;/key&gt;&lt;string&gt;</span> Gmail +Intro ?[username_redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingPassword<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[password_redacted]<span class="nt">&lt;/string&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dict&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By intercepting the profile, we can get the username and password used to log into Linkedin&rsquo;s IMAP (imap.intro.linkedin.com) and SMTP (smtp.intro.linkedin.com) services. The username was a base64 encoded string, and the password was a 32 character hash.</p>
+
+<p>Here&rsquo;s a diagram of how this works:</p>
+
+<p><a href="/images/blog/intro_phish/diagram.png" target="_blank"><img src="/images/blog/intro_phish/diagram.png"/></a></p>
+
+<p>Now that we have the username and password used for this mail account, let&rsquo;s grab the first email and see what content Linkedin&rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'># openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
+</span><span class='line'>depth=2 C = US, O = &quot;thawte, Inc.&quot;, OU = Certification Services Division, OU = &quot;(c) 2006 thawte, Inc. - For authorized use only&quot;, CN = thawte Primary Root CA
+</span><span class='line'>verify error:num=19:self signed certificate in certificate chain
+</span><span class='line'>verify return:0
+</span><span class='line'>. OK More capabilities after LOGIN
+</span><span class='line'>a LOGIN username_redacted password_redacted
+</span><span class='line'>* CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
+</span><span class='line'>A OK linkedin.intro.test@gmail.com Test Account authenticated (Success)
+</span><span class='line'>b SELECT INBOX
+</span><span class='line'>* FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
+</span><span class='line'>* OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \*)] Flags permitted.
+</span><span class='line'>* OK [UIDVALIDITY 1] UIDs valid.
+</span><span class='line'>* 4 EXISTS
+</span><span class='line'>* 0 RECENT
+</span><span class='line'>* OK [UIDNEXT 5] Predicted next UID.
+</span><span class='line'>* OK [HIGHESTMODSEQ 1049]
+</span><span class='line'>b OK [READ-WRITE] INBOX selected. (Success)
+</span><span class='line'>c FETCH 4 BODY[]
+</span><span class='line'>* 4 FETCH (FLAGS (\Seen) BODY[] {36510}
+</span><span class='line'>email_content_here
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As it turns out, Linkedin injects quite a bit of content into your email. The basic structure looks like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;</span>
+</span><span class='line'><span class="nt">&lt;html&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      User specified CSS (if any)
+</span><span class='line'>      <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          <span class="c">/*BEGIN RAPPORTIVE*/</span>
+</span><span class='line'>          <span class="nt">Injected</span> <span class="nt">Linkedin</span> <span class="nt">Intro</span> <span class="nt">CSS</span>
+</span><span class='line'>          <span class="c">/*END RAPPORTIVE*/</span>
+</span><span class='line'>      <span class="nt">&lt;/style&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
+</span><span class='line'>      <span class="c">&lt;!--BEGIN RAPPORTIVE--&gt;</span>
+</span><span class='line'>      Injected Linkedin Intro HTML Content
+</span><span class='line'>      <span class="c">&lt;!--END RAPPORTIVE--&gt;</span>
+</span><span class='line'>      Original Message
+</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can find the full email <a href="https://gist.github.com/jordan-wright/7189765#file-original_email-html">here</a> (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let&rsquo;s see how we can use it to make our phishing emails appear to be legitimate.</p>
+
+<h3>Setting up the Bait</h3>
+
+<p>Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to <code>display:none;</code>. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our <code>head</code> block, and they were pretty specific in ensuring the <code>!important</code> keyword is set for things such as the display, height, etc.</p>
+
+<p>But they weren&rsquo;t specific enough. If we look at the CSS, we can see that the rules apply to the <code>#rapportive.iphone</code> element. If we look closely, we can see that in fact the HTML element we want to hide has a full spec of <code>#rapportive.rapportive.topbar.iphone</code>. Therefore, we can simply set the following style block to hide the element:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">&lt;</span><span class="nt">style</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span><span class="o">&gt;</span>
+</span><span class='line'>    <span class="nf">#rapportive</span><span class="nc">.rapportive.topbar.iphone</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">display</span><span class="o">:</span><span class="k">none</span> <span class="cp">!important</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="nt">style</span><span class="o">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Easy as that.</p>
+
+<p>Now that we have removed the existing Intro data, we are free to inject our own. To do this, we can copy the existing HTML provided by Linkedin. To make sure that our data is not hidden by our previous CSS, we can simply remove the <code>topbar</code> class from the root element, since it will have no effect on styling. The last things we will want to do are to clean up the margins Linkedin puts on the original message, as well as changing the actual data itself to be whatever we want. In addition to this, I copied some of the CSS and HTML and changed the IDs which are generated automatically. This will make sure our template is always consistent.</p>
+
+<h3>Going Phishing</h3>
+
+<p>I&rsquo;ve taken the liberty of setting up a basic PoC <a href="https://gist.github.com/jordan-wright/7189765#file-template-html">template</a> for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now &ndash; it works. Let&rsquo;s see what it looks like if I spoof the example from Linkedin&rsquo;s original post, David (pardon the non-IOS7 &ndash; I don&rsquo;t see any major IOS7 styling issues which would cause much trouble):</p>
+
+<p><a href="/images/blog/intro_phish/david.png" target="_blank"><img style="display:block; margin:auto;" src="/images/blog/intro_phish/david.png"/></a></p>
+
+<p>Here&rsquo;s what the details look like when I open the Intro tab (they are customizable as well &ndash; I left them as me to show that I really do control the content):</p>
+
+<p><a href="/images/blog/intro_phish/david_details.png" target="_blank"><img style="display:block; margin:auto;" src="/images/blog/intro_phish/david_details.png"/></a></p>
+
+<p>Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.</p>
+
+<h3>Final Thoughts</h3>
+
+<p>While Linkedin Intro <em>seems</em> like it would be useful on the surface &ndash; the security risks of using it are simply too high. With that being said, as a social engineer, <strong><em>I hope my targets use Intro</em></strong>. By giving users a false sense of security when they see the Intro information in an email, Linkedin has made my pretext much stronger and the SE engagement that much easier.</p>
+
+<p>I have yet to get comments setup on the new blog, but <a href="/contact">shoot me an email</a> if you have any questions or comments!</p>
+
+<p>Jordan</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-26T19:21:00-05:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linkedin/'>Linkedin</a>, <a class='category' href='/blog/categories/social-engineering/'>Social Engineering</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/" title="Previous Post: Automated Social Engineering Recon Using Rapportive">&laquo; Automated Social Engineering Recon Using Rapportive</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/" title="Next Post: Linkedin's Response to My "Phishing with Intro" Post">Linkedin's Response to My "Phishing with Intro" Post &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Linkedin's Response to My "Phishing With Intro" Post</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/26/phishing-with-linkedins-intro/">Phishing With Linkedin's Intro</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Automated Social Engineering Recon Using Rapportive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/11/hello-world/">Hello World!</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
