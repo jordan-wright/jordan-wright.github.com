@@ -1,3 +1,9 @@
 article img {
 	border: 0px;
+	-webkit-box-shadow: 0 0 0 0;
+	box-shadow: 0 0 0 0;
+	-moz-box-shadow: 0 0 0 0;
+}
+article blockquote {
+	font-size:1em;
 }
