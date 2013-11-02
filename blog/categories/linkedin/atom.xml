@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linkedin | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/linkedin/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2013-11-02T12:19:43-05:00</updated>
+  <updated>2013-11-02T12:22:02-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/"/>
     <updated>2013-10-26T19:21:00-05:00</updated>
     <id>http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro</id>
-    <content type="html"><![CDATA[<p><img src="{{root_url}}/images/headers/linkedin_phish.png"/></p>
+    <content type="html"><![CDATA[<p><img src="/images/headers/linkedin_phish.png"/></p>
 
 <p><em>Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.</em></p>
 
@@ -81,7 +81,7 @@
 
 <p>Here&rsquo;s a diagram of how this works:</p>
 
-<p><a href="{{root_url}}/images/blog/intro_phish/diagram.png" target="_blank"><img src="{{root_url}}/images/blog/intro_phish/diagram.png"/></a></p>
+<p><a href="/images/blog/intro_phish/diagram.png" target="_blank"><img src="/images/blog/intro_phish/diagram.png"/></a></p>
 
 <p>Now that we have the username and password used for this mail account, let&rsquo;s grab the first email and see what content Linkedin&rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.</p>
 
@@ -95,7 +95,7 @@ verify return:0
 . OK More capabilities after LOGIN
 a LOGIN username_redacted password_redacted
 * CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
-A OK <a href="&#x6d;&#x61;&#105;&#x6c;&#116;&#111;&#58;&#x6c;&#105;&#110;&#x6b;&#101;&#x64;&#x69;&#110;&#46;&#x69;&#x6e;&#116;&#114;&#111;&#46;&#116;&#x65;&#115;&#x74;&#64;&#103;&#109;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#x6d;">&#108;&#105;&#110;&#x6b;&#101;&#x64;&#105;&#110;&#46;&#105;&#110;&#116;&#114;&#111;&#46;&#116;&#x65;&#x73;&#116;&#64;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a> Test Account authenticated (Success)
+A OK <a href="&#109;&#x61;&#105;&#108;&#x74;&#x6f;&#x3a;&#108;&#105;&#110;&#x6b;&#101;&#x64;&#x69;&#110;&#46;&#105;&#x6e;&#116;&#114;&#x6f;&#x2e;&#x74;&#x65;&#115;&#116;&#64;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x6c;&#105;&#x6e;&#x6b;&#101;&#x64;&#105;&#x6e;&#46;&#105;&#110;&#x74;&#x72;&#111;&#x2e;&#x74;&#101;&#115;&#116;&#64;&#103;&#x6d;&#x61;&#x69;&#108;&#46;&#x63;&#111;&#x6d;</a> Test Account authenticated (Success)
 b SELECT INBOX
 * FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
 * OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen *)] Flags permitted.
@@ -158,11 +158,11 @@ email_content_here
 
 <p>I&rsquo;ve taken the liberty of setting up a basic PoC <a href="https://gist.github.com/jordan-wright/7189765#file-template-html">template</a> for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now &ndash; it works. Let&rsquo;s see what it looks like if I spoof the example from Linkedin&rsquo;s original post, David (pardon the non-IOS7 &ndash; I don&rsquo;t see any major IOS7 styling issues which would cause much trouble):</p>
 
-<p><a href="{{root_url}}/images/blog/intro_phish/david.png" target="_blank"><img style="display:block; margin:auto;" src="{{root_url}}/images/blog/intro_phish/david.png"/></a></p>
+<p><a href="/images/blog/intro_phish/david.png" target="_blank"><img style="display:block; margin:auto;" src="/images/blog/intro_phish/david.png"/></a></p>
 
 <p>Here&rsquo;s what the details look like when I open the Intro tab (they are customizable as well &ndash; I left them as me to show that I really do control the content):</p>
 
-<p><a href="{{root_url}}/images/blog/intro_phish/david_details.png" target="_blank"><img style="display:block; margin:auto;" src="{{root_url}}/images/blog/intro_phish/david_details.png"/></a></p>
+<p><a href="/images/blog/intro_phish/david_details.png" target="_blank"><img style="display:block; margin:auto;" src="/images/blog/intro_phish/david_details.png"/></a></p>
 
 <p>Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.</p>
 
