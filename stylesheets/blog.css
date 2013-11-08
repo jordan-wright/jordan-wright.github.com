@@ -7,3 +7,8 @@ article img {
 article blockquote {
 	font-size:1em;
 }
+div .highlight {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
