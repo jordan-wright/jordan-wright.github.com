@@ -24,7 +24,7 @@ Let's take a look at how the Rapportive Extension works (disclosure: I'm using C
 
 Here are the requests made when using the extension:
 
-<a href="{{root_url}}/images/blog/rapportive/burp.PNG" target="_blank"><img src="{{root_url}}/images/blog/rapportive/burp.PNG"/></a>
+<a href="{{root_url}}/images/blog/rapportive/burp.png" target="_blank"><img src="{{root_url}}/images/blog/rapportive/burp.png"/></a>
 
 There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google's [OpenID](https://developers.google.com/accounts/docs/OpenID). The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I've only removed unneccessary data for brevity):
 
@@ -78,7 +78,7 @@ So now we want to see how we can:
 
 Let's start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:
 
-<a href="{{root_url}}/images/blog/rapportive/contact_email_headers.PNG" target="_blank"><img src="{{root_url}}/images/blog/rapportive/contact_email_headers.PNG"/></a>
+<a href="{{root_url}}/images/blog/rapportive/contact_email_headers.png" target="_blank"><img src="{{root_url}}/images/blog/rapportive/contact_email_headers.png"/></a>
 
 We can immediately see an interesting header being sent with the request titled "X-Session-Token". It turns out that **the entire authentication of the request relies on sending this token**. We can test this using an API console like [this one](https://apigee.com/console/others).
 
@@ -156,7 +156,7 @@ Company: CoNetrix
 
 ```
 
-You can find it [Github](https://github.com/jordan-wright/rapportive).
+You can find it on [Github](https://github.com/jordan-wright/rapportive).
 
 Enjoy!
 
