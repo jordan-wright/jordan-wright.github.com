@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: gophish | jordan-wright]]></title>
+  <link href="http://jordan-wright.github.io/blog/categories/gophish/atom.xml" rel="self"/>
+  <link href="http://jordan-wright.github.io/"/>
+  <updated>2013-11-29T16:17:26-06:00</updated>
+  <id>http://jordan-wright.github.io/</id>
+  <author>
+    <name><![CDATA[Jordan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Building Gophish - Day 1]]></title>
+    <link href="http://jordan-wright.github.io/blog/2013/11/29/building-gophish-day-1/"/>
+    <updated>2013-11-29T16:15:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2013/11/29/building-gophish-day-1</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/gophish.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Since the <a href="http://sptoolkit.com/the_end.php">Simple Phishing Toolkit (SPT)</a> was discontinued, I&rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called <a href="https://github.com/jordan-wright/gophish">gophish</a>.</p>
+
+<p>In addition to this, I&rsquo;ve been casually poking around at <a href="http://golang.org/"><code>go</code></a> for a while now, and have decided it would be good to finally put it to use in a larger project. I&rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced <code>go</code> developers so that <a href="https://github.com/jordan-wright/gophish">gophish</a> can be the best product possible.</p>
+
+<p>With that being said &ndash; let&rsquo;s get started!</p>
+
+<!--more-->
+
+
+<h3>Why Go?</h3>
+
+<p>In addition to learning a new language, here are a few reasons why I chose <code>go</code> for this project:</p>
+
+<ul>
+<li>Cross-compile binaries by default</li>
+<li>Only distribute one binary &ndash; just download and run (no more dependencies!)</li>
+<li>Low memory overhead</li>
+</ul>
+
+
+<p>I believe the second point is crucial, in that it makes it <em>dead-simple</em> to get up and running. Existing solutions (such as SPT or <a href="https://github.com/pentestgeek/phishing-frenzy">Phishing Frenzy</a>) require an already running webserver or other framework installation.</p>
+
+<h3>Gophish Requirements</h3>
+
+<p>Here are a few of the things I want to be able to do with gophish:</p>
+
+<ul>
+<li>Create &ldquo;campaigns&rdquo;, each of which are a simulation of a phishing attack</li>
+<li>Create HTML or text templates for phishing emails, providing as many as possible built-in</li>
+<li>Allow users to clone existing sites for use in templates</li>
+<li>Allow users to import and group phishing targets easily</li>
+<li>Provide intuitive analytics, and allow reports to be exported</li>
+<li>If possible, integrate with existing products such as the Social Engineer&rsquo;s Toolkit</li>
+</ul>
+
+
+<h3>Getting Started</h3>
+
+<p>I am <em>tentatively</em> planning on creating a REST API for all backend functionality, so as to allow developers to automate gophish. This will also make it easier to separate front-end logic from the backend.</p>
+
+<p>I have looked around at different <code>go</code> web frameworks, and I am going to start by taking a look at the tools provided in the <a href="http://www.gorillatoolkit.org/">Gorilla toolkit</a>, since they seem to sit on top of the standard <code>net/http</code> library without abstracting too many things away.</p>
+
+<p>That&rsquo;s all I have for now &ndash; stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
+  
+</feed>
