@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Building GoPhish - How to Send Email with Go - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve really grown to like it. After getting used to the syntax &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Building GoPhish - How to Send Email With Go</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T22:06:00-06:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/go_email.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
+
+<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
+
+<p>Let&rsquo;s see how to use it.</p>
+
+<!--more-->
+
+
+<h3>How You <em>Normally</em> Send an Email in Go</h3>
+
+<p>To send email in Go, one needs to:</p>
+
+<ul>
+<li>Create a byte slice of the email message (conforming to all needed RFC&rsquo;s)</li>
+<li>Send this email using the SMTP library</li>
+</ul>
+
+
+<p>The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.</p>
+
+<h3>Sending Email Using the <code>email</code> Package</h3>
+
+<p>To make this easier, I have created the <a href="https://github.com/jordan-wright/email"><code>email</code></a> package (full documentation <a href="http://godoc.org/github.com/jordan-wright/email">here</a>). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.</p>
+
+<h4>Installing the Package</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>go get github.com/jordan-wright/email</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Creating a New Email</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
+</span><span class='line'>
+</span><span class='line'><span class="kn">import</span> <span class="s">&quot;github.com/jordan-wright/email&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">e</span> <span class="o">:=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">NewEmail</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Setting the Subject, To, From, Bcc, Cc</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Subject</span> <span class="p">=</span> <span class="s">&quot;Awesome Subject&quot;</span>
+</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">From</span> <span class="p">=</span> <span class="s">&quot;Jordan Wright &lt;test@gmail.com&gt;&quot;</span>
+</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">To</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test@example.com&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Bcc</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test_bcc@example.com&quot;</span><span class="p">}</span>
+</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Cc</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test_cc@example.com&quot;</span><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Setting the Content (HTML &amp; Text)</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Text</span> <span class="p">=</span> <span class="s">&quot;Text Body is, of course, supported!&quot;</span>
+</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">HTML</span> <span class="p">=</span> <span class="s">&quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Attaching a File</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">AttachFile</span><span class="p">(</span><span class="s">&quot;test.txt&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also use the <a href="http://godoc.org/github.com/jordan-wright/email#Email.Attach"><code>Attach</code></a> function to attach content directly from an io.Reader.</p>
+
+<h4>Sending the Email (Using Gmail as Example)</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Send</span><span class="p">(</span><span class="s">&quot;smtp.gmail.com:587&quot;</span><span class="p">,</span> <span class="nx">smtp</span><span class="p">.</span><span class="nx">PlainAuth</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;test@gmail.com&quot;</span><span class="p">,</span> <span class="s">&quot;password123&quot;</span><span class="p">,</span> <span class="s">&quot;smtp.gmail.com&quot;</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Conclusion</h4>
+
+<p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish &ndash; you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
+
+<p>-Jordan</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T22:06:00-06:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/gophish/'>gophish</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/29/building-gophish-day-1/" title="Previous Post: Building Gophish - Day 1">&laquo; Building Gophish - Day 1</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the "Dnspwn Attack"</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">How to Pentest iPhone Apps With Burp</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Linkedin's Response to My "Phishing With Intro" Post</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

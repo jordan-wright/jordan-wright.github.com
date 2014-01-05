@@ -4,7 +4,7 @@
   <title><![CDATA[Category: go | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/go/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2013-11-29T16:17:26-06:00</updated>
+  <updated>2014-01-05T15:20:22-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Building GoPhish - How to Send Email with Go]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/"/>
+    <updated>2014-01-03T22:06:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/go_email.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
+
+<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
+
+<p>Let&rsquo;s see how to use it.</p>
+
+<!--more-->
+
+
+<h3>How You <em>Normally</em> Send an Email in Go</h3>
+
+<p>To send email in Go, one needs to:</p>
+
+<ul>
+<li>Create a byte slice of the email message (conforming to all needed RFC&rsquo;s)</li>
+<li>Send this email using the SMTP library</li>
+</ul>
+
+
+<p>The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.</p>
+
+<h3>Sending Email Using the <code>email</code> Package</h3>
+
+<p>To make this easier, I have created the <a href="https://github.com/jordan-wright/email"><code>email</code></a> package (full documentation <a href="http://godoc.org/github.com/jordan-wright/email">here</a>). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.</p>
+
+<h4>Installing the Package</h4>
+
+<p><code>
+go get github.com/jordan-wright/email
+</code></p>
+
+<h4>Creating a New Email</h4>
+
+<p>```go
+package main</p>
+
+<p>import &ldquo;github.com/jordan-wright/email&rdquo;</p>
+
+<p>func main() {</p>
+
+<pre><code>e := email.NewEmail()
+</code></pre>
+
+<p>}
+```</p>
+
+<h4>Setting the Subject, To, From, Bcc, Cc</h4>
+
+<p><code>go
+e.Subject = "Awesome Subject"
+e.From = "Jordan Wright &lt;test@gmail.com&gt;"
+e.To = []string{"test@example.com"}
+e.Bcc = []string{"test_bcc@example.com"}
+e.Cc = []string{"test_cc@example.com"}
+</code></p>
+
+<h4>Setting the Content (HTML &amp; Text)</h4>
+
+<p><code>go
+e.Text = "Text Body is, of course, supported!"
+e.HTML = "&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;"
+</code></p>
+
+<h4>Attaching a File</h4>
+
+<p><code>go
+e.AttachFile("test.txt")
+</code>
+You can also use the <a href="http://godoc.org/github.com/jordan-wright/email#Email.Attach"><code>Attach</code></a> function to attach content directly from an io.Reader.</p>
+
+<h4>Sending the Email (Using Gmail as Example)</h4>
+
+<p><code>go
+e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123", "smtp.gmail.com"))
+</code></p>
+
+<h4>Conclusion</h4>
+
+<p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish &ndash; you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building Gophish - Day 1]]></title>

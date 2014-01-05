@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Since the Simple Phishing Toolkit (SPT) was discontinued, I&rsquo;ve wanted to create a simple, effective, and open-source phishing &hellip;">
+  <meta name="description" content="Introduction I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve really grown to like it. After getting used to the syntax &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-03T22:06:00-06:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
+        
+           | <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/go_email.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
+
+<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
+
+<p>Let&rsquo;s see how to use it.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -459,6 +511,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a>
       </li>
     
@@ -474,10 +530,6 @@
         <a href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Linkedin&#8217;s Response to My &#8220;Phishing With Intro&#8221; Post</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/10/26/phishing-with-linkedins-intro/">Phishing With Linkedin&#8217;s Intro</a>
-      </li>
-    
   </ul>
 </section>
 
@@ -491,7 +543,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Jordan -
+  Copyright &copy; 2014 - Jordan -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
