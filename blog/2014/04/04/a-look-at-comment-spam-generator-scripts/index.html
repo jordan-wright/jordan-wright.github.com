@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>jordan-wright</title>
+  <title>A Look at Comment Spam Generator Scripts - jordan-wright</title>
   <meta name="author" content="Jordan">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jordan-wright.github.io/blog">
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
@@ -80,15 +80,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a></h1>
+      <h1 class="entry-title">A Look at Comment Spam Generator Scripts</h1>
     
     
       <p class="meta">
@@ -106,15 +103,15 @@
 
 <time datetime="2014-04-04T14:33:00-05:00" pubdate data-updated="true">Apr 4<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><img src="/images/headers/spam_gen.png"/></p>
+<div class="entry-content"><p><img src="/images/headers/spam_gen.png"/></p>
 
 <h3>Introduction</h3>
 
@@ -178,74 +175,16 @@
 </span><span class='line'>{I have a|I've got a|I've a|I own a} {house|home|residence|property} {built in|built-in|integrated|internal} {1962|'62}. {The|The actual|The particular|Your} {cast iron|surefire|certain|iron} {waste|squander|waste materials|spend} {pipe|water pipe|tube|water line} {runs|operates|works|goes} {under the|underneath the|beneath the|within the} {concrete slab|layer of concrete} {in the|within the|inside the|from the} {basement|cellar|downstairs room|attic}. {I have|I've|We have|We've} {already|currently|previously|by now} {dug|made|excavated|finished} {and|as well as|and also|along with} {confirmed|verified|established|validated} {the location|the place|the positioning|the venue} {I want to|I wish to|I would like to|I must} {cut|reduce|minimize|lower} {a section|a piece|an area|a bit} {out of the|from the|out from the|out of your} {pipe|water pipe|tube|water line} {and|as well as|and also|along with} {install a|use a|put in a|purchase a} "Y" {connector|connection|plug} {and|as well as|and also|along with} {run|operate|work|manage} {new|brand new|fresh|brand-new} {plastic|plastic material|plastic-type|plastic-type material} {waste|squander|waste materials|spend} {pipes|plumbing|water lines|piping} {to a new|to a different|to an alternative|completely to another} {bath|bathtub|shower|bath tub}. {I have seen|I've come across|I have come across|I know of} {PVC|Pvc material|Faux wood|Imitation wood} {connectors|fittings|connections|band} {that|which|in which|that will}./p&gt;</span></code></pre></td></tr></table></div></figure>
 
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
 
-<time datetime="2014-01-03T22:06:00-06:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
-        
-           | <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/go_email.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
-
-<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
-
-<p>Let&rsquo;s see how to use it.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -257,354 +196,46 @@
   
 
 
-<time datetime="2013-11-29T16:15:00-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/29/building-gophish-day-1/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/11/29/building-gophish-day-1/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/gophish.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Since the <a href="http://sptoolkit.com/the_end.php">Simple Phishing Toolkit (SPT)</a> was discontinued, I&rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called <a href="https://github.com/jordan-wright/gophish">gophish</a>.</p>
-
-<p>In addition to this, I&rsquo;ve been casually poking around at <a href="http://golang.org/"><code>go</code></a> for a while now, and have decided it would be good to finally put it to use in a larger project. I&rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced <code>go</code> developers so that <a href="https://github.com/jordan-wright/gophish">gophish</a> can be the best product possible.</p>
-
-<p>With that being said &ndash; let&rsquo;s get started!</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/29/building-gophish-day-1/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2014-04-04T14:33:00-05:00" pubdate data-updated="true">Apr 4<span>th</span>, 2014</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the &#8220;Dnspwn Attack&#8221;</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/phishing/'>phishing,</a>, <a class='category' href='/blog/categories/spam/'>spam</a>
+  
+</span>
 
 
-<time datetime="2013-11-15T20:45:00-06:00" pubdate data-updated="true">Nov 15<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Comments</a>
-        
-      </p>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/wireless_python.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>A while back, I <a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html">published a post</a> on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the <a href="http://www.aircrack-ng.org/">aircrack suite</a>.</p>
-
-<p>So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.</p>
-
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">How to Pentest iPhone Apps With Burp</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-07T15:50:00-06:00" pubdate data-updated="true">Nov 7<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/iphone_burp.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>When looking at the functionality of mobile apps, it&rsquo;s clear that they aren&rsquo;t <em>that</em> different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&rsquo;t careful to protect these apps, many of the <a href="https://www.owasp.org/index.php/Top_10_2013">same vulnerabilities</a> we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.</p>
-
-<p>This post will show how to setup the iPhone to work with the popular <a href="http://portswigger.net/burp/download.html">Burp Suite</a> so that traffic from apps can be intercepted and tested for vulnerabilities.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        <a class="basic-alignment left" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" title="Previous Post: Building GoPhish - How to Send Email with Go">&laquo; Building GoPhish - How to Send Email with Go</a>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Linkedin&#8217;s Response to My &#8220;Phishing With Intro&#8221; Post</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-01T17:55:00-05:00" pubdate data-updated="true">Nov 1<span>st</span>, 2013</time>
-        
-           | <a href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/linkedin_gift.png"/></p>
-
-<h3>The Initial Post</h3>
-
-<p>I recently published a <a href="/blog/2013/10/26/phishing-with-linkedins-intro/">blog post</a> which showed a practical attack against Linkedin&rsquo;s Intro. The post reached the front page of <a href="http://news.ycombinator.com">Hacker News</a> (a full writeup of my experience with the &ldquo;Hacker News Effect&rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&rsquo;s security team. This was their response.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/26/phishing-with-linkedins-intro/">Phishing With Linkedin&#8217;s Intro</a></h1>
-    
-    
-      <p class="meta">
-        
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-26T19:21:00-05:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/26/phishing-with-linkedins-intro/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/linkedin_phish.png"/></p>
-
-<p><em>Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.</em></p>
-
-<p><em>I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) &ndash; <a href="/contact">email me</a> if you know of one! I will be continuing my work with Linkedin&rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.</em></p>
-
-<p><em>I would also like to thank Linkedin&rsquo;s security team for their quick and effective response to these findings.</em></p>
-
-<h3>&ldquo;Intro&#8221;duction</h3>
-
-<p>On October 23, Linkedin introduced an application called <a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/">&ldquo;Intro&rdquo;</a>. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think <a href="http://rapportive.com/">Rapportive</a> for the iPhone Mail App, because that&rsquo;s <em>essentially</em> what this is (and made by the same people).</p>
-
-<p>However, when reading the initial description of Intro, there was one part that caught my eye:</p>
-
-<blockquote><p>David says Crosswise would love to work with you. Is this spam, or the real deal?</p>
-
-<p>With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.</p></blockquote>
-
-<p>This is not much different than Linkedin saying &ldquo;we&rsquo;ve put a picture of a lock in your email, so you know for sure it&rsquo;s secure&rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&rsquo;ll take a look and see what <em>exactly</em> Linkedin is doing to its users&#8217; email, as well as how we can spoof this information, gaining full control of the information shown to the user.</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/26/phishing-with-linkedins-intro/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Automated Social Engineering Recon Using Rapportive</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T02:55:00-05:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/rapportive_small.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>When performing a social engineering engagement, recon is key. In a <a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html">previous post</a>, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.</p>
-
-<p>During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/11/hello-world/">Hello World!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-11T02:25:00-05:00" pubdate data-updated="true">Oct 11<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/11/hello-world/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/11/hello-world/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/env python
-</span><span class='line'>print 'Hello, World!'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.</p>
-
-<p>For the past few years, I created and maintained a blog for an organization I started called <a href="http://raidersec.blogspot.com">Raidersec</a>. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</p>
-
-<p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="/projects">existing projects</a>, and <a href="/contact">let me know</a> if you have any questions or comments!</p>
-
-<p>-J</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -624,7 +255,7 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the &#8220;Dnspwn Attack&#8221;</a>
+        <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the "Dnspwn Attack"</a>
       </li>
     
       <li class="post">
@@ -641,6 +272,7 @@
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -655,7 +287,10 @@
       var disqus_shortname = 'jordan-wright';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
