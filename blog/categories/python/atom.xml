@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-08-11T19:07:31-05:00</updated>
+  <updated>2014-08-11T19:08:20-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,49 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Creating Tor Hidden Services with Python]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/06/21/creating-tor-hidden-services-with-python/"/>
-    <updated>2014-06-21T23:40:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/06/21/creating-tor-hidden-services-with-python</id>
-    <content type="html"><![CDATA[<p><img src="/images/headers/hidden_services.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>We all know how Tor can be used to protect the anonymity of someone who is trying to connect to a service. However, is it also possible to also use Tor to protect the anonymity of a service provider? The answer is <em>yes</em>, and this is done via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable by Tor users.</p>
-
-<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services manually, but this is no fun. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
-
-<!--more-->
-
-
-<h3>Creating Hidden Services Manually</h3>
-
-<p>The instructions provided by the Tor project show that</p>
-
-<h3>Introducing Stem</h3>
-
-<p>If you haven&rsquo;t used it yet, there is a fantastic Python library called <a href="need%20link">Stem</a> that is used to control a local Tor installation.</p>
-
-<h4><code>stem.Controller</code></h4>
-
-<p>This is the paragraph.</p>
-
-<h3>An Example Service</h3>
-
-<p>Now that we&rsquo;ve seen a little about how Stem works</p>
-
-<h3>Conclusion</h3>
-
-<p>Hidden services can be a great way to&hellip;</p>
-
-<ul>
-<li>Jordan</li>
-</ul>
-
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Wireless Attacks with Python: Part One - The "Dnspwn Attack"]]></title>
