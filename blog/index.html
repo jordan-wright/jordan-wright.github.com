@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Sites like phishtank and clean-mx act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently &hellip;">
+  <meta name="description" content="Introduction Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -88,6 +88,56 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Decompiling Android Apps the Easy Way</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-10T19:51:00-05:00" pubdate data-updated="true">Aug 10<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/android_apps.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.</p>
+
+<p>In a <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">previous post</a>, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a></h1>
     
     
@@ -125,6 +175,56 @@
   
     <footer>
       <a rel="full-article" href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/21/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-21T23:40:00-05:00" pubdate data-updated="true">Jun 21<span>st</span>, 2014</time>
+        
+           | <a href="/blog/2014/06/21/creating-tor-hidden-services-with-python/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/06/21/creating-tor-hidden-services-with-python/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/hidden_services.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>We all know how Tor can be used to protect the anonymity of someone who is trying to connect to a service. However, is it also possible to also use Tor to protect the anonymity of a service provider? The answer is <em>yes</em>, and this is done via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable by Tor users.</p>
+
+<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services manually, but this is no fun. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/21/creating-tor-hidden-services-with-python/">Read on &rarr;</a>
     </footer>
   
 
@@ -546,108 +646,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Automated Social Engineering Recon Using Rapportive</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T02:55:00-05:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/rapportive_small.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>When performing a social engineering engagement, recon is key. In a <a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html">previous post</a>, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.</p>
-
-<p>During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/11/hello-world/">Hello World!</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-11T02:25:00-05:00" pubdate data-updated="true">Oct 11<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/11/hello-world/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/11/hello-world/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/env python
-</span><span class='line'>print 'Hello, World!'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.</p>
-
-<p>For the past few years, I created and maintained a blog for an organization I started called <a href="http://raidersec.blogspot.com">Raidersec</a>. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</p>
-
-<p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="/projects">existing projects</a>, and <a href="/contact">let me know</a> if you have any questions or comments!</p>
-
-<p>-J</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -660,7 +661,15 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Decompiling Android Apps the Easy Way</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/21/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a>
       </li>
     
       <li class="post">
@@ -669,14 +678,6 @@
     
       <li class="post">
         <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/">Wireless Attacks With Python: Part One - the &#8220;Dnspwn Attack&#8221;</a>
       </li>
     
   </ul>

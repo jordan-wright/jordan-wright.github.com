@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-07-30T22:25:35-05:00</updated>
+  <updated>2014-08-11T19:07:31-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Decompiling Android Apps the Easy Way]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/"/>
+    <updated>2014-08-10T19:51:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/android_apps.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.</p>
+
+<p>In a <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">previous post</a>, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.</p>
+
+<!-- more -->
+
+
+<h3>Step One: Get the APK</h3>
+
+<p>The first step in analyzing an Android app is to get the actual APK that&rsquo;s loaded onto the device. Fortunately, there is a site called <a href="http://apps.evozi.com/apk-downloader/">APK Downloader</a> which allows us to do just that. By getting the link to the app of your choice from the <a href="https://play.google.com/store/apps?hl=en">Google Play Store</a> and pasting it into APK Downloader, you can download a local copy of the app APK.</p>
+
+<h3>Step Two: Unpack and Decompile</h3>
+
+<p>After we have the APK, we need to unpack and decompile the contents into its equivalent Java code. This used to be a pretty lengthy process using tools such as the <a href="https://code.google.com/p/android-apktool/">android apktool</a>. Fortunately for us, someone has also setup a web-based service which automatically performs the decompilation process on a given APK.</p>
+
+<p>By uploading the APK to <a href="http://www.decompileandroid.com/">decompileandroid.com</a>, the user will be presented with the option to download the decompiled contents of the app, including the Java source code. <em>Awesome.</em></p>
+
+<h3>Things to Look For</h3>
+
+<p>Decompiling Android apps can allow researchers to analyze the exact code that is running on the app for vulnerabilities, as well as reveal any hardcoded credentials or other sensitive data. For example, in June of 2014, researchers from Columbia university created a tool called <a href="https://github.com/nviennot/playdrone">PlayDrone</a> which automatically crawled thousands of Android apps found on the Google Play store and <a href="http://www.cs.columbia.edu/~nieh/pubs/sigmetrics2014_playdrone.pdf">discovered the existence of sensitive credentials</a> in many of them.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &ldquo;hidden in plain sight&rdquo;. As always, leave any questions or comments below!</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to Hunt Down Phishing Kits]]></title>
@@ -165,6 +203,49 @@
 <p>Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!</p>
 
 <p>-Jordan</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating Tor Hidden Services with Python]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/06/21/creating-tor-hidden-services-with-python/"/>
+    <updated>2014-06-21T23:40:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/06/21/creating-tor-hidden-services-with-python</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/hidden_services.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>We all know how Tor can be used to protect the anonymity of someone who is trying to connect to a service. However, is it also possible to also use Tor to protect the anonymity of a service provider? The answer is <em>yes</em>, and this is done via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable by Tor users.</p>
+
+<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services manually, but this is no fun. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
+
+<!--more-->
+
+
+<h3>Creating Hidden Services Manually</h3>
+
+<p>The instructions provided by the Tor project show that</p>
+
+<h3>Introducing Stem</h3>
+
+<p>If you haven&rsquo;t used it yet, there is a fantastic Python library called <a href="need%20link">Stem</a> that is used to control a local Tor installation.</p>
+
+<h4><code>stem.Controller</code></h4>
+
+<p>This is the paragraph.</p>
+
+<h3>An Example Service</h3>
+
+<p>Now that we&rsquo;ve seen a little about how Stem works</p>
+
+<h3>Conclusion</h3>
+
+<p>Hidden services can be a great way to&hellip;</p>
+
+<ul>
+<li>Jordan</li>
+</ul>
+
 ]]></content>
   </entry>
   
