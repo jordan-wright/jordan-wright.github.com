@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) &hellip;">
+  <meta name="description" content="Introduction Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-06T20:00:00-05:00" pubdate data-updated="true">Oct 6<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/hidden_services.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
+
+<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -596,56 +646,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Automated Social Engineering Recon Using Rapportive</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T02:55:00-05:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/rapportive_small.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>When performing a social engineering engagement, recon is key. In a <a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html">previous post</a>, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.</p>
-
-<p>During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -661,6 +661,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Decompiling Android Apps the Easy Way</a>
       </li>
     
@@ -674,10 +678,6 @@
     
       <li class="post">
         <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a>
       </li>
     
   </ul>

@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Creating Tor Hidden Services with Python - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Creating Tor Hidden Services With Python</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-06T20:00:00-05:00" pubdate data-updated="true">Oct 6<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/hidden_services.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
+
+<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
+
+<!--more-->
+
+
+<h3>Creating Hidden Services Manually</h3>
+
+<p>The <a href="https://www.torproject.org/docs/tor-hidden-service.html.en#two">instructions provided by the Tor project</a> show that creating hidden services simply involves setting up the service locally (such as a web server listening on localhost), and then setting a few configuration options to make the service available via Tor.</p>
+
+<p>There are two configuration settings necessary to setup a hidden service: <code>HiddenServiceDir</code>, the directory to store the <code>hostname</code> and <code>private_key</code> files, and <code>HiddenServicePort</code>, the ports used to proxy hidden service connections.</p>
+
+<p>As the instructions show, each hidden service requires a variation of the following two lines to be present in the <code>torrc</code> configuration file (setting the directory, host, and ports appropriately):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HiddenServiceDir /path/to/store/hidden_service/
+</span><span class='line'>HiddenServicePort 80 127.0.0.1:5000</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>A Bit About the Tor Control Protocol</h3>
+
+<p>Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.</p>
+
+<p>The <a href="https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt">full specification</a> of the protocol is available, however here is a quick example of getting the valid authentication methods:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 9151
+</span><span class='line'>PROTOCOLINFO
+</span><span class='line'>
+</span><span class='line'>250-PROTOCOLINFO 1
+</span><span class='line'>250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE="Tor\\control_auth_cookie"
+</span><span class='line'>250-VERSION Tor="0.2.4.24"
+</span><span class='line'>250 OK</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Other examples using this extensive protocol can be found <a href="https://www.thesprawl.org/research/tor-control-protocol/">here</a> or in the full protocol spec.</p>
+
+<h3>Introducing Stem</h3>
+
+<p>To make interacting with the Tor control port both easier and programmatic, the Tor project maintains a fantastic Python library called <a href="https://stem.torproject.org/">Stem</a>.</p>
+
+<h4><code>stem.Controller</code></h4>
+
+<p>Interaction with the Tor control port is performed using the <code>stem.Controller</code> class. Creating an instance of the class involves connecting to the port and authenticating as follows:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>from stem.control import Controller
+</span><span class='line'>controller = Controller.from_port(address="127.0.0.1", port=9151)
+</span><span class='line'>try:
+</span><span class='line'>    controller.authenticate(password="")
+</span><span class='line'>except Exception as e:
+</span><span class='line'>    print e</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have a Controller, we can access the local configuration, pull the current descriptors for relays, and more.</p>
+
+<p>Let&rsquo;s use the Controller to automatically set the configuration settings we saw in the previous section. When set, these configuration options will cause Tor to create the two files, <code>hostname</code> and <code>private_key</code>, necessary to run the hidden service. Here is a short script that will setup a hidden service to listen on TCP port 80 and proxy all requests to an (already established) web server listening on <a href="http://127.0.0.1:5000:">http://127.0.0.1:5000:</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>host = "127.0.0.1"
+</span><span class='line'>port = 5000
+</span><span class='line'>hidden_svc_dir = "/tmp/hidden_service/"
+</span><span class='line'>controller.set_options([
+</span><span class='line'>    ("HiddenServiceDir", hidden_svc_dir),
+</span><span class='line'>    ("HiddenServicePort", "80 %s:%s" % (host, str(port)))
+</span><span class='line'>])
+</span><span class='line'>svc_name = open(hidden_svc_dir + "/hostname", "r").read().strip()
+</span><span class='line'>print "Created host: %s" % svc_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Easy as that! Now that we have the configuration setup, our service should be ready to go.</p>
+
+<h3>An Example Service</h3>
+
+<p>Now that we&rsquo;ve seen a little about how Stem works, here&rsquo;s an extremely basic example showing how the hidden service can be setup to work with a Flask application:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>from stem.control import Controller
+</span><span class='line'>from flask import Flask
+</span><span class='line'>
+</span><span class='line'>if __name__ == "__main__":
+</span><span class='line'>    
+</span><span class='line'>    app = Flask("example")
+</span><span class='line'>    port = 5000
+</span><span class='line'>    host = "127.0.0.1"
+</span><span class='line'>    hidden_svc_dir = "c:/temp/"
+</span><span class='line'>
+</span><span class='line'>    @app.route('/')
+</span><span class='line'>    def index():
+</span><span class='line'>        return "&lt;h1&gt;Tor works!&lt;/h1&gt;"
+</span><span class='line'>    print " * Getting controller"
+</span><span class='line'>    controller = Controller.from_port(address="127.0.0.1", port=9151)
+</span><span class='line'>    try:
+</span><span class='line'>        controller.authenticate(password="")
+</span><span class='line'>        controller.set_options([
+</span><span class='line'>            ("HiddenServiceDir", hidden_svc_dir),
+</span><span class='line'>            ("HiddenServicePort", "80 %s:%s" % (host, str(port)))
+</span><span class='line'>            ])
+</span><span class='line'>        svc_name = open(hidden_svc_dir + "/hostname", "r").read().strip()
+</span><span class='line'>        print " * Created host: %s" % svc_name
+</span><span class='line'>    except Exception as e:
+</span><span class='line'>        print e
+</span><span class='line'>    app.run()</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here&rsquo;s what this looks like in action:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>C:\&gt;python tor_example.py
+</span><span class='line'> * Getting controller
+</span><span class='line'> * Created host: 4yrbax6gwnemqh7n.onion
+</span><span class='line'> * Running on http://127.0.0.1:5000/</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/blog/hidden_services/screenshot.png"/></p>
+
+<h3>Caveats</h3>
+
+<p>It is important to note that the security of the hidden service depends on protecting the location of the server. To do this, consider ways to prevent leaking the real server IP through debug messages, etc. There has been some <a href="https://news.ycombinator.com/item?id=8404511">great discussion</a> on the topic that might be worth looking into.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hidden services deliver freedom of speech and the free exchange of ideas without censorship. By using Stem Python library, it&rsquo;s possible to take the pain out of manual configuration and instead programmatically create and manage multiple hidden services.</p>
+
+<p>As always, let me know if you have any questions or comments.</p>
+
+<p>-Jordan</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-06T20:00:00-05:00" pubdate data-updated="true">Oct 6<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hidden-services/'>hidden services</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/tor/'>tor</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/" title="Previous Post: Decompiling Android Apps the Easy Way">&laquo; Decompiling Android Apps the Easy Way</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Decompiling Android Apps the Easy Way</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
