@@ -156,7 +156,7 @@
 </pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
 </span><span class='line'><span class="nb">session_start</span><span class="p">();</span>
 </span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">){</span>
-</span><span class='line'>        <span class="nx">header</span><span class="p">(</span><span class="s2">&quot;Location:file_doc.php&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Location:file_doc.php&quot;</span><span class="p">);</span>
 </span><span class='line'>        <span class="k">exit</span><span class="p">;</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'><span class="nb">session_destroy</span><span class="p">();</span>
