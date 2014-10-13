@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to &hellip;">
+  <meta name="description" content="Introduction A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming over 30 million &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -82,6 +82,58 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Reverse Engineering the We Heart It API</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-12T20:40:00-05:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/weheartit_api.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
+
+<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
+
+<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -584,68 +636,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/26/phishing-with-linkedins-intro/">Phishing With Linkedin&#8217;s Intro</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-26T19:21:00-05:00" pubdate data-updated="true">Oct 26<span>th</span>, 2013</time>
-        
-           | <a href="/blog/2013/10/26/phishing-with-linkedins-intro/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/linkedin_phish.png"/></p>
-
-<p><em>Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.</em></p>
-
-<p><em>I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) &ndash; <a href="/contact">email me</a> if you know of one! I will be continuing my work with Linkedin&rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.</em></p>
-
-<p><em>I would also like to thank Linkedin&rsquo;s security team for their quick and effective response to these findings.</em></p>
-
-<h3>&ldquo;Intro&#8221;duction</h3>
-
-<p>On October 23, Linkedin introduced an application called <a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/">&ldquo;Intro&rdquo;</a>. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think <a href="http://rapportive.com/">Rapportive</a> for the iPhone Mail App, because that&rsquo;s <em>essentially</em> what this is (and made by the same people).</p>
-
-<p>However, when reading the initial description of Intro, there was one part that caught my eye:</p>
-
-<blockquote><p>David says Crosswise would love to work with you. Is this spam, or the real deal?</p>
-
-<p>With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.</p></blockquote>
-
-<p>This is not much different than Linkedin saying &ldquo;we&rsquo;ve put a picture of a lock in your email, so you know for sure it&rsquo;s secure&rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&rsquo;ll take a look and see what <em>exactly</em> Linkedin is doing to its users&#8217; email, as well as how we can spoof this information, gaining full control of the information shown to the user.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/26/phishing-with-linkedins-intro/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -661,6 +651,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Reverse Engineering the We Heart It API</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a>
       </li>
     
@@ -674,10 +668,6 @@
     
       <li class="post">
         <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a>
       </li>
     
   </ul>

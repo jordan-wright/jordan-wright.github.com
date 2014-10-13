@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-10-06T20:57:02-05:00</updated>
+  <updated>2014-10-12T19:27:47-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,431 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Reverse Engineering the We Heart It API]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/"/>
+    <updated>2014-10-12T20:40:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/weheartit_api.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
+
+<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
+
+<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
+
+<!--more-->
+
+
+<h3>Dynamic Analysis</h3>
+
+<p>Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">intercepting traffic using a proxy</a>, we can easily analyze the structure of requests/responses in use by the application.</p>
+
+<h4>Registration &amp; Authentication</h4>
+
+<p>Loading up the WHI iPhone app and attempting to register an account shows the following request/response:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>POST /api/users HTTP/1.1
+</span><span class='line'>Host: api.weheartit.com
+</span><span class='line'>
+</span><span class='line'>&lt;snip&gt;
+</span><span class='line'>client_id=redacted
+</span><span class='line'>&client_secret=redacted
+</span><span class='line'>&user[email]=redacted
+</span><span class='line'>&user[name]=redacted
+</span><span class='line'>&user[password]=redacted
+</span><span class='line'>&user[username]=redacted
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>    "result":"success",
+</span><span class='line'>    "object":
+</span><span class='line'>    {   "id":27215547,
+</span><span class='line'>            "username":"jordan_test2",
+</span><span class='line'>            "name":"Jordan Test",
+</span><span class='line'>            "location":"",
+</span><span class='line'>            "bio":"",
+</span><span class='line'>            &lt;snip&gt;
+</span><span class='line'>            "public_account":true,
+</span><span class='line'>            "verified":false,
+</span><span class='line'>            "created_at":"2014-10-12T18:38:35Z",
+</span><span class='line'>            "email":"redacted",
+</span><span class='line'>            "cover_image": { &lt;snip&gt; }
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.</em></p>
+
+<p>Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an <code>Authorization: Bearer</code> header for all API calls:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>POST /oauth/token HTTP/1.1
+</span><span class='line'>Host: api.weheartit.com
+</span><span class='line'>
+</span><span class='line'>&lt;snip&gt;
+</span><span class='line'>client_id=redacted
+</span><span class='line'>&client_secret=redacted
+</span><span class='line'>&grant_type=password
+</span><span class='line'>&password=redacted
+</span><span class='line'>&username=redacted
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>    "access_token":"redacted",
+</span><span class='line'>    "token_type":"bearer",
+</span><span class='line'>    "expires_in":31104000,
+</span><span class='line'>    "refresh_token":"redacted",
+</span><span class='line'>    "scope":"public"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /api/v2/entries/85847648 HTTP/1.1
+</span><span class='line'>Host: api.weheartit.com
+</span><span class='line'>Authorization: Bearer [redacted]
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>    "id": 85847648,
+</span><span class='line'>    "title": "Colors",
+</span><span class='line'>    &lt;snip&gt;
+</span><span class='line'>    "hearts_count": 11285,
+</span><span class='line'>    "created_at": "2013-11-10T17:09:49Z",
+</span><span class='line'>    "hearted": false,
+</span><span class='line'>    "via_hearts_count": 9919,
+</span><span class='line'>    "tags": [&lt;snip&gt;],
+</span><span class='line'>    "creator": {
+</span><span class='line'>        "id": 6043210,
+</span><span class='line'>        "username": "Natasja4205",
+</span><span class='line'>        &lt;snip&gt;
+</span><span class='line'>    },
+</span><span class='line'>    "user": {
+</span><span class='line'>        "id": 6043210,
+</span><span class='line'>        "username": "Natasja4205",
+</span><span class='line'>        &lt;snip&gt;
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /api/v2/users/27215547 HTTP/1.1
+</span><span class='line'>Host: api.weheartit.com
+</span><span class='line'>Authorization: Bearer [redacted]
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>    "id": 27215547,
+</span><span class='line'>    "username": "jordan_test2",
+</span><span class='line'>    "name": "Jordan Test",
+</span><span class='line'>    "avatar": [&lt;snip&gt;],
+</span><span class='line'>    "public_account": true,
+</span><span class='line'>    "verified": false,
+</span><span class='line'>    "location": null,
+</span><span class='line'>    "bio": null,
+</span><span class='line'>    "link": null,
+</span><span class='line'>    "hearts_count": 0,
+</span><span class='line'>    "following_count": 1,
+</span><span class='line'>    "followers_count": 2,
+</span><span class='line'>    "sets_count": 0,
+</span><span class='line'>    "created_at": "2014-10-12T18:38:35Z",
+</span><span class='line'>    "cover": {&lt;snip&gt;}
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great &ndash; we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p>
+
+<h3>Static Analysis</h3>
+
+<p>Now that we have a feel of how the application operates, let&rsquo;s verify our findings by <a href="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/">decompiling the Android app</a> and doing some static analysis.</p>
+
+<h4>App Structure</h4>
+
+<p>The app has quite a few dependencies, but the core package (<code>com.weheartit</code>) is fairly straight-forward. The API we are concerned with is located at <code>com.weheartit.api</code>. Searching for the string &ldquo;/api&rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java</p>
+
+<h4>APIRequest.java</h4>
+
+<p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">Map</span> <span class="n">map</span><span class="o">,</span> <span class="n">LoginServices</span> <span class="n">loginservices</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;client_id&quot;</span><span class="o">,</span> <span class="s">&quot;25ieooqr&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;client_secret&quot;</span><span class="o">,</span> <span class="s">&quot;zlype4airg41b33uwafbe8a6p8bwcgiw&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;grant_type&quot;</span><span class="o">,</span> <span class="s">&quot;password&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">b</span><span class="o">(</span><span class="s">&quot;oauth/token&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">OAuthDataResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">LoginServices</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="n">loginservices</span><span class="o">)));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">UserSettings</span> <span class="n">usersettings</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">WhiSession</span><span class="o">.</span><span class="na">b</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">&quot;ApiRequest&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;updateUserSettings() for user (&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;)&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[name]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getFullName</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[username]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[email]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[bio]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getBio</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[location]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLocation</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[link]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLink</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[show_unsafe_content]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUnsafeContentEnabled</span><span class="o">()));</span>
+</span><span class='line'>        <span class="o">&lt;</span><span class="nl">snip:</span> <span class="n">other</span> <span class="n">settings</span><span class="o">&gt;</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;privacy_options[public]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserPublic</span><span class="o">()));</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;privacy_options[findable]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserFindable</span><span class="o">()));</span>
+</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">&quot;api/settings&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">ApiOperationResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="s">&quot;Failed to update user settings&quot;</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="n">Object</span> <span class="n">aobj</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="mi">3</span><span class="o">];</span>
+</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">long1</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequest&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;getEntryCollectionDetails() with %s, %s, %s&quot;</span><span class="o">,</span> <span class="n">aobj</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">{</span>
+</span><span class='line'>            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;heart_id&quot;</span><span class="o">,</span> <span class="n">long1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;api/entry_sets/&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryListResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">c</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>APIRequestv2.java</h4>
+
+<p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequestV2&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;getUserEntryCollections() with accessToken &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;page&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;api/v2/users/&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;/collections&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryCollectionListV2ResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">a</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiPagedResponseCallback</span> <span class="n">apipagedresponsecallback</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequestV2&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;getUserDashboard() with %s, %d&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">s</span><span class="o">,</span> <span class="n">long1</span>
+</span><span class='line'>        <span class="o">}));</span>
+</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">{</span>
+</span><span class='line'>            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;before&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">long1</span><span class="o">));</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;api/v2/user/dashboard&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserDashboardResponseHandler</span><span class="o">(</span><span class="n">apipagedresponsecallback</span><span class="o">,</span> <span class="n">b</span><span class="o">));</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>API Documentation</h3>
+
+<p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
+
+<h3>WHI Sitemaps</h3>
+
+<p>While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its <code>sitemaps</code> files:</p>
+
+<ul>
+<li>Username</li>
+<li>Link to Profile</li>
+<li>Date Modified</li>
+<li>List of Collections</li>
+</ul>
+
+
+<p>You can find these files here:</p>
+
+<ul>
+<li><a href="http://sitemaps.weheartit.com/collections.xml">http://sitemaps.weheartit.com/collections.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/entry_groups.xml">http://sitemaps.weheartit.com/entry_groups.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/entries.xml">http://sitemaps.weheartit.com/entries.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/popular_images.xml">http://sitemaps.weheartit.com/popular_images.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/users.xml">http://sitemaps.weheartit.com/users.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/tags.xml">http://sitemaps.weheartit.com/tags.xml</a></li>
+</ul>
+
+
+<h3>Conclusion</h3>
+
+<p>For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.</p>
+
+<p>As always, let me know if you have any questions or comments!</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Creating Tor Hidden Services with Python]]></title>
