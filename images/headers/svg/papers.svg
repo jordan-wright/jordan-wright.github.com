@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="300"
+   id="svg3063"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="papers.svg"
+   inkscape:export-filename="C:\Users\jmwri_000\Documents\jordan-wright.github.com\source\images\headers\tracking_elk.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs3065">
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4377"
+       is_visible="true" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.57300886"
+     inkscape:cx="410.57716"
+     inkscape:cy="269.35816"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3068">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,-900)">
+    <rect
+       style="fill:#3498db;fill-opacity:0.94117647"
+       id="rect3955"
+       width="1000"
+       height="300"
+       x="0"
+       y="900"
+       ry="6"
+       rx="6" />
+    <path
+       style="fill:#ffffff"
+       d="m 500,950.00029 -87.5,50.00001 0,100 87.5,50 87.5,-50 0,-100 -87.5,-50.00001 z m -0.61963,14.63201 75.22552,43.0053 0,85.9813 -75.22552,42.9906 -75.22551,-42.9906 0,-85.9813 75.22551,-43.0053 z"
+       id="path3075"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1"
+       id="rect4599"
+       width="66.637306"
+       height="92.860321"
+       x="468.31219"
+       y="1002.8646"
+       ry="6"
+       rx="6" />
+    <rect
+       style="fill:#3498db;fill-opacity:0.94117647;stroke:#3498db;stroke-opacity:0.94117647"
+       id="rect4675"
+       width="48.126942"
+       height="8.0211573"
+       x="477.25885"
+       y="1014.2794"
+       rx="2"
+       ry="2" />
+    <rect
+       style="fill:#3498db;fill-opacity:0.94117647;stroke:#3498db;stroke-opacity:0.94117647"
+       id="rect4675-8"
+       width="48.126942"
+       height="8.0211573"
+       x="476.81195"
+       y="1030.1727"
+       rx="2"
+       ry="2" />
+    <rect
+       style="fill:#3498db;fill-opacity:0.94117647;stroke:#3498db;stroke-opacity:0.94117647"
+       id="rect4675-82"
+       width="48.126942"
+       height="8.0211573"
+       x="476.81195"
+       y="1046.1727"
+       rx="2"
+       ry="2" />
+  </g>
+</svg>
