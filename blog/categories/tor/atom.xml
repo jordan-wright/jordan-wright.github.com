@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tor | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/tor/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-19T19:35:44-06:00</updated>
+  <updated>2014-12-20T00:11:19-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[What Happens if Tor Directory Authorities are Siezed?]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-siezed/"/>
+    <title type="html"><![CDATA[What Happens if Tor Directory Authorities are Seized?]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/"/>
     <updated>2014-12-19T18:43:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-siezed</id>
+    <id>http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized</id>
     <content type="html"><![CDATA[<p><img src="/images/headers/tor_seized.png"/></p>
 
 <h3>Introduction</h3>
