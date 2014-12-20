@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-18T23:51:12-06:00</updated>
+  <updated>2014-12-19T18:40:55-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -25,6 +25,9 @@
 <h3>Introduction</h3>
 
 <p>Technologies like Google Chrome&rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.</p>
+
+<!--more-->
+
 
 <h3>How the Omnibox Works</h3>
 
