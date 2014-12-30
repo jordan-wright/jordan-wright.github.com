@@ -4,7 +4,7 @@
   <title><![CDATA[Category: dynamic analysis | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/dynamic-analysis/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-28T20:40:01-06:00</updated>
+  <updated>2014-12-29T21:39:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -306,7 +306,7 @@ public void a(String s, Long long1, ApiPagedResponseCallback apipagedresponsecal
 
 <p>As always, let me know if you have any questions or comments!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

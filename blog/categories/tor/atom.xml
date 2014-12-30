@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tor | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/tor/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-28T20:40:01-06:00</updated>
+  <updated>2014-12-29T21:39:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -67,7 +67,7 @@
 
 <p>As always, let me know if you have any questions or comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 
 <p><em>*It is worth noting that I am by no means a Tor expert, and am relying on knowledge gained from <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">previous</a> <a href="http://raidersec.blogspot.com/2013/09/mapping-tor-relays-and-exit-nodes.html">research</a> into the Tor network structure.</em></p>
 ]]></content>
@@ -219,7 +219,7 @@ C:\&gt;python tor_example.py
 
 <p>As always, let me know if you have any questions or comments.</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

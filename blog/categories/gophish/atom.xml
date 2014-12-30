@@ -4,7 +4,7 @@
   <title><![CDATA[Category: gophish | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/gophish/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-28T20:40:01-06:00</updated>
+  <updated>2014-12-29T21:39:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -102,7 +102,7 @@ e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123",
 
 <p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish &ndash; you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -159,7 +159,7 @@ e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123",
 
 <p>That&rsquo;s all I have for now &ndash; stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

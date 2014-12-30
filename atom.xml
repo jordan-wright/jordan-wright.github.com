@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-28T20:40:01-06:00</updated>
+  <updated>2014-12-29T21:39:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Writing a Memory Scraper in Python]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python/"/>
+    <updated>2014-12-29T21:32:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[What InfoSec Learned in 2014]]></title>
@@ -87,7 +96,7 @@
 
 <p>[1] <a href="https://jhalderm.com/pub/papers/heartbleed-imc14.pdf">https://jhalderm.com/pub/papers/heartbleed-imc14.pdf</a></p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -145,7 +154,7 @@
 
 <p>As always, let me know if you have any questions or comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 
 <p><em>*It is worth noting that I am by no means a Tor expert, and am relying on knowledge gained from <a href="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/">previous</a> <a href="http://raidersec.blogspot.com/2013/09/mapping-tor-relays-and-exit-nodes.html">research</a> into the Tor network structure.</em></p>
 ]]></content>
@@ -228,7 +237,7 @@
 
 <p>As always, let me know if you have any questions/comments below.</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -266,7 +275,7 @@
 
 <p>Enjoy!</p>
 
-<p>Jordan</p>
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -691,7 +700,7 @@
 
 <p>As always, let me know if you have any questions or comments!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -831,7 +840,7 @@
 </span><span class='line'>from flask import Flask
 </span><span class='line'>
 </span><span class='line'>if __name__ == "__main__":
-</span><span class='line'>    
+</span><span class='line'>
 </span><span class='line'>    app = Flask("example")
 </span><span class='line'>    port = 5000
 </span><span class='line'>    host = "127.0.0.1"
@@ -879,7 +888,7 @@
 
 <p>As always, let me know if you have any questions or comments.</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -917,7 +926,7 @@
 
 <p>Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &ldquo;hidden in plain sight&rdquo;. As always, leave any questions or comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1072,7 +1081,7 @@
 
 <p>Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1250,7 +1259,7 @@
 
 <p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish &ndash; you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1307,7 +1316,7 @@
 
 <p>That&rsquo;s all I have for now &ndash; stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1480,7 +1489,7 @@
 
 <p>Enjoy!</p>
 
-<p>Jordan</p>
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1548,7 +1557,7 @@
 
 <p>As always, let me know if you have any questions or comments below!</p>
 
-<p>Jordan</p>
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1609,6 +1618,8 @@
 <li><em>October 28, 2013 approx. 2:40 PM PDT</em> &ndash; Hotfix released</li>
 </ul>
 
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -1832,7 +1843,7 @@
 
 <p>I have yet to get comments setup on the new blog, but <a href="http://jordan-wright.github.io/contact">shoot me an email</a> if you have any questions or comments!</p>
 
-<p>Jordan</p>
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -2018,7 +2029,7 @@
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>profile = requests.get('https://profiles.rapportive.com/contacts/email/' + target_email, 
+</pre></td><td class='code'><pre><code class=''><span class='line'>profile = requests.get('https://profiles.rapportive.com/contacts/email/' + target_email,
 </span><span class='line'>            headers = {'X-Session-Token' : response['session_token']}).json()</span></code></pre></td></tr></table></div></figure>
 
 
@@ -2077,7 +2088,7 @@
 
 <p>Enjoy!</p>
 
-<p>Jordan</p>
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
@@ -2098,7 +2109,7 @@
 
 <p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="http://jordan-wright.github.io/projects">existing projects</a>, and <a href="http://jordan-wright.github.io/contact">let me know</a> if you have any questions or comments!</p>
 
-<p>-J</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tutorial | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/tutorial/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-28T20:40:01-06:00</updated>
+  <updated>2014-12-29T21:39:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -47,7 +47,7 @@
 
 <p>Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &ldquo;hidden in plain sight&rdquo;. As always, leave any questions or comments below!</p>
 
-<p>-Jordan</p>
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
