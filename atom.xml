@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-29T21:39:49-06:00</updated>
+  <updated>2014-12-29T21:40:49-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,15 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[Writing a Memory Scraper in Python]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python/"/>
-    <updated>2014-12-29T21:32:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python</id>
-    <content type="html"><![CDATA[
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[What InfoSec Learned in 2014]]></title>
