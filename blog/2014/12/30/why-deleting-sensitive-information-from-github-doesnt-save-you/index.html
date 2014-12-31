@@ -5,14 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Hello World! - jordan-wright</title>
+  <title>Why Deleting Sensitive Information from Github Doesn't Save You - jordan-wright</title>
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="1
-2
-#!/usr/bin/env python
-print 'Hello, World!' Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist. For the past &hellip;">
+  <meta name="description" content="So you accidentally committed a password or API key to Github. Ouch. &ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +18,7 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2013/10/11/hello-world">
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -90,7 +87,7 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
   
   <header>
     
-      <h1 class="entry-title">Hello World!</h1>
+      <h1 class="entry-title">Why Deleting Sensitive Information From Github Doesn't Save You</h1>
     
     
       <p class="meta">
@@ -106,7 +103,7 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
   
 
 
-<time datetime="2013-10-11T02:25:00-05:00" pubdate data-updated="true">Oct 11<span>th</span>, 2013</time>
+<time datetime="2014-12-30T19:19:00-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
@@ -116,19 +113,45 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
   </header>
 
 
-<div class="entry-content"><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/env python
-</span><span class='line'>print 'Hello, World!'</span></code></pre></td></tr></table></div></figure>
+<div class="entry-content"><p><img src="/images/headers/harvest_github.png"/></p>
 
+<p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
 
-<p>Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.</p>
+<p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
 
-<p>For the past few years, I created and maintained a blog for an organization I started called <a href="http://raidersec.blogspot.com">Raidersec</a>. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</p>
+<p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
 
-<p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="/projects">existing projects</a>, and <a href="/contact">let me know</a> if you have any questions or comments!</p>
+<h3>Drinking from Github&rsquo;s Firehose</h3>
 
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+<p>Github has an extensive API. One of the most useful endpoints is located at <a href="https://developer.github.com/v3/activity/events/"><code>/events</code></a>. This endpoint basically provides a firehose of <em>all</em> public events as they happen. This includes account creation, code commits, and more. Just &ldquo;star&rdquo; a repository? It was published at <code>/events</code>.</p>
+
+<p>Hackers can use this endpoint to watch for any and all code commits. Once a commit is found, they can instantly make a request to the <a href="https://developer.github.com/v3/git/commits/"><code>repos/:owner/:repo/git/commits/:sha1</code></a> endpoint to get the details for that commit. Part of these details is a reference to the project snapshot, or <code>tree</code>, for that commit (the files themselves). This tree has it&rsquo;s own SHA1, that can be used in the <a href="https://developer.github.com/v3/git/trees/"><code>repos/:owner/:repo/git/tree/:sha1?recursive=1</code></a> endpoint to get a full listing of files in the repository.</p>
+
+<p>Each of these listings has a reference to the file&rsquo;s actual content for the commit. A request can be made to the <a href="https://developer.github.com/v3/git/blobs/"><code>/repos/:owner/:repo/git/blobs/:sha1</code></a> endpoint to get this file content, which will include the sensitive information!</p>
+
+<p>These 4 requests are made in a matter of seconds, and can be sped up by caching the SHA1 of files to determine if the file has been changed. It&rsquo;s a good thing that no one has made a system that&rsquo;s been caching all this data this entire time, right?</p>
+
+<h3>Say Hello to GHTorrent</h3>
+
+<p><a href="http://ghtorrent.org/">GHTorrent</a> advertises itself as an &ldquo;offline mirror of data&rdquo;. In a nutshell, it keeps track of <em>a ton</em> of data that flows through Github&rsquo;s Events API stream, and recursively resolves dependencies to relate, say, a commit object to an event object. Currently, they suggest they have accumulated the data from 2012-2014.</p>
+
+<p>This database has incredible potential for researchers, but also allows for hackers to pull previously deleted or changed data en masse. Granted, from what I can tell they don&rsquo;t store the actual file content (so your accidentally committed password won&rsquo;t be stored), but that doesn&rsquo;t mean that there isn&rsquo;t sensitive data to be had.</p>
+
+<p>Consider the email address used to create a Github account, or commit a code change. Both of these actions created an event that was harvested by GHTorrent. Here&rsquo;s an example showing the details of a particularly <a href="https://github.com/jordan-wright">talented developer</a>:</p>
+
+<p><img src="/images/blog/harvest_github/db.png"/></p>
+
+<p>Currently, it looks like there are about 4.7 million accounts cached in GHTorrent, with over 3.4 million having a non-null email address. That&rsquo;s a lot of email addresses.</p>
+
+<p>GHTorrent is just an example. While it doesn&rsquo;t appear to store all content, it would be trivial for hackers to reproduce the project with the added feature of searching commits for sensitive information as the events are generated. This searching can be done using keywords such as &ldquo;password&rdquo;, &ldquo;key&rdquo;, etc.</p>
+
+<h3>The Only Way to be Safe</h3>
+
+<p>Hopefully it&rsquo;s clear that deleting sensitive information from Github doesn&rsquo;t solve the problem. The <strong>only</strong> way to protect your assets after committing sensitive information is to consider the information compromised and to change the password/API key/whatever. Then, make sure to avoid committing this data in the future!</p>
+
+<p>Be smart &ndash; protect your data.</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
 </div>
 
 
@@ -151,15 +174,21 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
   
 
 
-<time datetime="2013-10-11T02:25:00-05:00" pubdate data-updated="true">Oct 11<span>th</span>, 2013</time>
+<time datetime="2014-12-30T19:19:00-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/github/'>github</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2013/10/11/hello-world/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2013/10/11/hello-world/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -170,8 +199,8 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2014/12/28/what-infosec-learned-in-2014/" title="Previous Post: What InfoSec Learned in 2014">&laquo; What InfoSec Learned in 2014</a>
       
-        <a class="basic-alignment right" href="/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/" title="Next Post: Automated Social Engineering Recon Using Rapportive">Automated Social Engineering Recon Using Rapportive &raquo;</a>
       
     </p>
   </footer>
@@ -237,8 +266,8 @@ print 'Hello, World!' Hi there! My name is Jordan, and I am a security researche
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2013/10/11/hello-world/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2013/10/11/hello-world/';
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/';
         var disqus_script = 'embed.js';
       
     (function () {
