@@ -121,6 +121,9 @@
 
 <p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
 
+<!--more-->
+
+
 <h3>Drinking from Github&rsquo;s Firehose</h3>
 
 <p>Github has an extensive API. One of the most useful endpoints is located at <a href="https://developer.github.com/v3/activity/events/"><code>/events</code></a>. This endpoint basically provides a firehose of <em>all</em> public events as they happen. This includes account creation, code commits, and more. Just &ldquo;star&rdquo; a repository? It was published at <code>/events</code>.</p>

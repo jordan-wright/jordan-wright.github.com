@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2014-12-30T20:42:43-06:00</updated>
+  <updated>2014-12-30T20:44:18-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -25,6 +25,9 @@
 <p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
 
 <p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
+
+<!--more-->
+
 
 <h3>Drinking from Github&rsquo;s Firehose</h3>
 
