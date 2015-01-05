@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-01-05T07:20:03-06:00</updated>
+  <updated>2015-01-05T07:25:14-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -18,7 +18,7 @@
     <link href="http://jordan-wright.github.io/blog/2015/01/05/sans-holiday-challenge-2014-writeup/"/>
     <updated>2015-01-05T07:15:00-06:00</updated>
     <id>http://jordan-wright.github.io/blog/2015/01/05/sans-holiday-challenge-2014-writeup</id>
-    <content type="html"><![CDATA[<p><img src=/images/headers/sans_holiday_2014.png/></p>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/sans_holiday_2014.png"/></p>
 
 <h3>Introduction</h3>
 
