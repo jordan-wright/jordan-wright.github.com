@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve really grown to like it. After getting used to the syntax &hellip;">
+  <meta name="description" content="Introduction It&rsquo;s been a while! I&rsquo;ve been busy getting gophish closer and closer to beta. Should be ready soon! Until then, here&rsquo;s &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,107 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-04T14:33:00-05:00" pubdate data-updated="true">Apr 4<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/spam_gen.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>It&rsquo;s been a while! I&rsquo;ve been busy getting <a href="http://github.com/jordan-wright/gophish">gophish</a> closer and closer to beta. Should be ready soon!</p>
+
+<p>Until then, here&rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at <a href="http://phishtank.com">phishtank.com</a>.</p>
+
+<p><em>As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&rsquo;t seem to relate to the content of the spam scripts at all.</em></p>
+
+<h3>The Spam Scripts</h3>
+
+<p>Here are the scripts &ndash; the format looks very similar to <a href="http://alexking.org/blog/2013/12/22/spam-comment-generator-script">those found by Alex King</a>. I&rsquo;m guessing that one choice from each <code>{block}</code> is used at random to make every comment unique.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{Rapper|Rap artist|Artist} {George|Henry} Watsky apologises {for|with regard to|regarding|pertaining to} {breaking|busting|splitting|smashing} {woman|lady|girl|female}
+</span><span class='line'>{The|The actual|The particular|Your} {rapper|rap artist|artist} {was|had been|has been|ended up being} {performing|carrying out|executing|undertaking} {at|from|with|in} Alexandra {Palace|Structure|Construction|Development} {in|within|inside|throughout} {north|northern|n .|upper} {London|Birmingham|Greater london|Manchester} {when he|as he|while he|whilst} {climbed|rose|risen|soared} {up the|in the|the|inside the} {stage|phase|period|point} {on a|on the|over a|with a} {rope|string|piece of string|line} {before|prior to|just before|ahead of} {launching|starting|introducing|establishing} {himself|themself|themselves|herself} {onto the|to the|on the|on top of the} {audience|target audience|viewers|market} {from|through|coming from|via} 30ft.
+</span><span class='line'>{In a|Inside a|In the|Within a} {lengthy|extended|prolonged|long} {post|publish|submit|article} {on|upon|about|in} {his|their|his / her|his or her} {Facebook|Fb|Myspace|Facebook or myspace} {page|web page|site|web site}, Watsky apologised {for|with regard to|regarding|pertaining to} {his|their|his / her|his or her} {stunt|stop|trick} {and|as well as|and also|along with} {said|stated|mentioned|explained} {he|he or she|this individual|they} {decided to|chose to|made a decision to|thought we would} {jump|leap|hop|bounce} {due to a|as a result of|because of a|because of} "huge overreach {in the|within the|inside the|from the} {heat|warmth|temperature|high temperature} {of the|from the|with the|in the} moment".
+</span><span class='line'>{He said|He explained|He was quoted saying|He stated}: "The {jump|leap|hop|bounce} {was not|wasn't|had not been|has not been} {awesome|amazing|great|wonderful}, {it was not|it wasn't|it had not been} badass, {and it|also it|plus it|and yes it} {was not|wasn't|had not been|has not been} ballsy. {It|This|That|The idea} {turned|switched|flipped|transformed} {what|exactly what|just what|precisely what} {should have|must have|needs to have|really should have} {been|already been|recently been|been recently} {a great|an excellent|a fantastic|an incredible} {day|day time|evening|morning} {for the people|for anyone|for those|for people} {who|that|which|whom} {got|obtained|received|acquired} {hurt|harm|damage|injure} {into a|right into a|in to a|in a} {nightmare|headache|problem|pain}. {It was|It had been|It absolutely was|It turned out} {stupid|silly|foolish|ridiculous} {and|as well as|and also|along with} {wildly|extremely|hugely|very} {irresponsible|reckless|uncaring|freewheeling}, {plain and simple|basically|in basic terms|simply}.
+</span><span class='line'>"I {pride|satisfaction|delight|pleasure} {myself|personally|me personally|myself personally} {on|upon|about|in} {trying to|attempting to|wanting to|looking to} {put on|placed on|wear|place on} {a good|a great|an excellent|a fantastic} {show|display|present|demonstrate} {and always|and try to|and constantly|try to} {giving|providing|offering|supplying} {100|One hundred|A hundred|Hundred} {per cent|percent|%|per-cent} {energy|power|vitality|electricity}, {but|however|yet|nevertheless} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {some|a few|several|a number of} {high|higher|large|substantial} {st|street|saint|e} {doesn't|does not|will not|won't} {make|help to make|help make|create} {someone|somebody|an individual|a person} {a good|a great|an excellent|a fantastic} {musician|music performer|artist|musician and performer} {or|or even|or perhaps|as well as} {performer|artist|musician|singer}. {I feel|Personally i think|I'm|I am} fing {terrible|horrible|awful|dreadful}. {I|We|My partner and i|My spouse and i} {made a|designed a|developed a|created a} boneheaded {decision|choice|selection|determination} {that|which|in which|that will} {got|obtained|received|acquired} {people|individuals|folks|men and women} {hurt|harm|damage|injure}, {and it's|and it is|and it's really|and} {extremely|very|really|incredibly} {lucky|fortunate|blessed|fortuitous} {it wasn't|it had not been|it was not} {worse|even worse|a whole lot worse|more serious}.{"|Inch|Inches|In .}
+</span><span class='line'>{He|He or she|This individual|They} {added|additional|extra|included} {he|he or she|this individual|they} {was not|wasn't|had not been|has not been} {under the influence of|intoxicated by|consuming|ingesting} {drugs or alcohol|alcohol or drugs} {when he|as he|while he|whilst} {performed|carried out|done|executed} {the|the actual|the particular|your} {stunt|stop|trick}, {and|as well as|and also|along with} {said|stated|mentioned|explained} {his|their|his / her|his or her} {health|wellness|well being|wellbeing} {was|had been|has been|ended up being} "fine, {besides|apart from|in addition to|aside from} {some|a few|several|a number of} {nicks|grazes|dings|lacerations}, bruises, {and the|and also the|as well as the|along with the} {shame|pity|disgrace|waste} {of|associated with|regarding|involving} {endangering|risking|threatening} {the|the actual|the particular|your} crowd".
+</span><span class='line'>{The|The actual|The particular|Your} {Californian|American} {rapper|rap artist|artist} {said|stated|mentioned|explained} {he had|he'd|he previously|he} {been to|visited|gone to|attended} {hospital|medical center|clinic|healthcare facility} {to visit|to go to|to see|to check out} {the two|the 2|both|both the} {audience|target audience|viewers|market} {members|people|associates|users} {who were|who have been|who had been|have been} {injured|hurt|wounded|harmed}, {and|as well as|and also|along with} {stayed|remained|stayed at|slept} {with them|together|using them|with these} {for|with regard to|regarding|pertaining to} {six hours|6 hours} {until the|before the|before|prior to the} {visiting|going to|browsing|traveling to} {period|time period|period of time|interval} {had|experienced|acquired|got} {ended|finished|concluded|broken}.
+</span><span class='line'>{He|He or she|This individual|They} {confirmed|verified|established|validated} {he would|he'd|however|although} {not be|'t be|not|stop} {cancelling|rescheduling|deleting|closing} {his|their|his / her|his or her} {remaining|leftover|staying|outstanding} {six|6|half a dozen|six to eight} {tour|visit|excursion|trip} {dates|times|days|schedules} {in the UK|in the united kingdom|in britain|in england}.
+</span><span class='line'>"I {will do|is going to do|can do|will perform} {the|the actual|the particular|your} {shows|exhibits|displays|demonstrates}, {as usual|as always} {I will|I'll|I am going to|Let me} {meet|fulfill|satisfy|meet up with} {everyone|everybody|every person|anyone} {afterwards|later on|soon after|after}, {and I will|and i'll} {NOT be|'t be|Not|Stop} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {anything|something|anything at all|everything}. {I am|I'm|I will be|We are} {deeply|seriously|profoundly|significantly} {sorry|i'm sorry|remorseful|i am sorry} {and I|and that i|and i also|i} {promise|guarantee|assure|offer} {to learn|to understand|to find out|to master} {from this|out of this|using this|because of this} {mistake|error|blunder|oversight},{"|Inch|Inches|In .} {he said|he explained|he was quoted saying|he stated}./p&gt;
+</span><span class='line'>
+</span><span class='line'>{Police|Law enforcement|Law enforcement officials|Authorities} {find|discover|locate|uncover} {2|Two|A couple of|Only two} {more|much more|a lot more|far more} corpses {in|within|inside|throughout} Surrey
+</span><span class='line'>Sgt. {PT|Rehabilitation|Therapist} Wednesdayinan {area of|section of|part of|division of} {South|Southern|To the south|Southerly} Surrey {that has been|that's been|which has been|that is} {used|utilized|employed|utilised} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {as a|like a|being a|as being a} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}.{The|The actual|The particular|Your} {integrated|incorporated|built-in|included} {homicide|murder|killing|kill} {investigation|analysis|study|exploration} {team|group|staff|crew} {was|had been|has been|ended up being} {called|known as|referred to as|named} {Wednesday|Thursday|Friday|Wed} {morning|early morning|morning hours|day} {to an|for an|to a|with an} {area of|section of|part of|division of} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} Surrey {that has become|that is|that has been|this is certainly} {a|the|any|a new} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}. (CBC){More|Much more|A lot more|Far more} {police|law enforcement|law enforcement officials|authorities} {were|had been|have been|ended up} {then|after that|next|and then} {called in|contacted|called}, {and a|along with a|plus a|as well as a} {police|law enforcement|law enforcement officials|authorities} {dog|canine|puppy|pet} {team|group|staff|crew} {located|situated|positioned|found} {a woman's|a ladies|a lady's|a female's} {body|physique|entire body|system} {as well|too|also|at the same time} {a short distance|ten or twenty yards} {away|aside|absent|apart}.{Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {both|each|equally|the two} {victims|sufferers|patients|subjects} {appeared to|seemed to|did actually|gave the impression to} {have|possess|have got|get} {met|fulfilled|satisfied|achieved} {with|along with|together with|using} {foul|bad|nasty|strong} {play|perform|enjoy|participate in}. {Police have|Mother and father|Weed|Cannabis} {not yet been|not|to be} {able to|in a position to|capable of|capable to} {identify|determine|recognize|discover} {them|all of them|these|these people}."Until {the|the actual|the particular|your} {identity|identification|id|personality} {has been|continues to be|may be|has become} {determined|established|decided|identified}, {investigators|detectives|researchers|private investigators} {will not|won't|is not going to|will not likely} {know the|be aware of|understand the|have in mind the} {connection|link|relationship|interconnection}, {if any|or no}, {today's|present day|the current|modern day} {victims|sufferers|patients|subjects} {have to|need to|must|ought to} {each other|one another|the other person|the other} {or to|in order to|or|as well as to} {the other|another|one other|the opposite} {two|2|a couple of|a pair of} {victims|sufferers|patients|subjects} {found|discovered|identified|located} {recently|lately|not too long ago|just lately} {in this area|in this region|in this field|of this type},{"|Inch|Inches|In .} {Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {in a|inside a|in the|within a} {written|created|composed|published} {statement|declaration|assertion|affirmation}.{2|Two|A couple of|Only two} {bodies|physiques|body|systems} foundearlier {in|within|inside|throughout} 2013IHIT {investigators|detectives|researchers|private investigators} {were|had been|have been|ended up} {already|currently|previously|by now} {called|known as|referred to as|named} {out|away|out there|out and about} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {to|in order to|to be able to|for you to} Colebrook {Road|Street|Highway|Path}, {a remote|an online|an isolated|a secluded} {rural|non-urban|countryside|outlying} {stretch|extend|stretch out|expand} {near the|close to the|nearby the|at the} {Serpentine|Courbe} {River|Water|Lake|Pond}, {south|southern|to the south|southerly} {of the|from the|with the|in the} {Panorama|Surroundings|Vista} {Ridge|Form|Shape|Rdg} {neighbourhood|area|local community|community} andnorth {of|associated with|regarding|involving} {Mud|Dirt|Off-road|Will get} {Bay|These types of|Fresh|These kinds of}.Colebrook {Road|Street|Highway|Path} {and|as well as|and also|along with} 125A StreetIn {February|Feb|Feb .|January}, abadly {burned|burnt|used up|burned up} {body|physique|entire body|system} {was found|was discovered|is discovered} {off|away|away from|off of} Colebrook Roadnear 125th {Street|Road|Avenue|Block}. Policeidentified {that|which|in which|that will} {victim|target|sufferer|prey} {as|because|since|while} {29|Twenty nine|30|28} {year old|years old|yr old|year-old} Amritpal Saran, {of|associated with|regarding|involving} Delta. {Police|Law enforcement|Law enforcement officials|Authorities} {said|stated|mentioned|explained} {the man|the person|the guy|he} {was|had been|has been|ended up being} {known to|recognized to|proven to|seen to} {them|all of them|these|these people}, {but|however|yet|nevertheless} {had no|didn't have|didn't have any|did not have any} {known|recognized|identified|acknowledged} {gang|bunch|team|company} {affiliations|organizations|connections|links}.{Police|Law enforcement|Law enforcement officials|Authorities} {were|had been|have been|ended up} {also called|also known as|also referred to as|otherwise known as} {to|in order to|to be able to|for you to} investigatea {violent|chaotic|severe|crazy} {attack|assault|strike|invasion} {on a|on the|over a|with a} Surrey {sex|intercourse|sexual intercourse|making love} {trade|industry|business|buy and sell} {worker|employee|member of staff|staff member} {along|together|alongside|coupled} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} {October|Oct|March|April}.{In|Within|Inside|Throughout} {February|Feb|Feb .|January}, {police|law enforcement|law enforcement officials|authorities} {released|launched|introduced|unveiled} {sketches|drawings|paintings|images} {of|associated with|regarding|involving} {two|2|a couple of|a pair of} {South|Southern|To the south|Southerly} {Asian|Oriental|Hard anodized cookware|Cookware} menwho allegedlydrove {her|the woman's|the girl|your ex} toColebrook {Road|Street|Highway|Path} {near|close to|around|in close proximity to} 128th {Street|Road|Avenue|Block}, {and|as well as|and also|along with} {physically|bodily|actually|literally} {and|as well as|and also|along with} {sexually|while making love|intimately|in the bedroom} {assaulted|attacked|bombarded|mauled} {her|the woman's|the girl|your ex}. {She|The lady|Your woman|The girl} {was|had been|has been|ended up being} {taken to|come to|taken up|delivered to} {hospital|medical center|clinic|healthcare facility} {with|along with|together with|using} {serious|severe|significant|critical} {injuries|accidents|accidental injuries|incidents}.
+</span><span class='line'>
+</span><span class='line'>{Pressure|Stress|Strain|Force} {rating|score|ranking|standing} {for 3|for several}
+</span><span class='line'>{Check out|Take a look at|Have a look at|Look at} {some|a few|several|a number of} {similar|comparable|related|equivalent} {questions|concerns|queries|inquiries}!
+</span><span class='line'>{How can I|How do i|How could i|How to} {reduce|decrease|lessen|minimize} {a|the|any|a new} 4" {cast iron|surefire|certain|iron} {pipe|water pipe|tube|water line} {opening|starting|beginning|opening up} {to|in order to|to be able to|for you to} 2" {pvc|pvc material|faux wood|imitation wood} pipe&gt; [ {2|Two|A couple of|Only two} {Answers|Solutions|Responses|Replies} {]|}
+</span><span class='line'>{The last|The final|The past|The very last} {owner|proprietor|operator|seller} {put a|place a|convey a} 2' {pvc|pvc material|faux wood|imitation wood} {pipe|water pipe|tube|water line} {into a|right into a|in to a|in a} 4" {cast iron|surefire|certain|iron} {opening|starting|beginning|opening up}   {it looks like|it appears as though|it appears like|it appears as if} {they just|they simply|they only|they merely} {filled|stuffed|crammed|loaded} {the opening|the outlet} {with|along with|together with|using} {plumbers|local plumbers|plumbing technicians|plumbing engineers} putty   {i am|i'm|i will be|we are} {looking to|seeking to|trying to|planning to} {repair it|do the repair|correct it|remedy it} {properly|correctly|effectively|appropriately}   {what can|so what can|exactly what can|exactly what do} {I use|I personally use|I take advantage of|I prefer} {to go into|to enter|to penetrate|to get in} {the|the actual|the particular|your} {cast iron|surefire|certain|iron} 4"opening {to reduce|to lessen|to cut back|to scale back} {it|this|that|the idea} {to|in order to|to be able to|for you to} 2" {opening|starting|beginning|opening up} {which I|that we|that i|i} {can then|may then|are able to|will then} {attach|connect|affix|add} {3|Three|Several|Three or more}? {Thank you|Thanks|Many thanks|Thanks a lot}
+</span><span class='line'>{Replace|Substitute|Change|Exchange} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {bonded|glued|fused|insured} {into|in to|directly into|straight into} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
+</span><span class='line'>{Need to|Have to|Must|Should} {connect|link|hook up|join} {new|brand new|fresh|brand-new} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {to an|for an|to a|with an} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} {just|simply|merely|only} {above|over|previously mentioned|earlier mentioned} {cement|concrete|bare concrete|bare cement} {floor|ground|flooring|floorboards}. {Need to|Have to|Must|Should} {create a|produce a|develop a|build a} {new|brand new|fresh|brand-new} cleanout {in|within|inside|throughout} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {that will be|that'll be|which will be|that is to be} 12" {above the|over the|across the|higher than the} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {so that|to ensure that|in order that|to ensure} {a main|a primary|a principal|an important} {sewer line|sewage} {blockage|obstruction|congestion|clog} {between the|between your|involving the|relating to the} {main|primary|principal|major} {stack|bunch|collection|pile} {the street|the road|the trail|the path} {sewer|sewer line|sewage} {some|a few|several|a number of} {25|Twenty five|Twenty-five|30} {feet|ft|toes|foot} {away|aside|absent|apart} {can be removed|can be taken off|is easy to remove|are easy to remove}. {Had to|Needed to|Were required to|Was required to}.
+</span><span class='line'>{For|With regard to|Regarding|Pertaining to} {600|Six hundred|Six-hundred|1000} {rating|score|ranking|standing} {pipe|water pipe|tube|water line} {what is the|what's the|is there a|exactly what is the} {schedule|routine|timetable|plan} {require|need|call for|demand} {for|with regard to|regarding|pertaining to} 2" NB {pipe|water pipe|tube|water line} [ {0|Zero|2|3} {Answers|Solutions|Responses|Replies} {]|}
+</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {Natural gas|Gas|Propane|Gas main} {pressure|stress|strain|force} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
+</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {And|As well as|And also|Along with}, {where can I|how can i|can anyone help me|i'm looking to} {find a|look for a|locate a|discover a} {pressure|stress|strain|force} {table|desk|stand|kitchen table} {for|with regard to|regarding|pertaining to} {capacities|capabilities|sizes|drives} {of various|of numerous|of varied|of assorted} {size|dimension|dimensions|measurement} {pipes|plumbing|water lines|piping} {at|from|with|in} {various|numerous|different|a variety of} {inlet|intake|inlt} {pressures|demands|challenges|difficulties}
+</span><span class='line'>{Adding|Including|Incorporating|Introducing} {a|the|any|a new} {PVC|Pvc material|Faux wood|Imitation wood} "Y" {to a|to some|with a|into a} {underground|subterranean|undercover|subway} {Cast iron|Surefire|Certain|Iron} {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
+</span><span class='line'>{I have a|I've got a|I've a|I own a} {house|home|residence|property} {built in|built-in|integrated|internal} {1962|'62}. {The|The actual|The particular|Your} {cast iron|surefire|certain|iron} {waste|squander|waste materials|spend} {pipe|water pipe|tube|water line} {runs|operates|works|goes} {under the|underneath the|beneath the|within the} {concrete slab|layer of concrete} {in the|within the|inside the|from the} {basement|cellar|downstairs room|attic}. {I have|I've|We have|We've} {already|currently|previously|by now} {dug|made|excavated|finished} {and|as well as|and also|along with} {confirmed|verified|established|validated} {the location|the place|the positioning|the venue} {I want to|I wish to|I would like to|I must} {cut|reduce|minimize|lower} {a section|a piece|an area|a bit} {out of the|from the|out from the|out of your} {pipe|water pipe|tube|water line} {and|as well as|and also|along with} {install a|use a|put in a|purchase a} "Y" {connector|connection|plug} {and|as well as|and also|along with} {run|operate|work|manage} {new|brand new|fresh|brand-new} {plastic|plastic material|plastic-type|plastic-type material} {waste|squander|waste materials|spend} {pipes|plumbing|water lines|piping} {to a new|to a different|to an alternative|completely to another} {bath|bathtub|shower|bath tub}. {I have seen|I've come across|I have come across|I know of} {PVC|Pvc material|Faux wood|Imitation wood} {connectors|fittings|connections|band} {that|which|in which|that will}./p&gt;</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -515,6 +616,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information From Github Doesn&#8217;t Save You</a>
       </li>
     
@@ -528,10 +633,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/">Chrome Tracks Every Key Typed Into the Omnibox</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/02/my-probably-boring-research-papers-on-security/">My (Probably Boring) Research Papers on Security</a>
       </li>
     
   </ul>
