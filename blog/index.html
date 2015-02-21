@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Back in December, SANS released another installment of their annual holiday challenge. I enjoyed taking on the 2012 challenge, so I was &hellip;">
+  <meta name="description" content="Introduction During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,6 +84,208 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Web Scraping Hotel Prices for Fun and Savings</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-21T12:05:00-06:00" pubdate data-updated="true">Feb 21<span>st</span>, 2015</time>
+        
+           | <a href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/web_scraping.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
+
+<p>Then I considered the alternative &ndash; maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+
+<h3>A Brief Intro to Python Web Scraping</h3>
+
+<p>Web scraping with Python is generally done using a mixture of the fantastic <code>requests</code> and <code>beautifulsoup</code> libraries. This post won&rsquo;t go into detail about all the neat features of <code>beautifulsoup</code>, instead aiming for simplicity to show the basics.</p>
+
+<h4>Getting a BeautifulSoup Object</h4>
+
+<p>The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with <code>requests.get()</code> and, if successful, creating a BeautifulSoup object using the <code>BeautifulSoup()</code> constructor with the <code>.text</code> of our response.</p>
+
+<p>It would look something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>response = requests.get('http://foo.bar')
+</span><span class='line'>if response.ok:
+</span><span class='line'>    soup = BeautifulSoup(response.text)</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Getting Data From BeautifulSoup</h4>
+
+<p>Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the <code>Tag</code> object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>soup.find_all('a') # Get all &lt;a&gt; tags
+</span><span class='line'>soup.find_all('a', {"class" : "css_class"}) # Get all &lt;a class="css_class"&gt; tags
+</span><span class='line'>soup.find_all('a', 'css_class') # Shortcut for searching by class
+</span><span class='line'>soup.find() # Same as find_all(), but returns the first instance</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After we have the <code>Tag</code> object we want, we can parse out the text by accessing the <code>.text</code> attribute.</p>
+
+<p>This is <em>barely</em> scratching the surface of BeautifulSoup&rsquo;s API, so if you&rsquo;re interested in learning more, you can take a look at the docs <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">here</a>. That&rsquo;s all we&rsquo;ll need for this post, so let&rsquo;s see this in action.</p>
+
+<h3>Parsing Some (Not Great) HTML</h3>
+
+<p>The goal was to simply pull down the rate for each day, and dump it out to a CSV (&ldquo;rates.csv&rdquo;) for some sweet Excel graphing later.</p>
+
+<p>I&rsquo;ll leave the exact hotel and URL redacted, but the basic URL was in the form:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>http://foo.bar?month=:int&day=:int&year=:int</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We can start with a naive approach of looping through the months I was interested in (August through December) and getting a BeautifulSoup object from each result.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import requests
+</span><span class='line'>from bs4 import BeautifulSoup
+</span><span class='line'>import time
+</span><span class='line'>
+</span><span class='line'>with open('rates.csv', 'w') as rates:
+</span><span class='line'>    rates.write("Date,Rate\n")
+</span><span class='line'>    for m in range(8,13):
+</span><span class='line'>        for d in range(1,32):
+</span><span class='line'>            try:
+</span><span class='line'>                response = requests.get('http://foo.bar?month=' + str(m) + '&day=' + str(d) + '&year=2015')
+</span><span class='line'>                if response.ok:
+</span><span class='line'>                    soup = BeautifulSoup(response.text)
+</span><span class='line'>            except Exception e:
+</span><span class='line'>                print e
+</span><span class='line'>            # Be (somewhat) nice.
+</span><span class='line'>            time.sleep(.2)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now we just need to figure out what kind of data we care about. This site used tables. <strong>A lot.</strong> After some testing, I wound up parsing HTML that looked like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;table summary="rooms availability"&gt;
+</span><span class='line'>    &lt;tbody&gt;
+</span><span class='line'>        &lt;tr&gt;
+</span><span class='line'>            &lt;td&gt;
+</span><span class='line'>                &lt;div class="roomSection"&gt;
+</span><span class='line'>                    &lt;div class="roomType"&gt;
+</span><span class='line'>                        &lt;span class="value"&gt;King&lt;/span&gt;
+</span><span class='line'>                    &lt;/div&gt;
+</span><span class='line'>                    &lt;div class="roomAvail"&gt;
+</span><span class='line'>                        &lt;div class="bar"&gt;
+</span><span class='line'>                            &lt;div class="label"&gt;Nightly Rate&lt;/div&gt;
+</span><span class='line'>                            &lt;div class="value"&gt;
+</span><span class='line'>                                159.00 &lt;-- What I want to get
+</span><span class='line'>                            &lt;/div&gt;
+</span><span class='line'>                        &lt;/div&gt;
+</span><span class='line'>                    &lt;/div&gt;
+</span><span class='line'>                &lt;/div&gt;
+</span><span class='line'>            &lt;/td&gt;
+</span><span class='line'>        &lt;/tr&gt;
+</span><span class='line'>    &lt;/tbody&gt;
+</span><span class='line'>&lt;/table&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I cleaned up the formatting, removed unnecessary parts, etc. Trust me, you&rsquo;re welcome.</p>
+
+<p>My first step was to get the room type and make sure it was &ldquo;King&rdquo; as a sanity check, since there were multiple types of rooms in the table. Then, I wanted to get the text of the div with the class &ldquo;value&rdquo; in the &ldquo;roomAvail&rdquo; section. This is the nightly rate.</p>
+
+<p>Finally, I want to write the rate out to the CSV file.</p>
+
+<p>There&rsquo;s definitely more concise ways of doing this with more advanced BeautifulSoup usage, but this code worked:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>king = soup.find("table", {"summary" : "rooms availability"}).find("div", "roomSection")
+</span><span class='line'>if king.find("div", "roomType").text.strip() == "King":
+</span><span class='line'>    rate = king.find("div", "roomAvail").find("div", "value").strip()
+</span><span class='line'>    rates.write("2015-" + str(m) + "-" + str(d) + "," + str(rate) + "\n")</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Success!</h3>
+
+<p>Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:</p>
+
+<p><img src="/images/blog/web scraping/rates.png"/></p>
+
+<p><em>Awesome.</em> In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.</p>
+
+<p>-Jordan</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -535,54 +737,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-30T22:12:00-05:00" pubdate data-updated="true">Jul 30<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/phishing_kit.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Sites like <a href="http://www.phishtank.com/phish_archive.php">phishtank</a> and <a href="http://support.clean-mx.com/clean-mx/phishing.php">clean-mx</a> act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find <a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">interesting information</a> about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how <em>phishing kits</em> are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -598,6 +752,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Web Scraping Hotel Prices for Fun and Savings</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a>
       </li>
     
@@ -611,10 +769,6 @@
     
       <li class="post">
         <a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">What Happens if Tor Directory Authorities Are Seized?</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/">Chrome Tracks Every Key Typed Into the Omnibox</a>
       </li>
     
   </ul>
