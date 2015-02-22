@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linkedin | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/linkedin/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-02-21T15:52:16-06:00</updated>
+  <updated>2015-02-21T21:59:30-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -95,7 +95,7 @@ verify return:0
 . OK More capabilities after LOGIN
 a LOGIN username_redacted password_redacted
 * CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
-A OK <a href="&#109;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#108;&#x69;&#x6e;&#x6b;&#101;&#x64;&#105;&#110;&#46;&#105;&#x6e;&#x74;&#x72;&#x6f;&#x2e;&#116;&#x65;&#x73;&#116;&#x40;&#x67;&#x6d;&#x61;&#x69;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#108;&#105;&#x6e;&#x6b;&#x65;&#x64;&#105;&#x6e;&#x2e;&#105;&#110;&#116;&#114;&#x6f;&#x2e;&#116;&#x65;&#115;&#x74;&#x40;&#x67;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a> Test Account authenticated (Success)
+A OK <a href="&#109;&#97;&#x69;&#108;&#116;&#111;&#58;&#108;&#x69;&#x6e;&#x6b;&#x65;&#x64;&#x69;&#x6e;&#46;&#105;&#110;&#x74;&#x72;&#111;&#46;&#116;&#101;&#x73;&#116;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#x6c;&#x69;&#110;&#107;&#101;&#100;&#105;&#110;&#x2e;&#105;&#x6e;&#116;&#x72;&#x6f;&#46;&#116;&#x65;&#x73;&#x74;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#111;&#109;</a> Test Account authenticated (Success)
 b SELECT INBOX
 * FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
 * OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen *)] Flags permitted.
