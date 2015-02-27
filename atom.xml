@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-02-24T17:16:09-06:00</updated>
+  <updated>2015-02-26T20:46:53-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Gophish Update: Getting Closer to Alpha!]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha/"/>
+    <updated>2015-02-26T20:50:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/gophish_purple.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>It&rsquo;s been a busy couple of months!</p>
+
+<p>I thought it would be worth providing a long-overdue update into the development status of <a href="http://github.com/jordan-wright/gophish">gophish</a>. Overall, the project is getting closer to beta status every day, and I&rsquo;m hoping to see a <a href="https://github.com/jordan-wright/gophish/milestones">0.1 release</a> at the end of March.</p>
+
+<p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
+
+<!--more-->
+
+
+<h3>Design</h3>
+
+<p>I moved away from the previous black and white look to a friendlier color scheme using the fantastic <a href="http://designmodo.github.io/Flat-UI/">Flat-UI</a> package from DesignModo.</p>
+
+<h3>Features</h3>
+
+<p>My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.</p>
+
+<p>Let&rsquo;s take a look at a few:</p>
+
+<h4>WYSIWYG Editing of HTML Templates</h4>
+
+<p>You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some <code>contenteditable</code> hacks, I couldn&rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that <a href="http://ckeditor.com">CKEditor</a> which takes care of this and more!</p>
+
+<p>Now we can switch between a raw HTML source view and a fully rendered view in just one-click. Want to see what a template would look like full-screen? Also no problem!</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/gophish_screenshots/gophish_template.gif"/></p>
+
+<h4>Email Attachments</h4>
+
+<p>Sending emails with links in them is great, but if we can&rsquo;t add &ldquo;malicious&rdquo; attachments to emails we send, then we miss a <em>huge</em> attack tactic deployed against our users. I&rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &ldquo;Add Files&rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!</p>
+
+<h4>Bulk Importing of Users</h4>
+
+<p>Adding users to a group manually is a <em>pain</em>. So, I&rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:</p>
+
+<ul>
+<li>First Name</li>
+<li>Last Name</li>
+<li>Email</li>
+<li>Position</li>
+</ul>
+
+
+<p><img src="http://jordan-wright.github.io/images/blog/gophish_screenshots/gophish_group.gif"/></p>
+
+<h4>Campaign Results Dashboard</h4>
+
+<p>Executing campaigns isn&rsquo;t helpful if you don&rsquo;t have a way to see the results. This is why I&rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/gophish_screenshots/gophish_campaign_results.gif"/></p>
+
+<h4>Full API Support</h4>
+
+<p>From the get-go, gophish was <strong>designed for automation</strong>. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near <em>everything</em>.</p>
+
+<p>To take a look at the API documentation, just load up gophish and head over to <code>/api</code>!</p>
+
+<h4>Coming Soon</h4>
+
+<p>While I&rsquo;m proud of all that&rsquo;s been accomplished with gophish so far, it&rsquo;s not even close to being done.</p>
+
+<p>Here are just a few of the <em>many</em> features coming down the pipeline to get excited about:</p>
+
+<ul>
+<li>A more fleshed out Campaign Results dashboard (<span><i class="fa fa-heart-o"></i></span> metrics)</li>
+<li>Ability to schedule campaigns in advance</li>
+<li>Email tracking &ndash; know when an email is opened!</li>
+<li>The ability to clone a landing page template with one click</li>
+<li>Support for importing emails from the &ldquo;Source&rdquo; of an existing email (or hopefully even an IMAP service directly!)</li>
+<li>&ldquo;Teams&rdquo; support to share and coordinate phishing campaigns</li>
+<li>Realtime updates to campaign results dashboard</li>
+<li>Client API libraries (eg Python)</li>
+</ul>
+
+
+<h3>Conclusion</h3>
+
+<p>Gophish development continues to push forward as much as possible. While I&rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on <a href="http://github.com/jordan-wright/gophish/issues">Github</a>!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Web Scraping Hotel Prices for Fun and Savings]]></title>
@@ -2719,27 +2809,6 @@
 <p>Enjoy!</p>
 
 <p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Hello World!]]></title>
-    <link href="http://jordan-wright.github.io/blog/2013/10/11/hello-world/"/>
-    <updated>2013-10-11T02:25:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2013/10/11/hello-world</id>
-    <content type="html"><![CDATA[<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#!/usr/bin/env python
-</span><span class='line'>print 'Hello, World!'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.</p>
-
-<p>For the past few years, I created and maintained a blog for an organization I started called <a href="http://raidersec.blogspot.com">Raidersec</a>. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</p>
-
-<p>I have quite a few projects in the works that I am excited to share soon! For now, feel free to check out my <a href="http://jordan-wright.github.io/projects">existing projects</a>, and <a href="http://jordan-wright.github.io/contact">let me know</a> if you have any questions or comments!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: kits | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/kits/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-02-24T17:16:09-06:00</updated>
+  <updated>2015-02-26T20:46:53-06:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -54,7 +54,7 @@ $message .= &ldquo;IP: &rdquo;.$ip.&ldquo;\n&rdquo;;
 $message .= &ldquo;Country: &rdquo;.$country.&ldquo;\n&rdquo;;
 $recipient = &ldquo;[redacted]@gmail.com&rdquo;;
 $subject = &ldquo;Ghost Wir3 &ndash; &rdquo;.$country;
-$headers = &ldquo;From:  Ghost Wir3 <a href="&#x6d;&#x61;&#x69;&#108;&#116;&#111;&#x3a;&#x6e;&#111;&#95;&#x72;&#101;&#x70;&#108;&#x79;&#x40;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;">&#110;&#111;&#x5f;&#114;&#x65;&#x70;&#108;&#x79;&#64;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;</a>&rdquo;;
+$headers = &ldquo;From:  Ghost Wir3 <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#110;&#x6f;&#x5f;&#114;&#x65;&#x70;&#108;&#121;&#64;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#110;&#111;&#x5f;&#114;&#101;&#x70;&#x6c;&#x79;&#x40;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#x6d;</a>&rdquo;;
 $headers .= $_POST[&lsquo;eMailAdd&rsquo;].&ldquo;\n&rdquo;;
 $headers .= &ldquo;MIME-Version: 1.0\n&rdquo;;</p>
 
