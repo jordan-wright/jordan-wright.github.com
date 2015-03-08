@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown &hellip;">
+  <meta name="description" content="TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later now. Elasticsearch (the &ldquo;E&rdquo; in ELK) is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-08T13:40:00-05:00" pubdate data-updated="true">Mar 8<span>th</span>, 2015</time>
+        
+           | <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/elk_rce.png"/></p>
+
+<blockquote><p>TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later <strong>now</strong>.</p></blockquote>
+
+<p>Elasticsearch (the &ldquo;E&rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).</p>
+
+<blockquote><p>Much of the analysis discovering this vulnerability was originally found on a blog post <a href="http://drops.wooyun.org/papers/5107">here</a> (<a href="https://translate.google.com/translate?hl=en&amp;sl=zh-CN&amp;tl=en&amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107">translated</a>). This post aims to translate and provide more detail on the vulnerability.</p></blockquote>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -536,58 +586,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Reverse Engineering the We Heart It API</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-12T20:40:00-05:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/weheartit_api.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
-
-<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
-
-<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -603,6 +601,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a>
       </li>
     
@@ -616,10 +618,6 @@
     
       <li class="post">
         <a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information From Github Doesn&#8217;t Save You</a>
       </li>
     
   </ul>
