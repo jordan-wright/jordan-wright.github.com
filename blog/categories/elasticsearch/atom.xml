@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elasticsearch | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/elasticsearch/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-03-24T07:54:54-05:00</updated>
+  <updated>2015-03-24T11:30:05-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -31,7 +31,7 @@
 
 <p>This honeypot is pretty simple. It takes requests on the <code>/</code>, <code>/_search</code>, and <code>/_nodes</code> endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical &ndash; I took the responses straight from one of my hosts that got 0wned).</p>
 
-<p>Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to <code>stdout</code>, as well as to a file called <code>elastichoney.log</code>. Here&rsquo;s what a sample attack might look like:</p>
+<p>Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to <code>stdout</code>, as well as to a file called <code>elastichoney.log</code>.</p>
 
 <p>It&rsquo;s important to note that this is by no means foolproof. Clever people can take a look at <a href="http://github.com/jordan-wright/elastichoney">the code</a> and quickly find ways to detect the honeypot. It&rsquo;s not perfect, but it works. Let&rsquo;s take a look at some results.</p>
 
