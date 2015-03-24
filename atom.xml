@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-03-24T07:49:45-05:00</updated>
+  <updated>2015-03-24T07:54:54-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -75,7 +75,7 @@
 </span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Now, I&rsquo;m sure you&rsquo;re interested in some samples. <a href="http://jordan-wright.github.io/assets/downloads/elastichoney.log">Here&rsquo;s</a> a bit of what I have so far. There&rsquo;s some nifty <code>wget</code> calls in there if you grab them fast enough.</p>
+<p>Now, I&rsquo;m sure you&rsquo;re interested in some samples. <a href="https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log">Here&rsquo;s</a> a bit of what I have so far. There&rsquo;s some nifty <code>wget</code> calls in there if you grab them fast enough.</p>
 
 <p>Enjoy!</p>
 
