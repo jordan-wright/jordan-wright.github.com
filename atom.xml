@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-09T15:52:03-05:00</updated>
+  <updated>2015-05-09T15:54:57-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -23,6 +23,9 @@
 <h3>Introduction</h3>
 
 <p>Welcome back to my series on how Tor works! In the <a href="http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one/">last post</a>, we took a look at how Tor operates from a very high level. In this post, we&rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: <strong>bridges</strong>.</p>
+
+<!--more-->
+
 
 <h3>Relay Recap</h3>
 
