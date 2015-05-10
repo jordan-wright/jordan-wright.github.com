@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tor | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/tor/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-09T15:54:57-05:00</updated>
+  <updated>2015-05-10T11:25:22-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,87 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Tor Works: Part Two - Relays vs. Bridges]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/"/>
+    <updated>2015-05-09T15:00:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/how_tor_works_2.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Welcome back to my series on how Tor works! In the <a href="/blog/2015/02/28/how-tor-works-part-one/">last post</a>, we took a look at how Tor operates from a very high level. In this post, we&rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: <strong>bridges</strong>.</p>
+
+<!--more-->
+
+
+<h3>Relay Recap</h3>
+
+<p>In the last post, we introduced relays as systems designed to move traffic in the Tor network. You&rsquo;ll recall that there were three types of relays:</p>
+
+<ul>
+<li><strong>Entry/Guard Relays</strong> &ndash; Entry points into the Tor network</li>
+<li><strong>Middle Relays</strong> &ndash; Send traffic from an entry relay to an exit relay</li>
+<li><strong>Exit Relays</strong> &ndash; Send the traffic out of the Tor network to the original destination</li>
+</ul>
+
+
+<p>Relays are created by volunteers by simply configuring the Tor software to act as a relay. As a reminder, if you have bandwidth to spare, consider setting up a Tor relay!</p>
+
+<h3>The Problem With Relays</h3>
+
+<p>When a Tor client starts up, it needs a way to fetch a list of all the entry, middle, and exit relays available. This list of all relays isn&rsquo;t a secret. In fact, in the next post I&rsquo;ll explain in detail how this list is distributed (for a sneak peek check out documents on the <em>concensus</em>). While making this list public is necessary, it also presents a problem.</p>
+
+<p>To figure out why this is problem, let&rsquo;s play the role of the attacker and ask ourselves: <em>What Would an Oppressive Government Do (WWOGD)?</em>. By thinking to ourselves what a <strong><em>real OG</em></strong> would do, we can figure out why Tor is built the way it is.</p>
+
+<p>So what would a real OG do? Since censorship is a pretty big deal, and Tor is pretty darn good at getting around it, a real OG would want to block users from using Tor. There are two ways to &ldquo;block Tor users&rdquo;:</p>
+
+<ul>
+<li>Block users coming out of Tor</li>
+<li>Block users going into Tor</li>
+</ul>
+
+
+<p>The first situation is possible, and is up to the discretion of the device (router, etc.) or website owner. All a site owner needs to do is to download the list of Tor exit nodes and block all traffic from those nodes. While this would be unfortunate, there&rsquo;s nothing Tor can really do about it.</p>
+
+<p>However, the second situation is much worse. While blocking incoming Tor users can keep them from a particular site, blocking users from going into Tor will keep them from <strong>every</strong> site, making Tor effectively useless to those under censorship &ndash; some of the users who need Tor most. Just using relays, this is possible since real OG&rsquo;s can just download a list of all guard relays and block any traffic to them.</p>
+
+<p>Thankfully, the Tor project thought of exactly this situation and came up with a clever solution around it. Say hello to <strong>bridges</strong>.</p>
+
+<h3>Introducing Bridges</h3>
+
+<p><a href="https://www.torproject.org/docs/bridges.html.en">Bridges</a> are a clever solution to this problem. At their core, bridges are just unpublished entry relays. Users that are behind censored networks can use bridges as a way to access the Tor network.</p>
+
+<p>So if bridges are unpublished, how do users know where they are? Won&rsquo;t a master list need to be published somewhere? We&rsquo;ll talk more about these master lists of relays and bridges in the next post, but for now the answer is yes &ndash; there is a list of bridges maintained by the Tor project.</p>
+
+<p><strong>This list just isn&rsquo;t made public.</strong></p>
+
+<p>Instead, the Tor project has created a way for users to receive a small list of bridges so that they can connect to the rest of the Tor network. This project, called <a href="https://bridges.torproject.org/bridges">BridgeDB</a> gives users the information about a few bridges at a time. This makes sense, since a few bridges should be all any user needs.</p>
+
+<p>By only giving users a few bridges at a time, it is possible to prevent OG&rsquo;s from blocking all possible entry points into the Tor network. Sure, as relays are discovered they can be blocked, but can anyone really discover all the bridges?</p>
+
+<h3>Can Anyone Find Every Bridge?</h3>
+
+<p>The list of all bridges is a closely guarded secret. If a real OG were able to gain access to this list, it would be able to completely block users from using Tor. With this being the case, there has been <a href="https://blog.torproject.org/blog/research-problems-ten-ways-discover-tor-bridges">research</a> done by the Tor project into possible ways people could discover all the bridges.</p>
+
+<p>I&rsquo;d like to talk very briefly about #2 and #6 on that list, since that&rsquo;s <a href="https://zmap.io/paper.pdf"><em>exactly</em></a> <a href="http://www.cs.uml.edu/~xinwenfu/paper/Bridge.pdf">what</a> researchers have done with some significant success. In the first scenario, researchers scanned the entire IPv4 space using a fast port scanner called ZMap looking for Tor bridges and &ldquo;were able to identify 79–86%&rdquo;<sup>1</sup> of them. I recommend reading the paper for the really cool technical details (about finding Tor bridges and ZMap in general).</p>
+
+<p>The second scenario is a neat one and introduces an important challenge for Tor (or any network for that matter). It all comes down to a simple concept &ndash; <em>users can&rsquo;t be trusted</em>. In order to keep the Tor network as anonymous and locked down as possible, the Tor network is designed in such a way to intentionally distrust relay operators. We&rsquo;ll see more examples of this later.</p>
+
+<h3>Next Steps</h3>
+
+<p>In this post, we&rsquo;ve talked about the need for relays that aren&rsquo;t published in some &ldquo;master list&rdquo;. But, you&rsquo;ll notice I didn&rsquo;t give many details about <em>how</em> this master list is created, or how Tor clients get access to the list.</p>
+
+<p>So, in our next post, we&rsquo;ll take a look at how the Tor network maintains the status of all relays in the network. We&rsquo;ll also introduce some very powerful relays in the Tor network who run the show &ndash; <strong>directory authorities</strong>.</p>
+
+<p>As always, please let me know if you have any questions or comments below!</p>
+
+<p>Jordan</p>
+
+<p><sup>[1] <a href="https://zmap.io/paper.pdf">https://zmap.io/paper.pdf</a></sup></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Tor Works: Part One]]></title>
@@ -1079,6 +1160,8 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
 <p>As always, please let me know if you have any questions or comments below!</p>
 
 <p>Jordan</p>
+
+<p><em>Update: <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Part two &ndash; &ldquo;Relays vs. Bridges&rdquo;</a> has been published!</em></p>
 
 <div>
 <script>

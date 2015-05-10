@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-09T15:54:57-05:00</updated>
+  <updated>2015-05-10T11:25:22-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -1445,6 +1445,8 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
 <p>As always, please let me know if you have any questions or comments below!</p>
 
 <p>Jordan</p>
+
+<p><em>Update: <a href="http://jordan-wright.github.io/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Part two &ndash; &ldquo;Relays vs. Bridges&rdquo;</a> has been published!</em></p>
 
 <div>
 <script>
