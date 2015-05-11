@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: browsers | jordan-wright]]></title>
+  <link href="http://jordan-wright.github.io/blog/categories/browsers/atom.xml" rel="self"/>
+  <link href="http://jordan-wright.github.io/"/>
+  <updated>2015-05-10T20:04:46-05:00</updated>
+  <id>http://jordan-wright.github.io/</id>
+  <author>
+    <name><![CDATA[Jordan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Chrome Tracks Every Key Typed into the Omnibox]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/"/>
+    <updated>2014-12-18T23:43:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/browser_tracking.png"/></p>
+
+<blockquote><p>Friendly Reminder: Browser makers may track every key you type in the URL bar</p></blockquote>
+
+<h3>Introduction</h3>
+
+<p>Technologies like Google Chrome&rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.</p>
+
+<!--more-->
+
+
+<h3>How the Omnibox Works</h3>
+
+<p>Predictive search isn&rsquo;t magic. Chrome doesn&rsquo;t come shipped with a built-in collection of popular searches. No, the only way to get suggestions for what you are searching is to <em>ask Google</em>. This happens by sending a request to Google for search suggestions <strong>for every key typed in the omnibox</strong> &ndash; by default.</p>
+
+<p>What does this look like? After installing Burp&rsquo;s CA certificate and starting <code>chrome.exe</code> with the <code>--allow-ssl-mitm-proxies</code> option, we can see the following requests pop up as we search:</p>
+
+<p><code>
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=o
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=om
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omg
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgw
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgwt
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgwtf
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgwtfb
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgwtfbb
+GET /complete/search?client=chrome-omni&amp;gs_ri=chrome-ext&amp;xssi=t&amp;q=omgwtfbbq
+</code></p>
+
+<blockquote><p><em>But I&rsquo;m searching these things anyway!</em></p></blockquote>
+
+<p>Sure, this might be fine for searches, but what else could be sent via this method? Hostnames, web addresses, and IP addresses are <strong><em>all</em></strong> sent to Google before you press enter. This means that Google knows if you visit a website, even if you don&rsquo;t visit the site from search results.</p>
+
+<h4>Disabling Omnibox</h4>
+
+<p>Since this setting is enabled by default, here&rsquo;s how to disable it:</p>
+
+<p><span class="fa-stack fa-lg fa-1x">
+<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
+<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">1</i>
+</span> Navigate to <code>chrome://settings</code></p>
+
+<p><span class="fa-stack fa-lg fa-1x">
+<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
+<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">2</i>
+</span> Click &ldquo;Show Advanced Settings&rdquo;</p>
+
+<p><span class="fa-stack fa-lg fa-1x">
+<i class="fa fa-circle fa-stack-2x" style="color:#019875"></i>
+<i class="fa fa-stack-1x" style="color:white; font-family:inherit;">3</i>
+</span> Uncheck &ldquo;Use a prediction service to help complete searches&hellip;&rdquo;</p>
+
+<p><img src="/images/blog/browser_track/omnibox.png"/></p>
+
+<h3>Chrome Isn&rsquo;t the Only One</h3>
+
+<p>It&rsquo;s important to note that Chrome isn&rsquo;t the only browser that has this capability. Internet Explorer has the same feature from Bing. The only difference is that this isn&rsquo;t default behavior, and has to be explicitly enabled.</p>
+
+<h3>Putting Things in Perspective</h3>
+
+<p>This isn&rsquo;t new information &ndash; more of a friendly reminder. It&rsquo;s important to put these privacy &ldquo;risks&rdquo; in perspective and determine what is more important to you &ndash; keeping your browsing history and IP/hostname scheme private, or getting solid search suggestions.</p>
+
+<p>As always, let me know if you have any questions/comments below.</p>
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: web_scraping | jordan-wright]]></title>
+  <link href="http://jordan-wright.github.io/blog/categories/web-scraping/atom.xml" rel="self"/>
+  <link href="http://jordan-wright.github.io/"/>
+  <updated>2015-05-10T20:04:46-05:00</updated>
+  <id>http://jordan-wright.github.io/</id>
+  <author>
+    <name><![CDATA[Jordan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Web Scraping Hotel Prices for Fun and Savings]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/"/>
+    <updated>2015-02-21T12:05:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/web_scraping.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
+
+<p>Then I considered the alternative &ndash; maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+
+<!--more-->
+
+
+<h3>A Brief Intro to Python Web Scraping</h3>
+
+<p>Web scraping with Python is generally done using a mixture of the fantastic <code>requests</code> and <code>beautifulsoup</code> libraries. This post won&rsquo;t go into detail about all the neat features of <code>beautifulsoup</code>, instead aiming for simplicity to show the basics.</p>
+
+<h4>Getting a BeautifulSoup Object</h4>
+
+<p>The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with <code>requests.get()</code> and, if successful, creating a BeautifulSoup object using the <code>BeautifulSoup()</code> constructor with the <code>.text</code> of our response.</p>
+
+<p>It would look something like this:</p>
+
+<p>```
+response = requests.get(&lsquo;<a href="http://foo.bar">http://foo.bar</a>&rsquo;)
+if response.ok:</p>
+
+<pre><code>soup = BeautifulSoup(response.text)
+</code></pre>
+
+<p>```</p>
+
+<h4>Getting Data From BeautifulSoup</h4>
+
+<p>Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the <code>Tag</code> object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:</p>
+
+<p><code>
+soup.find_all('a') # Get all &lt;a&gt; tags
+soup.find_all('a', {"class" : "css_class"}) # Get all &lt;a class="css_class"&gt; tags
+soup.find_all('a', 'css_class') # Shortcut for searching by class
+soup.find() # Same as find_all(), but returns the first instance
+</code></p>
+
+<p>After we have the <code>Tag</code> object we want, we can parse out the text by accessing the <code>.text</code> attribute.</p>
+
+<p>This is <em>barely</em> scratching the surface of BeautifulSoup&rsquo;s API, so if you&rsquo;re interested in learning more, you can take a look at the docs <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">here</a>. That&rsquo;s all we&rsquo;ll need for this post, so let&rsquo;s see this in action.</p>
+
+<h3>Parsing Some (Not Great) HTML</h3>
+
+<p>The goal was to simply pull down the rate for each day, and dump it out to a CSV (&ldquo;rates.csv&rdquo;) for some sweet Excel graphing later.</p>
+
+<p>I&rsquo;ll leave the exact hotel and URL redacted, but the basic URL was in the form:</p>
+
+<p><code>
+http://foo.bar?month=:int&amp;day=:int&amp;year=:int
+</code></p>
+
+<p>We can start with a naive approach of looping through the months I was interested in (August through December) and getting a BeautifulSoup object from each result.</p>
+
+<p>```
+import requests
+from bs4 import BeautifulSoup
+import time</p>
+
+<p>with open(&lsquo;rates.csv&rsquo;, &lsquo;w&rsquo;) as rates:</p>
+
+<pre><code>rates.write("Date,Rate\n")
+for m in range(8,13):
+    for d in range(1,32):
+        try:
+            response = requests.get('http://foo.bar?month=' + str(m) + '&amp;day=' + str(d) + '&amp;year=2015')
+            if response.ok:
+                soup = BeautifulSoup(response.text)
+        except Exception e:
+            print e
+        # Be (somewhat) nice.
+        time.sleep(.2)
+</code></pre>
+
+<p>```</p>
+
+<p>Now we just need to figure out what kind of data we care about. This site used tables. <strong>A lot.</strong> After some testing, I wound up parsing HTML that looked like this:</p>
+
+<p>```</p>
+
+<table summary="rooms availability">
+    <tbody>
+        <tr>
+            <td>
+                <div class="roomSection">
+                    <div class="roomType">
+                        <span class="value">King</span>
+                    </div>
+                    <div class="roomAvail">
+                        <div class="bar">
+                            <div class="label">Nightly Rate</div>
+                            <div class="value">
+                                159.00 <-- What I want to get
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<p>```</p>
+
+<p>I cleaned up the formatting, removed unnecessary parts, etc. Trust me, you&rsquo;re welcome.</p>
+
+<p>My first step was to get the room type and make sure it was &ldquo;King&rdquo; as a sanity check, since there were multiple types of rooms in the table. Then, I wanted to get the text of the div with the class &ldquo;value&rdquo; in the &ldquo;roomAvail&rdquo; section. This is the nightly rate.</p>
+
+<p>Finally, I want to write the rate out to the CSV file.</p>
+
+<p>There&rsquo;s definitely more concise ways of doing this with more advanced BeautifulSoup usage, but this code worked:</p>
+
+<p>```
+king = soup.find(&ldquo;table&rdquo;, {&ldquo;summary&rdquo; : &ldquo;rooms availability&rdquo;}).find(&ldquo;div&rdquo;, &ldquo;roomSection&rdquo;)
+if king.find(&ldquo;div&rdquo;, &ldquo;roomType&rdquo;).text.strip() == &ldquo;King&rdquo;:</p>
+
+<pre><code>rate = king.find("div", "roomAvail").find("div", "value").strip()
+rates.write("2015-" + str(m) + "-" + str(d) + "," + str(rate) + "\n")
+</code></pre>
+
+<p>```</p>
+
+<h3>Success!</h3>
+
+<p>Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:</p>
+
+<p><img src="/images/blog/web scraping/rates.png"/></p>
+
+<p><em>Awesome.</em> In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: dynamic analysis | jordan-wright]]></title>
+  <link href="http://jordan-wright.github.io/blog/categories/dynamic-analysis/atom.xml" rel="self"/>
+  <link href="http://jordan-wright.github.io/"/>
+  <updated>2015-05-10T20:04:46-05:00</updated>
+  <id>http://jordan-wright.github.io/</id>
+  <author>
+    <name><![CDATA[Jordan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Reverse Engineering the We Heart It API]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/"/>
+    <updated>2014-10-12T20:40:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/weheartit_api.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
+
+<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
+
+<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
+
+<!--more-->
+
+
+<h3>Dynamic Analysis</h3>
+
+<p>Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By <a href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">intercepting traffic using a proxy</a>, we can easily analyze the structure of requests/responses in use by the application.</p>
+
+<h4>Registration &amp; Authentication</h4>
+
+<p>Loading up the WHI iPhone app and attempting to register an account shows the following request/response:</p>
+
+<p>```
+POST /api/users HTTP/1.1
+Host: api.weheartit.com</p>
+
+<p><snip>
+client_id=redacted
+&amp;client_secret=redacted
+&amp;user[email]=redacted
+&amp;user[name]=redacted
+&amp;user[password]=redacted
+&amp;user[username]=redacted</p>
+
+<p>{</p>
+
+<pre><code>"result":"success",
+"object":
+{   "id":27215547,
+        "username":"jordan_test2",
+        "name":"Jordan Test",
+        "location":"",
+        "bio":"",
+        &lt;snip&gt;
+        "public_account":true,
+        "verified":false,
+        "created_at":"2014-10-12T18:38:35Z",
+        "email":"redacted",
+        "cover_image": { &lt;snip&gt; }
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p><em>Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.</em></p>
+
+<p>Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an <code>Authorization: Bearer</code> header for all API calls:</p>
+
+<p>```
+POST /oauth/token HTTP/1.1
+Host: api.weheartit.com</p>
+
+<p><snip>
+client_id=redacted
+&amp;client_secret=redacted
+&amp;grant_type=password
+&amp;password=redacted
+&amp;username=redacted</p>
+
+<p>{</p>
+
+<pre><code>"access_token":"redacted",
+"token_type":"bearer",
+"expires_in":31104000,
+"refresh_token":"redacted",
+"scope":"public"
+</code></pre>
+
+<p>}
+```</p>
+
+<p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
+
+<p>```
+GET /api/v2/entries/85847648 HTTP/1.1
+Host: api.weheartit.com
+Authorization: Bearer [redacted]</p>
+
+<p>{</p>
+
+<pre><code>"id": 85847648,
+"title": "Colors",
+&lt;snip&gt;
+"hearts_count": 11285,
+"created_at": "2013-11-10T17:09:49Z",
+"hearted": false,
+"via_hearts_count": 9919,
+"tags": [&lt;snip&gt;],
+"creator": {
+    "id": 6043210,
+    "username": "Natasja4205",
+    &lt;snip&gt;
+},
+"user": {
+    "id": 6043210,
+    "username": "Natasja4205",
+    &lt;snip&gt;
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>```
+GET /api/v2/users/27215547 HTTP/1.1
+Host: api.weheartit.com
+Authorization: Bearer [redacted]</p>
+
+<p>{</p>
+
+<pre><code>"id": 27215547,
+"username": "jordan_test2",
+"name": "Jordan Test",
+"avatar": [&lt;snip&gt;],
+"public_account": true,
+"verified": false,
+"location": null,
+"bio": null,
+"link": null,
+"hearts_count": 0,
+"following_count": 1,
+"followers_count": 2,
+"sets_count": 0,
+"created_at": "2014-10-12T18:38:35Z",
+"cover": {&lt;snip&gt;}
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Great &ndash; we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p>
+
+<h3>Static Analysis</h3>
+
+<p>Now that we have a feel of how the application operates, let&rsquo;s verify our findings by <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">decompiling the Android app</a> and doing some static analysis.</p>
+
+<h4>App Structure</h4>
+
+<p>The app has quite a few dependencies, but the core package (<code>com.weheartit</code>) is fairly straight-forward. The API we are concerned with is located at <code>com.weheartit.api</code>. Searching for the string &ldquo;/api&rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java</p>
+
+<h4>APIRequest.java</h4>
+
+<p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
+
+<p>```java
+private void a(Map map, LoginServices loginservices, ApiResponseCallback apiresponsecallback)</p>
+
+<pre><code>{
+    HashMap hashmap = new HashMap();
+    hashmap.put("client_id", "25ieooqr");
+    hashmap.put("client_secret", "zlype4airg41b33uwafbe8a6p8bwcgiw");
+    hashmap.put("grant_type", "password");
+    hashmap.putAll(map);
+    a.b("oauth/token", hashmap, new OAuthDataResponseHandler(apiresponsecallback, LoginServices.a(loginservices)));
+}
+</code></pre>
+
+<p>```</p>
+
+<p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
+
+<p>```java
+public void a(UserSettings usersettings, ApiResponseCallback apiresponsecallback)</p>
+
+<pre><code>{
+    User user = WhiSession.b();
+    String s = user.getAccessToken();
+    WhiLog.d("ApiRequest", (new StringBuilder()).append("updateUserSettings() for user (").append(user.getId()).append(")").toString());
+    HashMap hashmap = new HashMap(12);
+    hashmap.put("access_token", s);
+    hashmap.put("user[name]", usersettings.getFullName());
+    hashmap.put("user[username]", usersettings.getUsername());
+    hashmap.put("user[email]", usersettings.getEmail());
+    hashmap.put("user[bio]", usersettings.getBio());
+    hashmap.put("user[location]", usersettings.getLocation());
+    hashmap.put("user[link]", usersettings.getLink());
+    hashmap.put("user[show_unsafe_content]", Boolean.toString(usersettings.isUnsafeContentEnabled()));
+    &lt;snip: other settings&gt;
+    hashmap.put("privacy_options[public]", Boolean.toString(usersettings.isUserPublic()));
+    hashmap.put("privacy_options[findable]", Boolean.toString(usersettings.isUserFindable()));
+    a.c("api/settings", hashmap, new ApiOperationResponseHandler(apiresponsecallback, "Failed to update user settings"));
+}
+</code></pre>
+
+<p>```</p>
+
+<p>```java
+public void a(String s, long l, Long long1, ApiResponseCallback apiresponsecallback)</p>
+
+<pre><code>{
+    Object aobj[] = new Object[3];
+    aobj[0] = s;
+    aobj[1] = Long.valueOf(l);
+    aobj[2] = long1;
+    WhiLog.a("ApiRequest", String.format("getEntryCollectionDetails() with %s, %s, %s", aobj));
+    HashMap hashmap = new HashMap();
+    hashmap.put("access_token", s);
+    if (long1 != null)
+    {
+        hashmap.put("heart_id", long1.toString());
+    }
+    a.a((new StringBuilder()).append("api/entry_sets/").append(l).toString(), hashmap, new EntryListResponseHandler(apiresponsecallback, c));
+}
+</code></pre>
+
+<p>```</p>
+
+<h4>APIRequestv2.java</h4>
+
+<p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
+
+<p>```java
+public void a(String s, long l, int i, ApiResponseCallback apiresponsecallback)</p>
+
+<pre><code>{
+    WhiLog.a("ApiRequestV2", (new StringBuilder()).append("getUserEntryCollections() with accessToken ").append(s).append(", ").append(l).append(", ").append(i).toString());
+    HashMap hashmap = new HashMap();
+    hashmap.put("access_token", s);
+    hashmap.put("page", String.valueOf(i));
+    e.a((new StringBuilder()).append("api/v2/users/").append(l).append("/collections").toString(), hashmap, new EntryCollectionListV2ResponseHandler(apiresponsecallback, a));
+}
+</code></pre>
+
+<p>```</p>
+
+<p>```java
+public void a(String s, Long long1, ApiPagedResponseCallback apipagedresponsecallback)</p>
+
+<pre><code>{
+    WhiLog.a("ApiRequestV2", String.format("getUserDashboard() with %s, %d", new Object[] {
+        s, long1
+    }));
+    HashMap hashmap = new HashMap();
+    hashmap.put("access_token", s);
+    if (long1 != null)
+    {
+        hashmap.put("before", String.valueOf(long1));
+    }
+    e.a("api/v2/user/dashboard", hashmap, new UserDashboardResponseHandler(apipagedresponsecallback, b));
+}
+</code></pre>
+
+<p>```</p>
+
+<h3>API Documentation</h3>
+
+<p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
+
+<h3>WHI Sitemaps</h3>
+
+<p>While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its <code>sitemaps</code> files:</p>
+
+<ul>
+<li>Username</li>
+<li>Link to Profile</li>
+<li>Date Modified</li>
+<li>List of Collections</li>
+</ul>
+
+
+<p>You can find these files here:</p>
+
+<ul>
+<li><a href="http://sitemaps.weheartit.com/collections.xml">http://sitemaps.weheartit.com/collections.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/entry_groups.xml">http://sitemaps.weheartit.com/entry_groups.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/entries.xml">http://sitemaps.weheartit.com/entries.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/popular_images.xml">http://sitemaps.weheartit.com/popular_images.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/users.xml">http://sitemaps.weheartit.com/users.xml</a></li>
+<li><a href="http://sitemaps.weheartit.com/tags.xml">http://sitemaps.weheartit.com/tags.xml</a></li>
+</ul>
+
+
+<h3>Conclusion</h3>
+
+<p>For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.</p>
+
+<p>As always, let me know if you have any questions or comments!</p>
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
+  
+</feed>

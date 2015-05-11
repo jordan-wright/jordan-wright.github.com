@@ -107,7 +107,7 @@
   
 
 
-<time datetime="2015-05-11T17:00:00-05:00" pubdate data-updated="true">May 11<span>th</span>, 2015</time>
+<time datetime="2015-05-11T15:00:00-05:00" pubdate data-updated="true">May 11<span>th</span>, 2015</time>
         
            | <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/#disqus_thread"
              data-disqus-identifier="http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">Comments</a>
@@ -181,102 +181,6 @@
     <footer>
       <a rel="full-article" href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Read on &rarr;</a>
     </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/05/01/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-05-01T17:58:00-05:00" pubdate data-updated="true">May 1<span>st</span>, 2015</time>
-        
-           | <a href="/blog/2015/05/01/how-tor-works-part-three-the-consensus/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/05/01/how-tor-works-part-three-the-consensus/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/how_tor_works_2.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Welcome to the third post in my series on how Tor works! In the past two posts, we talked about how clients tunnel traffic through relays, as well as introduced the idea of bridges.</p>
-
-<p>But how do clients know what relays are active? How is the Tor network actually organized? This post will take a look at</p>
-
-<h3>Respect My Authoritah</h3>
-
-<h3>I Made a Poster</h3>
-
-<p>Here it is:</p>
-
-<p><a href="/images/blog/how_tor_works/consensus.png"><img src="/images/blog/how_tor_works/consensus_small.png"/></a></p>
-
-<h3>Next Steps</h3>
-
-<p>You&rsquo;ll notice that we haven&rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &ldquo;break bad&rdquo;, or wreak havoc on Tor users.</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad/">What Happens When Tor Exit Nodes Break Bad?</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-04-30T21:40:00-05:00" pubdate data-updated="true">Apr 30<span>th</span>, 2015</time>
-        
-           | <a href="/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
   
 
 
@@ -537,7 +441,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2015/02/18/dont-connect-to-wifi-automatically/">Why You Shouldn&#8217;t Automatically Connect to Wifi Networks</a></h1>
+      <h1 class="entry-title"><a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a></h1>
     
     
       <p class="meta">
@@ -553,29 +457,128 @@
   
 
 
-<time datetime="2015-02-18T18:08:00-06:00" pubdate data-updated="true">Feb 18<span>th</span>, 2015</time>
+<time datetime="2015-01-05T07:15:00-06:00" pubdate data-updated="true">Jan 5<span>th</span>, 2015</time>
         
-           | <a href="/blog/2015/02/18/dont-connect-to-wifi-automatically/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/02/18/dont-connect-to-wifi-automatically/">Comments</a>
+           | <a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>We&rsquo;ve all seen the articles describing the <a href="https://medium.com/matter/heres-why-public-wifi-is-a-public-health-hazard-dd5b8dcb55e6">damage hackers can do to devices</a> in a local coffee shop. These articles generally describe an approach that involves the attacker connecting to the same local wifi network as the user (statistics show Wifi networks named &ldquo;Starbucks&rdquo; are the <em>real</em> APT*).</p>
+  <div class="entry-content"><p><img src="/images/headers/sans_holiday_2014.png"/></p>
 
-<p>&ldquo;&rdquo;<em>That&rsquo;s fine</em>&ldquo;&rdquo;, you think, &ldquo;I don&rsquo;t use the coffe shop wifi, so I&rsquo;m just fine.&rdquo; In this post, I&rsquo;ll show you how another seemingly harmless feature &ndash; setting a wifi network to connect automatically &ndash; can backfire, allowing attackers to force you onto their own hostile network.</p>
+<h3>Introduction</h3>
 
-<h3>What Happens When You Enable Wifi</h3>
+<p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
 
-<p>Before going into the specifics of the attack, let&rsquo;s talk a little about what happens behind the scenes when you first enable wifi. Connecting to a wifi network</p>
+<p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em></p>
 
-<h3>Karma&rsquo;s a #$%^@!</h3>
-
-<p>* <sup>Not really.</sup></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information From Github Doesn&#8217;t Save You</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-30T19:19:00-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/harvest_github.png"/></p>
+
+<p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
+
+<p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
+
+<p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/28/what-infosec-learned-in-2014/">What InfoSec Learned in 2014</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T20:38:00-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/12/28/what-infosec-learned-in-2014/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/what_infosec_2014.png"/></p>
+
+<p><em>Busy year.</em></p>
+
+<p>It seems as though each year brings more and more events that throw our industry into the forefront of attention &ndash; and they&rsquo;re never good. At the same time, it&rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/12/28/what-infosec-learned-in-2014/">Read on &rarr;</a>
+    </footer>
   
 
 
@@ -604,15 +607,15 @@
       </li>
     
       <li class="post">
-        <a href="/blog/2015/05/01/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/04/30/what-happens-when-tor-exit-nodes-break-bad/">What Happens When Tor Exit Nodes Break Bad?</a>
-      </li>
-    
-      <li class="post">
         <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a>
       </li>
     
   </ul>

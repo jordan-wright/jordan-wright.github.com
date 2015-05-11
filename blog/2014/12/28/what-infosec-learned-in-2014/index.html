@@ -1,0 +1,343 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>What InfoSec Learned in 2014 - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Busy year. It seems as though each year brings more and more events that throw our industry into the forefront of attention &ndash; and they&rsquo; &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">What InfoSec Learned in 2014</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T20:38:00-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/what_infosec_2014.png"/></p>
+
+<p><em>Busy year.</em></p>
+
+<p>It seems as though each year brings more and more events that throw our industry into the forefront of attention &ndash; and they&rsquo;re never good. At the same time, it&rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:</p>
+
+<!--more-->
+
+
+<p><img class="section_header" src="/images/blog/infosec_2014/heartbleed.png"/></p>
+
+<h3>No Software is Safe, or Why Your Vulnerability Doesn&rsquo;t Need a Logo</h3>
+
+<p>Heartbleed and Shellshock were arguably two of the most critical vulnerabilities our industry has seen in a while. These vulnerabilities provided a stark reminder that &ndash; as the security community often quips &ndash; no software is safe. The importance and widespread use of both OpenSSL and Bash contributed to a large, immediate impact when the vulnerabilities were announced.</p>
+
+<p>This impact was also largely fueled by the media. Now, many people would take the stark stance that assigning names and logos to vulnerabilities is ridiculous, and I mostly agree. However, it&rsquo;s important to at least consider the benefits this approach had. Too often, vulnerabilities aren&rsquo;t patched because they simply aren&rsquo;t kept up with. It&rsquo;s mind numbing trying to keep up with every CVE-<em>xxxx</em> affecting every piece of software. In these cases, since the vulnerabilities were critical enough, this approach of marketing to the media worked really well &ndash; many systems were patched quickly<sup>1</sup>.</p>
+
+<p>But sadly, we can already see this being overused. It seems as though anyone who thinks they have found a critical vulnerability needs to find some kind of catchy name to put with it. And I get it &ndash; CVE-2014-0160 isn&rsquo;t as dangerous sounding as <strong><em>Heartbleed</em></strong>, and CVE-2014-6271 + related isn&rsquo;t as hacker-scary sounding as <strong><em>Shellshock</em></strong>. Add logos to go with the catchy names? Marketing people <strong>love</strong> it.</p>
+
+<p>I have no doubt that 2015 will bring with it more critical vulnerabilities in well-known, established pieces of software. I only hope that we can use the lessons-learned from Heartbleed and Shellshock to mature as an industry and approach the marketing and distribution of these details in a responsible, controlled way. Not every vulnerability needs a full marketing team behind it.</p>
+
+<p><img class="section_header" src="/images/blog/infosec_2014/router.png"/></p>
+
+<h3>Embedded Devices: Hacking Like it&rsquo;s 1995</h3>
+
+<p>While the (in)security of embedded devices such as SOHO routers isn&rsquo;t particularly new, there were a substantial number of critical vulnerabilities recently released for these devices. These vulnerabilities includes <a href="https://github.com/elvanderb/TCP-32764">blatant</a> <a href="http://www.devttys0.com/2013/10/reverse-engineering-a-d-link-backdoor/">backdoors</a>, web-app security 101 <a href="http://mis.fortunecook.ie/">blunders</a>, or just bad software.</p>
+
+<p>The primary cause for concern with these vulnerabilities is that they affect a <em>ton</em> of devices. For example, the recently reported <a href="http://mis.fortunecook.ie/">&ldquo;Misfortune Cookie&rdquo;</a> vulnerability &ndash; complete with a name and logo &ndash; claims to affect &ldquo;12 million &hellip; unique devices&rdquo;. Unfortunately, security appears to be put on the backburner when it comes to the development of embedded devices, likely due to either infosec ignorance or simply because manufacturers don&rsquo;t think attackers will target their systems &ndash; I am a fan of the latter.</p>
+
+<p>I wholeheartedly expect to see a wider emphasis put on attacking embedded devices &ndash; particularly network devices &ndash; in 2015. The fact that in 2012 over 400,000 devices can be <a href="http://internetcensus2012.bitbucket.org/paper.html">commandeered using default passwords</a> alone should be considered a substantial threat. Sadly, it will only get worse before it gets better. The only way to fix the situation will be to continue finding and publishing vulnerabilities in these devices in the hopes that manufacturers will start placing a higher emphasis on device security.</p>
+
+<p>Here&rsquo;s hoping for the best.</p>
+
+<p><img class="section_header" src="/images/blog/infosec_2014/pos.png"/></p>
+
+<h3>POS Software = POS</h3>
+
+<p>Compromising Point-of-Sale (POS) devices became the new-hotness for cybercriminals this year. Notable breaches of retailers such as Target and Home Depot caused massive re-issuing of bank credit/debit cards, hefty financial losses, and resulted in some nice <a href="http://cdn.arstechnica.net/wp-content/uploads/2014/12/document4.pdf">class action complaint readings</a>.</p>
+
+<p>The key thing to note about these breaches is that POS malware such as <a href="http://blog.spiderlabs.com/2013/05/alina-shedding-some-light-on-this-malware-family.html">Alina</a>, <a href="http://blog.spiderlabs.com/2014/02/jackpos-the-house-always-wins.html">JackPOS</a>, etc. <strong>is not sophisticated</strong>. It&rsquo;s not. Generally, it works like this:</p>
+
+<ul>
+<li>Check if a POS software process is running</li>
+<li>Dump the memory of that process</li>
+<li>Grep for 16 numbers in a row</li>
+<li>Validate it&rsquo;s a valid CC using something like Luhn&rsquo;s algorithm</li>
+<li>Send it off to a server</li>
+<li>Repeat</li>
+</ul>
+
+
+<p><em>Groundbreaking.</em></p>
+
+<p>So why did this work so well? Turns out, these POS systems (like embedded devices) have not gone through through the gamut of security scrutiny that standard software has. This makes sense, since the market-share for this software was much smaller (meaning less installs of the software than, say, Java or Flash).</p>
+
+<p>But the criminals figured something out. Maybe market share isn&rsquo;t as important as we thought it was. Maybe there is low-hanging fruit that can give enough yield when compromised that it&rsquo;s worth looking into. A <a href="https://www.fox-it.com/en/files/2014/12/Anunak_APT-against-financial-institutions2.pdf">recent report</a> by security firm Fox-IT summed it up nicely:</p>
+
+<blockquote><p>[Hackers] can steal $2000 a thousand times, and earn $2 million, but also they can steal it in one time and immediately get it with much less effort&hellip;</p></blockquote>
+
+<p>Don&rsquo;t get me wrong &ndash; consumer malware families like Zeus will still have a place in the industry while there is money to be made in selling harvested information. However, I have no doubt that Target and Home Depot will only be the beginning of these retailer breaches, at least until chip-and-pin cards are the industry default.</p>
+
+<h3>Conclusion</h3>
+
+<p>It&rsquo;s clear that our industry is showing no signs of slowing down (and hey, I <span><i class="fa fa-heart-o"></i> job security</span>). However, we need to push forward into the next year with the mindset that <em>we&rsquo;re still losing</em>. This next year will bring more breaches, more vulnerabilities, and more lessons to be learned.</p>
+
+<p>As always, let me know if you have any questions or comments below.</p>
+
+<p>[1] <a href="https://jhalderm.com/pub/papers/heartbleed-imc14.pdf">https://jhalderm.com/pub/papers/heartbleed-imc14.pdf</a></p>
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-28T20:38:00-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/infosec/'>infosec</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/" title="Previous Post: What Happens if Tor Directory Authorities are Seized?">&laquo; What Happens if Tor Directory Authorities are Seized?</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/" title="Next Post: Why Deleting Sensitive Information from Github Doesn't Save You">Why Deleting Sensitive Information from Github Doesn't Save You &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
