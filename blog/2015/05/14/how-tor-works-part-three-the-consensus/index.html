@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My (Probably Boring) Research Papers on Security - jordan-wright</title>
+  <title>How Tor Works Part Three - The Consensus - jordan-wright</title>
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Introduction I&rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and &hellip;">
+  <meta name="description" content="Introduction Welcome to the third post in my series on how Tor works! In the past two posts, we talked about how clients tunnel traffic through &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security">
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
@@ -88,7 +88,7 @@
   
   <header>
     
-      <h1 class="entry-title">My (Probably Boring) Research Papers on Security</h1>
+      <h1 class="entry-title">How Tor Works Part Three - the Consensus</h1>
     
     
       <p class="meta">
@@ -104,7 +104,7 @@
   
 
 
-<time datetime="2014-12-02T22:50:00-06:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2014</time>
+<time datetime="2015-05-14T18:30:00-05:00" pubdate data-updated="true">May 14<span>th</span>, 2015</time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
@@ -114,36 +114,70 @@
   </header>
 
 
-<div class="entry-content"><p><img src="/images/headers/papers.png"/></p>
+<div class="entry-content"><p><img src="/images/headers/how_tor_works_2.png"/></p>
 
 <h3>Introduction</h3>
 
-<p>I&rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible &ndash; progress happens this way.</p>
+<p>Welcome to the third post in my series on how Tor works! In the <a href="/blog/categories/tor/">past two posts</a>, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.</p>
 
-<p>As such, I&rsquo;ve decided to &ldquo;open-source&rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.</p>
-
-<p>Please bear in mind some of these papers were written <del>the night before</del> in a short time-span.</p>
+<p>But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the <strong>consensus</strong> as well as introducing a few very important Tor nodes that run the show behind the scenes.</p>
 
 <!--more-->
 
 
-<h3>The Papers</h3>
+<h3>Respect My Authoritah</h3>
 
-<p>Here are the papers (in no particular order):</p>
+<p>In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about <em>how</em> this list is maintained, we need to talk about <em>who</em> maintains it.</p>
+
+<p><a href="https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824">Hardcoded into each Tor client</a> is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role &ndash; to maintain the status of the entire Tor network. These nodes are known as <strong>directory authorities</strong> (DA&rsquo;s).</p>
+
+<p>I&rsquo;ve <a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">written a bit</a> about DA&rsquo;s in the past. Distributed around the world, DA&rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.</p>
+
+<p>So why 10? We know it&rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&rsquo;ll recall that in the previous post I mentioned that there is a master list of relays <em>and</em> a master list of bridges. This is where the split happens. 9 of the DA&rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.</p>
+
+<p>Here are the DA&rsquo;s:</p>
+
+<p><img src="/images/blog/how_tor_works/authorities.png"/></p>
+
+<h3>Reaching a Consensus</h3>
+
+<p>So there are DA&rsquo;s and they maintain the status of the Tor network. But, <strong>how</strong>?</p>
+
+<p>The status of all the Tor relays is maintained in a living document called the <strong>consensus</strong>. DA&rsquo;s maintain this document and update it every hour by a vote. Here&rsquo;s a basic flow of how this updating process works.</p>
 
 <ul>
-<li><a href="https://www.dropbox.com/s/y7mz05n47zs71qu/A%20Systems%20Analysis%20of%20the%20Cybercrime%20Industry.pdf?dl=0"><em>A Systems Analysis of the Cybercrime Industry</em></a> &ndash; A formal systems analysis of the current cybercrime industry, showing how this industry is similar to &ldquo;a market for lemons&rdquo;.</li>
-<li><a href="https://www.dropbox.com/s/rvk6ybbl85zce00/The%20Fault%20Tolerance%20of%20Botnets.pdf?dl=0"><em>The Fault Tolerance of Botnets</em></a> &ndash; Studying fault tolerant models of botnets</li>
-<li><a href="https://www.dropbox.com/s/jy8v6tmsjyr65z5/The%20State%20of%20Email%20Security.pdf?dl=0"><em>The State of Email Security</em></a> &ndash; A study regarding the history and current state of email threats and subsequent security mitigations.</li>
-<li><a href="https://www.dropbox.com/s/db2tbau0jdv9pym/Paradigm%20Exercise.pdf?dl=0"><em>Paradigm Shift in Software Development</em></a> &ndash; A brief look into how the creation and establishment of the OSS movement created a paradigm shift in software development methodologies.</li>
+<li>Each DA compiles a list of all known relays</li>
+<li>Each DA then computes the other needed data, such as relay flags, bandwidth weights, and more</li>
+<li>The DA then submits this data as a &ldquo;status-vote&rdquo; to all the other authorities</li>
+<li>Each DA next will go get any other votes it is missing from the other authorities</li>
+<li>All the parameters, relay information, etc. from each vote are combined or computed and then <strong>signed</strong> by each DA</li>
+<li>This signature is then posted to the other DA&rsquo;s</li>
+<li>There should be a majority of the DA&rsquo;s that agree on the data, validating the new consensus</li>
+<li>The consensus is then published by each DA</li>
 </ul>
 
 
-<p>As always, let me know if you have any questions or comments below! It is worth noting that I do my best to provide the best attribution possible, but if you find mistakes please let me know and I will correct it immediately.</p>
+<p>You&rsquo;ll notice that I mention each DA publishes this consensus. This is done over HTTP such that anyone can download the latest copy at <code>http://directory_authority/tor/status-vote/current/consensus/</code>. You can see for yourself by downloading the most current consensus from <code>tor26</code> <a href="http://86.59.21.38/tor/status-vote/current/consensus/">here</a>.</p>
 
-<p>Enjoy!</p>
+<p>So we see a consensus&hellip; but what does it mean?</p>
 
-<p>Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+<h3>Anatomy of a Consensus</h3>
+
+<p>The consensus document is a bit tough to get a handle on right away just by reading <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">the spec</a>. I find it helps to have things broken down visually to get an idea of how things are structured.</p>
+
+<p>To help with this, I made a poster in the fantastic <a href="https://github.com/corkami/">corkami</a> style. Here&rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):</p>
+
+<p><a href="/images/blog/how_tor_works/consensus.png"><img src="/images/blog/how_tor_works/consensus_small.png"/></a></p>
+
+<h3>Next Steps</h3>
+
+<p>The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.</p>
+
+<p>Now, you&rsquo;ll notice that we haven&rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &ldquo;break bad&rdquo;, or wreak havoc on Tor users.</p>
+
+<p>Until then, let me know if you have any questions or comments below!</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
 </div>
 
 
@@ -166,12 +200,12 @@
   
 
 
-<time datetime="2014-12-02T22:50:00-06:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2014</time>
+<time datetime="2015-05-14T18:30:00-05:00" pubdate data-updated="true">May 14<span>th</span>, 2015</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/boring/'>boring</a>, <a class='category' href='/blog/categories/papers/'>papers</a>, <a class='category' href='/blog/categories/research/'>research</a>
+    <a class='category' href='/blog/categories/consensus/'>consensus</a>, <a class='category' href='/blog/categories/tor/'>tor</a>
   
 </span>
 
@@ -180,7 +214,7 @@
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -191,10 +225,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/" title="Previous Post: Reverse Engineering the We Heart It API">&laquo; Reverse Engineering the We Heart It API</a>
+        <a class="basic-alignment left" href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/" title="Previous Post: 60 Days of Watching Hackers Attack Elasticsearch">&laquo; 60 Days of Watching Hackers Attack Elasticsearch</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/" title="Next Post: Chrome Tracks Every Key Typed into the Omnibox">Chrome Tracks Every Key Typed into the Omnibox &raquo;</a>
       
     </p>
   </footer>
@@ -260,8 +292,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/';
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus/';
         var disqus_script = 'embed.js';
       
     (function () {

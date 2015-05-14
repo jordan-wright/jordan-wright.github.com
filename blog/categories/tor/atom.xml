@@ -4,7 +4,7 @@
   <title><![CDATA[Category: tor | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/tor/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-14T18:24:30-05:00</updated>
+  <updated>2015-05-14T18:26:41-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How Tor Works Part Three - The Consensus]]></title>
+    <link href="http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus/"/>
+    <updated>2015-05-14T18:30:00-05:00</updated>
+    <id>http://jordan-wright.github.io/blog/2015/05/14/how-tor-works-part-three-the-consensus</id>
+    <content type="html"><![CDATA[<p><img src="/images/headers/how_tor_works_2.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>Welcome to the third post in my series on how Tor works! In the <a href="/blog/categories/tor/">past two posts</a>, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.</p>
+
+<p>But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the <strong>consensus</strong> as well as introducing a few very important Tor nodes that run the show behind the scenes.</p>
+
+<!--more-->
+
+
+<h3>Respect My Authoritah</h3>
+
+<p>In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about <em>how</em> this list is maintained, we need to talk about <em>who</em> maintains it.</p>
+
+<p><a href="https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824">Hardcoded into each Tor client</a> is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role &ndash; to maintain the status of the entire Tor network. These nodes are known as <strong>directory authorities</strong> (DA&rsquo;s).</p>
+
+<p>I&rsquo;ve <a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">written a bit</a> about DA&rsquo;s in the past. Distributed around the world, DA&rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.</p>
+
+<p>So why 10? We know it&rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&rsquo;ll recall that in the previous post I mentioned that there is a master list of relays <em>and</em> a master list of bridges. This is where the split happens. 9 of the DA&rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.</p>
+
+<p>Here are the DA&rsquo;s:</p>
+
+<p><img src="http://jordan-wright.github.io/images/blog/how_tor_works/authorities.png"/></p>
+
+<h3>Reaching a Consensus</h3>
+
+<p>So there are DA&rsquo;s and they maintain the status of the Tor network. But, <strong>how</strong>?</p>
+
+<p>The status of all the Tor relays is maintained in a living document called the <strong>consensus</strong>. DA&rsquo;s maintain this document and update it every hour by a vote. Here&rsquo;s a basic flow of how this updating process works.</p>
+
+<ul>
+<li>Each DA compiles a list of all known relays</li>
+<li>Each DA then computes the other needed data, such as relay flags, bandwidth weights, and more</li>
+<li>The DA then submits this data as a &ldquo;status-vote&rdquo; to all the other authorities</li>
+<li>Each DA next will go get any other votes it is missing from the other authorities</li>
+<li>All the parameters, relay information, etc. from each vote are combined or computed and then <strong>signed</strong> by each DA</li>
+<li>This signature is then posted to the other DA&rsquo;s</li>
+<li>There should be a majority of the DA&rsquo;s that agree on the data, validating the new consensus</li>
+<li>The consensus is then published by each DA</li>
+</ul>
+
+
+<p>You&rsquo;ll notice that I mention each DA publishes this consensus. This is done over HTTP such that anyone can download the latest copy at <code>http://directory_authority/tor/status-vote/current/consensus/</code>. You can see for yourself by downloading the most current consensus from <code>tor26</code> <a href="http://86.59.21.38/tor/status-vote/current/consensus/">here</a>.</p>
+
+<p>So we see a consensus&hellip; but what does it mean?</p>
+
+<h3>Anatomy of a Consensus</h3>
+
+<p>The consensus document is a bit tough to get a handle on right away just by reading <a href="https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt">the spec</a>. I find it helps to have things broken down visually to get an idea of how things are structured.</p>
+
+<p>To help with this, I made a poster in the fantastic <a href="https://github.com/corkami/">corkami</a> style. Here&rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):</p>
+
+<p><a href="http://jordan-wright.github.io/images/blog/how_tor_works/consensus.png"><img src="http://jordan-wright.github.io/images/blog/how_tor_works/consensus_small.png"/></a></p>
+
+<h3>Next Steps</h3>
+
+<p>The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.</p>
+
+<p>Now, you&rsquo;ll notice that we haven&rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &ldquo;break bad&rdquo;, or wreak havoc on Tor users.</p>
+
+<p>Until then, let me know if you have any questions or comments below!</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How Tor Works: Part Two - Relays vs. Bridges]]></title>
