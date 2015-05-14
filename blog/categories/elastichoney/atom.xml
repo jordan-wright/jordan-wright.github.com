@@ -4,7 +4,7 @@
   <title><![CDATA[Category: elastichoney | jordan-wright]]></title>
   <link href="http://jordan-wright.github.io/blog/categories/elastichoney/atom.xml" rel="self"/>
   <link href="http://jordan-wright.github.io/"/>
-  <updated>2015-05-10T20:04:46-05:00</updated>
+  <updated>2015-05-14T18:24:30-05:00</updated>
   <id>http://jordan-wright.github.io/</id>
   <author>
     <name><![CDATA[Jordan]]></name>
@@ -111,7 +111,7 @@ source={"query":+{"filtered":+{"query":+{"match_all":+{}}}},+"script_fields":+{"
 
 <p>Enjoy!</p>
 
-<p>Jordan</p>
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
 ]]></content>
   </entry>
   
