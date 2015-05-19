@@ -3,7 +3,7 @@ layout: post
 title: "Phishing with Linkedin's Intro"
 date: 2013-10-26 19:21
 comments: true
-categories: 
+categories:
 -   Linkedin
 -   Social Engineering
 ---
@@ -112,7 +112,7 @@ As it turns out, Linkedin injects quite a bit of content into your email. The ba
 </html>
 ```
 
-You can find the full email [here](https://gist.github.com/jordan-wright/7189765#file-original_email-html) (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let's see how we can use it to make our phishing emails appear to be legitimate. 
+You can find the full email [here](https://gist.github.com/jordan-wright/7189765#file-original_email-html) (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let's see how we can use it to make our phishing emails appear to be legitimate.
 
 ### Setting up the Bait
 Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to ```display:none;```. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our ```head``` block, and they were pretty specific in ensuring the ```!important``` keyword is set for things such as the display, height, etc.
@@ -147,4 +147,4 @@ While Linkedin Intro *seems* like it would be useful on the surface - the securi
 
 I have yet to get comments setup on the new blog, but [shoot me an email](/contact) if you have any questions or comments!
 
-Jordan
+Jordan ([@jw_sec](http://twitter.com/jw_sec))

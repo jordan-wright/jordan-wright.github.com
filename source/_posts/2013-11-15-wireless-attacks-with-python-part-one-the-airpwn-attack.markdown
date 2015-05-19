@@ -4,7 +4,7 @@ title: "Wireless Attacks with Python: Part One - The \"Dnspwn Attack\""
 date: 2013-11-15 20:45
 comments: true
 published: true
-categories: 
+categories:
 - wireless
 - python
 - security
@@ -131,4 +131,4 @@ It's important to note that this attack will work just as well on other simple r
 
 Enjoy!
 
-Jordan
+Jordan ([@jw_sec](http://twitter.com/jw_sec))

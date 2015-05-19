@@ -95,5 +95,4 @@ We can see that someone has a Java bot that is performing the same technique I d
 ### Conclusion
 Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!
 
--Jordan
-
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))

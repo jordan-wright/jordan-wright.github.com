@@ -12,3 +12,8 @@ div .highlight {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+
+.section_header {
+	margin: 0 auto;
+	display: block;
+}

@@ -4,7 +4,7 @@ title: "Building Gophish - Day 1"
 date: 2013-11-29 16:15
 comments: true
 published: true
-categories: 
+categories:
 - gophish
 - go
 ---
@@ -42,4 +42,4 @@ I have looked around at different ```go``` web frameworks, and I am going to sta
 
 That's all I have for now - stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!
 
--Jordan
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))

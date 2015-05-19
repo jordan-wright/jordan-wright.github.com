@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Jordan - Github</title>
-        <meta name="description" content="Jordan Wright (jordan-wright) blog">
-        <meta name="viewport" content="width=device-width">
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jordan Wright is a security researcher in the information security field.">
+    <meta name="author" content="Jordan Wright">
 
-        <link rel="stylesheet" href="/css/bootstrap.css">
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-            .avatar {
-              border-radius: 50%;
-              -webkit-border-radius: 50%;
-              -moz-border-radius:50%;
-            }
-        </style>
-        <link rel="stylesheet" href="/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/css/main.css">
+    <title>JORDAN WRIGHT</title>
 
-        <script src="/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-    </head>
-    <body>
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,400' rel='stylesheet' type='text/css'>
+    <!-- Custom styles for this template -->
+    <link href="/css/main.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="/js/hover.zoom.js"></script>
+    <script src="/js/hover.zoom.conf.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -39,70 +37,83 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Jordan Wright</a>
+          <a class="navbar-brand" href="/">JORDAN WRIGHT</a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="/contact">Contact</a></li>
+          <ul class="nav navbar-nav navbar-right">
             <li><a href="/blog">Blog</a></li>
             <li><a href="/projects">Projects</a></li>
+            <li><a href="/resume.pdf">Resume</a></li>
+            <li><a href="/contact">Contact</a></li>
           </ul>
-        </div><!--/.navbar-collapse -->
+        </div><!--/.nav-collapse -->
       </div>
     </div>
 
-    <div class="jumbotron">
-      <div class="container" style="text-align:center;">
-        <img src="/images/jordan-wright.png" class="avatar"></img>
-        <h1>Hi there, I'm Jordan</h1>
-        <p>and I like security.</p>
-      </div>
-    </div>
+	<!-- +++++ Welcome Section +++++ -->
+	<div id="ww">
+	    <div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2 centered">
+					<img class="avatar" src="/images/jordan-wright-2-crop.jpg" alt="Jordan Wright">
+					<h1>Hi there, I'm Jordan.</h1>
+					<p>I'm a security researcher who enjoys writing about new things I find, and creating open-source software for the community to use.</p>
+                    <a href="/blog"><img class="social" src="/images/blog.png"/></a>
+                    <a href="https://github.com/jordan-wright"><img class="social" src="/images/github.png"/></a>
+                    <a href="https://www.linkedin.com/pub/jordan-wright/54/795/752"><img class="social" src="/images/linkedin.png"/></a>
+                    <a href="https://twitter.com/jw_sec"><img class="social" src="/images/twitter.png"/></a>
+				</div><!-- /col-lg-8 -->
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /ww -->
 
-    <div class="container">
-      <div style="text-align:center;" class="row">
-      <hr/>
-      <h1> Interests </h1>
-      <hr/>
-      </div>
-      <div  style="text-align:center;" class="row">
-        <div class="col-lg-6">
-          <h2><i class="icon-lock icon-2x"></i>
-            <br/>
-              Security
-          </h2>
-          <p>Security is my passion. I enjoy developing tools and techniques that benefit the security community. In addition to this, I also maintain a couple of awesome <a href="/blog">blogs.</a></p>
-          <p><a class="btn btn-default" href="/blog">View blog &raquo;</a></p>
-        </div>
-        <div class="col-lg-6">
-          <h2><i class="icon-code icon-2x"></i>
-            </br>
-            Open-Source Software</h2>
-          </h2>
-          <p>I enjoy developing security tools. In particular, I enjoy developing security tools for the <b>community to use</b>. This is why I regularly open-source as many projects as I can.</p>
-          <p><a class="btn btn-default" href="/projects">View projects &raquo;</a></p>
-       </div>
-      </div>
+	<!-- +++++ Credits Section +++++ -->
 
-      <hr>
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+					<h4>Credits</h4>
+					<p>
+						Template from <a href="http://www.blacktie.co/2014/01/stanley-freelancer-theme/">blacktie.co</a><br/>
+                        Icons made by <a href="http://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a><br/>
+					</p>
+				</div><!-- /col-lg-4 -->
 
-      <footer>
-        <p>&copy; Jordan (jordan-wright) 2013</p>
-      </footer>
-    </div>
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/main.js"></script>
+				<div class="col-lg-4">
+					<h4>My Links</h4>
+                    <p>
+                        <a href="/blog">Blog</a><br/>
+                        <a href="https://github.com/jordan-wright">Github</a><br/>
+						<a href="https://www.linkedin.com/pub/jordan-wright/54/795/752">Linkedin</a><br/>
+						<a href="https://twitter.com/jw_sec">Twitter</a>
+					</p>
+				</div><!-- /col-lg-4 -->
 
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                <div class="col-lg-4">
+					<h4>Get in Touch!</h4>
+					<p>Have any questions? I'd love to <a href="/contact">hear from you!</a></p>
+				</div><!-- /col-lg-4 -->
 
-          ga('create', 'UA-44718701-1', 'jordan-wright.github.io');
-          ga('send', 'pageview');
+			</div>
 
-        </script>
-    </body>
+		</div>
+	</div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-44718701-1', 'jordan-wright.github.io');
+      ga('send', 'pageview');
+
+    </script>
+  </body>
 </html>

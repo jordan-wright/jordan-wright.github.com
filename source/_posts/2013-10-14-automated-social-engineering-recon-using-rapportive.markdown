@@ -102,7 +102,7 @@ Now we just need to figure out where to get our session token. There was one req
 }
 ```
 
-This request will return a session token for the currently logged in user. However, here's the trick: ***any email will work***. Seriously - [try it](http://rapportive.com/login_status?user_email=this_doesnt_exist_@gmail.com). Even without being logged in to Rapportive (ie, by using a random email address), we can still receive a session token and can still make valid queries on email addresses like the one seen originally. So - we don't need to worry about automating the authentication. 
+This request will return a session token for the currently logged in user. However, here's the trick: ***any email will work***. Seriously - [try it](http://rapportive.com/login_status?user_email=this_doesnt_exist_@gmail.com). Even without being logged in to Rapportive (ie, by using a random email address), we can still receive a session token and can still make valid queries on email addresses like the one seen originally. So - we don't need to worry about automating the authentication.
 
 Let's take a look at how we can at least automate the process of getting the session token and querying for an email address.
 
@@ -120,7 +120,7 @@ print response['session_token']
 Easy as that! Now that we have the session token, we can make a request for a given target email address as follows:
 
 ```
-profile = requests.get('https://profiles.rapportive.com/contacts/email/' + target_email, 
+profile = requests.get('https://profiles.rapportive.com/contacts/email/' + target_email,
             headers = {'X-Session-Token' : response['session_token']}).json()
 ```
 
@@ -160,4 +160,4 @@ You can find it on [Github](https://github.com/jordan-wright/rapportive).
 
 Enjoy!
 
-Jordan
+Jordan ([@jw_sec](http://twitter.com/jw_sec))

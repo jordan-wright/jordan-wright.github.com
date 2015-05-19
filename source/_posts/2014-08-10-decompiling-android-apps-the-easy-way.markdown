@@ -25,4 +25,4 @@ Decompiling Android apps can allow researchers to analyze the exact code that is
 ### Conclusion
 Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information "hidden in plain sight". As always, leave any questions or comments below!
 
--Jordan
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))

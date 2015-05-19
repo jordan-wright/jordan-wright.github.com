@@ -3,7 +3,7 @@ layout: post
 title: "Linkedin's Response to My \"Phishing with Intro\" Post"
 date: 2013-11-1 17:55
 comments: true
-categories: 
+categories:
 ---
 
 <img src="{{root_url}}/images/headers/linkedin_gift.png"/>
@@ -46,3 +46,5 @@ Thanks, Linkedin.
 *	*October 27, 2013* - Blog Post Published
 *	*October 28, 2013 9:53 AM PDT* - Contacted by Linkedin Security Team
 *	*October 28, 2013 approx. 2:40 PM PDT* - Hotfix released
+
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))

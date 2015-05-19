@@ -3,7 +3,8 @@ layout: post
 title: "Creating Tor Hidden Services with Python"
 date: 2014-10-06 20:00
 comments: true
-categories: 
+published: true
+categories:
 - tor
 - python
 - hidden services
@@ -84,7 +85,7 @@ from stem.control import Controller
 from flask import Flask
 
 if __name__ == "__main__":
-    
+
     app = Flask("example")
     port = 5000
     host = "127.0.0.1"
@@ -126,4 +127,4 @@ Hidden services deliver freedom of speech and the free exchange of ideas without
 
 As always, let me know if you have any questions or comments.
 
--Jordan
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))

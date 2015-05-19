@@ -3,7 +3,7 @@ layout: post
 title: "Building GoPhish - How to Send Email with Go"
 date: 2014-01-03 22:06
 comments: true
-categories: 
+categories:
 - gophish
 - go
 ---
@@ -58,7 +58,7 @@ e.HTML = "<h1>Fancy Html is supported, too!</h1>"
 ```go
 e.AttachFile("test.txt")
 ```
-You can also use the [```Attach```](http://godoc.org/github.com/jordan-wright/email#Email.Attach) function to attach content directly from an io.Reader. 
+You can also use the [```Attach```](http://godoc.org/github.com/jordan-wright/email#Email.Attach) function to attach content directly from an io.Reader.
 #### Sending the Email (Using Gmail as Example)
 ```go
 e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123", "smtp.gmail.com"))
@@ -66,4 +66,4 @@ e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123",
 #### Conclusion
 I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.
 
--Jordan
+-Jordan ([@jw_sec](http://twitter.com/jw_sec))
