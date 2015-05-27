@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>2 Years of @dumpmon - jordan-wright</title>
+  <meta name="author" content="Jordan">
+
+  
+  <meta name="description" content="Introduction This post is long overdue. Back in May 2013, I released a Twitter bot called @dumpmon whose sole purpose was to track and report &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/05/26/two-years-of-at-dumpmon">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-44718701-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">jordan-wright</a></h1>
+  
+    <h2>Security and Programming Blog</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/projects">Projects</a></li>
+  <li><a href="/blog">Blog</a></li>
+  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">2 Years of @dumpmon</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-26T09:00:00-05:00" pubdate data-updated="true">May 26<span>th</span>, 2015</time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/headers/dumpmon_header.png"/></p>
+
+<h3>Introduction</h3>
+
+<p>This post is long overdue.</p>
+
+<p>Back in May 2013, I <a href="http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html">released</a> a Twitter bot called <a href="http://twitter.com/dumpmon">@dumpmon</a> whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven &ndash; to my excitement &ndash; to be valuable to researchers, being featured in <a href="http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/">news articles</a>, Defcon slides, and <a href="http://haveibeenpwned.com">HIBP</a>!</p>
+
+<p>After two years, it&rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.</p>
+
+<p><em>Note: This is a pretty long post, so feel free to skip <a href="#data">here</a> if you just want the data.</em></p>
+
+<!--more-->
+
+
+<h3>Collecting the Data: Mongo + ELK</h3>
+
+<p>Soon after dumpmon went live, I noticed that sensitive pastes were getting deleting shortly after being posted. This makes it difficult to use the data for any long term research, so I started keeping copies.</p>
+
+<p>First, I used MongoDB to store each paste and meta information (such as <code>type</code>, <code>num_emails</code>, <code>num_hashes</code>, etc.). This worked well for about a year, but it put quite a bit of strain on my Raspberry Pi. Additionally, it was cumbersome to query the data and visualize the statistics over time.</p>
+
+<p>I decided to move everything over to ELK. Unfortunately, in the process of doing so, the DB got corrupted causing most of the data to be lost. <em>Not a good day.</em></p>
+
+<p>However, I eventually got everything up and running with copies of the data going to both MongoDB (just in case), as well as ELK. Here&rsquo;s a partial screenshot of the dashboard:</p>
+
+<p><img src="/images/blog/dumpmon_report/dashboard.png"/></p>
+
+<p>Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.</p>
+
+<h3>Analyzing the Data</h3>
+
+<p>Enough history &ndash; let&rsquo;s take a look at the data!</p>
+
+<p>As mentioned before, most of the older data was lost in the process of migrating to ELK, but we still have data dating back to June 2014 to analyze.</p>
+
+<p>Let&rsquo;s first talk about the overall kinds of data kinds of data found. Currently, dumpmon looks for database dumps, Cisco config files, Google API keys, and SSH private keys. Overwhemingly, database dumps are the most common type of paste found, coming in at 92%.</p>
+
+<p>Each of these database dumps can contain a combination of usernames, email addresses, passwords (plain text or hashed), and more.</p>
+
+<p>After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, <strong>dumpmon found 46 significant (by its thresholds) database dumps every day.</strong></p>
+
+<h4>Cumulative Results</h4>
+
+<p>Here are a few more cumulative numbers for those interested:</p>
+
+<ul>
+<li>32.8k potential database dumps total</li>
+<li>540 emails, on average, per dump (since June)</li>
+<li>5 million unique emails found (since June)</li>
+<li>1 million unique hashes found (since June)</li>
+</ul>
+
+
+<h3>Twitter Account Statistics</h3>
+
+<p>Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.</p>
+
+<p><img src="/images/blog/dumpmon_report/twitter_followers.png"/></p>
+
+<p>As you can see above, the number of followers has steadily increased over time. While Twitter won&rsquo;t give me trends for the entire time dumpmon has been running, here is some data for the last 28 days:</p>
+
+<p><img src="/images/blog/dumpmon_report/general_stats.png"/></p>
+
+<div id="data"></div>
+
+
+<h3>Here, Have Some Data</h3>
+
+<p>I&rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (<a href="/contact">contact</a> me if you&rsquo;re a researcher who needs this data), I&rsquo;m happy to give out all of the information I have about dumpmon&rsquo;s Twitter activity. This includes dumpmon&rsquo;s entire tweet archive, aggregated analytics data, and more.</p>
+
+<p><img style="vertical-align:middle;" src="/images/blog/dumpmon_report/zip.png"/>
+<strong>Tweet Archive</strong></p>
+
+<p><a href="/downloads/dumpmon_archive.zip">This</a> is dumpmon&rsquo;s exported Twitter archive. It contains <strong>every tweet</strong> sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.</p>
+
+<p>Specifically, the <code>tweets.csv</code> file in this archive contains the following fields:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="/downloads/dumpmon_archive.zip">Download</a></p>
+
+<p><img style="vertical-align:middle;" src="/images/blog/dumpmon_report/analytics.png"/>
+<strong>Tweet Analytics</strong></p>
+
+<p><a href="/downloads/tweet_activity_metrics_dumpmon.csv">This file</a> contains the analytics of every tweet after 04/30/2014 (22k tweets). It&rsquo;s in CSV format and has the following fields:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Tweet id, Tweet permalink, Tweet text, time, impressions, engagements, engagement rate, retweets, replies, favorites, user profile clicks, url clicks, hashtag clicks, detail expands, permalink clicks</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="/downloads/tweet_activity_metrics_dumpmon.csv">Download</a></p>
+
+<h3>Conclusion</h3>
+
+<p>I hope this post gave a long-overdue update of where dumpmon is today. I recently moved dumpmon to a new home on a Digital Ocean VPS that&rsquo;s bigger, faster, and has more storage than my Pi.</p>
+
+<p>It should be noted that dumpmon is just getting started. While there haven&rsquo;t been too many changes to the codebase in a while, I&rsquo;ve seen people expanding the codebase in ways I&rsquo;m excited to bring mainline.</p>
+
+<p><strong>All in all, @dumpmon is here to stay.</strong></p>
+
+<p>As always, please don&rsquo;t hesitate to let me know if you have any questions or comments!</p>
+
+<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-26T09:00:00-05:00" pubdate data-updated="true">May 26<span>th</span>, 2015</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/dumpmon/'>dumpmon</a>, <a class='category' href='/blog/categories/elk/'>elk</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/05/26/two-years-of-at-dumpmon/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/05/26/two-years-of-at-dumpmon/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/" title="Previous Post: How Tor Works Part Three - The Consensus">&laquo; How Tor Works Part Three - The Consensus</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jordan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'jordan-wright';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/05/26/two-years-of-at-dumpmon/';
+        var disqus_url = 'http://jordan-wright.github.io/blog/2015/05/26/two-years-of-at-dumpmon/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

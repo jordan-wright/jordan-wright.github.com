@@ -9,7 +9,7 @@
   <meta name="author" content="Jordan">
 
   
-  <meta name="description" content="Busy year. It seems as though each year brings more and more events that throw our industry into the forefront of attention &ndash; and they&rsquo; &hellip;">
+  <meta name="description" content="So you accidentally committed a password or API key to Github. Ouch. &ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information From Github Doesn&#8217;t Save You</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-30T19:19:00-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
+        
+           | <a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/#disqus_thread"
+             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/headers/harvest_github.png"/></p>
+
+<p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
+
+<p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
+
+<p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -585,58 +635,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email With Go</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-01-03T22:06:00-06:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2014</time>
-        
-           | <a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/go_email.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
-
-<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
-
-<p>Let&rsquo;s see how to use it.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -654,6 +652,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
       </li>
     
@@ -667,10 +669,6 @@
     
       <li class="post">
         <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a>
       </li>
     
   </ul>
