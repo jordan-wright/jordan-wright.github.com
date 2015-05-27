@@ -149,11 +149,11 @@
 
 <p>As mentioned before, most of the older data was lost in the process of migrating to ELK, but we still have data dating back to June 2014 to analyze.</p>
 
-<p>Let&rsquo;s first talk about the overall kinds of data kinds of data found. Currently, dumpmon looks for database dumps, Cisco config files, Google API keys, and SSH private keys. Overwhemingly, database dumps are the most common type of paste found, coming in at 92%.</p>
+<p>Let&rsquo;s first talk about the overall kinds of data found. Currently, dumpmon looks for database dumps, Cisco config files, Google API keys, and SSH private keys. Overwhemingly, database dumps are the most common type of paste found, coming in at 92%.</p>
 
 <p>Each of these database dumps can contain a combination of usernames, email addresses, passwords (plain text or hashed), and more.</p>
 
-<p>After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, <strong>dumpmon found 46 significant (by its thresholds) database dumps every day.</strong></p>
+<p>After a few weeks of running the bot, it was clear that password dumps occur far more often than I thought. On average, <strong>dumpmon found 46 significant (by its thresholds) database dumps every day.</strong></p>
 
 <h4>Cumulative Results</h4>
 
