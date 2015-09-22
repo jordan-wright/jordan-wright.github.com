@@ -12,7 +12,7 @@ Sites like [phishtank](http://www.phishtank.com/phish_archive.php) and [clean-mx
 ### How Phishing Kits Work
 To perform a phishing attack, attackers commonly employ prebuilt *phishing kits*. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:
 
-```php
+``` php
 <?php
 session_start();
 if(!isset($_SESSION['username']) || $_SESSION['username'] == "" || !isset($_SESSION['password']) || $_SESSION['password'] == ""){
@@ -43,7 +43,6 @@ foreach ($arr as $recipient)
 }
 ?>
 ```
-
 In this example, to reuse the phishing kit, an attacker simply needs to change the ```$recipient``` variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).
 
 ### How to Find Phishing Kits
@@ -73,7 +72,7 @@ This shell revealed additional scripts (and other webshells) used by the attacke
 ### Fellow Phish Hunters
 In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:
 
-```
+``` text
 [29/Jul/2014:02:59:44 +0100] "GET /phpmyadmin/tardis.zip HTTP/1.1" 404 428 "-" "Java/1.7.0_45"
 [29/Jul/2014:02:59:44 +0100] "GET /phpmyadmin/paypal/tardis.zip HTTP/1.1" 404 435 "-" "Java/1.7.0_45"
 [29/Jul/2014:02:59:45 +0100] "GET /phpmyadmin/paypal/paypal.zip HTTP/1.1" 404 435 "-" "Java/1.7.0_45"

@@ -12,5 +12,10 @@ categories:
 ### Introduction
 Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain command and control over botnets, harvest stolen information, and more.
 
-Having insight into the complete list of domains day-by-day offers the benefit of getting to see 
+Having insight into the complete list of domains day-by-day offers the benefit of getting to see
 <!--more-->
+### Zone Files
+
+Someone has to keep track of all the domains for a certain TLD (.com, .net, etc.). These are called the *sponsors*. Each sponsor maintains a master list of all the domains they are responsible for. This master list is called a "zone file".
+
+Typically, zone files for a domain can contain 

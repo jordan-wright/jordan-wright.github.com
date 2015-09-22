@@ -31,7 +31,7 @@ While I am currently performing a much more in-depth analysis of Intro which wil
 
 Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since [Google implemented OAuth support into Gmail's IMAP and SMTP](https://developers.google.com/gmail/oauth_overview). After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin's IMAP and SMTP servers. I'm not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:
 
-``` xml
+``` text
 <dict>
     <key>PayloadDisplayName</key><string>Email Settings</string>
     <key>PayloadType</key><string>com.apple.mail.managed</string>
@@ -57,7 +57,6 @@ Intro works by first obtaining an OAuth access token to manage your email. They 
     <key>OutgoingPassword</key><string>[password_redacted]</string>
 </dict>
 ```
-
 By intercepting the profile, we can get the username and password used to log into Linkedin's IMAP (imap.intro.linkedin.com) and SMTP (smtp.intro.linkedin.com) services. The username was a base64 encoded string, and the password was a 32 character hash.
 
 Here's a diagram of how this works:
@@ -66,7 +65,7 @@ Here's a diagram of how this works:
 
 Now that we have the username and password used for this mail account, let's grab the first email and see what content Linkedin's IMAP proxy injects into it. We can do this with OpenSSL.
 
-```
+``` text
 # openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
 depth=2 C = US, O = "thawte, Inc.", OU = Certification Services Division, OU = "(c) 2006 thawte, Inc. - For authorized use only", CN = thawte Primary Root CA
 verify error:num=19:self signed certificate in certificate chain
@@ -111,7 +110,6 @@ As it turns out, Linkedin injects quite a bit of content into your email. The ba
 	</body>
 </html>
 ```
-
 You can find the full email [here](https://gist.github.com/jordan-wright/7189765#file-original_email-html) (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let's see how we can use it to make our phishing emails appear to be legitimate.
 
 ### Setting up the Bait

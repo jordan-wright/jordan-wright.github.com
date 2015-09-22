@@ -26,7 +26,7 @@ Very quickly after I deployed the honeypot, I started getting hit by attackers s
 
 Here's an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:
 
-```
+``` json
 {
     "source": "[redacted]",
     "@timestamp": "2015-03-23T13:34:22.519890008-05:00",
@@ -44,7 +44,6 @@ Here's an entry from my logs that is attempting to exploit the CVE-2015-1427 tha
     "honeypot": "[redacted]"
 }
 ```
-
 Now, I'm sure you're interested in some samples. [Here's](https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log) a bit of what I have so far. There's some nifty ```wget``` calls in there if you grab them fast enough.
 
 Enjoy!

@@ -22,7 +22,7 @@ There are two configuration settings necessary to setup a hidden service: ```Hid
 
 As the instructions show, each hidden service requires a variation of the following two lines to be present in the ```torrc``` configuration file (setting the directory, host, and ports appropriately):
 
-```
+``` text
 HiddenServiceDir /path/to/store/hidden_service/
 HiddenServicePort 80 127.0.0.1:5000
 ```
@@ -32,7 +32,7 @@ Changing the configuration file and restarting Tor everytime a change is needed 
 
 The [full specification](https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt) of the protocol is available, however here is a quick example of getting the valid authentication methods:
 
-```
+``` text
 $ telnet localhost 9151
 PROTOCOLINFO
 
@@ -41,7 +41,6 @@ PROTOCOLINFO
 250-VERSION Tor="0.2.4.24"
 250 OK
 ```
-
 Other examples using this extensive protocol can be found [here](https://www.thesprawl.org/research/tor-control-protocol/) or in the full protocol spec.
 
 ### Introducing Stem

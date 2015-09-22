@@ -106,7 +106,7 @@ That's all there is to it! You can find the full source on [Github](https://gith
 ### Demo
 For the demo, I have the following HTML response available on the host 192.168.2.138:
 
-```
+``` html
 <html>
 <head></head>
 <body>
@@ -114,7 +114,6 @@ For the demo, I have the following HTML response available on the host 192.168.2
 </body>
 </html>
 ```
-
 It's worth noticing that we can have *any* HTML, Javascript, etc. we want. It would be trivial to hook the browser using the [BeEF framework](http://beefproject.com/), for example.
 
 Here's a screenshot of it in action (I am using my iPhone as the victim):

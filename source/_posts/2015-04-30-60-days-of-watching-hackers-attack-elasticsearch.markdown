@@ -47,7 +47,7 @@ I'm a fan of open-sourcing as much information as possible if it helps the commu
 
 You can download the raw JSON logs [here](/downloads/elastichoney_logs.json.gz). Here's an example log to show how the logs are structured:
 
-```json
+``` json
 {
     "source": "222.186.56.46",
     "@timestamp": "2015-05-10T15:44:56.803Z",
@@ -87,7 +87,6 @@ You can download the raw JSON logs [here](/downloads/elastichoney_logs.json.gz).
     }
 }
 ```
-
 As always, let me know if you have any questions or comments below!
 
 Enjoy!

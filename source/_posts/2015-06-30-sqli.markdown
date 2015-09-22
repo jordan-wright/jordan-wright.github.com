@@ -1,0 +1,17 @@
+---
+layout: post
+title: "SQLi"
+date: 2015-06-30 18:15
+comments: true
+published: false
+categories:
+---
+
+<img src="{{root_url}}/images/headers/dumpmon_header.png"/>
+### Introduction
+In the past couple of days, the Twitter account [@TeamGhostShell](https://twitter.com/teamghostshell) has posted proof ([example](https://twitter.com/TeamGhostShell/status/615937282747572225)) that a large number of sites (particularly .edu sites) have been compromised via SQL injection.
+
+So how did this happen? It's very likely that these attacks were carried out using the popular SQLi exploiting tool ```sqlmap```, as well as a list of Google dorks. Let's take a look at some details.
+
+### SQLi + Google Dorks
+Both SQLi 

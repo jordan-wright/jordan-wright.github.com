@@ -28,7 +28,7 @@ Here are the requests made when using the extension:
 
 There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google's [OpenID](https://developers.google.com/accounts/docs/OpenID). The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I've only removed unneccessary data for brevity):
 
-```
+``` json
 {
    "contact":{
       "image_url_raw":"https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&d=404",
@@ -68,7 +68,6 @@ There are two interesting requests to note. The first one is a call to /immediat
    "success":"image_or_occupation_or_useful_membership",
 }
 ```
-
 We can see that quite a bit of data was returned by this query. As social engineers, not only would we know that this is likely a valid email address (and therefore a valid email address format for other potential targets of the same organization), but we could also see the social networking profiles linked to this email address. This could reveal other infrmation which may be useful to us later.
 
 So now we want to see how we can:

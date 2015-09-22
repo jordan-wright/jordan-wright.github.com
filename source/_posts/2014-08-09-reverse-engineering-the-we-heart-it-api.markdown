@@ -55,7 +55,6 @@ client_id=redacted
     }
 }
 ```
-
 *Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.*
 
 Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an ```Authorization: Bearer``` header for all API calls:
@@ -82,7 +81,7 @@ client_id=redacted
 
 This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):
 
-```
+``` text
 GET /api/v2/entries/85847648 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
@@ -108,8 +107,7 @@ Authorization: Bearer [redacted]
     }
 }
 ```
-
-```
+``` text
 GET /api/v2/users/27215547 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
@@ -145,7 +143,7 @@ The app has quite a few dependencies, but the core package (```com.weheartit```)
 #### APIRequest.java
 APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth ```client_id``` and ```client_secret``` parameters used by the Android app to get an access token:
 
-```java
+``` java
 private void a(Map map, LoginServices loginservices, ApiResponseCallback apiresponsecallback)
     {
         HashMap hashmap = new HashMap();
@@ -159,7 +157,7 @@ private void a(Map map, LoginServices loginservices, ApiResponseCallback apiresp
 
 This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a ```User``` object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):
 
-```java
+``` java
 public void a(UserSettings usersettings, ApiResponseCallback apiresponsecallback)
     {
         User user = WhiSession.b();
@@ -181,7 +179,7 @@ public void a(UserSettings usersettings, ApiResponseCallback apiresponsecallback
     }
 ```
 
-```java
+``` java
 public void a(String s, long l, Long long1, ApiResponseCallback apiresponsecallback)
     {
         Object aobj[] = new Object[3];
@@ -202,7 +200,7 @@ public void a(String s, long l, Long long1, ApiResponseCallback apiresponsecallb
 #### APIRequestv2.java
 It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at ```/api/v2/*```. Here are a couple of examples:
 
-```java
+``` java
 public void a(String s, long l, int i, ApiResponseCallback apiresponsecallback)
     {
         WhiLog.a("ApiRequestV2", (new StringBuilder()).append("getUserEntryCollections() with accessToken ").append(s).append(", ").append(l).append(", ").append(i).toString());
@@ -213,7 +211,7 @@ public void a(String s, long l, int i, ApiResponseCallback apiresponsecallback)
     }
 ```
 
-```java
+``` java
 public void a(String s, Long long1, ApiPagedResponseCallback apipagedresponsecallback)
     {
         WhiLog.a("ApiRequestV2", String.format("getUserDashboard() with %s, %d", new Object[] {

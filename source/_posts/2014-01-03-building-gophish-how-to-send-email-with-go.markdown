@@ -32,7 +32,7 @@ go get github.com/jordan-wright/email
 ```
 
 #### Creating a New Email
-```go
+``` go
 package main
 
 import "github.com/jordan-wright/email"
@@ -42,7 +42,7 @@ func main() {
 }
 ```
 #### Setting the Subject, To, From, Bcc, Cc
-```go
+``` go
 e.Subject = "Awesome Subject"
 e.From = "Jordan Wright <test@gmail.com>"
 e.To = []string{"test@example.com"}
@@ -50,17 +50,17 @@ e.Bcc = []string{"test_bcc@example.com"}
 e.Cc = []string{"test_cc@example.com"}
 ```
 #### Setting the Content (HTML & Text)
-```go
+``` go
 e.Text = "Text Body is, of course, supported!"
 e.HTML = "<h1>Fancy Html is supported, too!</h1>"
 ```
 #### Attaching a File
-```go
+``` go
 e.AttachFile("test.txt")
 ```
 You can also use the [```Attach```](http://godoc.org/github.com/jordan-wright/email#Email.Attach) function to attach content directly from an io.Reader.
 #### Sending the Email (Using Gmail as Example)
-```go
+``` go
 e.Send("smtp.gmail.com:587", smtp.PlainAuth("", "test@gmail.com", "password123", "smtp.gmail.com"))
 ```
 #### Conclusion
