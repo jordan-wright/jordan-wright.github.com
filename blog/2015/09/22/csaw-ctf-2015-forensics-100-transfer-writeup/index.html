@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" CSAW CTF 2015 - Forensics 100 Transfer Writeup &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2015-09-22T19:05:18Z" />
+
+    
+    <meta property="og:article:tag" content="csaw2015" />
+    
+    <meta property="og:article:tag" content="writeup" />
+    
+    <meta property="og:article:tag" content="ctf" />
+    
+    
+
+  <title>
+     CSAW CTF 2015 - Forensics 100 Transfer Writeup &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">CSAW CTF 2015 - Forensics 100 Transfer Writeup</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-09-22T19:05:18Z">
+            Sep 22, 2015
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/writeup/">#writeup</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/ctf/">#ctf</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      <img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
+
+
+<p>This challenge starts off with the following hint:</p>
+
+<pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
+</code></pre>
+
+<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:</p>
+
+<p><img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
+
+<p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p>
+
+<pre><code class="language-python">import string
+import random
+from base64 import b64encode, b64decode
+
+FLAG = 'flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}'
+
+enc_ciphers = ['rot13', 'b64e', 'caesar']
+# dec_ciphers = ['rot13', 'b64d', 'caesard']
+
+def rot13(s):
+    _rot13 = string.maketrans( 
+    &quot;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&quot;, 
+    &quot;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&quot;)
+    return string.translate(s, _rot13)
+
+def b64e(s):
+    return b64encode(s)
+
+def caesar(plaintext, shift=3):
+    alphabet = string.ascii_lowercase
+    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
+    table = string.maketrans(alphabet, shifted_alphabet)
+    return plaintext.translate(table)
+
+def encode(pt, cnt=50):
+    tmp = '2{}'.format(b64encode(pt))
+    for cnt in xrange(cnt):
+        c = random.choice(enc_ciphers)
+        i = enc_ciphers.index(c) + 1
+        _tmp = globals()[c](tmp)
+        tmp = '{}{}'.format(i, _tmp)
+
+    return tmp
+
+if __name__ == '__main__':
+    print encode(FLAG, cnt=?)
+
+2Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm&lt;snip&gt;
+</code></pre>
+
+<p>We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&rsquo;s dissect the <code>encode</code> function to see if we can figure out what&rsquo;s going on with the input.</p>
+
+<p>It looks like we start off by base64 encoding the input and prepending &ldquo;2&rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.</p>
+
+<p>The important line in our reversal is <code>tmp = '{}{}'.format(i, _tmp)</code>. This line prepends the <em>output</em> of the function chosen with the function&rsquo;s <em>index in enc_ciphers + 1</em>. This makes sense, as the index + 1 of the base64 encode function is 2, and that&rsquo;s exactly what we prepend to the initial input before base64 encoding it.</p>
+
+<p>So, in a nutshell here are the corresponding keys:</p>
+
+<ul>
+<li>1 - rot13</li>
+<li>2 - base64 encode</li>
+<li>3 - caesar cipher</li>
+</ul>
+
+<p>All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change <code>shift=3</code> to <code>shift=-3</code>. Then, we only have to add the following base64 decode function:</p>
+
+<pre><code class="language-python">def b64d(s):
+    return b64decode(s)
+</code></pre>
+
+<p>Finally, we just need to put the pieces together to do the reversing. I used the following <code>decode</code> and <code>main</code> functions:</p>
+
+<pre><code class="language-python">def decode(pt):
+	while &quot;flag&quot; not in pt:
+		i = int(pt[0])
+		raw = pt[1:]
+		print &quot;Running function &quot; + dec_ciphers[i-1]
+		_pt = globals()[dec_ciphers[i-1]](raw)
+		pt = _pt
+	print pt
+
+if __name__ == '__main__':
+	with open('csaw_data.txt', 'r') as raw:
+		print decode(raw.read().strip())
+</code></pre>
+
+<p>This gives us the following output:</p>
+
+<pre><code class="language-text">Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function rot13
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function rot13
+Running function caesard
+Running function caesard
+Running function b64d
+flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
+</code></pre>
+
+<p>There&rsquo;s the flag! <code>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></p>
+
+<p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=CSAW%20CTF%202015%20-%20Forensics%20100%20Transfer%20Writeup&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/09\/22\/csaw-ctf-2015-forensics-100-transfer-writeup\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

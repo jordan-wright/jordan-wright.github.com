@@ -1,137 +1,159 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>How Tor Works: Part One - jordan-wright</title>
-  <meta name="author" content="Jordan">
 
-  
-  <meta name="description" content="Introduction Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown &hellip;">
-  
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  	<meta property="og:title" content=" How Tor Works: Part One &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/" />
 
-  
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+    
+  	<meta property="og:type" content="article" />
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-44718701-1']);
-    _gaq.push(['_trackPageview']);
+    <meta property="og:article:published_time" content="2015-02-28T00:00:00Z" />
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    
+    <meta property="og:article:tag" content="tor" />
+    
+    
+
+  <title>
+     How Tor Works: Part One &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
 
 
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/" />
+
+    
+
+    
 </head>
+<body class="nav-closed">
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jordan-wright</a></h1>
-  
-    <h2>Security and Programming Blog</h2>
-  
-</hgroup>
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
 
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Home</a></li>
-  <li><a href="/contact">Contact</a></li>
-  <li><a href="/projects">Projects</a></li>
-  <li><a href="/blog">Blog</a></li>
-  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">How Tor Works: Part One</h1>
-    
-    
-      <p class="meta">
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">How Tor Works: Part One</h1>
+        <small></small>
+
+        <section class="post-meta">
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-28T18:00:00-06:00" pubdate data-updated="true">Feb 28<span>th</span>, 2015</time>
+          <time class="post-date" datetime="2015-02-28T00:00:00Z">
+            Feb 28, 2015
+          </time>
         
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
-        
-      </p>
-    
-  </header>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/tor/">#tor</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" >
 
 
-<div class="entry-content"><p><img src="/images/headers/how_tor_works_1.png"/></p>
-
-<h3>Introduction</h3>
+<h3 id="introduction:b6a2f7f7305d0d4a88042f3de1458bb0">Introduction</h3>
 
 <p>Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.</p>
 
 <p>But how does Tor work under the hood? In this series of posts, we&rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.</p>
 
-<!--more-->
-
-
-<h3>Brief History of Tor</h3>
+<h3 id="brief-history-of-tor:b6a2f7f7305d0d4a88042f3de1458bb0">Brief History of Tor</h3>
 
 <p>The concept of Onion Routing (more on why it&rsquo;s called this later) was first <a href="http://www.onion-router.net/History.html">proposed</a> in 1995, where it was first funded by the <a href="http://www.onr.navy.mil/">Office of Naval Research</a> (ONR) and later helped out by DARPA in 1997. Since then, funding for the Tor Project has been provided by a <a href="https://www.torproject.org/about/sponsors.html.en">number of different sponsors</a>, and the Tor Project was recently announced a winner of the <a href="http://www.redditblog.com/2015/02/announcing-winners-of-reddit-donate.html">reddit donate</a> campaign.</p>
 
 <p>The Tor software as we know it today was originally open-sourced in October of 2003, and is the 3<sup>rd</sup> generation of Onion Routing software. This idea of Onion Routing was (and is!) simply that we can wrap traffic in encrypted layers (like <em>onions</em>) in order to protect the contents of the data as well as the anonymity of the sender and receiver.</p>
 
-<h3>Tor 101</h3>
+<h3 id="tor-101:b6a2f7f7305d0d4a88042f3de1458bb0">Tor 101</h3>
 
 <p>Now that we know a bit about Tor&rsquo;s history, let&rsquo;s talk about how it works. At an <em>extremely</em> high level, Tor works by bouncing connections from your computer to destinations (such as google.com) through a series of intermediate computers, or <strong>relays</strong>.</p>
 
@@ -163,43 +185,43 @@
       <g
          id="g6036"
          style="fill:#ffffff">
-    <g
+	<g
    id="g6038"
    style="fill:#ffffff">
-        <polygon
+		<polygon
    id="polygon6040"
    points="35.5,9.4 34.7,9.5 34.5,9.9 34.5,10.2 34.9,10.5 35.4,10.8 35.4,11.1 34.9,11.2 34.8,12.0 35.5,12.0 36.3,11.9 36.8,11.4 36.3,11.2 36.0,10.9 35.7,10.3 "
    style="fill:#ffffff" />
 
-        <polygon
+		<polygon
    id="polygon6042"
    points="33.8,10.5 33.3,11.2 33.3,11.7 33.8,11.7 34.8,11.1 34.8,10.6 34.4,10.4 "
    style="fill:#ffffff" />
 
-        <path
+		<path
    id="path6044"
    d="m 22.4,13.1 -0.1,0.3 h -0.6 v 0.3 h 0.1 c 0,0 0.0,0.0 0.0,0.1 l 0.3,-0.0 0.2,-0.1 0.0,-0.3 0.3,-0.0 0.1,-0.2 -0.2,-0.0 -0.2,0.0 z"
    inkscape:connector-curvature="0"
    style="fill:#ffffff" />
 
-        <polygon
+		<polygon
    id="polygon6046"
    points="20.8,13.7 20.7,14.0 21.2,14.0 21.2,13.7 21.0,13.4 "
    style="fill:#ffffff" />
 
-        <path
+		<path
    id="path6048"
    d="M 48.6,24.0 C 48.6,23.3 48.5,22.6 48.5,21.9 48.2,19.6 47.7,17.4 46.9,15.3 46.8,15.1 46.7,15.0 46.7,14.8 45.6,12.2 44.0,9.8 42.1,7.8 42.0,7.6 41.9,7.5 41.7,7.4 41.4,7.0 41.0,6.6 40.6,6.3 36.3,2.4 30.6,0 24.3,0 17.9,0 12.1,2.4 7.8,6.4 6.8,7.3 5.9,8.3 5.0,9.4 1.8,13.5 0,18.7 0,24.3 c 0,13.4 10.9,24.3 24.3,24.3 9.4,0 17.6,-5.4 21.6,-13.2 0.8,-1.6 1.5,-3.4 1.9,-5.3 0.1,-0.4 0.2,-0.9 0.3,-1.4 0.2,-1.3 0.3,-2.8 0.3,-4.2 10e-4,-0.0 -0.0,-0.1 -0.0,-0.2 z m -4.5,-9.7 0.1,-0.1 c 0.1,0.3 0.3,0.7 0.5,1.0 l -0.2,-0.0 -0.4,0.0 V 14.3 z M 40.5,10.1 40.5,9.0 c 0.3,0.4 0.7,0.8 1.1,1.2 l -0.4,0.6 -1.5,-0.0 -0.0,-0.3 0.9,-0.4 z M 11.2,7.4 V 7.3 h 0.4 l 0.0,-0.1 h 0.7 v 0.3 l -0.2,0.3 h -1.0 l 10e-4,-0.4 0,0 z m 0.7,1.0 c 0,0 0.4,-0.0 0.5,-0.0 0.0,0 0,0.4 0,0.4 L 11.4,8.9 11.2,8.7 11.9,8.4 z m 33.6,9.6 h -1.7 l -1.0,-0.8 -1.1,0.1 v 0.6 h -0.3 l -0.3,-0.2 -1.9,-0.5 v -1.2 l -2.5,0.1 -0.7,0.4 h -0.9 l -0.4,-0.0 -1.2,0.6 v 1.2 l -2.4,1.7 0.2,0.7 h 0.5 L 31,21.8 l -0.3,0.1 -0.0,1.8 2.1,2.4 h 0.9 l 0.0,-0.1 h 1.6 l 0.4,-0.4 h 0.9 l 0.5,0.5 1.4,0.1 -0.1,1.8 1.5,2.7 -0.8,1.5 0.0,0.7 0.6,0.6 v 1.7 l 0.8,1.1 v 1.4 h 0.7 c -4.0,5.0 -10.3,8.2 -17.3,8.2 C 12.0,46.6 2,36.6 2,24.3 2,21.2 2.6,18.2 3.7,15.5 V 14.8 L 4.5,13.9 C 4.8,13.3 5.1,12.8 5.4,12.3 L 5.5,12.7 4.5,13.9 C 4.2,14.4 4.0,15.0 3.7,15.5 v 1.2 l 0.9,0.4 v 1.7 l 0.8,1.5 0.7,0.1 0.0,-0.5 -0.8,-1.3 -0.1,-1.2 h 0.5 l 0.2,1.3 1.2,1.7 -0.3,0.5 0.7,1.1 1.9,0.4 v -0.3 l 0.7,0.1 -0.0,0.5 0.6,0.1 0.9,0.2 1.3,1.5 1.7,0.1 0.1,1.3 -1.1,0.8 -0.0,1.2 -0.1,0.7 1.6,2.1 0.1,0.7 c 0,0 0.6,0.1 0.6,0.1 0.0,0 1.3,0.9 1.3,0.9 v 3.8 l 0.4,0.1 -0.3,1.7 0.7,1.0 -0.1,1.7 1.0,1.8 1.3,1.1 1.3,0.0 0.1,-0.4 -0.9,-0.8 0.0,-0.4 0.1,-0.5 0.0,-0.5 -0.6,-0.0 -0.3,-0.4 0.5,-0.5 0.0,-0.3 -0.6,-0.1 0.0,-0.3 0.8,-0.1 1.3,-0.6 0.4,-0.8 1.3,-1.7 -0.3,-1.3 0.4,-0.7 1.2,0.0 0.8,-0.6 0.2,-2.6 0.9,-1.2 0.1,-0.7 -0.8,-0.2 -0.5,-0.9 -1.9,-0.0 -1.5,-0.5 -0.0,-1.1 -0.5,-0.9 -1.4,-0.0 -0.8,-1.2 -0.7,-0.3 -0.0,0.3 -1.3,0.0 -0.4,-0.6 -1.3,-0.2 -1.1,1.3 -1.7,-0.3 -0.1,-2.0 -1.2,-0.2 0.5,-0.9 -0.1,-0.5 -1.7,1.1 -1.0,-0.1 -0.3,-0.8 0.2,-0.8 0.5,-1.0 1.3,-0.6 2.6,-0.0 -0.0,0.8 0.9,0.4 -0.0,-1.3 0.6,-0.6 1.3,-0.9 0.0,-0.6 1.3,-1.4 1.4,-0.8 -0.1,-0.1 0.9,-0.9 0.3,0.0 0.1,0.2 0.3,-0.4 0.0,-0.0 -0.4,-0.0 -0.4,-0.1 v -0.4 l 0.2,-0.1 h 0.4 l 0.2,0.0 0.1,0.3 0.2,-0.0 v -0.0 l 0.0,0.0 0.6,-0.1 0.0,-0.3 0.3,0.0 v 0.3 l -0.3,0.2 h 10e-4 l 0.0,0.3 1.2,0.3 c 0,0 10e-4,0.0 0.0,0.0 l 0.2,-0.0 0.0,-0.5 -0.9,-0.4 -0.0,-0.2 0.8,-0.2 0.0,-0.7 -0.8,-0.5 -0.0,-1.3 -1.1,0.5 h -0.4 l 0.1,-1.0 -1.5,-0.3 -0.6,0.4 v 1.5 l -1.1,0.3 -0.4,0.9 -0.5,0.0 V 10.5 L 16.9,10.3 16.3,10.0 16.1,9.2 18.1,8.0 19.0,7.7 19.1,8.4 19.7,8.3 19.7,8.0 20.3,7.9 20.3,7.8 20.1,7.7 20.0,7.4 l 0.6,-0.0 0.4,-0.4 0.0,-0.0 0.0,0.0 0.1,-0.1 1.4,-0.1 0.6,0.5 -1.6,0.9 2.1,0.5 0.2,-0.7 h 0.9 L 25.4,7.1 24.7,7.0 V 6.2 L 22.6,5.2 21.2,5.4 20.4,5.8 20.4,6.9 19.6,6.7 19.5,6.2 20.3,5.4 18.8,5.3 l -0.4,0.1 -0.1,0.5 0.5,0.0 -0.1,0.5 -0.9,0.0 -0.1,0.3 -1.3,0.0 c 0,0 -0.0,-0.7 -0.0,-0.7 -0.0,0 1.0,-0.0 1.0,-0.0 L 18.0,5.5 17.5,5.3 16.9,5.8 15.9,5.8 15.3,5.0 H 14.1 L 12.8,6.0 h 1.2 l 0.1,0.3 -0.3,0.2 1.3,0.0 0.2,0.4 L 13.8,7.1 13.7,6.7 12.8,6.5 12.3,6.2 11.2,6.2 C 14.8,3.5 19.4,2 24.3,2 c 5.6,0 10.7,2.1 14.7,5.5 l -0.2,0.4 -1.0,0.4 -0.4,0.4 0.1,0.5 0.5,0.0 0.3,0.8 0.9,-0.3 0.1,1.0 h -0.2 l -0.7,-0.1 -0.8,0.1 -0.8,1.1 -1.1,0.1 -0.1,0.9 0.4,0.1 -0.1,0.6 -1.1,-0.2 -1.0,0.2 -0.2,0.5 0.1,1.2 0.6,0.2 1.0,-0.0 0.6,-0.0 0.2,-0.5 1.0,-1.4 0.7,0.1 0.7,-0.6 0.1,0.5 1.7,1.1 -0.2,0.2 -0.7,-0.0 0.3,0.4 0.4,0.1 0.5,-0.2 -0.0,-0.6 0.2,-0.1 -0.2,-0.2 -1.1,-0.6 -0.3,-0.8 h 0.9 l 0.3,0.3 0.8,0.7 0.0,0.8 0.8,0.9 0.3,-1.2 0.5,-0.3 0.1,1.0 0.5,0.6 1.1,-0.0 c 0.2,0.5 0.4,1.1 0.6,1.7 l -0.1,0.1 z m -32.3,-7.0 0.5,-0.2 0.5,0.1 -0.1,0.7 -0.5,0.1 -0.3,-0.7 z m 3.0,1.6 v 0.4 h -1.3 l -0.5,-0.1 0.1,-0.3 0.6,-0.2 h 0.8 v 0.2 h 0.1 z m 0.6,0.6 V 13.8 l -0.3,0.2 -0.4,0.0 c 0,0 0,-0.6 0,-0.7 h 0.7 z m -0.3,-0.1 v -0.5 l 0.4,0.4 -0.4,0.1 z m 0.2,1.0 v 0.4 l -0.3,0.3 h -0.7 l 0.1,-0.4 0.3,-0.0 0.0,-0.1 0.5,-0.0 z m -1.7,-0.8 h 0.7 l -0.9,1.3 -0.3,-0.2 0.0,-0.5 0.5,-0.5 z m 3.0,0.7 v 0.4 H 17.3 l -0.1,-0.2 v -0.4 h 0.0 l 0.8,0.2 z m -0.6,-0.5 0.2,-0.2 0.3,0.2 -0.2,0.2 -0.2,-0.2 z m 28.5,5.7 0.0,-0.0 c 0.0,0.1 0.0,0.2 0.0,0.3 l -0.1,-0.2 z"
    inkscape:connector-curvature="0"
    style="fill:#ffffff" />
 
-        <path
+		<path
    id="path6050"
    d="M 3.7,14.8 V 15.5 C 4.0,15.0 4.2,14.4 4.5,13.9 l -0.7,0.9 z"
    inkscape:connector-curvature="0"
    style="fill:#ffffff" />
 
-    </g>
+	</g>
 
 </g>
       <g
@@ -368,20 +390,18 @@
   </g>
 </svg>
 </div>
-
-
 <br/>
 
 
 <p>Currently, there are <a href="https://metrics.torproject.org/networksize.html">about 6000 relays</a> routing traffic through the Tor network. These relays are located all across the world and run completely by volunteers willing to give up some bandwidth for the cause. It&rsquo;s important to note that most relays don&rsquo;t have special hardware or software to run. They just have the Tor software configured to act as a relay.</p>
 
-<p>When it comes to speed and anonymity of the Tor network &ndash; the more relays, the better! This makes sense, because every relay only has so much bandwidth to offer. Additionally, if there are more relays to choose from, it will be more difficult to track any one user.</p>
+<p>When it comes to speed and anonymity of the Tor network - the more relays, the better! This makes sense, because every relay only has so much bandwidth to offer. Additionally, if there are more relays to choose from, it will be more difficult to track any one user.</p>
 
-<h3>Types of Relays</h3>
+<h3 id="types-of-relays:b6a2f7f7305d0d4a88042f3de1458bb0">Types of Relays</h3>
 
 <p>By default, Tor bounces connections through 3 relays. Each of these have a specific role to play (we&rsquo;ll cover each in more detail in later posts):</p>
 
-<div style="padding:10px;background:#3498DB;border-radius:5px;">
+<p><div style="padding:10px;background:#3498DB;border-radius:5px;">
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -409,7 +429,7 @@
          <g
             id="g8160"
             style="fill:#ffffff">
-    <path
+   	<path
       id="path8162"
       d="M 578.766,51.487 V 50.592 H 575.77 35.93 32.934 v 0.895 C 15.272,52.701 2.095,66.753 0,83.808 v 3.002 355.724 c 0,6.898 1.795,12.712 4.791,17.949 6.893,12.137 17.068,18.269 31.14,18.269 h 197.012 v 49.695 h -37.425 c -9.281,0 -16.467,7.218 -16.467,16.48 0,9.262 7.186,16.479 16.467,16.479 h 220.666 c 9.281,0 16.768,-7.218 16.768,-16.479 0,-9.263 -7.486,-16.48 -16.768,-16.48 H 378.759 V 478.752 H 575.77 c 14.078,0 24.343,-6.132 31.14,-18.269 3.085,-5.493 5.091,-11.37 5.091,-17.949 V 86.811 83.809 C 609.905,66.753 595.833,52.701 578.766,51.487 z m 0,35.324 v 355.724 c 0,2.108 -0.895,3.002 -2.996,3.002 H 35.93 c -2.095,0 -2.996,-0.894 -2.996,-3.002 V 86.811 83.809 h 545.831 v 3.002 z"
       inkscape:connector-curvature="0"
@@ -489,22 +509,22 @@
          <g
             id="g8370"
             style="fill:#ffffff">
-    <g
+   	<g
       id="g8372"
       style="fill:#ffffff">
-        <path
+   		<path
       id="path8374"
       d="m 97.265,71.261 c -0.093,-0.108 -0.23,-0.172 -0.374,-0.172 H 0.494 c -0.144,0 -0.28,0.063 -0.374,0.172 -0.094,0.108 -0.136,0.253 -0.115,0.396 0.014,0.09 1.468,9.016 12.753,9.016 h 71.869 c 11.284,0 12.738,-8.926 12.753,-9.016 0.02,-0.143 -0.022,-0.288 -0.115,-0.396 z m -41.323,6.286 h -14.5 v -3.334 h 14.5 v 3.334 z"
       inkscape:connector-curvature="0"
       style="fill:#ffffff" />
 
-        <path
+   		<path
       id="path8376"
       d="m 10.507,67.619 h 76.37 c 1.104,0 2,-0.896 2,-2 V 18.713 c 0,-1.104 -0.896,-2 -2,-2 h -76.37 c -1.104,0 -2,0.896 -2,2 v 46.906 c 0,1.104 0.896,2 2,2 z m 5,-43.906 h 66.37 V 60.619 H 15.507 V 23.713 z"
       inkscape:connector-curvature="0"
       style="fill:#ffffff" />
 
-    </g>
+   	</g>
 
    </g>
          <g
@@ -771,25 +791,24 @@
      </g>
    </svg>
 </div>
-
-
 <br/>
-
+</p>
 
 <ul>
-<li><p><strong>Entry/Guard Relay</strong> &ndash; This is the entry point to the Tor network. Relays are selected to serve as guard relays after being around for a while, as well as having shown to be stable and having high bandwidth.<sup><a href="https://blog.torproject.org/blog/lifecycle-of-a-new-relay">1</a></sup></p></li>
-<li><p><strong>Middle Relay</strong> &ndash; Middle relays are exactly that &ndash; middle nodes used to transport traffic from the guard relay to the exit relay. This prevents the guard and exit relay from knowing each other.</p></li>
-<li><p><strong>Exit Relay</strong> &ndash; These relays are the exit point at the edge of the Tor network. These relays send traffic to the final destination intended by the client.</p></li>
-</ul>
+<li><p><strong>Entry/Guard Relay</strong> - This is the entry point to the Tor network. Relays are selected to serve as guard relays after being around for a while, as well as having shown to be stable and having high bandwidth.<sup><a href="https://blog.torproject.org/blog/lifecycle-of-a-new-relay">1</a></sup></p></li>
 
+<li><p><strong>Middle Relay</strong> - Middle relays are exactly that - middle nodes used to transport traffic from the guard relay to the exit relay. This prevents the guard and exit relay from knowing each other.</p></li>
+
+<li><p><strong>Exit Relay</strong> - These relays are the exit point at the edge of the Tor network. These relays send traffic to the final destination intended by the client.</p></li>
+</ul>
 
 <p>Generally, it is safe to run a guard or middle relay on any VPS or shared server (such as  <a href="https://www.digitalocean.com/?refcode=2895d5b6c219">DigitalOcean</a> or <a href="https://aws.amazon.com/ec2/">EC2</a>), since all the server operators will see is harmless encrypted traffic (more on this later).</p>
 
 <p>However, there are <a href="https://blog.torproject.org/blog/tips-running-exit-node-minimal-harassment">special responsibilities</a> to consider when running an exit node. Since exit relays send traffic directly to the end destination, any illicit activity done through Tor appears to come from the exit relay. This leads to the rare possibility of raids, abuse notices, or more.</p>
 
-<p>If you meet an exit relay operator &ndash; thank them. <strong>They deserve it.</strong></p>
+<p>If you meet an exit relay operator - thank them. <strong>They deserve it.</strong></p>
 
-<h3>Why Onions?</h3>
+<h3 id="why-onions:b6a2f7f7305d0d4a88042f3de1458bb0">Why Onions?</h3>
 
 <p>Now that we know how connections are routed through relays, how do we know we can actually <em>trust</em> relays? How can we be sure relays won&rsquo;t track who we&rsquo;re connecting to and sniff the data we send across the wire? The short answer is, <em>we don&rsquo;t have to!</em>.</p>
 
@@ -815,7 +834,7 @@ This encrypted data is then encrypted again in such a way that only the middle r
 </span>
 Finally, this encrypted data is encrypted once more in such a way that only the guard relay can decrypt it.</p>
 
-<div style="padding:10px;background:#3498DB;border-radius:5px;">
+<p><div style="padding:10px;background:#3498DB;border-radius:5px;">
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -831,28 +850,28 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
    version="1.0">
    <style
       id="style3946">
-    .style0{
-        fill:   none;
-        stroke: #000000;
-        stroke-width:   3;
-        stroke-linejoin:    round;
-    }
-    .style1{
-        fill:   none;
-        stroke: #000000;
-        stroke-width:   3;
-    }
-    .style2{
-        font-size:  11.9px;
-        line-height:    125%;
-        letter-spacing: 0px;
-        word-spacing:   0px;
-        fill:   #000000;
-        font-family:    Sans;
-    }
-    .style3{
-        font-size:  11.9px;
-    }
+ 	.style0{
+ 		fill:	none;
+ 		stroke:	#000000;
+ 		stroke-width:	3;
+ 		stroke-linejoin:	round;
+ 	}
+ 	.style1{
+ 		fill:	none;
+ 		stroke:	#000000;
+ 		stroke-width:	3;
+ 	}
+ 	.style2{
+ 		font-size:	11.9px;
+ 		line-height:	125%;
+ 		letter-spacing:	0px;
+ 		word-spacing:	0px;
+ 		fill:	#000000;
+ 		font-family:	Sans;
+ 	}
+ 	.style3{
+ 		font-size:	11.9px;
+ 	}
  </style>
    <metadata
       id="metadata1928">
@@ -1155,18 +1174,18 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
         style="font-size:12px;fill:#ffffff">Original Data</tspan></text>
  </svg>
        </div>
-
-
 <br/>
-
+</p>
 
 <p>This means that we have wrapped our original data in layers of encryption, much like an onion is wrapped in layers of&hellip;well, more onion, I guess.</p>
 
-<p>By doing this, each relay only has the information it needs to know &ndash; where it got the encrypted data from, and where to send it to next. Encrypting data this way is beneficial to both parties: client traffic isn&rsquo;t compromised and relays can&rsquo;t be held liable for data they can&rsquo;t see.</p>
+<p>By doing this, each relay only has the information it needs to know - where it got the encrypted data from, and where to send it to next. Encrypting data this way is beneficial to both parties: client traffic isn&rsquo;t compromised and relays can&rsquo;t be held liable for data they can&rsquo;t see.</p>
 
-<blockquote><p>Note: It&rsquo;s important to remember that exit relays <strong>can see the original data sent by the client</strong>, since they have to pass that data to the destination. This means that, if credentials are passed over HTTP, FTP, or other cleartext protocols, the exit relays can sniff the traffic!</p></blockquote>
+<blockquote>
+<p>Note: It&rsquo;s important to remember that exit relays <strong>can see the original data sent by the client</strong>, since they have to pass that data to the destination. This means that, if credentials are passed over HTTP, FTP, or other cleartext protocols, the exit relays can sniff the traffic!</p>
+</blockquote>
 
-<h3>Next Steps</h3>
+<h3 id="next-steps:b6a2f7f7305d0d4a88042f3de1458bb0">Next Steps</h3>
 
 <p>Our journey into the operation of Tor is just beginning. In future posts, we&rsquo;ll take a look at how the Tor network is organized, discuss the differences between relays and bridges, take a deep-dive into how exactly the encryption works, take a step-by-step view of what happens behind the scenes when you start up your Tor client for the first time, and more.</p>
 
@@ -1176,7 +1195,7 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
 
 <p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
 
-<p><em>Update: <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Part two &ndash; &ldquo;Relays vs. Bridges&rdquo;</a> has been published!</em></p>
+<p><em>Update: <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Part two - &ldquo;Relays vs. Bridges&rdquo;</a> has been published!</em></p>
 
 <div>
 <script>
@@ -1186,160 +1205,88 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
 </script>
 </div>
 
-</div>
+    </section>
 
 
-  <footer>
-    <p class="meta">
-      
-  
+  <footer class="post-footer">
 
-<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-28T18:00:00-06:00" pubdate data-updated="true">Feb 28<span>th</span>, 2015</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/tor/'>tor</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-</div>
 
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" title="Previous Post: Gophish Update: Getting Closer to Alpha!">&laquo; Gophish Update: Getting Closer to Alpha!</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/" title="Next Post: Remote Code Execution in Elasticsearch - CVE-2015-1427">Remote Code Execution in Elasticsearch - CVE-2015-1427 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
+    
 
-</div>
 
-<aside class="sidebar">
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
     
-      <li class="post">
-        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
-      </li>
-    
-  </ul>
+  </div>
 </section>
 
 
 
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20Tor%20Works%3a%20Part%20One&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f28%2fhow-tor-works-part-one%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f28%2fhow-tor-works-part-one%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f28%2fhow-tor-works-part-one%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
 
 
-  
-</aside>
 
+    
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Jordan -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
-</p>
-
-</footer>
-  
-
+<div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'jordan-wright';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2015/02/28/how-tor-works-part-one/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/02\/28\/how-tor-works-part-one\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
 </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 
 
 
+  </footer>
+</article>
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
 </body>
 </html>
+

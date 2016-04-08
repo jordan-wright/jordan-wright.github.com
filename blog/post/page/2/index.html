@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" Posts &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/post/" />
+
+    
+    <meta property="og:type" content="website" />
+    
+
+  <title>
+     Posts &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+        <link href="http://jordan-wright.com/blog/post/index.xml" rel="alternate" type="application/rss+xml" title="Posts &middot; Jordan Wright" />
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/post/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/post/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+	<header class="main-header tag-head no-cover">
+
+    <nav class="main-nav overlay clearfix">
+      
+          <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+      
+    </nav>
+    <div class="vertical">
+        <div class="main-header-content inner">
+            <h1 class="page-title">Posts tagged #posts</h1>
+            <h2 class="page-description">
+                
+            </h2>
+        </div>
+    </div>
+</header>
+
+<main class="content" role="main">
+    
+
+	<div class="extra-pagination inner">
+    <nav class="pagination" role="navigation">
+	
+	    <a class="newer-posts" href="/post/">&larr; Newer Posts</a>
+	
+	<span class="page-number">Page 2 of 4</span>
+	
+	    <a class="older-posts" href="/post/page/3/">Older Posts &rarr;</a>
+	
+</nav>
+
+	</div>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elk_results.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c2f7a687b0f5cbc5c5a21adfebefeddd">Introduction</h3>
+
+<p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
+
+<p>After re-building the box from scratch (with many improvements!), I <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">created a honeypot</a> called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.</p>
+
+<p>Here are the results.</p>
+ <a class="read-more icon-standard" href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/elastichoney/">#elastichoney</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/honeypot/">#honeypot</a>,
+            
+        
+        <time class="post-date" datetime="2015-04-30T20:00:00Z">
+            30 Apr 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing elastichoney - an Elasticsearch Honeypot</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elastichoney.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c0ae86186de728bbad406ae19d00e422">Introduction</h3>
+
+<p>I recently <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">wrote</a> about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to <a href="http://github.com/jordan-wright/elastichoney">elastichoney</a>!</p>
+ <a class="read-more icon-standard" href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/honeypot/">#honeypot</a>,
+            
+        
+        <time class="post-date" datetime="2015-03-23T00:00:00Z">
+            23 Mar 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elk_rce.png" alt="" class="pure-img" >
+
+
+<blockquote>
+<p>TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later <strong>now</strong>.</p>
+</blockquote>
+
+<p>Elasticsearch (the &ldquo;E&rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).</p>
+
+<blockquote>
+<p>Much of the analysis discovering this vulnerability was originally found on a blog post <a href="http://drops.wooyun.org/papers/5107">here</a> (<a href="https://translate.google.com/translate?hl=en&amp;sl=zh-CN&amp;tl=en&amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107">translated</a>). This post aims to translate and provide more detail on the vulnerability.</p>
+</blockquote>
+ <a class="read-more icon-standard" href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/vulnerability/">#vulnerability</a>,
+            
+        
+        <time class="post-date" datetime="2015-03-08T00:00:00Z">
+            8 Mar 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:b6a2f7f7305d0d4a88042f3de1458bb0">Introduction</h3>
+
+<p>Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.</p>
+
+<p>But how does Tor work under the hood? In this series of posts, we&rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/28/how-tor-works-part-one/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/tor/">#tor</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-28T00:00:00Z">
+            28 Feb 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Gophish Update: Getting Closer to Alpha!</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:04122820eae1345d676d25dffa9afb36">Introduction</h3>
+
+<p>It&rsquo;s been a busy couple of months!</p>
+
+<p>I thought it would be worth providing a long-overdue update into the development status of <a href="http://github.com/jordan-wright/gophish">gophish</a>. Overall, the project is getting closer to beta status every day, and I&rsquo;m hoping to see a <a href="https://github.com/jordan-wright/gophish/milestones">0.1 release</a> at the end of March.</p>
+
+<p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-26T00:00:00Z">
+            26 Feb 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Web Scraping Hotel Prices for Fun and Savings</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/web_scraping.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:fe91443da304f39c7fb3c4eaf276cfbc">Introduction</h3>
+
+<p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
+
+<p>Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/python/">#python</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/web_scraping/">#web_scraping</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-21T00:00:00Z">
+            21 Feb 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c3e220fe137858e19964dc8e2605b764">Introduction</h3>
+
+<p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
+
+<p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em></p>
+ <a class="read-more icon-standard" href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        
+        <time class="post-date" datetime="2015-01-05T00:00:00Z">
+            5 Jan 2015
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information from Github Doesn&#39;t Save You</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/harvest_github.png" alt="" class="pure-img" >
+
+
+<p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
+
+<p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
+
+<p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
+ <a class="read-more icon-standard" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/github/">#github</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-30T00:00:00Z">
+            30 Dec 2014
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/28/what-infosec-learned-in-2014/">What InfoSec Learned in 2014</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/what_infosec_2014.png" alt="" class="pure-img" >
+
+
+<p><em>Busy year.</em></p>
+
+<p>It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&rsquo;re never good. At the same time, it&rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:</p>
+ <a class="read-more icon-standard" href="/blog/2014/12/28/what-infosec-learned-in-2014/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/infosec/">#infosec</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-28T00:00:00Z">
+            28 Dec 2014
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">What Happens if Tor Directory Authorities are Seized?</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/tor_seized.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:945cc41d8052557b224927a93c0a481d">Introduction</h3>
+
+<p>The Tor Project <a href="https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network">has announced</a> that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&rsquo;t know the legitimacy behind these threats, it&rsquo;s worth looking at the role DA&rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*</p>
+ <a class="read-more icon-standard" href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/tor/">#tor</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-19T00:00:00Z">
+            19 Dec 2014
+        </time>
+    </footer>
+</article>
+
+	
+
+	<nav class="pagination" role="navigation">
+	
+	    <a class="newer-posts" href="/post/">&larr; Newer Posts</a>
+	
+	<span class="page-number">Page 2 of 4</span>
+	
+	    <a class="older-posts" href="/post/page/3/">Older Posts &rarr;</a>
+	
+</nav>
+
+</main>
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

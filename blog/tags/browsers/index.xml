@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Browsers on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/browsers/</link>
+    <description>Recent content in Browsers on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 16 Dec 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/browsers/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Chrome Tracks Every Key Typed into the Omnibox</title>
+      <link>http://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</link>
+      <pubDate>Tue, 16 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/browser_tracking.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&amp;gt; Friendly Reminder: Browser makers may track every key you type in the URL bar&lt;/p&gt;
+
+&lt;h3 id=&#34;introduction:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Technologies like Google Chrome&amp;rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.&lt;/p&gt;
+
+&lt;h3 id=&#34;how-the-omnibox-works:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;How the Omnibox Works&lt;/h3&gt;
+
+&lt;p&gt;Predictive search isn&amp;rsquo;t magic. Chrome doesn&amp;rsquo;t come shipped with a built-in collection of popular searches. No, the only way to get suggestions for what you are searching is to &lt;em&gt;ask Google&lt;/em&gt;. This happens by sending a request to Google for search suggestions &lt;strong&gt;for every key typed in the omnibox&lt;/strong&gt; - by default.&lt;/p&gt;
+
+&lt;p&gt;What does this look like? After installing Burp&amp;rsquo;s CA certificate and starting &lt;code&gt;chrome.exe&lt;/code&gt; with the &lt;code&gt;--allow-ssl-mitm-proxies&lt;/code&gt; option, we can see the following requests pop up as we search:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=o
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=om
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omg
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgw
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgwt
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgwtf
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgwtfb
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgwtfbb
+GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&amp;amp;q=omgwtfbbq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;But I&amp;rsquo;m searching these things anyway!&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Sure, this might be fine for searches, but what else could be sent via this method? Hostnames, web addresses, and IP addresses are &lt;strong&gt;&lt;em&gt;all&lt;/em&gt;&lt;/strong&gt; sent to Google before you press enter. This means that Google knows if you visit a website, even if you don&amp;rsquo;t visit the site from search results.&lt;/p&gt;
+
+&lt;h4 id=&#34;disabling-omnibox:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Disabling Omnibox&lt;/h4&gt;
+
+&lt;p&gt;Since this setting is enabled by default, here&amp;rsquo;s how to disable it:&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#019875&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;1&lt;/i&gt;
+&lt;/span&gt; Navigate to &lt;code&gt;chrome://settings&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#019875&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;2&lt;/i&gt;
+&lt;/span&gt; Click &amp;ldquo;Show Advanced Settings&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
+&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#019875&#34;&gt;&lt;/i&gt;
+&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;3&lt;/i&gt;
+&lt;/span&gt; Uncheck &amp;ldquo;Use a prediction service to help complete searches&amp;hellip;&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/browser_track/omnibox.png&#34;/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;chrome-isn-t-the-only-one:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Chrome Isn&amp;rsquo;t the Only One&lt;/h3&gt;
+
+&lt;p&gt;It&amp;rsquo;s important to note that Chrome isn&amp;rsquo;t the only browser that has this capability. Internet Explorer has the same feature from Bing. The only difference is that this isn&amp;rsquo;t default behavior, and has to be explicitly enabled.&lt;/p&gt;
+
+&lt;h3 id=&#34;putting-things-in-perspective:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Putting Things in Perspective&lt;/h3&gt;
+
+&lt;p&gt;This isn&amp;rsquo;t new information - more of a friendly reminder. It&amp;rsquo;s important to put these privacy &amp;ldquo;risks&amp;rdquo; in perspective and determine what is more important to you - keeping your browsing history and IP/hostname scheme private, or getting solid search suggestions.&lt;/p&gt;
+
+&lt;p&gt;As always, let me know if you have any questions/comments below.&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

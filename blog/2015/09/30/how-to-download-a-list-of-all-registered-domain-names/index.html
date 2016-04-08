@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" How to Download a List of All Registered Domain Names &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2015-09-30T00:00:00Z" />
+
+    
+    <meta property="og:article:tag" content="tutorial" />
+    
+    <meta property="og:article:tag" content="dns" />
+    
+    
+
+  <title>
+     How to Download a List of All Registered Domain Names &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">How to Download a List of All Registered Domain Names</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-09-30T00:00:00Z">
+            Sep 30, 2015
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/tutorial/">#tutorial</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/dns/">#dns</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/download_domains.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:f02c1fdb4a3462e911a59de78bed39bf">Introduction</h3>
+
+<p>Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.</p>
+
+<p>Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.</p>
+
+<h3 id="zone-files:f02c1fdb4a3462e911a59de78bed39bf">Zone Files</h3>
+
+<p>Before being swamped with domains, let&rsquo;s talk a little about how these lists of domains are organized. Someone has to keep track of all the domains for a certain TLD (.com, .net, .ninja, etc.). These are called the <em>registries</em>. Each registry maintains a master list of all the domains they are responsible for. This master list is called a &ldquo;<a href="https://en.wikipedia.org/wiki/Zone_file">zone file</a>&rdquo;.</p>
+
+<p>It&rsquo;s the registry&rsquo;s responsibility to maintain this zone file. As you can imagine, the zone file for TLD&rsquo;s updates many times a day as new domains are registered, other domains expire, and nameserver records are changed.</p>
+
+<h3 id="i-just-want-to-download-the-data:f02c1fdb4a3462e911a59de78bed39bf">I Just Want to Download the Data!</h3>
+
+<p>So we know what zone files are for, but how do we access them? As mentioned before, each registry is responsible for maintaining the zone file for their TLD, but they are also responsible for maintaining <em>access to</em> the zone file. This means that in some cases we&rsquo;ll need to go directly to the registrar, but there are some helpful exceptions.</p>
+
+<h4 id="com-net-and-name:f02c1fdb4a3462e911a59de78bed39bf">.COM, .NET, and .NAME</h4>
+
+<p>Let&rsquo;s start with the most obvious ones: .com, .net, and .name (since it&rsquo;s bundled). These are maintained by Verisign. <a href="https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml">Access to these zone files</a> consists of downloading a <a href="https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx">Zone Access Form</a> and emailing the completed form to <code>tldzone@verisign-grs.com</code>.</p>
+
+<p>It took a couple of weeks for this access to be granted. After your form is approved, you will receive FTP credentials that can be used to download the zone files daily.</p>
+
+<pre><code class="language-text">root@tld:~# ftp rz.verisign-grs.com
+Connected to rz.verisign-grs.com.
+220-**** Welcome to the VeriSign Global Registry Services gTLD Zone FTP Server ****
+220-***
+220-*** This computer system is owned and operated by VeriSign, Inc.
+220-*** All software or information that you access or download from this
+220-*** server is being licensed to you under the terms of our Registrar
+220-*** License and Agreement.  Unauthorized access to this system may
+220-*** result in criminal prosecution.
+220-***
+220-*** All sessions established with this server are monitored and logged.
+220-*** Disconnect now if you do not consent to having your actions monitored
+220-*** and logged.
+220-***
+220-******!
+220
+Name: [redacted]
+331 Please specify the password.
+Password:
+230 Login successful.
+Remote system type is UNIX.
+Using binary mode to transfer files.
+ftp&gt; ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+&lt;snip&gt;
+-rw-r--r--    1 ftp      ftp      2497503218 Sep 29 15:20 com.zone.gz
+-rw-r--r--    1 ftp      ftp      321976673 Sep 29 15:12 net.zone.gz
+226 Directory send OK.
+</code></pre>
+
+<p>We&rsquo;ll take a look at what we can do with these soon. First, let&rsquo;s talk about how we can catch all that malware on <code>.ninja</code>.</p>
+
+<h4 id="the-centralized-zone-data-service-czds:f02c1fdb4a3462e911a59de78bed39bf">The Centralized Zone Data Service (CZDS)</h4>
+
+<p>You&rsquo;ve likely noticed that there are a <em>ton</em> of new gTLDs appearing. At the time of this writing, there are <a href="https://www.iana.org/domains/root/db">1070 valid and sponsored TLDs</a> approved by the IANA - a department of ICANN.</p>
+
+<p>Since each registry maintains its own zone file, it&rsquo;s overwhelming to try to get access to all of them separately. Fortunately, ICANN solved this problem by creating the Centralized Zone Data Service (CZDS).</p>
+
+<p>CZDS &ldquo;provides a centralized access point&hellip; to the Zone Files provided by participating Top Level Domains&rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.</p>
+
+<p><img src="/blog/images/blog/download_domains/czds.png"/></p>
+
+<p>When you get access to a particular zone file, you&rsquo;re able to download it via <a href="https://czds.icann.org/en/help/api-access">ICANN&rsquo;s API</a>. They even provide a <a href="https://github.com/fourkitchens/czdap-tools">Python client</a> that can be used to bulk download all the zone files you have access to.</p>
+
+<p>Unfortunately, you may not get access to all zone files. In fact, looking at <a href="https://czdap.icann.org/en/reports">the most recent report</a> released by ICANN, TLDs such as <code>.aaa</code> only have <strong>3</strong> people authorized to use CZDS to download the zone file. We&rsquo;ll work with what we have, I suppose.</p>
+
+<p>Ok, we have enough data. Let&rsquo;s start parsing.</p>
+
+<h3 id="parsing-zone-files:f02c1fdb4a3462e911a59de78bed39bf">Parsing Zone Files</h3>
+
+<p>If you want to parse everything about the zone files, you can read about the full format in <a href="https://tools.ietf.org/html/rfc1035">RFC 1035</a>, but this post is only interested in the domain -&gt; nameserver mappings. So, let&rsquo;s just start by taking a look at the contents of the file.</p>
+
+<pre><code class="language-text">root@tld:~# head com.zone -n 50
+; The use of the Data contained in Verisign Inc.'s aggregated
+; .com, and .net top-level domain zone files (including the checksum
+; files) is subject to the restrictions described in the access Agreement
+; with Verisign Inc.
+
+$ORIGIN COM.
+$TTL 900
+@ IN    SOA     a.gtld-servers.net. nstld.verisign-grs.com. (
+                                  1443370544 ;serial
+                                  1800 ;refresh every 30 min
+                                  900 ;retry every 15 min
+                                  604800 ;expire after a week
+                                  86400 ;minimum of a day
+                                  )
+$TTL 172800
+ NS A.GTLD-SERVERS.NET.
+ NS G.GTLD-SERVERS.NET.
+ NS H.GTLD-SERVERS.NET.
+ NS C.GTLD-SERVERS.NET.
+ NS I.GTLD-SERVERS.NET.
+ NS B.GTLD-SERVERS.NET.
+ NS D.GTLD-SERVERS.NET.
+ NS L.GTLD-SERVERS.NET.
+ NS F.GTLD-SERVERS.NET.
+ NS J.GTLD-SERVERS.NET.
+ NS K.GTLD-SERVERS.NET.
+ NS E.GTLD-SERVERS.NET.
+ NS M.GTLD-SERVERS.NET.
+COM. 86400 DNSKEY 257 3 8 AQPD&lt;snip&gt;
+COM. 86400 DNSKEY 256 3 8 AQOp&lt;snip&gt;
+COM. 86400 NSEC3PARAM 1 0 0 -
+COM. 900 RRSIG SOA 8 1 900 20151004161544 20150927150544 35864 COM. MpW&lt;snip&gt;
+COM. RRSIG NS 8 1 172800 20151003045209 20150926034209 35864 COM. mcxl&lt;snip&gt;
+COM. 86400 RRSIG NSEC3PARAM 8 1 86400 20151003045209 20150926034209 35864 COM. SLk71&lt;snip&gt;
+COM. 86400 RRSIG DNSKEY 8 1 86400 20150930182533 20150923182033 30909 COM. pDtt&lt;snip&gt;
+KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
+KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
+KITCHENFLOORTILE NS NS1.HOSTINGNET
+</code></pre>
+
+<p>The first 35 lines of the file include some information about the zone file, the root name servers, etc. The actual meat of the file starts on line 36.</p>
+
+<p>Typically, zone files contain lines that have the following format:</p>
+
+<ul>
+<li>Name</li>
+<li>TTL</li>
+<li>Record Class</li>
+<li>Record Type</li>
+<li>Record Data</li>
+</ul>
+
+<p>In our example, we see that <code>KITCHENROKTOBERFEST.COM</code> (the .com is understood) points to the name servers at <code>NS1.HOSTINGNET.COM</code> and <code>NS2.HOSTINGNET.COM</code>.</p>
+
+<p>In addition to lines showing how domain names map to nameservers, at the bottom of the file we have the A records (IP addresses) for each name server in the file. But what if we want to remove all the &ldquo;fluff&rdquo; and only keep the lines showing which domains map to which nameservers?</p>
+
+<p>We can grab the &ldquo;interesting&rdquo; lines using a simple <code>grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone</code>, which will give us only the lines with domains pointing to nameservers.</p>
+
+<pre><code class="language-text">root@tld:~# grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone | head -n 10
+KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
+KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
+KITCHENFLOORTILE NS NS1.HOSTINGNET
+KITCHENFLOORTILE NS NS2.HOSTINGNET
+KITCHENTABLESET NS NS1.HOSTINGNET
+KITCHENTABLESET NS NS2.HOSTINGNET
+KITEPICTURES NS NS1.HOSTINGNET
+KITEPICTURES NS NS2.HOSTINGNET
+BOYSBOXERS NS NS1.HOSTINGNET
+BOYSBOXERS NS NS2.HOSTINGNET
+
+root@tld:~# grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone | wc -l
+281899907
+</code></pre>
+
+<p><strong>Awesome.</strong> We can parse this output to do anything we want with our list of domains.</p>
+
+<h3 id="conclusion:f02c1fdb4a3462e911a59de78bed39bf">Conclusion</h3>
+
+<p>There are a <em>ton</em> of use cases for this data in terms of information security, such as typo-squat monitoring, DGA monitoring, bit flip monitoring, etc.
+However, while this is an infosec blog, zone files can be used for far more than that. It could be used to detect name trends, watch for certain keywords, and more.</p>
+
+<p>Now, consider what would happen if you kept a version controlled <em>diff</em> of this data every day. That would allow you to see trends over time or, for infosec, watch how domains change. Domain move behind Cloudflare/Akamai? You&rsquo;ll have a record of what nameserver they pointed to before the move.</p>
+
+<p>I hope this sheds some light on not only how useful zone files are, but also how <strong>accessible</strong> they are. ICANN, Verisign, and other registries deserve credit for making this data available to the public.</p>
+
+<p>As always, let me know if you have questions/comments.</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20to%20Download%20a%20List%20of%20All%20Registered%20Domain%20Names&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f30%2fhow-to-download-a-list-of-all-registered-domain-names%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f30%2fhow-to-download-a-list-of-all-registered-domain-names%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f30%2fhow-to-download-a-list-of-all-registered-domain-names%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/09\/30\/how-to-download-a-list-of-all-registered-domain-names\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

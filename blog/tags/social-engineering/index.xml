@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Social Engineering on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/social-engineering/</link>
+    <description>Recent content in Social Engineering on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 26 Oct 2013 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/social-engineering/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Phishing with Linkedin&#39;s Intro</title>
+      <link>http://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link>
+      <pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I would also like to thank Linkedin&amp;rsquo;s security team for their quick and effective response to these findings.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;intro-duction:f80351ff888298fda53ee2a6d21568e5&#34;&gt;&amp;ldquo;Intro&amp;rdquo;duction&lt;/h3&gt;
+
+&lt;p&gt;On October 23, Linkedin introduced an application called &lt;a href=&#34;http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/&#34;&gt;&amp;ldquo;Intro&amp;rdquo;&lt;/a&gt;. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think &lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapportive&lt;/a&gt; for the iPhone Mail App, because that&amp;rsquo;s &lt;em&gt;essentially&lt;/em&gt; what this is (and made by the same people).&lt;/p&gt;
+
+&lt;p&gt;However, when reading the initial description of Intro, there was one part that caught my eye:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;David says Crosswise would love to work with you. Is this spam, or the real deal?&lt;/p&gt;
+
+&lt;p&gt;With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-linkedin-does-to-your-email:f80351ff888298fda53ee2a6d21568e5&#34;&gt;What Linkedin Does to Your Email&lt;/h3&gt;
+
+&lt;p&gt;While I am currently performing a much more in-depth analysis of Intro which will give a much better look into its behavior (to be posted soon), for now we will just take a look at the basics of how Intro works, and look specifically into how it manipulates user&amp;rsquo;s email.&lt;/p&gt;
+
+&lt;p&gt;Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since &lt;a href=&#34;https://developers.google.com/gmail/oauth_overview&#34;&gt;Google implemented OAuth support into Gmail&amp;rsquo;s IMAP and SMTP&lt;/a&gt;. After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin&amp;rsquo;s IMAP and SMTP servers. I&amp;rsquo;m not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;&amp;lt;dict&amp;gt;
+    &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Email Settings&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;com.apple.mail.managed&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
+    &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[redacted]&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;com.rapportive.iphone.settings.email.[redacted]&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;EmailAccountName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Test Account&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;EmailAccountType&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailTypeIMAP&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;EmailAddress&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;linkedin.intro.test@gmail.com&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;EmailAccountDescription&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Gmail +Intro&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;IncomingMailServerAuthentication&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailAuthPassword&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;IncomingMailServerHostName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;imap.intro.linkedin.com&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;IncomingMailServerPortNumber&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;143&amp;lt;/integer&amp;gt;
+    &amp;lt;key&amp;gt;IncomingMailServerUseSSL&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
+    &amp;lt;key&amp;gt;IncomingMailServerUsername&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[username_redacted]&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;IncomingPassword&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[password_redacted]&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingPasswordSameAsIncomingPassword&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingMailServerAuthentication&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailAuthPassword&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingMailServerHostName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;smtp.intro.linkedin.com&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingMailServerPortNumber&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;587&amp;lt;/integer&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingMailServerUseSSL&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingMailServerUsername&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt; Gmail +Intro ?[username_redacted]&amp;lt;/string&amp;gt;
+    &amp;lt;key&amp;gt;OutgoingPassword&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[password_redacted]&amp;lt;/string&amp;gt;
+&amp;lt;/dict&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;By intercepting the profile, we can get the username and password used to log into Linkedin&amp;rsquo;s IMAP (imap.intro.linkedin.com) and SMTP (smtp.intro.linkedin.com) services. The username was a base64 encoded string, and the password was a 32 character hash.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s a diagram of how this works:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that we have the username and password used for this mail account, let&amp;rsquo;s grab the first email and see what content Linkedin&amp;rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;# openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
+depth=2 C = US, O = &amp;quot;thawte, Inc.&amp;quot;, OU = Certification Services Division, OU = &amp;quot;(c) 2006 thawte, Inc. - For authorized use only&amp;quot;, CN = thawte Primary Root CA
+verify error:num=19:self signed certificate in certificate chain
+verify return:0
+. OK More capabilities after LOGIN
+a LOGIN username_redacted password_redacted
+* CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
+A OK linkedin.intro.test@gmail.com Test Account authenticated (Success)
+b SELECT INBOX
+* FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
+* OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \*)] Flags permitted.
+* OK [UIDVALIDITY 1] UIDs valid.
+* 4 EXISTS
+* 0 RECENT
+* OK [UIDNEXT 5] Predicted next UID.
+* OK [HIGHESTMODSEQ 1049]
+b OK [READ-WRITE] INBOX selected. (Success)
+c FETCH 4 BODY[]
+* 4 FETCH (FLAGS (\Seen) BODY[] {36510}
+email_content_here
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As it turns out, Linkedin injects quite a bit of content into your email. The basic structure looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html PUBLIC &amp;quot;-//W3C//DTD HTML 4.0 Transitional//EN&amp;quot; &amp;quot;http://www.w3.org/TR/REC-html40/loose.dtd&amp;quot;&amp;gt;
+&amp;lt;html&amp;gt;
+	&amp;lt;head&amp;gt;
+	    &amp;lt;meta http-equiv=&amp;quot;Content-Type&amp;quot; content=&amp;quot;text/html; charset=utf-8&amp;quot;&amp;gt;
+	    User specified CSS (if any)
+	    &amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
+	        /*BEGIN RAPPORTIVE*/
+	        Injected Linkedin Intro CSS
+	        /*END RAPPORTIVE*/
+	    &amp;lt;/style&amp;gt;
+	&amp;lt;/head&amp;gt;
+	&amp;lt;body&amp;gt;
+	    &amp;lt;!--BEGIN RAPPORTIVE--&amp;gt;
+	    Injected Linkedin Intro HTML Content
+	    &amp;lt;!--END RAPPORTIVE--&amp;gt;
+	    Original Message
+	&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find the full email &lt;a href=&#34;https://gist.github.com/jordan-wright/7189765#file-original_email-html&#34;&gt;here&lt;/a&gt; (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let&amp;rsquo;s see how we can use it to make our phishing emails appear to be legitimate.&lt;/p&gt;
+
+&lt;h3 id=&#34;setting-up-the-bait:f80351ff888298fda53ee2a6d21568e5&#34;&gt;Setting up the Bait&lt;/h3&gt;
+
+&lt;p&gt;Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to &lt;code&gt;display:none;&lt;/code&gt;. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our &lt;code&gt;head&lt;/code&gt; block, and they were pretty specific in ensuring the &lt;code&gt;!important&lt;/code&gt; keyword is set for things such as the display, height, etc.&lt;/p&gt;
+
+&lt;p&gt;But they weren&amp;rsquo;t specific enough. If we look at the CSS, we can see that the rules apply to the &lt;code&gt;#rapportive.iphone&lt;/code&gt; element. If we look closely, we can see that in fact the HTML element we want to hide has a full spec of &lt;code&gt;#rapportive.rapportive.topbar.iphone&lt;/code&gt;. Therefore, we can simply set the following style block to hide the element:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
+    #rapportive.rapportive.topbar.iphone {
+        display:none !important;
+    }
+&amp;lt;/style&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easy as that.&lt;/p&gt;
+
+&lt;p&gt;Now that we have removed the existing Intro data, we are free to inject our own. To do this, we can copy the existing HTML provided by Linkedin. To make sure that our data is not hidden by our previous CSS, we can simply remove the &lt;code&gt;topbar&lt;/code&gt; class from the root element, since it will have no effect on styling. The last things we will want to do are to clean up the margins Linkedin puts on the original message, as well as changing the actual data itself to be whatever we want. In addition to this, I copied some of the CSS and HTML and changed the IDs which are generated automatically. This will make sure our template is always consistent.&lt;/p&gt;
+
+&lt;h3 id=&#34;going-phishing:f80351ff888298fda53ee2a6d21568e5&#34;&gt;Going Phishing&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve taken the liberty of setting up a basic PoC &lt;a href=&#34;https://gist.github.com/jordan-wright/7189765#file-template-html&#34;&gt;template&lt;/a&gt; for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now - it works. Let&amp;rsquo;s see what it looks like if I spoof the example from Linkedin&amp;rsquo;s original post, David (pardon the non-IOS7 - I don&amp;rsquo;t see any major IOS7 styling issues which would cause much trouble):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what the details look like when I open the Intro tab (they are customizable as well - I left them as me to show that I really do control the content):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.&lt;/p&gt;
+
+&lt;h3 id=&#34;final-thoughts:f80351ff888298fda53ee2a6d21568e5&#34;&gt;Final Thoughts&lt;/h3&gt;
+
+&lt;p&gt;While Linkedin Intro &lt;em&gt;seems&lt;/em&gt; like it would be useful on the surface - the security risks of using it are simply too high. With that being said, as a social engineer, &lt;strong&gt;&lt;em&gt;I hope my targets use Intro&lt;/em&gt;&lt;/strong&gt;. By giving users a false sense of security when they see the Intro information in an email, Linkedin has made my pretext much stronger and the SE engagement that much easier.&lt;/p&gt;
+
+&lt;p&gt;I have yet to get comments setup on the new blog, but &lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;shoot me an email&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Automated Social Engineering Recon Using Rapportive</title>
+      <link>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
+      <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:578e8f3d2f79388ccb3407934a96543b&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href=&#34;http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html&#34;&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
+
+&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
+
+&lt;h3 id=&#34;what-is-rapportive:578e8f3d2f79388ccb3407934a96543b&#34;&gt;What is Rapportive?&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapporitve&lt;/a&gt;, acquired by Linkedin in February 2012, is an add-on for multiple browsers which embeds information about your contacts directly into Gmail. The extension sends your contact&amp;rsquo;s email address to the Rapportive server, which responds with known public information associated with the email address such as social networking profiles.&lt;/p&gt;
+
+&lt;h3 id=&#34;reverse-engineering-the-rapportive-extension:578e8f3d2f79388ccb3407934a96543b&#34;&gt;Reverse Engineering the Rapportive Extension&lt;/h3&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at how the Rapportive Extension works (disclosure: I&amp;rsquo;m using Chrome). The extension simply consists of a Javascript file called &amp;ldquo;user.js&amp;rdquo;. When we navigate to Gmail, this file will load another JS file called &lt;a href=&#34;https://rapportive.com/load/launchpad&#34;&gt;&amp;ldquo;launchpad&amp;rdquo;&lt;/a&gt;. The launchpad file then fetches the main file called &lt;a href=&#34;https://rapportive.com/load/application&#34;&gt;&amp;ldquo;application&amp;rdquo;&lt;/a&gt;, which implements all the functionality provided by Rapportive. If you want to do a full static analysis of them - feel free. For this post, we&amp;rsquo;ll take a look at the behavior of the extension, and see if we can automate its functionality.&lt;/p&gt;
+
+&lt;p&gt;Here are the requests made when using the extension:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&amp;rsquo;s &lt;a href=&#34;https://developers.google.com/accounts/docs/OpenID&#34;&gt;OpenID&lt;/a&gt;. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&amp;rsquo;ve only removed unneccessary data for brevity):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+   &amp;quot;contact&amp;quot;:{
+      &amp;quot;image_url_raw&amp;quot;:&amp;quot;https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&amp;amp;d=404&amp;quot;,
+      &amp;quot;raplets&amp;quot;:[],
+      &amp;quot;memberships&amp;quot;:[
+         {
+            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/www.linkedin.com\/pub\/54\/795\/752&amp;quot;,
+            &amp;quot;view_text&amp;quot;:&amp;quot;&amp;quot;,
+            &amp;quot;site_name&amp;quot;:&amp;quot;LinkedIn&amp;quot;,
+         },
+         {
+            &amp;quot;display_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
+            &amp;quot;username&amp;quot;:null,
+            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/raidersec.blogspot.com&amp;quot;,
+            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on Blogger&amp;quot;,
+            &amp;quot;site_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
+         },
+         {
+            &amp;quot;display_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
+            &amp;quot;username&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
+            &amp;quot;profile_id&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
+            &amp;quot;profile_url&amp;quot;:&amp;quot;https:\/\/github.com\/jordan-wright&amp;quot;,
+            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on GitHub&amp;quot;,
+            &amp;quot;site_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
+         }
+      ],
+      &amp;quot;headline&amp;quot;:&amp;quot;Jordan Wright - Security Engineer&amp;quot;,
+      &amp;quot;email&amp;quot;:&amp;quot;jmwright798@gmail.com&amp;quot;,
+      &amp;quot;location&amp;quot;:&amp;quot;Texas Area&amp;quot;,
+      &amp;quot;occupations&amp;quot;:[
+         {
+            &amp;quot;job_title&amp;quot;:&amp;quot;Security Engineer&amp;quot;
+         }
+      ],
+      &amp;quot;name&amp;quot;:&amp;quot;Jordan Wright&amp;quot;,
+   },
+   &amp;quot;success&amp;quot;:&amp;quot;image_or_occupation_or_useful_membership&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can see that quite a bit of data was returned by this query. As social engineers, not only would we know that this is likely a valid email address (and therefore a valid email address format for other potential targets of the same organization), but we could also see the social networking profiles linked to this email address. This could reveal other infrmation which may be useful to us later.&lt;/p&gt;
+
+&lt;p&gt;So now we want to see how we can:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Automate the login process (&lt;em&gt;if needed&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Deconstruct the /contact/email query to find any special parameters that we need to pass&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let&amp;rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;We can immediately see an interesting header being sent with the request titled &amp;ldquo;X-Session-Token&amp;rdquo;. It turns out that &lt;strong&gt;the entire authentication of the request relies on sending this token&lt;/strong&gt;. We can test this using an API console like &lt;a href=&#34;https://apigee.com/console/others&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Now we just need to figure out where to get our session token. There was one request that Burp didn&amp;rsquo;t catch that is made once we first log into Gmail. It is a request to /login_status?[email_address]. The response to this query looks like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{
+   &amp;quot;user_full_name&amp;quot;:&amp;quot; &amp;quot;,
+   &amp;quot;status&amp;quot;:200,
+   &amp;quot;authenticated_as&amp;quot;:null,
+   &amp;quot;active_auths&amp;quot;:[],
+   &amp;quot;claimed_emails&amp;quot;:null,
+   &amp;quot;plan&amp;quot;:{
+      &amp;quot;key&amp;quot;:&amp;quot;free&amp;quot;,
+      &amp;quot;price&amp;quot;:0,
+      &amp;quot;name&amp;quot;:&amp;quot;Free&amp;quot;
+   },
+   &amp;quot;session_token&amp;quot;:&amp;quot;BAgiX09ON0&amp;amp;lt;snip&amp;amp;lt;ece684be8&amp;quot;,
+   &amp;quot;user_preferences&amp;quot;:{&amp;amp;lt;snip&amp;amp;lt;},
+   &amp;quot;authenticity_token&amp;quot;:&amp;quot;7KNIosqb&amp;amp;lt;snip&amp;amp;gt;csaXzbQFOFi7jg=&amp;quot;,
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This request will return a session token for the currently logged in user. However, here&amp;rsquo;s the trick: &lt;strong&gt;&lt;em&gt;any email will work&lt;/em&gt;&lt;/strong&gt;. Seriously - &lt;a href=&#34;http://rapportive.com/login_status?user_email=this_doesnt_exist_@gmail.com&#34;&gt;try it&lt;/a&gt;. Even without being logged in to Rapportive (ie, by using a random email address), we can still receive a session token and can still make valid queries on email addresses like the one seen originally. So - we don&amp;rsquo;t need to worry about automating the authentication.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s take a look at how we can at least automate the process of getting the session token and querying for an email address.&lt;/p&gt;
+
+&lt;h3 id=&#34;automating-rapportive-queries:578e8f3d2f79388ccb3407934a96543b&#34;&gt;Automating Rapportive Queries&lt;/h3&gt;
+
+&lt;p&gt;Now that we know how Rapportive works, we can automate the process to perform lookups for users of our choosing. Let&amp;rsquo;s start by getting the session token for a particular email address:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import requests
+random_email = &#39;asdfqwer@gmail.com&#39;
+response = requests.get(&#39;https://rapportive.com/login_status?user_email=&#39; + random_email).json()
+print response[&#39;session_token&#39;]
+# output - BAgiX0IvUmJHMUQ3Z2pOUWhmM0ZKRX...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easy as that! Now that we have the session token, we can make a request for a given target email address as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;profile = requests.get(&#39;https://profiles.rapportive.com/contacts/email/&#39; + target_email,
+            headers = {&#39;X-Session-Token&#39; : response[&#39;session_token&#39;]}).json()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The profile returned will now be in JSON format where we can parse out any information such as social networking profile links, usernames, etc. I won&amp;rsquo;t bore you with the implementation of all the parsing - so let&amp;rsquo;s move onto the final script!&lt;/p&gt;
+
+&lt;h3 id=&#34;introducing-rapportive-py:578e8f3d2f79388ccb3407934a96543b&#34;&gt;Introducing rapportive.py&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve created a simple Python script called &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;rapportive.py&lt;/a&gt; to do this work for us. It takes in a list of email addresses from STDIN or a single email via the -e argument and prints out any results found. This can be useful if we want to pass in emails from other tools such as &lt;a href=&#34;https://github.com/pentestgeek/jigsaw/blob/master/jigsaw.rb&#34;&gt;jigsaw.rb&lt;/a&gt;. It can also log to an output file, if needed.&lt;/p&gt;
+
+&lt;p&gt;Here is an example of how to use it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~# cat emails.txt | ./rapportive.py
+10-25 23:37 rapportive   INFO     Using owcdf@gmail.com
+10-25 23:37 rapportive   INFO     Found match for jmwright798@gmail.com
+
+Name: Jordan Wright
+Position: Security  Engineer
+Company: CoNetrix
+        LinkedIn - http://www.linkedin.com/pub/54/795/752
+        Blogger - http://raidersec.blogspot.com
+        GitHub - https://github.com/jordan-wright
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;~# ./rapportive.py -e jmwright798@gmail.com
+10-25 23:31 rapportive   INFO     Using ntmai@gmail.com
+10-25 23:31 rapportive   INFO     Found match for jmwright798@gmail.com
+Name: Jordan Wright
+Position: Security  Engineer
+Company: CoNetrix
+        LinkedIn - http://www.linkedin.com/pub/54/795/752
+        Blogger - http://raidersec.blogspot.com
+        GitHub - https://github.com/jordan-wright
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can find it on &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Enjoy!&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,258 +1,239 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>Web Scraping Hotel Prices for Fun and Savings - jordan-wright</title>
-  <meta name="author" content="Jordan">
 
-  
-  <meta name="description" content="Introduction During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I &hellip;">
-  
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  	<meta property="og:title" content=" Web Scraping Hotel Prices for Fun and Savings &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" />
 
-  
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+    
+  	<meta property="og:type" content="article" />
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-44718701-1']);
-    _gaq.push(['_trackPageview']);
+    <meta property="og:article:published_time" content="2015-02-21T00:00:00Z" />
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    
+    <meta property="og:article:tag" content="python" />
+    
+    <meta property="og:article:tag" content="web_scraping" />
+    
+    
+
+  <title>
+     Web Scraping Hotel Prices for Fun and Savings &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
 
 
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" />
+
+    
+
+    
 </head>
+<body class="nav-closed">
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jordan-wright</a></h1>
-  
-    <h2>Security and Programming Blog</h2>
-  
-</hgroup>
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
 
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
 </header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Home</a></li>
-  <li><a href="/contact">Contact</a></li>
-  <li><a href="/projects">Projects</a></li>
-  <li><a href="/blog">Blog</a></li>
-  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
 
-</nav>
-  <div id="main">
-    <div id="content">
-      <div>
-<article class="hentry" role="article">
-  
-  <header>
-    
-      <h1 class="entry-title">Web Scraping Hotel Prices for Fun and Savings</h1>
-    
-    
-      <p class="meta">
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Web Scraping Hotel Prices for Fun and Savings</h1>
+        <small></small>
+
+        <section class="post-meta">
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-21T12:05:00-06:00" pubdate data-updated="true">Feb 21<span>st</span>, 2015</time>
+          <time class="post-date" datetime="2015-02-21T00:00:00Z">
+            Feb 21, 2015
+          </time>
         
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io">Comments</a>
-        
-      </p>
-    
-  </header>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/python/">#python</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/web_scraping/">#web_scraping</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/web_scraping.png" alt="" class="pure-img" >
 
 
-<div class="entry-content"><p><img src="/images/headers/web_scraping.png"/></p>
-
-<h3>Introduction</h3>
+<h3 id="introduction:fe91443da304f39c7fb3c4eaf276cfbc">Introduction</h3>
 
 <p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
 
-<p>Then I considered the alternative &ndash; maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+<p>Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
 
-<!--more-->
-
-
-<h3>A Brief Intro to Python Web Scraping</h3>
+<h3 id="a-brief-intro-to-python-web-scraping:fe91443da304f39c7fb3c4eaf276cfbc">A Brief Intro to Python Web Scraping</h3>
 
 <p>Web scraping with Python is generally done using a mixture of the fantastic <code>requests</code> and <code>beautifulsoup</code> libraries. This post won&rsquo;t go into detail about all the neat features of <code>beautifulsoup</code>, instead aiming for simplicity to show the basics.</p>
 
-<h4>Getting a BeautifulSoup Object</h4>
+<h4 id="getting-a-beautifulsoup-object:fe91443da304f39c7fb3c4eaf276cfbc">Getting a BeautifulSoup Object</h4>
 
 <p>The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with <code>requests.get()</code> and, if successful, creating a BeautifulSoup object using the <code>BeautifulSoup()</code> constructor with the <code>.text</code> of our response.</p>
 
 <p>It would look something like this:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>response = requests.get('http://foo.bar')
-</span><span class='line'>if response.ok:
-</span><span class='line'>    soup = BeautifulSoup(response.text)</span></code></pre></td></tr></table></div></figure>
+<pre><code>response = requests.get('http://foo.bar')
+if response.ok:
+    soup = BeautifulSoup(response.text)
+</code></pre>
 
-
-<h4>Getting Data From BeautifulSoup</h4>
+<h4 id="getting-data-from-beautifulsoup:fe91443da304f39c7fb3c4eaf276cfbc">Getting Data From BeautifulSoup</h4>
 
 <p>Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the <code>Tag</code> object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>soup.find_all('a') # Get all &lt;a&gt; tags
-</span><span class='line'>soup.find_all('a', {"class" : "css_class"}) # Get all &lt;a class="css_class"&gt; tags
-</span><span class='line'>soup.find_all('a', 'css_class') # Shortcut for searching by class
-</span><span class='line'>soup.find() # Same as find_all(), but returns the first instance</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>soup.find_all('a') # Get all &lt;a&gt; tags
+soup.find_all('a', {&quot;class&quot; : &quot;css_class&quot;}) # Get all &lt;a class=&quot;css_class&quot;&gt; tags
+soup.find_all('a', 'css_class') # Shortcut for searching by class
+soup.find() # Same as find_all(), but returns the first instance
+</code></pre>
 
 <p>After we have the <code>Tag</code> object we want, we can parse out the text by accessing the <code>.text</code> attribute.</p>
 
 <p>This is <em>barely</em> scratching the surface of BeautifulSoup&rsquo;s API, so if you&rsquo;re interested in learning more, you can take a look at the docs <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">here</a>. That&rsquo;s all we&rsquo;ll need for this post, so let&rsquo;s see this in action.</p>
 
-<h3>Parsing Some (Not Great) HTML</h3>
+<h3 id="parsing-some-not-great-html:fe91443da304f39c7fb3c4eaf276cfbc">Parsing Some (Not Great) HTML</h3>
 
 <p>The goal was to simply pull down the rate for each day, and dump it out to a CSV (&ldquo;rates.csv&rdquo;) for some sweet Excel graphing later.</p>
 
 <p>I&rsquo;ll leave the exact hotel and URL redacted, but the basic URL was in the form:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>http://foo.bar?month=:int&day=:int&year=:int</span></code></pre></td></tr></table></div></figure>
-
+<pre><code>http://foo.bar?month=:int&amp;day=:int&amp;year=:int
+</code></pre>
 
 <p>We can start with a naive approach of looping through the months I was interested in (August through December) and getting a BeautifulSoup object from each result.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import requests
-</span><span class='line'>from bs4 import BeautifulSoup
-</span><span class='line'>import time
-</span><span class='line'>
-</span><span class='line'>with open('rates.csv', 'w') as rates:
-</span><span class='line'>    rates.write("Date,Rate\n")
-</span><span class='line'>    for m in range(8,13):
-</span><span class='line'>        for d in range(1,32):
-</span><span class='line'>            try:
-</span><span class='line'>                response = requests.get('http://foo.bar?month=' + str(m) + '&day=' + str(d) + '&year=2015')
-</span><span class='line'>                if response.ok:
-</span><span class='line'>                    soup = BeautifulSoup(response.text)
-</span><span class='line'>            except Exception e:
-</span><span class='line'>                print e
-</span><span class='line'>            # Be (somewhat) nice.
-</span><span class='line'>            time.sleep(.2)</span></code></pre></td></tr></table></div></figure>
+<pre><code>import requests
+from bs4 import BeautifulSoup
+import time
 
+with open('rates.csv', 'w') as rates:
+    rates.write(&quot;Date,Rate\n&quot;)
+    for m in range(8,13):
+        for d in range(1,32):
+            try:
+                response = requests.get('http://foo.bar?month=' + str(m) + '&amp;day=' + str(d) + '&amp;year=2015')
+                if response.ok:
+                    soup = BeautifulSoup(response.text)
+            except Exception e:
+                print e
+            # Be (somewhat) nice.
+            time.sleep(.2)
+</code></pre>
 
 <p>Now we just need to figure out what kind of data we care about. This site used tables. <strong>A lot.</strong> After some testing, I wound up parsing HTML that looked like this:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;table summary="rooms availability"&gt;
-</span><span class='line'>    &lt;tbody&gt;
-</span><span class='line'>        &lt;tr&gt;
-</span><span class='line'>            &lt;td&gt;
-</span><span class='line'>                &lt;div class="roomSection"&gt;
-</span><span class='line'>                    &lt;div class="roomType"&gt;
-</span><span class='line'>                        &lt;span class="value"&gt;King&lt;/span&gt;
-</span><span class='line'>                    &lt;/div&gt;
-</span><span class='line'>                    &lt;div class="roomAvail"&gt;
-</span><span class='line'>                        &lt;div class="bar"&gt;
-</span><span class='line'>                            &lt;div class="label"&gt;Nightly Rate&lt;/div&gt;
-</span><span class='line'>                            &lt;div class="value"&gt;
-</span><span class='line'>                                159.00 &lt;-- What I want to get
-</span><span class='line'>                            &lt;/div&gt;
-</span><span class='line'>                        &lt;/div&gt;
-</span><span class='line'>                    &lt;/div&gt;
-</span><span class='line'>                &lt;/div&gt;
-</span><span class='line'>            &lt;/td&gt;
-</span><span class='line'>        &lt;/tr&gt;
-</span><span class='line'>    &lt;/tbody&gt;
-</span><span class='line'>&lt;/table&gt;
-</span></code></pre></td></tr></table></div></figure>
+<pre><code>&lt;table summary=&quot;rooms availability&quot;&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;
+                &lt;div class=&quot;roomSection&quot;&gt;
+                    &lt;div class=&quot;roomType&quot;&gt;
+                        &lt;span class=&quot;value&quot;&gt;King&lt;/span&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;roomAvail&quot;&gt;
+                        &lt;div class=&quot;bar&quot;&gt;
+                            &lt;div class=&quot;label&quot;&gt;Nightly Rate&lt;/div&gt;
+                            &lt;div class=&quot;value&quot;&gt;
+                                159.00 &lt;-- What I want to get
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
 
+</code></pre>
 
 <p>I cleaned up the formatting, removed unnecessary parts, etc. Trust me, you&rsquo;re welcome.</p>
 
@@ -262,179 +243,102 @@
 
 <p>There&rsquo;s definitely more concise ways of doing this with more advanced BeautifulSoup usage, but this code worked:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>king = soup.find("table", {"summary" : "rooms availability"}).find("div", "roomSection")
-</span><span class='line'>if king.find("div", "roomType").text.strip() == "King":
-</span><span class='line'>    rate = king.find("div", "roomAvail").find("div", "value").strip()
-</span><span class='line'>    rates.write("2015-" + str(m) + "-" + str(d) + "," + str(rate) + "\n")</span></code></pre></td></tr></table></div></figure>
+<pre><code>king = soup.find(&quot;table&quot;, {&quot;summary&quot; : &quot;rooms availability&quot;}).find(&quot;div&quot;, &quot;roomSection&quot;)
+if king.find(&quot;div&quot;, &quot;roomType&quot;).text.strip() == &quot;King&quot;:
+    rate = king.find(&quot;div&quot;, &quot;roomAvail&quot;).find(&quot;div&quot;, &quot;value&quot;).strip()
+    rates.write(&quot;2015-&quot; + str(m) + &quot;-&quot; + str(d) + &quot;,&quot; + str(rate) + &quot;\n&quot;)
+</code></pre>
 
-
-<h3>Success!</h3>
+<h3 id="success:fe91443da304f39c7fb3c4eaf276cfbc">Success!</h3>
 
 <p>Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:</p>
 
-<p><img src="/images/blog/web scraping/rates.png"/></p>
+<p><img src="/blog/images/blog/web scraping/rates.png"/></p>
 
 <p><em>Awesome.</em> In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.</p>
 
-<p>-Jordan</p>
-</div>
+    </section>
 
 
-  <footer>
-    <p class="meta">
-      
-  
+  <footer class="post-footer">
 
-<span class="byline author vcard">Posted by <span class="fn">Jordan</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-21T12:05:00-06:00" pubdate data-updated="true">Feb 21<span>st</span>, 2015</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/web-scraping/'>web_scraping</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" data-via="" data-counturl="http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-</div>
 
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/" title="Previous Post: SANS Holiday Challenge 2014 - Writeup">&laquo; SANS Holiday Challenge 2014 - Writeup</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" title="Next Post: Gophish Update: Getting Closer to Alpha!">Gophish Update: Getting Closer to Alpha! &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
-  </section>
+    
 
-</div>
 
-<aside class="sidebar">
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
     
-      <li class="post">
-        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
-      </li>
-    
-  </ul>
+  </div>
 </section>
 
 
 
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Web%20Scraping%20Hotel%20Prices%20for%20Fun%20and%20Savings&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f21%2fweb-scraping-hotel-prices-for-fun-and-savings%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f21%2fweb-scraping-hotel-prices-for-fun-and-savings%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f21%2fweb-scraping-hotel-prices-for-fun-and-savings%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
 
 
-  
-</aside>
 
+    
 
-    </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Jordan -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
-</p>
-
-</footer>
-  
-
+<div id="disqus_thread"></div>
 <script type="text/javascript">
-      var disqus_shortname = 'jordan-wright';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/';
-        var disqus_url = 'http://jordan-wright.github.io/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/';
-        var disqus_script = 'embed.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/02\/21\/web-scraping-hotel-prices-for-fun-and-savings\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
 </script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
 
 
 
+  </footer>
+</article>
 
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
 </body>
 </html>
+

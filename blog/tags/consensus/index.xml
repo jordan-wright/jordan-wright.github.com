@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Consensus on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/consensus/</link>
+    <description>Recent content in Consensus on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 14 May 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/consensus/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How Tor Works Part Three - The Consensus</title>
+      <link>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
+      <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:92f80a714c92adf518d9200d85295a2a&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+
+&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
+
+&lt;h3 id=&#34;respect-my-authoritah:92f80a714c92adf518d9200d85295a2a&#34;&gt;Respect My Authoritah&lt;/h3&gt;
+
+&lt;p&gt;In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about &lt;em&gt;how&lt;/em&gt; this list is maintained, we need to talk about &lt;em&gt;who&lt;/em&gt; maintains it.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
+
+&lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
+
+&lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;reaching-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Reaching a Consensus&lt;/h3&gt;
+
+&lt;p&gt;So there are DA&amp;rsquo;s and they maintain the status of the Tor network. But, &lt;strong&gt;how&lt;/strong&gt;?&lt;/p&gt;
+
+&lt;p&gt;The status of all the Tor relays is maintained in a living document called the &lt;strong&gt;consensus&lt;/strong&gt;. DA&amp;rsquo;s maintain this document and update it every hour by a vote. Here&amp;rsquo;s a basic flow of how this updating process works.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each DA compiles a list of all known relays&lt;/li&gt;
+&lt;li&gt;Each DA then computes the other needed data, such as relay flags, bandwidth weights, and more&lt;/li&gt;
+&lt;li&gt;The DA then submits this data as a &amp;ldquo;status-vote&amp;rdquo; to all the other authorities&lt;/li&gt;
+&lt;li&gt;Each DA next will go get any other votes it is missing from the other authorities&lt;/li&gt;
+&lt;li&gt;All the parameters, relay information, etc. from each vote are combined or computed and then &lt;strong&gt;signed&lt;/strong&gt; by each DA&lt;/li&gt;
+&lt;li&gt;This signature is then posted to the other DA&amp;rsquo;s&lt;/li&gt;
+&lt;li&gt;There should be a majority of the DA&amp;rsquo;s that agree on the data, validating the new consensus&lt;/li&gt;
+&lt;li&gt;The consensus is then published by each DA&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice that I mention each DA publishes this consensus. This is done over HTTP such that anyone can download the latest copy at &lt;code&gt;http://directory_authority/tor/status-vote/current/consensus/&lt;/code&gt;. You can see for yourself by downloading the most current consensus from &lt;code&gt;tor26&lt;/code&gt; &lt;a href=&#34;http://86.59.21.38/tor/status-vote/current/consensus/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So we see a consensus&amp;hellip; but what does it mean?&lt;/p&gt;
+
+&lt;h3 id=&#34;anatomy-of-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Anatomy of a Consensus&lt;/h3&gt;
+
+&lt;p&gt;The consensus document is a bit tough to get a handle on right away just by reading &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt&#34;&gt;the spec&lt;/a&gt;. I find it helps to have things broken down visually to get an idea of how things are structured.&lt;/p&gt;
+
+&lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;next-steps:92f80a714c92adf518d9200d85295a2a&#34;&gt;Next Steps&lt;/h3&gt;
+
+&lt;p&gt;The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.&lt;/p&gt;
+
+&lt;p&gt;Now, you&amp;rsquo;ll notice that we haven&amp;rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&amp;rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &amp;ldquo;break bad&amp;rdquo;, or wreak havoc on Tor users.&lt;/p&gt;
+
+&lt;p&gt;Until then, let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

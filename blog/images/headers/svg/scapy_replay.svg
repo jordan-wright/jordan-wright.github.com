@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="300"
+   id="svg3063"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="scapy_replay.svg"
+   inkscape:export-filename="C:\Users\jmwri_000\Documents\jordan-wright.github.com\source\images\headers\browser_tracking.png"
+   inkscape:export-xdpi="89.496582"
+   inkscape:export-ydpi="89.496582">
+  <defs
+     id="defs3065">
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4377"
+       is_visible="true" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4377-1"
+       is_visible="true" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.81035689"
+     inkscape:cx="444.5878"
+     inkscape:cy="191.49492"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3068">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,-900)">
+    <rect
+       style="fill:#336e7b;fill-opacity:1"
+       id="rect3955"
+       width="1000"
+       height="300"
+       x="0"
+       y="900"
+       ry="6" />
+    <path
+       style="fill:#ffffff"
+       d="m 500,950.00029 -87.5,50.00001 0,100 87.5,50 87.5,-50 0,-100 -87.5,-50.00001 z m -0.61963,14.63201 75.22552,43.0053 0,85.9813 -75.22552,42.9906 -75.22551,-42.9906 0,-85.9813 75.22551,-43.0053 z"
+       id="path3075"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g3842"
+       transform="translate(439.24784,983.981)"
+       style="fill:#ffffff">
+	<rect
+   id="rect3844"
+   height="24.666"
+   width="24.666"
+   y="20.667"
+   x="50.667"
+   style="fill:#ffffff" />
+
+	<rect
+   id="rect3846"
+   height="24.666"
+   width="24.666"
+   y="80.667"
+   x="14.667"
+   style="fill:#ffffff" />
+
+	<rect
+   id="rect3848"
+   height="24.666"
+   width="24.666"
+   y="80.667"
+   x="86.667"
+   style="fill:#ffffff" />
+
+	<polygon
+   id="polygon3850"
+   points="101.228,77.733 101.228,61.067 99.001,61.067 99.001,61 65.5,61 65.5,49.667 60.5,49.667 60.5,61 27.001,61 27.001,61.067 25.522,61.067 25.522,77.733 29.978,77.733 29.978,66 96.772,66 96.772,77.733 "
+   style="fill:#ffffff" />
+
+</g>
+  </g>
+</svg>

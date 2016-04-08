@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1000"
+   height="300"
+   id="svg3063"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="android_apps.svg">
+  <defs
+     id="defs3065">
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4377"
+       is_visible="true" />
+    <inkscape:path-effect
+       effect="spiro"
+       id="path-effect4377-1"
+       is_visible="true" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.1460177"
+     inkscape:cx="505.29957"
+     inkscape:cy="109.20635"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3068">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(0,-900)">
+    <rect
+       style="fill:#a4c639;fill-opacity:1"
+       id="rect3955"
+       width="1000"
+       height="300"
+       x="0"
+       y="900"
+       ry="6" />
+    <path
+       style="fill:#ffffff"
+       d="m 500,950.00029 -87.5,50.00001 0,100 87.5,50 87.5,-50 0,-100 -87.5,-50.00001 z m -0.61963,14.63201 75.22552,43.0053 0,85.9813 -75.22552,42.9906 -75.22551,-42.9906 0,-85.9813 75.22551,-43.0053 z"
+       id="path3075"
+       inkscape:connector-curvature="0" />
+    <rect
+       style="fill:#e74c3c;fill-opacity:1;stroke:#e74c3c;stroke-width:3.43795609;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect4318"
+       width="28.561611"
+       height="61.880264"
+       x="485.19049"
+       y="1015.1154"
+       ry="5.9578338" />
+    <g
+       id="g3048"
+       transform="matrix(0.27652941,0,0,0.27652941,498.86487,1021.0748)"
+       style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1">
+      <use
+         xlink:href="#b"
+         id="use3050"
+         style="stroke:#a4c639;stroke-width:14.39999961999999900;fill:#ffffff;fill-opacity:1;stroke-opacity:1"
+         x="0"
+         y="0"
+         width="294"
+         height="345" />
+      <use
+         xlink:href="#a"
+         transform="scale(-1,1)"
+         id="use3052"
+         x="0"
+         y="0"
+         width="294"
+         height="345"
+         style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+      <g
+         id="a"
+         style="stroke:#a4c639;stroke-width:7.19999980999999960;fill:#ffffff;fill-opacity:1;stroke-opacity:1">
+        <rect
+           rx="6.5"
+           transform="matrix(0.87461971,0.48480962,-0.48480962,0.87461971,0,0)"
+           height="86"
+           width="13"
+           y="-86"
+           x="14"
+           id="rect3055"
+           style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+        <rect
+           id="c"
+           rx="24"
+           height="133"
+           width="48"
+           y="41"
+           x="-143"
+           style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+        <use
+           y="97"
+           x="85"
+           xlink:href="#c"
+           id="use3058"
+           width="294"
+           height="345"
+           style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+      </g>
+      <g
+         id="b"
+         style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1">
+        <ellipse
+           cy="41"
+           rx="91"
+           ry="84"
+           id="ellipse3061"
+           d="m 91,41 c 0,46.391919 -40.742088,84 -91,84 -50.257912,0 -91,-37.608081 -91,-84 0,-46.391919 40.742088,-84 91,-84 50.257912,0 91,37.608081 91,84 z"
+           cx="0"
+           sodipodi:cx="0"
+           sodipodi:cy="41"
+           sodipodi:rx="91"
+           sodipodi:ry="84"
+           style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+        <rect
+           rx="22"
+           height="182"
+           width="182"
+           y="20"
+           x="-91"
+           id="rect3063"
+           style="fill:#ffffff;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="g3065"
+       transform="matrix(0.27652941,0,0,0.27652941,498.86487,1021.0748)"
+       style="fill:#a4c639;stroke:#a4c639;stroke-width:7.19999980999999960;fill-opacity:1;stroke-opacity:1">
+      <path
+         d="M -95,44.5 H 95"
+         id="path3067"
+         inkscape:connector-curvature="0"
+         style="fill:#a4c639;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+      <circle
+         cx="-42"
+         r="4"
+         id="circle3069"
+         d="m -38,0 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z"
+         cy="0"
+         sodipodi:cx="-42"
+         sodipodi:cy="0"
+         sodipodi:rx="4"
+         sodipodi:ry="4"
+         style="fill:#a4c639;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+      <circle
+         cx="42"
+         r="4"
+         id="circle3071"
+         d="m 46,0 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z"
+         cy="0"
+         sodipodi:cx="42"
+         sodipodi:cy="0"
+         sodipodi:rx="4"
+         sodipodi:ry="4"
+         style="fill:#a4c639;fill-opacity:1;stroke:#a4c639;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

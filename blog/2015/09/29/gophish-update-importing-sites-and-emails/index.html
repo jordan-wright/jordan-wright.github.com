@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" Gophish Update - Importing Sites and Emails &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2015-09-29T06:45:33Z" />
+
+    
+    <meta property="og:article:tag" content="gophish" />
+    
+    
+
+  <title>
+     Gophish Update - Importing Sites and Emails &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Gophish Update - Importing Sites and Emails</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2015-09-29T06:45:33Z">
+            Sep 29, 2015
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/gophish/">#gophish</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:2a9445cd46ce65423aab69c1e387d2fb">Introduction</h3>
+
+<p>I&rsquo;m excited to announce that the <a href="https://github.com/jordan-wright/gophish">gophish</a> &ldquo;alpha&rdquo; release is almost complete! I&rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.</p>
+
+<p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.</p>
+
+<h3 id="importing-sites:2a9445cd46ce65423aab69c1e387d2fb">Importing Sites</h3>
+
+<p>Attackers often <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">create phishing kits</a> containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.</p>
+
+<p>Let&rsquo;s take a look at how easy it is to import a site using gophish:</p>
+
+<p><img src="/blog/images/blog/gophish_screenshots/import_site.gif"/></p>
+
+<p>This works by grabbing the HTML content of the site and adding a <code>&lt;base&gt;</code> tag so that relative resources (like CSS, JS, etc.) are loaded from the site itself.</p>
+
+<p>You could use this functionality to clone things such as your own webmail login, company webpage, or other services that the users may be prone to entering sensitive information into. Of course, once you import a site, you&rsquo;re free to edit it to add template variables, change links, etc. through the gophish editor.</p>
+
+<h3 id="importing-email:2a9445cd46ce65423aab69c1e387d2fb">Importing Email</h3>
+
+<p>The emails you use in your training are the bait to your phish. Having believable emails is the key to good training, since this will show users first-hand how legit phishing emails can look.</p>
+
+<p>What better way to get some believable looking email templates than to use <em>real</em> emails? Now you can import an email in gophish via a simple copy/paste from your email client.</p>
+
+<p>Here&rsquo;s an example showing how we can import an email from Gmail:</p>
+
+<p><img src="/blog/images/blog/gophish_screenshots/import_email.gif"/></p>
+
+<p>This functionality is provided by the Go <a href="https://github.com/jordan-wright/email">email</a> library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by <a href="https://github.com/jordan-wright/gophish/issues">filing an issue!</a></p>
+
+<h3 id="conclusion:2a9445cd46ce65423aab69c1e387d2fb">Conclusion</h3>
+
+<p>I&rsquo;m really excited to release gophish in the upcoming month or so and bring enterprise-grade phishing training to <em>anyone</em> who wants it. Until then, keep checking out the pre-alpha and <a href="https://github.com/jordan-wright/gophish/issues">let me know</a> if you have any questions or comments!</p>
+
+<p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%20-%20Importing%20Sites%20and%20Emails&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f29%2fgophish-update-importing-sites-and-emails%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f29%2fgophish-update-importing-sites-and-emails%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f29%2fgophish-update-importing-sites-and-emails%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2015\/09\/29\/gophish-update-importing-sites-and-emails\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

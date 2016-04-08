@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" What Happens When Tor Exit Nodes Break Bad? &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2016-04-05T00:00:00Z" />
+
+    
+    <meta property="og:article:tag" content="tor" />
+    
+    
+
+  <title>
+     What Happens When Tor Exit Nodes Break Bad? &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/" />
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">What Happens When Tor Exit Nodes Break Bad?</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2016-04-05T00:00:00Z">
+            Apr 5, 2016
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/tor/">#tor</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/heisenberg.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:f95a411bd10674adcf2a6a8ceddf9328">Introduction</h3>
+
+<p>When <a href="/blog/categories/tor/">looking at how Tor works</a>, we&rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&rsquo;ll notice that we haven&rsquo;t dealt too much with <em>exit nodes</em>. Exit nodes are the final link in a Tor &ldquo;circuit&rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.</p>
+
+<p>This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&rsquo;t always the case. This post will take a look at what happens when a Tor <a href="https://i.imgur.com/L8L7k1Z.jpg">exit node operator</a> decides to &ldquo;break bad&rdquo; and wreak havoc on Tor users<a href="#end-1"><sup>1</sup></a>.</p>
+
+<h3 id="a-case-of-the-sniffles:f95a411bd10674adcf2a6a8ceddf9328">A Case of the Sniffles</h3>
+
+<p>Tor exit nodes are the definition of a man-in-the-middle (MitM). This means that <strong>any</strong> unencrypted protocols (e.g. FTP, HTTP, SMTP, etc.) can be seen by the exit node operator. This includes things like usernames, passwords, session cookies, or even file uploads/downloads.</p>
+
+<blockquote>
+<p><strong>To be clear: Tor exit nodes can see traffic as if it were just leaving your device.</strong></p>
+</blockquote>
+
+<p>The unfortunate part about this is that there is nothing (aside from using encrypted protocols&hellip; more on this later) we can do about this. Sniffing is a completely passive operation, so the only protection is to be aware of the risks and avoid passing any sensitive data over Tor unencrypted.</p>
+
+<p>But let&rsquo;s say you&rsquo;re an exit node operator trying to <em>break bad</em>, not break slightly-inconvenient. Sniffing is for <strong>chumps</strong>. Let&rsquo;s turn it up a notch and start modifying some traffic.</p>
+
+<h3 id="turn-it-up-to-11:f95a411bd10674adcf2a6a8ceddf9328">Turn it up to 11</h3>
+
+<p>Remember - as an exit node operator, we&rsquo;re responsible for passing traffic to and from the client unmodified, right? <a href="http://i.giphy.com/xT0BKNBeDmlxDkM51e.gif">Yeah, right</a>.</p>
+
+<p>Let&rsquo;s take a look at just a few of the ways we can modify traffic:</p>
+
+<h4 id="ssl-mitm-sslstrip:f95a411bd10674adcf2a6a8ceddf9328">SSL MiTM &amp; sslstrip</h4>
+
+<p>SSL rains on our parade if we&rsquo;re trying to cause havoc for our users. Fortunately for us as attackers, many sites have issues that allow us to force the user through unencrypted connections. Examples include redirects from HTTP to HTTPS, including HTTP content on an HTTPS site, and more.</p>
+
+<p>A nifty tool to take advantage of this is called <a href="http://www.thoughtcrime.org/software/sslstrip/">sslstrip</a>. All we have to do is proxy the traffic leaving our exit node through sslstrip and it&rsquo;s game over in many scenarios.</p>
+
+<p>Of course, if we want to be less sneaky, we can just straight up terminate the SSL connections with a self-signed cert. Then we have insight into all the SSL traffic crossing our exit node. Piece of cake.</p>
+
+<h4 id="hooking-browsers-with-beef:f95a411bd10674adcf2a6a8ceddf9328">Hooking Browsers with BeEF</h4>
+
+<p>Now that we have insight into more traffic than before, we can start doing some damage. One example of this would be to use the <a href="http://beefproject.com/">BeEF framework</a> to automatically &ldquo;hook&rdquo; browsers so they are under our control. Then, we can leverage Metasploit&rsquo;s <a href="https://community.rapid7.com/community/metasploit/blog/2015/07/16/the-new-metasploit-browser-autopwn-strikes-faster-and-smarter--part-2">&ldquo;browser autopwn&rdquo;</a> function to compromise the end host and drop a reverse shell. Game over.</p>
+
+<h4 id="backdoor-binaries:f95a411bd10674adcf2a6a8ceddf9328">Backdoor Binaries</h4>
+
+<p>Let&rsquo;s say that we see binaries being downloaded through our exit nodes. These can be full software downloads, or even updates to existing software that&rsquo;s happening in the background that the user isn&rsquo;t even aware of.</p>
+
+<p>All we have to do to transparently backdoor binaries would be to proxy the Tor traffic through something like <a href="https://github.com/secretsquirrel/the-backdoor-factory">The Backdoor Factory</a>. Then, as the software is executed, the end host is compromised. Game over.</p>
+
+<h3 id="catching-walter-white:f95a411bd10674adcf2a6a8ceddf9328">Catching Walter White</h3>
+
+<p>While most Tor exit nodes (from what we can tell) play nice, it&rsquo;s not terribly uncommon to find some that don&rsquo;t. Remember all those theoretical attacks we just talked about? <a href="http://www.cs.kau.se/philwint/spoiled_onions/">They</a> <a href="http://packetstorm.foofus.com/papers/attack/jackin-tor.txt">actually</a> <a href="http://www.leviathansecurity.com/blog/the-case-of-the-modified-binaries/">happened</a>.</p>
+
+<p>Fortunately, the Tor Project thought of this and <a href="https://trac.torproject.org/projects/tor/wiki/doc/badRelays">designed a safeguard</a> to prevent bad exits from being used by clients. This comes in the form of a flag in <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">the consensus</a>. Not surprisingly, the flag is called <code>BadExit</code>.</p>
+
+<p>To address the problem of hunting down bad exit nodes, a slick system called <a href="https://github.com/NullHypothesis/exitmap">exitmap</a> was created.</p>
+
+<p>Exitmap works like this:</p>
+
+<ul>
+<li>For each exit node:
+
+<ul>
+<li>Run Python module (file upload/download, login, etc.)</li>
+<li>Record the results</li>
+</ul></li>
+</ul>
+
+<p>Exitmap leverages the awesome <a href="https://stem.torproject.org/">Stem</a> library to do most of the heavy lifting for building circuits to each exit node. Pretty basic, but <em>effective</em>.</p>
+
+<p>Back in 2013, exitmap was created as part of the <a href="http://www.cs.kau.se/philwint/spoiled_onions/">Spoiled Onions project</a>. The authors of the paper found 65 exit nodes that were tampering with traffic. This shows that, while the problem isn&rsquo;t rampant (there were about 1000 exit nodes when they wrote the paper), it&rsquo;s bad enough to warrant a sheriff to make sure exits are playing nice, which is why exitmap is still up, running, and actively maintained.</p>
+
+<p>In <a href="https://chloe.re/2015/06/20/a-month-with-badonions/">another example</a>, a researcher basically set up a fake login page and logged in through every exit node (similar to exitmap). Then, the HTTP logs were watched for any further login attempts. Multiple nodes tried to break in to the site using the same credentials the author used.</p>
+
+<h3 id="this-isn-t-just-tor-s-problem:f95a411bd10674adcf2a6a8ceddf9328">This Isn&rsquo;t Just Tor&rsquo;s Problem</h3>
+
+<p>It&rsquo;s important to note that this isn&rsquo;t just Tor&rsquo;s problem. There are a substantial number of hops along any given path, including the normal path between you, your ISP, and the cat picture you&rsquo;re trying to look at. All it takes is one operator with malicious intent to cause serious harm.</p>
+
+<p>The best thing you can do is to enforce encryption wherever possible. If the traffic can&rsquo;t be seen, it can&rsquo;t (feasibly) be modified.</p>
+
+<p>Finally, keep in mind this is just an example of what happens when Tor operators act irresponsibly. This is <strong>not</strong> the norm. In fact, a vast majority of exit node operators take their role very seriously and deserve a major &ldquo;thank you&rdquo; for all the risk they assume to keep information flowing freely.</p>
+
+<p><sup id="end-1">1</sup> Actual image of evil Tor exit node operator. <sup>Not really.</sup></p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=What%20Happens%20When%20Tor%20Exit%20Nodes%20Break%20Bad%3f&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2016%2f04%2f05%2fwhat-happens-when-tor-exit-nodes-break-bad%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2f2016%2f04%2f05%2fwhat-happens-when-tor-exit-nodes-break-bad%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2f2016%2f04%2f05%2fwhat-happens-when-tor-exit-nodes-break-bad%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/2016\/04\/05\/what-happens-when-tor-exit-nodes-break-bad\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

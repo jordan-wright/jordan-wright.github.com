@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Apps on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/apps/</link>
+    <description>Recent content in Apps on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Aug 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/apps/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Decompiling Android Apps the Easy Way</title>
+      <link>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
+      <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:63400f08d09db64e22ecc762efbc8d27&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.&lt;/p&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;previous post&lt;/a&gt;, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&amp;rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.&lt;/p&gt;
+
+&lt;h3 id=&#34;step-one-get-the-apk:63400f08d09db64e22ecc762efbc8d27&#34;&gt;Step One: Get the APK&lt;/h3&gt;
+
+&lt;p&gt;The first step in analyzing an Android app is to get the actual APK that&amp;rsquo;s loaded onto the device. Fortunately, there is a site called &lt;a href=&#34;http://apps.evozi.com/apk-downloader/&#34;&gt;APK Downloader&lt;/a&gt; which allows us to do just that. By getting the link to the app of your choice from the &lt;a href=&#34;https://play.google.com/store/apps?hl=en&#34;&gt;Google Play Store&lt;/a&gt; and pasting it into APK Downloader, you can download a local copy of the app APK.&lt;/p&gt;
+
+&lt;h3 id=&#34;step-two-unpack-and-decompile:63400f08d09db64e22ecc762efbc8d27&#34;&gt;Step Two: Unpack and Decompile&lt;/h3&gt;
+
+&lt;p&gt;After we have the APK, we need to unpack and decompile the contents into its equivalent Java code. This used to be a pretty lengthy process using tools such as the &lt;a href=&#34;https://code.google.com/p/android-apktool/&#34;&gt;android apktool&lt;/a&gt;. Fortunately for us, someone has also setup a web-based service which automatically performs the decompilation process on a given APK.&lt;/p&gt;
+
+&lt;p&gt;By uploading the APK to &lt;a href=&#34;http://www.decompileandroid.com/&#34;&gt;decompileandroid.com&lt;/a&gt;, the user will be presented with the option to download the decompiled contents of the app, including the Java source code. &lt;em&gt;Awesome.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;things-to-look-for:63400f08d09db64e22ecc762efbc8d27&#34;&gt;Things to Look For&lt;/h3&gt;
+
+&lt;p&gt;Decompiling Android apps can allow researchers to analyze the exact code that is running on the app for vulnerabilities, as well as reveal any hardcoded credentials or other sensitive data. For example, in June of 2014, researchers from Columbia university created a tool called &lt;a href=&#34;https://github.com/nviennot/playdrone&#34;&gt;PlayDrone&lt;/a&gt; which automatically crawled thousands of Android apps found on the Google Play store and &lt;a href=&#34;http://www.cs.columbia.edu/~nieh/pubs/sigmetrics2014_playdrone.pdf&#34;&gt;discovered the existence of sensitive credentials&lt;/a&gt; in many of them.&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:63400f08d09db64e22ecc762efbc8d27&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &amp;ldquo;hidden in plain sight&amp;rdquo;. As always, leave any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

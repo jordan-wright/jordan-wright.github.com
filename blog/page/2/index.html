@@ -1,736 +1,619 @@
-
 <!DOCTYPE html>
-<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
-<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
-<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<html lang="en-us">
 <head>
-  <meta charset="utf-8">
-  <title>jordan-wright</title>
-  <meta name="author" content="Jordan">
 
-  
-  <meta name="description" content="So you accidentally committed a password or API key to Github. Ouch. &ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github& &hellip;">
-  
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <!-- http://t.co/dKP3o1e -->
-  <meta name="HandheldFriendly" content="True">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  	<meta property="og:title" content=" Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/" />
 
-  
-  <link rel="canonical" href="http://jordan-wright.github.io/blog/page/2">
-  <link href="/favicon.png" rel="icon">
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/stylesheets/data-tables.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/atom.xml" rel="alternate" title="jordan-wright" type="application/atom+xml">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="/stylesheets/blog.css" rel="stylesheet" media="screen, projection" type="text/css">
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/vivus/0.1.2/vivus.min.js"></script>
+    
+    <meta property="og:type" content="website" />
+    
 
-  
-  <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-44718701-1']);
-    _gaq.push(['_trackPageview']);
+  <title>
+     Jordan Wright
+  </title>
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
 
 
-</head>
-
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/">jordan-wright</a></h1>
-  
-    <h2>Security and Programming Blog</h2>
-  
-</hgroup>
-
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:jordan-wright.github.io" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/">Home</a></li>
-  <li><a href="/contact">Contact</a></li>
-  <li><a href="/projects">Projects</a></li>
-  <li><a href="/blog">Blog</a></li>
-  <li><a href="http://raidersec.blogspot.com">Raidersec</a></li>
-  <li><a href="/blog/archives">Archives</a></li>
-</ul>
-
-</nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  
-    <article>
+    
       
-  <header>
+      
+        <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
     
-      <h1 class="entry-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information From Github Doesn&#8217;t Save You</a></h1>
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/" />
+
     
+
     
-      <p class="meta">
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-30T19:19:00-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Comments</a>
         
-      </p>
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
     
-  </header>
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
 
 
-  <div class="entry-content"><p><img src="/images/headers/harvest_github.png"/></p>
+ <div class="site-wrapper">
+
+
+
+<header class="main-header no-cover">
+
+
+    <nav class="main-nav overlay clearfix">
+        
+            <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+        
+    </nav>
+    <div class="vertical">
+        <div class="main-header-content inner">
+            
+            
+            
+            
+            
+            
+            
+
+            <h1 class="page-title">Jordan Wright</h1>
+            <h2 class="page-description">Security and Programming Blog</h2>
+        </div>
+    </div>
+    <a class="scroll-down icon-arrow-left" href="#content"><span class="hidden">Scroll Down</span></a>
+</header>
+
+
+<main id="content" class="content" role="main">
+
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
+        
+            
+        
+    
+
+    
+    
+    
+
+    <div class="extra-pagination inner">
+        <nav class="pagination" role="navigation">
+	
+	    <a class="newer-posts" href="/">&larr; Newer Posts</a>
+	
+	<span class="page-number">Page 2 of 4</span>
+	
+	    <a class="older-posts" href="/page/3/">Older Posts &rarr;</a>
+	
+</nav>
+
+    </div>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elk_results.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c2f7a687b0f5cbc5c5a21adfebefeddd">Introduction</h3>
+
+<p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
+
+<p>After re-building the box from scratch (with many improvements!), I <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">created a honeypot</a> called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.</p>
+
+<p>Here are the results.</p>
+ <a class="read-more icon-standard" href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/elastichoney/">#elastichoney</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/honeypot/">#honeypot</a>,
+            
+        
+        <time class="post-date" datetime="2015-04-30T20:00:00Z">
+            30 Apr 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing elastichoney - an Elasticsearch Honeypot</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elastichoney.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c0ae86186de728bbad406ae19d00e422">Introduction</h3>
+
+<p>I recently <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">wrote</a> about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to <a href="http://github.com/jordan-wright/elastichoney">elastichoney</a>!</p>
+ <a class="read-more icon-standard" href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/honeypot/">#honeypot</a>,
+            
+        
+        <time class="post-date" datetime="2015-03-23T00:00:00Z">
+            23 Mar 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Remote Code Execution in Elasticsearch - CVE-2015-1427</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/elk_rce.png" alt="" class="pure-img" >
+
+
+<blockquote>
+<p>TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later <strong>now</strong>.</p>
+</blockquote>
+
+<p>Elasticsearch (the &ldquo;E&rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).</p>
+
+<blockquote>
+<p>Much of the analysis discovering this vulnerability was originally found on a blog post <a href="http://drops.wooyun.org/papers/5107">here</a> (<a href="https://translate.google.com/translate?hl=en&amp;sl=zh-CN&amp;tl=en&amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107">translated</a>). This post aims to translate and provide more detail on the vulnerability.</p>
+</blockquote>
+ <a class="read-more icon-standard" href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/elasticsearch/">#elasticsearch</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/vulnerability/">#vulnerability</a>,
+            
+        
+        <time class="post-date" datetime="2015-03-08T00:00:00Z">
+            8 Mar 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/28/how-tor-works-part-one/">How Tor Works: Part One</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:b6a2f7f7305d0d4a88042f3de1458bb0">Introduction</h3>
+
+<p>Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.</p>
+
+<p>But how does Tor work under the hood? In this series of posts, we&rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/28/how-tor-works-part-one/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/tor/">#tor</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-28T00:00:00Z">
+            28 Feb 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Gophish Update: Getting Closer to Alpha!</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:04122820eae1345d676d25dffa9afb36">Introduction</h3>
+
+<p>It&rsquo;s been a busy couple of months!</p>
+
+<p>I thought it would be worth providing a long-overdue update into the development status of <a href="http://github.com/jordan-wright/gophish">gophish</a>. Overall, the project is getting closer to beta status every day, and I&rsquo;m hoping to see a <a href="https://github.com/jordan-wright/gophish/milestones">0.1 release</a> at the end of March.</p>
+
+<p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-26T00:00:00Z">
+            26 Feb 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Web Scraping Hotel Prices for Fun and Savings</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/web_scraping.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:fe91443da304f39c7fb3c4eaf276cfbc">Introduction</h3>
+
+<p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
+
+<p>Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
+ <a class="read-more icon-standard" href="/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/python/">#python</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/web_scraping/">#web_scraping</a>,
+            
+        
+        <time class="post-date" datetime="2015-02-21T00:00:00Z">
+            21 Feb 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">SANS Holiday Challenge 2014 - Writeup</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction:c3e220fe137858e19964dc8e2605b764">Introduction</h3>
+
+<p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
+
+<p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em></p>
+ <a class="read-more icon-standard" href="/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        
+        <time class="post-date" datetime="2015-01-05T00:00:00Z">
+            5 Jan 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information from Github Doesn&#39;t Save You</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/harvest_github.png" alt="" class="pure-img" >
+
 
 <p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
 
 <p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
 
 <p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read on &rarr;</a>
+ <a class="read-more icon-standard" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/github/">#github</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-30T00:00:00Z">
+            30 Dec 2014
+        </time>
     </footer>
-  
+</article>
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/12/28/what-infosec-learned-in-2014/">What InfoSec Learned in 2014</a></h1>
-    
-    
-      <p class="meta">
         
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/28/what-infosec-learned-in-2014/">What InfoSec Learned in 2014</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/what_infosec_2014.png" alt="" class="pure-img" >
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-28T20:38:00-06:00" pubdate data-updated="true">Dec 28<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/12/28/what-infosec-learned-in-2014/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/28/what-infosec-learned-in-2014/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/what_infosec_2014.png"/></p>
 
 <p><em>Busy year.</em></p>
 
-<p>It seems as though each year brings more and more events that throw our industry into the forefront of attention &ndash; and they&rsquo;re never good. At the same time, it&rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/28/what-infosec-learned-in-2014/">Read on &rarr;</a>
+<p>It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&rsquo;re never good. At the same time, it&rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:</p>
+ <a class="read-more icon-standard" href="/blog/2014/12/28/what-infosec-learned-in-2014/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/infosec/">#infosec</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-28T00:00:00Z">
+            28 Dec 2014
+        </time>
     </footer>
-  
+</article>
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">What Happens if Tor Directory Authorities Are Seized?</a></h1>
-    
-    
-      <p class="meta">
         
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">What Happens if Tor Directory Authorities are Seized?</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/tor_seized.png" alt="" class="pure-img" >
 
 
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-19T18:43:00-06:00" pubdate data-updated="true">Dec 19<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/tor_seized.png"/></p>
-
-<h3>Introduction</h3>
+<h3 id="introduction:945cc41d8052557b224927a93c0a481d">Introduction</h3>
 
 <p>The Tor Project <a href="https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network">has announced</a> that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&rsquo;t know the legitimacy behind these threats, it&rsquo;s worth looking at the role DA&rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">Read on &rarr;</a>
+ <a class="read-more icon-standard" href="/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/tor/">#tor</a>,
+            
+        
+        <time class="post-date" datetime="2014-12-19T00:00:00Z">
+            19 Dec 2014
+        </time>
     </footer>
-  
+</article>
+
+    
+
+    <nav class="pagination" role="navigation">
+	
+	    <a class="newer-posts" href="/">&larr; Newer Posts</a>
+	
+	<span class="page-number">Page 2 of 4</span>
+	
+	    <a class="older-posts" href="/page/3/">Older Posts &rarr;</a>
+	
+</nav>
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/">Chrome Tracks Every Key Typed Into the Omnibox</a></h1>
-    
-    
-      <p class="meta">
+</main>
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
         
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-18T23:43:00-06:00" pubdate data-updated="true">Dec 18<span>th</span>, 2014</time>
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
         
-           | <a href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/browser_tracking.png"/></p>
-
-<blockquote><p>Friendly Reminder: Browser makers may track every key you type in the URL bar</p></blockquote>
-
-<h3>Introduction</h3>
-
-<p>Technologies like Google Chrome&rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/">Read on &rarr;</a>
     </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/12/02/my-probably-boring-research-papers-on-security/">My (Probably Boring) Research Papers on Security</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-12-02T22:50:00-06:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2014</time>
-        
-           | <a href="/blog/2014/12/02/my-probably-boring-research-papers-on-security/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/12/02/my-probably-boring-research-papers-on-security/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/papers.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>I&rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible &ndash; progress happens this way.</p>
-
-<p>As such, I&rsquo;ve decided to &ldquo;open-source&rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.</p>
-
-<p>Please bear in mind some of these papers were written <del>the night before</del> in a short time-span.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/12/02/my-probably-boring-research-papers-on-security/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Reverse Engineering the We Heart It API</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-12T20:40:00-05:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/weheartit_api.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
-
-<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
-
-<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Creating Tor Hidden Services With Python</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-06T20:00:00-05:00" pubdate data-updated="true">Oct 6<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/10/06/creating-tor-hidden-services-with-python/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/10/06/creating-tor-hidden-services-with-python/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/hidden_services.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
-
-<p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/06/creating-tor-hidden-services-with-python/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Decompiling Android Apps the Easy Way</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-10T19:51:00-05:00" pubdate data-updated="true">Aug 10<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/android_apps.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.</p>
-
-<p>In a <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">previous post</a>, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">How to Hunt Down Phishing Kits</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-30T22:12:00-05:00" pubdate data-updated="true">Jul 30<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/07/30/how-to-hunt-down-phishing-kits/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/phishing_kit.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>Sites like <a href="http://www.phishtank.com/phish_archive.php">phishtank</a> and <a href="http://support.clean-mx.com/clean-mx/phishing.php">clean-mx</a> act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find <a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">interesting information</a> about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how <em>phishing kits</em> are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">A Look at Comment Spam Generator Scripts</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-04T14:33:00-05:00" pubdate data-updated="true">Apr 4<span>th</span>, 2014</time>
-        
-           | <a href="/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/#disqus_thread"
-             data-disqus-identifier="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/headers/spam_gen.png"/></p>
-
-<h3>Introduction</h3>
-
-<p>It&rsquo;s been a while! I&rsquo;ve been busy getting <a href="http://github.com/jordan-wright/gophish">gophish</a> closer and closer to beta. Should be ready soon!</p>
-
-<p>Until then, here&rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at <a href="http://phishtank.com">phishtank.com</a>.</p>
-
-<p><em>As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&rsquo;t seem to relate to the content of the spam scripts at all.</em></p>
-
-<h3>The Spam Scripts</h3>
-
-<p>Here are the scripts &ndash; the format looks very similar to <a href="http://alexking.org/blog/2013/12/22/spam-comment-generator-script">those found by Alex King</a>. I&rsquo;m guessing that one choice from each <code>{block}</code> is used at random to make every comment unique.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{Rapper|Rap artist|Artist} {George|Henry} Watsky apologises {for|with regard to|regarding|pertaining to} {breaking|busting|splitting|smashing} {woman|lady|girl|female}
-</span><span class='line'>{The|The actual|The particular|Your} {rapper|rap artist|artist} {was|had been|has been|ended up being} {performing|carrying out|executing|undertaking} {at|from|with|in} Alexandra {Palace|Structure|Construction|Development} {in|within|inside|throughout} {north|northern|n .|upper} {London|Birmingham|Greater london|Manchester} {when he|as he|while he|whilst} {climbed|rose|risen|soared} {up the|in the|the|inside the} {stage|phase|period|point} {on a|on the|over a|with a} {rope|string|piece of string|line} {before|prior to|just before|ahead of} {launching|starting|introducing|establishing} {himself|themself|themselves|herself} {onto the|to the|on the|on top of the} {audience|target audience|viewers|market} {from|through|coming from|via} 30ft.
-</span><span class='line'>{In a|Inside a|In the|Within a} {lengthy|extended|prolonged|long} {post|publish|submit|article} {on|upon|about|in} {his|their|his / her|his or her} {Facebook|Fb|Myspace|Facebook or myspace} {page|web page|site|web site}, Watsky apologised {for|with regard to|regarding|pertaining to} {his|their|his / her|his or her} {stunt|stop|trick} {and|as well as|and also|along with} {said|stated|mentioned|explained} {he|he or she|this individual|they} {decided to|chose to|made a decision to|thought we would} {jump|leap|hop|bounce} {due to a|as a result of|because of a|because of} "huge overreach {in the|within the|inside the|from the} {heat|warmth|temperature|high temperature} {of the|from the|with the|in the} moment".
-</span><span class='line'>{He said|He explained|He was quoted saying|He stated}: "The {jump|leap|hop|bounce} {was not|wasn't|had not been|has not been} {awesome|amazing|great|wonderful}, {it was not|it wasn't|it had not been} badass, {and it|also it|plus it|and yes it} {was not|wasn't|had not been|has not been} ballsy. {It|This|That|The idea} {turned|switched|flipped|transformed} {what|exactly what|just what|precisely what} {should have|must have|needs to have|really should have} {been|already been|recently been|been recently} {a great|an excellent|a fantastic|an incredible} {day|day time|evening|morning} {for the people|for anyone|for those|for people} {who|that|which|whom} {got|obtained|received|acquired} {hurt|harm|damage|injure} {into a|right into a|in to a|in a} {nightmare|headache|problem|pain}. {It was|It had been|It absolutely was|It turned out} {stupid|silly|foolish|ridiculous} {and|as well as|and also|along with} {wildly|extremely|hugely|very} {irresponsible|reckless|uncaring|freewheeling}, {plain and simple|basically|in basic terms|simply}.
-</span><span class='line'>"I {pride|satisfaction|delight|pleasure} {myself|personally|me personally|myself personally} {on|upon|about|in} {trying to|attempting to|wanting to|looking to} {put on|placed on|wear|place on} {a good|a great|an excellent|a fantastic} {show|display|present|demonstrate} {and always|and try to|and constantly|try to} {giving|providing|offering|supplying} {100|One hundred|A hundred|Hundred} {per cent|percent|%|per-cent} {energy|power|vitality|electricity}, {but|however|yet|nevertheless} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {some|a few|several|a number of} {high|higher|large|substantial} {st|street|saint|e} {doesn't|does not|will not|won't} {make|help to make|help make|create} {someone|somebody|an individual|a person} {a good|a great|an excellent|a fantastic} {musician|music performer|artist|musician and performer} {or|or even|or perhaps|as well as} {performer|artist|musician|singer}. {I feel|Personally i think|I'm|I am} fing {terrible|horrible|awful|dreadful}. {I|We|My partner and i|My spouse and i} {made a|designed a|developed a|created a} boneheaded {decision|choice|selection|determination} {that|which|in which|that will} {got|obtained|received|acquired} {people|individuals|folks|men and women} {hurt|harm|damage|injure}, {and it's|and it is|and it's really|and} {extremely|very|really|incredibly} {lucky|fortunate|blessed|fortuitous} {it wasn't|it had not been|it was not} {worse|even worse|a whole lot worse|more serious}.{"|Inch|Inches|In .}
-</span><span class='line'>{He|He or she|This individual|They} {added|additional|extra|included} {he|he or she|this individual|they} {was not|wasn't|had not been|has not been} {under the influence of|intoxicated by|consuming|ingesting} {drugs or alcohol|alcohol or drugs} {when he|as he|while he|whilst} {performed|carried out|done|executed} {the|the actual|the particular|your} {stunt|stop|trick}, {and|as well as|and also|along with} {said|stated|mentioned|explained} {his|their|his / her|his or her} {health|wellness|well being|wellbeing} {was|had been|has been|ended up being} "fine, {besides|apart from|in addition to|aside from} {some|a few|several|a number of} {nicks|grazes|dings|lacerations}, bruises, {and the|and also the|as well as the|along with the} {shame|pity|disgrace|waste} {of|associated with|regarding|involving} {endangering|risking|threatening} {the|the actual|the particular|your} crowd".
-</span><span class='line'>{The|The actual|The particular|Your} {Californian|American} {rapper|rap artist|artist} {said|stated|mentioned|explained} {he had|he'd|he previously|he} {been to|visited|gone to|attended} {hospital|medical center|clinic|healthcare facility} {to visit|to go to|to see|to check out} {the two|the 2|both|both the} {audience|target audience|viewers|market} {members|people|associates|users} {who were|who have been|who had been|have been} {injured|hurt|wounded|harmed}, {and|as well as|and also|along with} {stayed|remained|stayed at|slept} {with them|together|using them|with these} {for|with regard to|regarding|pertaining to} {six hours|6 hours} {until the|before the|before|prior to the} {visiting|going to|browsing|traveling to} {period|time period|period of time|interval} {had|experienced|acquired|got} {ended|finished|concluded|broken}.
-</span><span class='line'>{He|He or she|This individual|They} {confirmed|verified|established|validated} {he would|he'd|however|although} {not be|'t be|not|stop} {cancelling|rescheduling|deleting|closing} {his|their|his / her|his or her} {remaining|leftover|staying|outstanding} {six|6|half a dozen|six to eight} {tour|visit|excursion|trip} {dates|times|days|schedules} {in the UK|in the united kingdom|in britain|in england}.
-</span><span class='line'>"I {will do|is going to do|can do|will perform} {the|the actual|the particular|your} {shows|exhibits|displays|demonstrates}, {as usual|as always} {I will|I'll|I am going to|Let me} {meet|fulfill|satisfy|meet up with} {everyone|everybody|every person|anyone} {afterwards|later on|soon after|after}, {and I will|and i'll} {NOT be|'t be|Not|Stop} {jumping|leaping|bouncing|moving} {off|away|away from|off of} {anything|something|anything at all|everything}. {I am|I'm|I will be|We are} {deeply|seriously|profoundly|significantly} {sorry|i'm sorry|remorseful|i am sorry} {and I|and that i|and i also|i} {promise|guarantee|assure|offer} {to learn|to understand|to find out|to master} {from this|out of this|using this|because of this} {mistake|error|blunder|oversight},{"|Inch|Inches|In .} {he said|he explained|he was quoted saying|he stated}./p&gt;
-</span><span class='line'>
-</span><span class='line'>{Police|Law enforcement|Law enforcement officials|Authorities} {find|discover|locate|uncover} {2|Two|A couple of|Only two} {more|much more|a lot more|far more} corpses {in|within|inside|throughout} Surrey
-</span><span class='line'>Sgt. {PT|Rehabilitation|Therapist} Wednesdayinan {area of|section of|part of|division of} {South|Southern|To the south|Southerly} Surrey {that has been|that's been|which has been|that is} {used|utilized|employed|utilised} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {as a|like a|being a|as being a} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}.{The|The actual|The particular|Your} {integrated|incorporated|built-in|included} {homicide|murder|killing|kill} {investigation|analysis|study|exploration} {team|group|staff|crew} {was|had been|has been|ended up being} {called|known as|referred to as|named} {Wednesday|Thursday|Friday|Wed} {morning|early morning|morning hours|day} {to an|for an|to a|with an} {area of|section of|part of|division of} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} Surrey {that has become|that is|that has been|this is certainly} {a|the|any|a new} {dumping ground|drop zone} {for|with regard to|regarding|pertaining to} {bodies|physiques|body|systems}. (CBC){More|Much more|A lot more|Far more} {police|law enforcement|law enforcement officials|authorities} {were|had been|have been|ended up} {then|after that|next|and then} {called in|contacted|called}, {and a|along with a|plus a|as well as a} {police|law enforcement|law enforcement officials|authorities} {dog|canine|puppy|pet} {team|group|staff|crew} {located|situated|positioned|found} {a woman's|a ladies|a lady's|a female's} {body|physique|entire body|system} {as well|too|also|at the same time} {a short distance|ten or twenty yards} {away|aside|absent|apart}.{Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {both|each|equally|the two} {victims|sufferers|patients|subjects} {appeared to|seemed to|did actually|gave the impression to} {have|possess|have got|get} {met|fulfilled|satisfied|achieved} {with|along with|together with|using} {foul|bad|nasty|strong} {play|perform|enjoy|participate in}. {Police have|Mother and father|Weed|Cannabis} {not yet been|not|to be} {able to|in a position to|capable of|capable to} {identify|determine|recognize|discover} {them|all of them|these|these people}."Until {the|the actual|the particular|your} {identity|identification|id|personality} {has been|continues to be|may be|has become} {determined|established|decided|identified}, {investigators|detectives|researchers|private investigators} {will not|won't|is not going to|will not likely} {know the|be aware of|understand the|have in mind the} {connection|link|relationship|interconnection}, {if any|or no}, {today's|present day|the current|modern day} {victims|sufferers|patients|subjects} {have to|need to|must|ought to} {each other|one another|the other person|the other} {or to|in order to|or|as well as to} {the other|another|one other|the opposite} {two|2|a couple of|a pair of} {victims|sufferers|patients|subjects} {found|discovered|identified|located} {recently|lately|not too long ago|just lately} {in this area|in this region|in this field|of this type},{"|Inch|Inches|In .} {Pound|Lb|Single pound|Lb .} {said|stated|mentioned|explained} {in a|inside a|in the|within a} {written|created|composed|published} {statement|declaration|assertion|affirmation}.{2|Two|A couple of|Only two} {bodies|physiques|body|systems} foundearlier {in|within|inside|throughout} 2013IHIT {investigators|detectives|researchers|private investigators} {were|had been|have been|ended up} {already|currently|previously|by now} {called|known as|referred to as|named} {out|away|out there|out and about} {twice|two times|2 times|double} {this year|this season|this coming year|in 2010} {to|in order to|to be able to|for you to} Colebrook {Road|Street|Highway|Path}, {a remote|an online|an isolated|a secluded} {rural|non-urban|countryside|outlying} {stretch|extend|stretch out|expand} {near the|close to the|nearby the|at the} {Serpentine|Courbe} {River|Water|Lake|Pond}, {south|southern|to the south|southerly} {of the|from the|with the|in the} {Panorama|Surroundings|Vista} {Ridge|Form|Shape|Rdg} {neighbourhood|area|local community|community} andnorth {of|associated with|regarding|involving} {Mud|Dirt|Off-road|Will get} {Bay|These types of|Fresh|These kinds of}.Colebrook {Road|Street|Highway|Path} {and|as well as|and also|along with} 125A StreetIn {February|Feb|Feb .|January}, abadly {burned|burnt|used up|burned up} {body|physique|entire body|system} {was found|was discovered|is discovered} {off|away|away from|off of} Colebrook Roadnear 125th {Street|Road|Avenue|Block}. Policeidentified {that|which|in which|that will} {victim|target|sufferer|prey} {as|because|since|while} {29|Twenty nine|30|28} {year old|years old|yr old|year-old} Amritpal Saran, {of|associated with|regarding|involving} Delta. {Police|Law enforcement|Law enforcement officials|Authorities} {said|stated|mentioned|explained} {the man|the person|the guy|he} {was|had been|has been|ended up being} {known to|recognized to|proven to|seen to} {them|all of them|these|these people}, {but|however|yet|nevertheless} {had no|didn't have|didn't have any|did not have any} {known|recognized|identified|acknowledged} {gang|bunch|team|company} {affiliations|organizations|connections|links}.{Police|Law enforcement|Law enforcement officials|Authorities} {were|had been|have been|ended up} {also called|also known as|also referred to as|otherwise known as} {to|in order to|to be able to|for you to} investigatea {violent|chaotic|severe|crazy} {attack|assault|strike|invasion} {on a|on the|over a|with a} Surrey {sex|intercourse|sexual intercourse|making love} {trade|industry|business|buy and sell} {worker|employee|member of staff|staff member} {along|together|alongside|coupled} Colebrook {Road|Street|Highway|Path} {in|within|inside|throughout} {October|Oct|March|April}.{In|Within|Inside|Throughout} {February|Feb|Feb .|January}, {police|law enforcement|law enforcement officials|authorities} {released|launched|introduced|unveiled} {sketches|drawings|paintings|images} {of|associated with|regarding|involving} {two|2|a couple of|a pair of} {South|Southern|To the south|Southerly} {Asian|Oriental|Hard anodized cookware|Cookware} menwho allegedlydrove {her|the woman's|the girl|your ex} toColebrook {Road|Street|Highway|Path} {near|close to|around|in close proximity to} 128th {Street|Road|Avenue|Block}, {and|as well as|and also|along with} {physically|bodily|actually|literally} {and|as well as|and also|along with} {sexually|while making love|intimately|in the bedroom} {assaulted|attacked|bombarded|mauled} {her|the woman's|the girl|your ex}. {She|The lady|Your woman|The girl} {was|had been|has been|ended up being} {taken to|come to|taken up|delivered to} {hospital|medical center|clinic|healthcare facility} {with|along with|together with|using} {serious|severe|significant|critical} {injuries|accidents|accidental injuries|incidents}.
-</span><span class='line'>
-</span><span class='line'>{Pressure|Stress|Strain|Force} {rating|score|ranking|standing} {for 3|for several}
-</span><span class='line'>{Check out|Take a look at|Have a look at|Look at} {some|a few|several|a number of} {similar|comparable|related|equivalent} {questions|concerns|queries|inquiries}!
-</span><span class='line'>{How can I|How do i|How could i|How to} {reduce|decrease|lessen|minimize} {a|the|any|a new} 4" {cast iron|surefire|certain|iron} {pipe|water pipe|tube|water line} {opening|starting|beginning|opening up} {to|in order to|to be able to|for you to} 2" {pvc|pvc material|faux wood|imitation wood} pipe&gt; [ {2|Two|A couple of|Only two} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{The last|The final|The past|The very last} {owner|proprietor|operator|seller} {put a|place a|convey a} 2' {pvc|pvc material|faux wood|imitation wood} {pipe|water pipe|tube|water line} {into a|right into a|in to a|in a} 4" {cast iron|surefire|certain|iron} {opening|starting|beginning|opening up}   {it looks like|it appears as though|it appears like|it appears as if} {they just|they simply|they only|they merely} {filled|stuffed|crammed|loaded} {the opening|the outlet} {with|along with|together with|using} {plumbers|local plumbers|plumbing technicians|plumbing engineers} putty   {i am|i'm|i will be|we are} {looking to|seeking to|trying to|planning to} {repair it|do the repair|correct it|remedy it} {properly|correctly|effectively|appropriately}   {what can|so what can|exactly what can|exactly what do} {I use|I personally use|I take advantage of|I prefer} {to go into|to enter|to penetrate|to get in} {the|the actual|the particular|your} {cast iron|surefire|certain|iron} 4"opening {to reduce|to lessen|to cut back|to scale back} {it|this|that|the idea} {to|in order to|to be able to|for you to} 2" {opening|starting|beginning|opening up} {which I|that we|that i|i} {can then|may then|are able to|will then} {attach|connect|affix|add} {3|Three|Several|Three or more}? {Thank you|Thanks|Many thanks|Thanks a lot}
-</span><span class='line'>{Replace|Substitute|Change|Exchange} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {bonded|glued|fused|insured} {into|in to|directly into|straight into} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Need to|Have to|Must|Should} {connect|link|hook up|join} {new|brand new|fresh|brand-new} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {pipe|water pipe|tube|water line} {to an|for an|to a|with an} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {pipe|water pipe|tube|water line} {just|simply|merely|only} {above|over|previously mentioned|earlier mentioned} {cement|concrete|bare concrete|bare cement} {floor|ground|flooring|floorboards}. {Need to|Have to|Must|Should} {create a|produce a|develop a|build a} {new|brand new|fresh|brand-new} cleanout {in|within|inside|throughout} 3" {ABS|Ab muscles|Abdominal muscles|Stomach muscles} {that will be|that'll be|which will be|that is to be} 12" {above the|over the|across the|higher than the} {old|aged|outdated|previous} {cast iron|surefire|certain|iron} cleanout {so that|to ensure that|in order that|to ensure} {a main|a primary|a principal|an important} {sewer line|sewage} {blockage|obstruction|congestion|clog} {between the|between your|involving the|relating to the} {main|primary|principal|major} {stack|bunch|collection|pile} {the street|the road|the trail|the path} {sewer|sewer line|sewage} {some|a few|several|a number of} {25|Twenty five|Twenty-five|30} {feet|ft|toes|foot} {away|aside|absent|apart} {can be removed|can be taken off|is easy to remove|are easy to remove}. {Had to|Needed to|Were required to|Was required to}.
-</span><span class='line'>{For|With regard to|Regarding|Pertaining to} {600|Six hundred|Six-hundred|1000} {rating|score|ranking|standing} {pipe|water pipe|tube|water line} {what is the|what's the|is there a|exactly what is the} {schedule|routine|timetable|plan} {require|need|call for|demand} {for|with regard to|regarding|pertaining to} 2" NB {pipe|water pipe|tube|water line} [ {0|Zero|2|3} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {Natural gas|Gas|Propane|Gas main} {pressure|stress|strain|force} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{Capacity|Capability|Ability|Potential} {of|associated with|regarding|involving} 6" {schedule|routine|timetable|plan} {40|Forty|45|Forty five} {pipe|water pipe|tube|water line} {at|from|with|in} {3|Three|Several|Three or more} {psi|pounds per square inch}. {And|As well as|And also|Along with}, {where can I|how can i|can anyone help me|i'm looking to} {find a|look for a|locate a|discover a} {pressure|stress|strain|force} {table|desk|stand|kitchen table} {for|with regard to|regarding|pertaining to} {capacities|capabilities|sizes|drives} {of various|of numerous|of varied|of assorted} {size|dimension|dimensions|measurement} {pipes|plumbing|water lines|piping} {at|from|with|in} {various|numerous|different|a variety of} {inlet|intake|inlt} {pressures|demands|challenges|difficulties}
-</span><span class='line'>{Adding|Including|Incorporating|Introducing} {a|the|any|a new} {PVC|Pvc material|Faux wood|Imitation wood} "Y" {to a|to some|with a|into a} {underground|subterranean|undercover|subway} {Cast iron|Surefire|Certain|Iron} {pipe|water pipe|tube|water line} [ {1|One|A single|One particular} {Answers|Solutions|Responses|Replies} {]|}
-</span><span class='line'>{I have a|I've got a|I've a|I own a} {house|home|residence|property} {built in|built-in|integrated|internal} {1962|'62}. {The|The actual|The particular|Your} {cast iron|surefire|certain|iron} {waste|squander|waste materials|spend} {pipe|water pipe|tube|water line} {runs|operates|works|goes} {under the|underneath the|beneath the|within the} {concrete slab|layer of concrete} {in the|within the|inside the|from the} {basement|cellar|downstairs room|attic}. {I have|I've|We have|We've} {already|currently|previously|by now} {dug|made|excavated|finished} {and|as well as|and also|along with} {confirmed|verified|established|validated} {the location|the place|the positioning|the venue} {I want to|I wish to|I would like to|I must} {cut|reduce|minimize|lower} {a section|a piece|an area|a bit} {out of the|from the|out from the|out of your} {pipe|water pipe|tube|water line} {and|as well as|and also|along with} {install a|use a|put in a|purchase a} "Y" {connector|connection|plug} {and|as well as|and also|along with} {run|operate|work|manage} {new|brand new|fresh|brand-new} {plastic|plastic material|plastic-type|plastic-type material} {waste|squander|waste materials|spend} {pipes|plumbing|water lines|piping} {to a new|to a different|to an alternative|completely to another} {bath|bathtub|shower|bath tub}. {I have seen|I've come across|I have come across|I know of} {PVC|Pvc material|Faux wood|Imitation wood} {connectors|fittings|connections|band} {that|which|in which|that will}./p&gt;</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/3/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/blog/">Newer &rarr;</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
-    
-      <li class="post">
-        <a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - the Consensus</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/">60 Days of Watching Hackers Attack Elasticsearch</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">How Tor Works: Part Two - Relays vs. Bridges</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Introducing Elastichoney - an Elasticsearch Honeypot</a>
-      </li>
-    
-  </ul>
-</section>
-
-
-
-
-
-  
-</aside>
-
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Jordan -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span><span> Icons made by Freepik from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></span>
-</p>
-
-</footer>
-  
-
-<script type="text/javascript">
-      var disqus_shortname = 'jordan-wright';
-      
-        
-        var disqus_script = 'count.js';
-      
-    (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    }());
-</script>
-
-
-
-
-
-  <script type="text/javascript">
-    (function() {
-      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
-      script.src = 'https://apis.google.com/js/plusone.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
-    })();
-  </script>
-
-
-
-  <script type="text/javascript">
-    (function(){
-      var twitterWidgets = document.createElement('script');
-      twitterWidgets.type = 'text/javascript';
-      twitterWidgets.async = true;
-      twitterWidgets.src = '//platform.twitter.com/widgets.js';
-      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
-    })();
-  </script>
-
-
-
-
-
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
 </body>
 </html>
+

