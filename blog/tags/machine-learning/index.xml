@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Apr 2016 14:40:18 -0500</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>I Automated Infosec &#34;Thought Leadership&#34;, and it&#39;s Hilarious</title>
+      <link>http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link>
+      <pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&lt;br/&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;being-a-thought-leader-is-hard:13c33e684e00db6e5efa8e888f88d231&#34;&gt;Being a Thought Leader is Hard&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;@thought__leader - Thinking thoughts for you, so you don&amp;rsquo;t have to.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The infosec industry is full of &amp;ldquo;thought leaders&amp;rdquo;. These are people who are on the forefront of the industry, keeping up with latest trends, technologies, and philosophies.&lt;/p&gt;
+
+&lt;p&gt;Or they are heavy on the buzzwords and prolific on Linkedin/Twitter. &lt;a href=&#34;https://www.youtube.com/watch?v=Pc64xWxRsag&#34;&gt;That works, too&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, both of these take way too much time for me. In fact, I&amp;rsquo;d argue that they take too long for our industry. So this weekend, I set out to &lt;strong&gt;automate thought leadership&lt;/strong&gt;, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect &lt;em&gt;literally no one&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;This resulted in @thought__leader. And it&amp;rsquo;s hilarious.&lt;/p&gt;
+
+&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;RT mistydemeo: Oh thank goodness: GitHub orgs can now use drones armed with Zero days, new backdoors &lt;a href=&#34;https://t.co/pgVE7DFbUX&#34;&gt;https://t.co/pgVE7DFbUX&lt;/a&gt;&lt;/p&gt;&amp;mdash; InfoSecThoughtLeader (@thought__leader) &lt;a href=&#34;https://twitter.com/thought__leader/status/718971777385426944&#34;&gt;April 10, 2016&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+
+&lt;h4 id=&#34;becoming-a-thought-leader:13c33e684e00db6e5efa8e888f88d231&#34;&gt;Becoming a Thought Leader&lt;/h4&gt;
+
+&lt;p&gt;I created @thought__leader to be simple. Basically, it works by taking in a whole bunch of tweets from other thought leaders and spitting out new tweets using parts of what it gathered.&lt;/p&gt;
+
+&lt;h5 id=&#34;finding-thought-leaders:13c33e684e00db6e5efa8e888f88d231&#34;&gt;Finding Thought Leaders&lt;/h5&gt;
+
+&lt;p&gt;First, I had to find thought leaders. My criteria was simple: the candidate had to have over 10k Twitter followers and they had to have a bunch of tweets. After all, I&amp;rsquo;m looking for &lt;a href=&#34;http://www.quickmeme.com/img/1d/1d6acc029adc6b99fca09b14def2ee281e0431f57b981b274b0c293a1af55a15.jpg&#34;&gt;thought &lt;strong&gt;leaders&lt;/strong&gt;&lt;/a&gt;, not thought &lt;strong&gt;thinkers&lt;/strong&gt;. This included infosec researchers, journalists, and more.&lt;/p&gt;
+
+&lt;p&gt;I also Googled &amp;ldquo;infosec thought leaders&amp;rdquo; and added people listed in the blog posts. They checked out somehow, I guess.&lt;/p&gt;
+
+&lt;p&gt;Then I added &lt;a href=&#34;https://twitter.com/threatbutt&#34;&gt;@threatbutt&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;This actually narrowed down the list of people quite a bit. All in all, I came up with &lt;a href=&#34;https://gist.github.com/jordan-wright/33265dc9ddcaaf1cebb79db09a6c8f8c&#34;&gt;these 99 accounts&lt;/a&gt; in no particular order. I&amp;rsquo;m sure I missed someone obvious.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;On a serious note, while we&amp;rsquo;re poking fun at the concept of thought leadership I should note that these folks are actually fantastic contributors to the field.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h5 id=&#34;gathering-thoughts:13c33e684e00db6e5efa8e888f88d231&#34;&gt;Gathering Thoughts&lt;/h5&gt;
+
+&lt;p&gt;The next step was to download a whole bunch of premium &lt;em&gt;thought leadership&lt;/em&gt; using the &lt;code&gt;python-twitter&lt;/code&gt; library.&lt;/p&gt;
+
+&lt;p&gt;First, we connect to the Twitter API:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import twitter
+api = twitter.Api(consumer_key=&#39;....&#39;,
+          consumer_secret=&#39;....&#39;,
+          access_token_key=&#39;....&#39;,
+          access_token_secret=&#39;....&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, for every user, we can query the &lt;code&gt;statuses/user_timeline&lt;/code&gt; to grab their most recent tweets. Since rate limits allow 180 requests per 15 minutes, I kept track of where I was and ran the script a few times. I also chose to get rid of retweets and replies to help keep original content where possible.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;tweet_corpus = &amp;quot;&amp;quot;
+with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as users:
+	for user in users.readlines():
+		user = user.strip()
+		since_id = &amp;quot;&amp;quot;
+		for user in users.readlines():
+			user = user.strip()
+			timeline = api.GetUserTimeline(screen_name=user, count=200, exclude_replies=True, max_id=tweets[user].get(&amp;quot;max_id&amp;quot;))
+			if len(timeline) &amp;lt;= 1: continue
+			tweet_corpus += &#39;\n&#39;.join([t.text for t in timeline if not t.text[:2] == &amp;quot;RT&amp;quot;]) + &amp;quot;\n&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running this a few times resulted in just over 52k tweets. The leadership sitting in memory at this point is &lt;strong&gt;palpable&lt;/strong&gt;. Now let&amp;rsquo;s become a thought leader.&lt;/p&gt;
+
+&lt;h5 id=&#34;generating-thoughts:13c33e684e00db6e5efa8e888f88d231&#34;&gt;Generating Thoughts&lt;/h5&gt;
+
+&lt;p&gt;To become a beacon of infosec futurism we need to be able to create new content from the tweets we grabbed. Taking the cue from other Twitter bots like &lt;a href=&#34;https://twitter.com/horse_ebooks?lang=en&#34;&gt;@horse_ebooks&lt;/a&gt; or the awesome &lt;a href=&#34;https://www.reddit.com/r/SubredditSimulator/&#34;&gt;Subreddit Simulator&lt;/a&gt; project, we&amp;rsquo;ll use &lt;strong&gt;Markov Chains&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re new to &lt;a href=&#34;https://en.wikipedia.org/wiki/Markov_chain&#34;&gt;Markov Chains&lt;/a&gt;, this explanation from the Subreddit Simulator description will work good enough:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The text for [tweets] are generated using &amp;ldquo;markov chains&amp;rdquo;, a random process that&amp;rsquo;s &amp;ldquo;trained&amp;rdquo; from looking at real data. If you&amp;rsquo;ve ever used a keyboard on your phone that tries to predict which word you&amp;rsquo;ll type next, those are often built using something similar.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Fortunately for us, there&amp;rsquo;s a Python library called &lt;a href=&#34;https://github.com/jsvine/markovify&#34;&gt;markovify&lt;/a&gt; that makes building Markov Chains super easy.&lt;/p&gt;
+
+&lt;p&gt;To use the library, we just need a corpus of data to work with. In our case, it&amp;rsquo;s the &lt;code&gt;tweet_corpus&lt;/code&gt; we built up earlier. From the markovify readme, if we are using newline split data, we can send our corpus to an instance of the &lt;code&gt;markovify.NewLineText&lt;/code&gt; class to let it build up our Markov Chains.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;m = NewlineText(tweet_corpus)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;From here, we can generate new tweets by making calls like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;m.make_short_sentence(140)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here are some samples:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Hackers hijacking water treatment plant controls shows how to resist and even with no security #6wordcyber
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Dell apologizes for HTTPS certificate for Google Maps tampering http://t.co/WyNrI7Snk3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Clearly this ex-defense minister is worried @kevinmitnick could whistle into a website for that gig.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Management will spend $12k on IM but wont pay for a Diffie-Hellman 1024-bit pair in 154 minutes http://t.co/UZerPfZbS3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Man-on-the-side content injection attacks in wake of Ashley Madison passwords http://t.co/zw4fqvMAbk
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Just had my frist experience with @SixtUSA and it wants its network management problems back.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Working on Tool to Test Network Security. And guess what? It is an even bigger God-complex https://t.co/vPcPyorOQp
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Let&#39;s do the talk again, for sure, especially as a geek, this makes me miss TrueCrypt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;Microsoft and fixes for Adobe Flash Player or Windows, it&#39;s time for Valentine&#39;s Day - https://t.co/L6tkJEmjld
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; All that&amp;rsquo;s left is to saturate the infosec Twittersphere with glorious thought leadership. Right now, I have the bot tweeting every 5 minutes. I&amp;rsquo;m also shamelessly re-grabbing the latest tweets every hour and retraining the model. I&amp;rsquo;ll open source the code eventually.&lt;/p&gt;
+
+&lt;p&gt;Consider thought leadership solved. Now we can get back to naming those CVE&amp;rsquo;s.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
