@@ -33,7 +33,7 @@
 
 &lt;p&gt;Unfortunately, both of these take way too much time for me. In fact, I&amp;rsquo;d argue that they take too long for our industry. So this weekend, I set out to &lt;strong&gt;automate thought leadership&lt;/strong&gt;, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect &lt;em&gt;literally no one&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;This resulted in @thought__leader. And it&amp;rsquo;s hilarious.&lt;/p&gt;
+&lt;p&gt;This resulted in &lt;a href=&#34;https://twitter.com/thought__leader&#34;&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.&lt;/p&gt;
 
 &lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;RT mistydemeo: Oh thank goodness: GitHub orgs can now use drones armed with Zero days, new backdoors &lt;a href=&#34;https://t.co/pgVE7DFbUX&#34;&gt;https://t.co/pgVE7DFbUX&lt;/a&gt;&lt;/p&gt;&amp;mdash; InfoSecThoughtLeader (@thought__leader) &lt;a href=&#34;https://twitter.com/thought__leader/status/718971777385426944&#34;&gt;April 10, 2016&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
@@ -136,7 +136,7 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
 &lt;pre&gt;&lt;code&gt;Microsoft and fixes for Adobe Flash Player or Windows, it&#39;s time for Valentine&#39;s Day - https://t.co/L6tkJEmjld
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; All that&amp;rsquo;s left is to saturate the infosec Twittersphere with glorious thought leadership. Right now, I have the bot tweeting every 5 minutes. I&amp;rsquo;m also shamelessly re-grabbing the latest tweets every hour and retraining the model. I&amp;rsquo;ll open source the code eventually.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; All that&amp;rsquo;s left is to saturate the infosec Twittersphere with glorious thought leadership. Right now, I have the bot tweeting every 7 minutes. I&amp;rsquo;m also shamelessly re-grabbing the latest tweets every hour and retraining the model. I&amp;rsquo;ll open source the code eventually.&lt;/p&gt;
 
 &lt;p&gt;Consider thought leadership solved. Now we can get back to naming those CVE&amp;rsquo;s.&lt;/p&gt;
 </description>
