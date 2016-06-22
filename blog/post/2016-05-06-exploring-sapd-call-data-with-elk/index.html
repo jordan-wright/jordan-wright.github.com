@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" Analyzing 5 Years of Police Call Data &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2016-06-22T06:30:00-05:00" />
+
+    
+    <meta property="og:article:tag" content="analytics" />
+    
+    <meta property="og:article:tag" content="san antonio" />
+    
+    <meta property="og:article:tag" content="sapd" />
+    
+    <meta property="og:article:tag" content="elk" />
+    
+    
+
+  <title>
+     Analyzing 5 Years of Police Call Data &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.15" />
+
+    <link rel="canonical" href="http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/" />
+
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-44718701-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="http://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Analyzing 5 Years of Police Call Data</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2016-06-22T06:30:00-05:00">
+            Jun 22, 2016
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/analytics/">#analytics</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/san-antonio/">#san antonio</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/sapd/">#sapd</a></span>
+         
+          <span class="post-tag small"><a href="http://jordan-wright.com/blog/tags/elk/">#elk</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<img src="/blog/images/headers/sapd.png" alt="" class="pure-img" >
+
+
+<p>San Antonio is a great city. <a href="http://www.yelp.com/search?cflt=mexican&amp;find_loc=San+Antonio%2C+TX%2C+USA">According to Yelp</a>, there are over 1200 places to get a taco - how could it <em>not</em> be great?</p>
+
+<p>Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy <sup>24</sup>&frasl;<sub>7</sub>, constantly putting their lives on the line to keep the city safe, and I&rsquo;m thankful for all the work they do.</p>
+
+<p>Being an amateur API aficionado, I was excited to find the <a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data">SAPD Open Data Initiative</a> that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.</p>
+
+<p>In this post, I&rsquo;ll explain how I was able to gather and analyze <strong>4.3 million call data records</strong>, or how I basically became the extremely boring part of Batman.</p>
+
+<h3 id="getting-the-call-data:8175b79b7dc19e8a6016758bd8f0507c">Getting the Call Data</h3>
+
+<h4 id="a-little-about-the-format:8175b79b7dc19e8a6016758bd8f0507c">A Little About the Format</h4>
+
+<p>The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD <a href="http://www.sanantonio.gov/SAPD/Calls.aspx">publishes historical calls</a> on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.</p>
+
+<p><img src="/blog/images/blog/sapd/call_details.png"/></p>
+
+<p>Each call record has the following details:</p>
+
+<ul>
+<li><strong>Incident Number</strong> - A unique identifier for the call in SAPD-YYYY-xxxxxxx format</li>
+<li><strong>Category</strong> - The category of the call (e.g. &ldquo;Crimes Against Person Calls&rdquo;)</li>
+<li><strong>Problem Type</strong> - The sub-type of the call that narrows down from the root category (e.g. &ldquo;Robbery of Individual&rdquo;)</li>
+<li><strong>Response Date</strong> - The date/time a response was given to the call</li>
+<li><strong>Address</strong> - The address where the incident occurred</li>
+<li><strong>HOA</strong> - The Homeowner&rsquo;s Association where the incident occurred (if applicable)</li>
+<li><strong>School District</strong> - The school district where the incident occurred</li>
+<li><strong>Council District</strong> - The council district where the incident occurred</li>
+</ul>
+
+<p>This is a <em>ton</em> of great data. However, searching through the data manually is a pain, and I didn&rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.</p>
+
+<h4 id="scraping-the-data:8175b79b7dc19e8a6016758bd8f0507c">Scraping the Data</h4>
+
+<p>Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the <a href="https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;hideResults=on">SSL configuration in use</a>. I wound up having to use a custom TLS adapter just to get the <code>requests</code> library to negotiate a TLS connection.</p>
+
+<p>Then I had to address the restrictions on how I could search. I had to filter by a certain category and I could only get at most 10k results per query. To put things in perspective, that lets me <em>usually</em> get a week of calls labelled as &ldquo;Other&rdquo;.</p>
+
+<p><em>No one can say our officers aren&rsquo;t busy.</em></p>
+
+<p>I ended up hacking together a scraper that ran like this:</p>
+
+<ul>
+<li>For every category
+
+<ul>
+<li>Try to get a week&rsquo;s worth of calls</li>
+<li>If # calls = 10000
+
+<ul>
+<li>Get that week a day at a time to make sure we don&rsquo;t miss anything</li>
+</ul></li>
+<li>Store the results</li>
+</ul></li>
+</ul>
+
+<p><a href="https://gist.github.com/jordan-wright/92e209d89a4174e3ccb50ed4f909e58e">Here&rsquo;s</a> the current code - be warned, it&rsquo;s hacky. I was manually changing the categories to make sure things were going smoothly, so YMMV.</p>
+
+<p>After finishing up the scraping, I was left with <strong>4.3 million records</strong> to work with.</p>
+
+<h3 id="analyzing-the-data:8175b79b7dc19e8a6016758bd8f0507c">Analyzing the Data</h3>
+
+<p>After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.</p>
+
+<p><img src="/blog/images/blog/sapd/calls_over_time.png"/></p>
+
+<p>We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:</p>
+
+<p><strong>Theft and Crimes Against People</strong></p>
+
+<p>I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &ldquo;theft&rdquo; was consistently the highest:</p>
+
+<p><img src="/blog/images/blog/sapd/person_and_theft.png"/></p>
+
+<p>With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &ldquo;crimes against persons&rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:</p>
+
+<p><img src="/blog/images/blog/sapd/zipcodes_person.png"/></p>
+
+<img src="/blog/images/blog/sapd/78207.png" alt="" class="pure-img" >
+
+
+<p>We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:</p>
+
+<p><img src="/blog/images/blog/sapd/school_crimes.png"/></p>
+
+<p><strong>When Does Crime Happen?</strong></p>
+
+<p>This was an interesting one, since I couldn&rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &ldquo;Crimes Against Persons&rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:</p>
+
+<p><img src="/blog/images/blog/sapd/crimes_by_minute.png"/></p>
+
+<p><strong>Traffic Related Calls</strong></p>
+
+<p>The calls labelled as &ldquo;traffic related&rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:</p>
+
+<p><img src="/blog/images/blog/sapd/traffic_calls_by_minute.png"/></p>
+
+<p>Looking at the top addresses for traffic stops and DWI&rsquo;s, we see that downtown is the place where most incidents happen:</p>
+
+<p><img src="/blog/images/blog/sapd/traffic_locations.png" /></p>
+
+<p><strong>Other Calls</strong></p>
+
+<p>The &ldquo;other&rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &ldquo;fireworks disturbance&rdquo; calls always spikes around July 4th, New Year&rsquo;s Eve, and my birthday <sup>not really</sup>.</p>
+
+<p><img src="/blog/images/blog/sapd/fireworks.png"/></p>
+
+<p><strong>Issues with Geocoding</strong></p>
+
+<p>It was my original intent to geocode the records so that I could plot them in a heatmap fashion. Unfortunately, I ran into a couple of challenges:</p>
+
+<ul>
+<li><p><strong>Finding a geocoder</strong> - Even though there are only about 233k unique addresses found in the data, I still ran into issues finding a free service to geocode that many addresses. I started working with Mapzen (which is pretty awesome), when I discovered my other problem:</p></li>
+
+<li><p><strong>Generic Addresses</strong> - Many of the addresses in the dataset are <em>incredibly</em> vague. For example, the address with the most number of &ldquo;traffic related&rdquo; calls? &ldquo;IH 10 W&rdquo;, followed by &ldquo;NW Loop 410&rdquo;. Go figure.</p></li>
+</ul>
+
+<p>Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.</p>
+
+<h3 id="sweet-sweet-dashboards:8175b79b7dc19e8a6016758bd8f0507c">Sweet, Sweet Dashboards</h3>
+
+<p>One of the best parts about the ELK stack is the ability to create dashboards like this one:</p>
+
+<p><img src="/blog/images/blog/sapd/dashboard.png"/></p>
+
+<p>This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.</p>
+
+<p>I don&rsquo;t think it&rsquo;s any stretch to say that having this visibility into crime across the city <strong>basically makes me</strong> <sup>the boring part of</sup> <strong>Batman</strong>. After all, have you ever seen Batman and me in the same room?</p>
+
+<p>Didn&rsquo;t think so.</p>
+
+<p><img src="/blog/images/blog/sapd/batman.png" style="max-height:400px;" alt="">
+
+<br></p>
+
+<h3 id="have-some-data:8175b79b7dc19e8a6016758bd8f0507c">Have Some Data</h3>
+
+<p>Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.</p>
+
+<p>The dataset contains all records from January 1, 2011 to November 30, 2015, which was when I pulled the data.</p>
+
+<p>You can download the full dataset <a href="https://drive.google.com/open?id=0B9Ile8onstUBbWgxakprZk9JYjA">here</a>.</p>
+
+<p>Let&rsquo;s help our officers make this city safer.</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="http://jordan-wright.com/blog/" style="background-image: url(http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Analyzing%205%20Years%20of%20Police%20Call%20Data&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2016-05-06-exploring-sapd-call-data-with-elk%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2016-05-06-exploring-sapd-call-data-with-elk%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2016-05-06-exploring-sapd-call-data-with-elk%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'http:\/\/jordan-wright.com\/blog\/post\/2016-05-06-exploring-sapd-call-data-with-elk\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

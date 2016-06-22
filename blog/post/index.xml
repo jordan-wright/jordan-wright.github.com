@@ -6,8 +6,167 @@
     <description>Recent content in Posts on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2016 14:40:18 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate>
     <atom:link href="http://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Analyzing 5 Years of Police Call Data</title>
+      <link>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
+      <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
+      <description>
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
+
+&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy &lt;sup&gt;24&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt;, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
+
+&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
+
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;
+
+&lt;h3 id=&#34;getting-the-call-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Getting the Call Data&lt;/h3&gt;
+
+&lt;h4 id=&#34;a-little-about-the-format:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;A Little About the Format&lt;/h4&gt;
+
+&lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Each call record has the following details:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Incident Number&lt;/strong&gt; - A unique identifier for the call in SAPD-YYYY-xxxxxxx format&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Category&lt;/strong&gt; - The category of the call (e.g. &amp;ldquo;Crimes Against Person Calls&amp;rdquo;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Problem Type&lt;/strong&gt; - The sub-type of the call that narrows down from the root category (e.g. &amp;ldquo;Robbery of Individual&amp;rdquo;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Response Date&lt;/strong&gt; - The date/time a response was given to the call&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Address&lt;/strong&gt; - The address where the incident occurred&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HOA&lt;/strong&gt; - The Homeowner&amp;rsquo;s Association where the incident occurred (if applicable)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;School District&lt;/strong&gt; - The school district where the incident occurred&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Council District&lt;/strong&gt; - The council district where the incident occurred&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is a &lt;em&gt;ton&lt;/em&gt; of great data. However, searching through the data manually is a pain, and I didn&amp;rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.&lt;/p&gt;
+
+&lt;h4 id=&#34;scraping-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Scraping the Data&lt;/h4&gt;
+
+&lt;p&gt;Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the &lt;a href=&#34;https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;amp;hideResults=on&#34;&gt;SSL configuration in use&lt;/a&gt;. I wound up having to use a custom TLS adapter just to get the &lt;code&gt;requests&lt;/code&gt; library to negotiate a TLS connection.&lt;/p&gt;
+
+&lt;p&gt;Then I had to address the restrictions on how I could search. I had to filter by a certain category and I could only get at most 10k results per query. To put things in perspective, that lets me &lt;em&gt;usually&lt;/em&gt; get a week of calls labelled as &amp;ldquo;Other&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;No one can say our officers aren&amp;rsquo;t busy.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;I ended up hacking together a scraper that ran like this:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;For every category
+
+&lt;ul&gt;
+&lt;li&gt;Try to get a week&amp;rsquo;s worth of calls&lt;/li&gt;
+&lt;li&gt;If # calls = 10000
+
+&lt;ul&gt;
+&lt;li&gt;Get that week a day at a time to make sure we don&amp;rsquo;t miss anything&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Store the results&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/92e209d89a4174e3ccb50ed4f909e58e&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; the current code - be warned, it&amp;rsquo;s hacky. I was manually changing the categories to make sure things were going smoothly, so YMMV.&lt;/p&gt;
+
+&lt;p&gt;After finishing up the scraping, I was left with &lt;strong&gt;4.3 million records&lt;/strong&gt; to work with.&lt;/p&gt;
+
+&lt;h3 id=&#34;analyzing-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Analyzing the Data&lt;/h3&gt;
+
+&lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Theft and Crimes Against People&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &amp;ldquo;theft&amp;rdquo; was consistently the highest:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &amp;ldquo;crimes against persons&amp;rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
+
+&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;When Does Crime Happen?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This was an interesting one, since I couldn&amp;rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &amp;ldquo;Crimes Against Persons&amp;rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Traffic Related Calls&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The calls labelled as &amp;ldquo;traffic related&amp;rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;Looking at the top addresses for traffic stops and DWI&amp;rsquo;s, we see that downtown is the place where most incidents happen:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Other Calls&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The &amp;ldquo;other&amp;rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &amp;ldquo;fireworks disturbance&amp;rdquo; calls always spikes around July 4th, New Year&amp;rsquo;s Eve, and my birthday &lt;sup&gt;not really&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Issues with Geocoding&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It was my original intent to geocode the records so that I could plot them in a heatmap fashion. Unfortunately, I ran into a couple of challenges:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Finding a geocoder&lt;/strong&gt; - Even though there are only about 233k unique addresses found in the data, I still ran into issues finding a free service to geocode that many addresses. I started working with Mapzen (which is pretty awesome), when I discovered my other problem:&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Generic Addresses&lt;/strong&gt; - Many of the addresses in the dataset are &lt;em&gt;incredibly&lt;/em&gt; vague. For example, the address with the most number of &amp;ldquo;traffic related&amp;rdquo; calls? &amp;ldquo;IH 10 W&amp;rdquo;, followed by &amp;ldquo;NW Loop 410&amp;rdquo;. Go figure.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.&lt;/p&gt;
+
+&lt;h3 id=&#34;sweet-sweet-dashboards:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
+
+&lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.&lt;/p&gt;
+
+&lt;p&gt;I don&amp;rsquo;t think it&amp;rsquo;s any stretch to say that having this visibility into crime across the city &lt;strong&gt;basically makes me&lt;/strong&gt; &lt;sup&gt;the boring part of&lt;/sup&gt; &lt;strong&gt;Batman&lt;/strong&gt;. After all, have you ever seen Batman and me in the same room?&lt;/p&gt;
+
+&lt;p&gt;Didn&amp;rsquo;t think so.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
+
+&lt;br&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;have-some-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Have Some Data&lt;/h3&gt;
+
+&lt;p&gt;Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.&lt;/p&gt;
+
+&lt;p&gt;The dataset contains all records from January 1, 2011 to November 30, 2015, which was when I pulled the data.&lt;/p&gt;
+
+&lt;p&gt;You can download the full dataset &lt;a href=&#34;https://drive.google.com/open?id=0B9Ile8onstUBbWgxakprZk9JYjA&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s help our officers make this city safer.&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>I Automated Infosec &#34;Thought Leadership&#34;, and it&#39;s Hilarious</title>
@@ -1511,1083 +1670,6 @@ flag{at_least_it_isnt_php}
 &lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 
 &lt;p&gt;&lt;sup&gt;1&lt;/sup&gt; There&amp;rsquo;s an Xzibit joke to be made here.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>How Tor Works: Part One</title>
-      <link>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
-      <pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
-      <description>
-
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&amp;rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.&lt;/p&gt;
-
-&lt;p&gt;But how does Tor work under the hood? In this series of posts, we&amp;rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.&lt;/p&gt;
-
-&lt;h3 id=&#34;brief-history-of-tor:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Brief History of Tor&lt;/h3&gt;
-
-&lt;p&gt;The concept of Onion Routing (more on why it&amp;rsquo;s called this later) was first &lt;a href=&#34;http://www.onion-router.net/History.html&#34;&gt;proposed&lt;/a&gt; in 1995, where it was first funded by the &lt;a href=&#34;http://www.onr.navy.mil/&#34;&gt;Office of Naval Research&lt;/a&gt; (ONR) and later helped out by DARPA in 1997. Since then, funding for the Tor Project has been provided by a &lt;a href=&#34;https://www.torproject.org/about/sponsors.html.en&#34;&gt;number of different sponsors&lt;/a&gt;, and the Tor Project was recently announced a winner of the &lt;a href=&#34;http://www.redditblog.com/2015/02/announcing-winners-of-reddit-donate.html&#34;&gt;reddit donate&lt;/a&gt; campaign.&lt;/p&gt;
-
-&lt;p&gt;The Tor software as we know it today was originally open-sourced in October of 2003, and is the 3&lt;sup&gt;rd&lt;/sup&gt; generation of Onion Routing software. This idea of Onion Routing was (and is!) simply that we can wrap traffic in encrypted layers (like &lt;em&gt;onions&lt;/em&gt;) in order to protect the contents of the data as well as the anonymity of the sender and receiver.&lt;/p&gt;
-
-&lt;h3 id=&#34;tor-101:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Tor 101&lt;/h3&gt;
-
-&lt;p&gt;Now that we know a bit about Tor&amp;rsquo;s history, let&amp;rsquo;s talk about how it works. At an &lt;em&gt;extremely&lt;/em&gt; high level, Tor works by bouncing connections from your computer to destinations (such as google.com) through a series of intermediate computers, or &lt;strong&gt;relays&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
-&lt;svg
-   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
-   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
-   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
-   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
-   xmlns=&#34;http://www.w3.org/2000/svg&#34;
-   width=&#34;100%&#34;
-   height=&#34;482&#34;
-   style=&#34;max-height:250px;&#34;
-   onclick=&#34;d.reset().play();&#34;
-   viewBox=&#34;0 0 748 483&#34;
-   id=&#34;earth&#34;
-   version=&#34;1.1&#34;&gt;
-  &lt;defs
-     id=&#34;defs5976&#34; /&gt;
-  &lt;g
-     inkscape:label=&#34;Layer 1&#34;
-     inkscape:groupmode=&#34;layer&#34;
-     id=&#34;layer1&#34;
-     transform=&#34;translate(-135.6,-230.9)&#34;&gt;
-    &lt;g
-       id=&#34;g6088&#34;
-       transform=&#34;matrix(9.9,0,0,9.9,135.6,230.9)&#34;
-       style=&#34;fill:#ffffff&#34;&gt;
-      &lt;g
-         id=&#34;g6036&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-	&lt;g
-   id=&#34;g6038&#34;
-   style=&#34;fill:#ffffff&#34;&gt;
-		&lt;polygon
-   id=&#34;polygon6040&#34;
-   points=&#34;35.5,9.4 34.7,9.5 34.5,9.9 34.5,10.2 34.9,10.5 35.4,10.8 35.4,11.1 34.9,11.2 34.8,12.0 35.5,12.0 36.3,11.9 36.8,11.4 36.3,11.2 36.0,10.9 35.7,10.3 &#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-		&lt;polygon
-   id=&#34;polygon6042&#34;
-   points=&#34;33.8,10.5 33.3,11.2 33.3,11.7 33.8,11.7 34.8,11.1 34.8,10.6 34.4,10.4 &#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-		&lt;path
-   id=&#34;path6044&#34;
-   d=&#34;m 22.4,13.1 -0.1,0.3 h -0.6 v 0.3 h 0.1 c 0,0 0.0,0.0 0.0,0.1 l 0.3,-0.0 0.2,-0.1 0.0,-0.3 0.3,-0.0 0.1,-0.2 -0.2,-0.0 -0.2,0.0 z&#34;
-   inkscape:connector-curvature=&#34;0&#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-		&lt;polygon
-   id=&#34;polygon6046&#34;
-   points=&#34;20.8,13.7 20.7,14.0 21.2,14.0 21.2,13.7 21.0,13.4 &#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-		&lt;path
-   id=&#34;path6048&#34;
-   d=&#34;M 48.6,24.0 C 48.6,23.3 48.5,22.6 48.5,21.9 48.2,19.6 47.7,17.4 46.9,15.3 46.8,15.1 46.7,15.0 46.7,14.8 45.6,12.2 44.0,9.8 42.1,7.8 42.0,7.6 41.9,7.5 41.7,7.4 41.4,7.0 41.0,6.6 40.6,6.3 36.3,2.4 30.6,0 24.3,0 17.9,0 12.1,2.4 7.8,6.4 6.8,7.3 5.9,8.3 5.0,9.4 1.8,13.5 0,18.7 0,24.3 c 0,13.4 10.9,24.3 24.3,24.3 9.4,0 17.6,-5.4 21.6,-13.2 0.8,-1.6 1.5,-3.4 1.9,-5.3 0.1,-0.4 0.2,-0.9 0.3,-1.4 0.2,-1.3 0.3,-2.8 0.3,-4.2 10e-4,-0.0 -0.0,-0.1 -0.0,-0.2 z m -4.5,-9.7 0.1,-0.1 c 0.1,0.3 0.3,0.7 0.5,1.0 l -0.2,-0.0 -0.4,0.0 V 14.3 z M 40.5,10.1 40.5,9.0 c 0.3,0.4 0.7,0.8 1.1,1.2 l -0.4,0.6 -1.5,-0.0 -0.0,-0.3 0.9,-0.4 z M 11.2,7.4 V 7.3 h 0.4 l 0.0,-0.1 h 0.7 v 0.3 l -0.2,0.3 h -1.0 l 10e-4,-0.4 0,0 z m 0.7,1.0 c 0,0 0.4,-0.0 0.5,-0.0 0.0,0 0,0.4 0,0.4 L 11.4,8.9 11.2,8.7 11.9,8.4 z m 33.6,9.6 h -1.7 l -1.0,-0.8 -1.1,0.1 v 0.6 h -0.3 l -0.3,-0.2 -1.9,-0.5 v -1.2 l -2.5,0.1 -0.7,0.4 h -0.9 l -0.4,-0.0 -1.2,0.6 v 1.2 l -2.4,1.7 0.2,0.7 h 0.5 L 31,21.8 l -0.3,0.1 -0.0,1.8 2.1,2.4 h 0.9 l 0.0,-0.1 h 1.6 l 0.4,-0.4 h 0.9 l 0.5,0.5 1.4,0.1 -0.1,1.8 1.5,2.7 -0.8,1.5 0.0,0.7 0.6,0.6 v 1.7 l 0.8,1.1 v 1.4 h 0.7 c -4.0,5.0 -10.3,8.2 -17.3,8.2 C 12.0,46.6 2,36.6 2,24.3 2,21.2 2.6,18.2 3.7,15.5 V 14.8 L 4.5,13.9 C 4.8,13.3 5.1,12.8 5.4,12.3 L 5.5,12.7 4.5,13.9 C 4.2,14.4 4.0,15.0 3.7,15.5 v 1.2 l 0.9,0.4 v 1.7 l 0.8,1.5 0.7,0.1 0.0,-0.5 -0.8,-1.3 -0.1,-1.2 h 0.5 l 0.2,1.3 1.2,1.7 -0.3,0.5 0.7,1.1 1.9,0.4 v -0.3 l 0.7,0.1 -0.0,0.5 0.6,0.1 0.9,0.2 1.3,1.5 1.7,0.1 0.1,1.3 -1.1,0.8 -0.0,1.2 -0.1,0.7 1.6,2.1 0.1,0.7 c 0,0 0.6,0.1 0.6,0.1 0.0,0 1.3,0.9 1.3,0.9 v 3.8 l 0.4,0.1 -0.3,1.7 0.7,1.0 -0.1,1.7 1.0,1.8 1.3,1.1 1.3,0.0 0.1,-0.4 -0.9,-0.8 0.0,-0.4 0.1,-0.5 0.0,-0.5 -0.6,-0.0 -0.3,-0.4 0.5,-0.5 0.0,-0.3 -0.6,-0.1 0.0,-0.3 0.8,-0.1 1.3,-0.6 0.4,-0.8 1.3,-1.7 -0.3,-1.3 0.4,-0.7 1.2,0.0 0.8,-0.6 0.2,-2.6 0.9,-1.2 0.1,-0.7 -0.8,-0.2 -0.5,-0.9 -1.9,-0.0 -1.5,-0.5 -0.0,-1.1 -0.5,-0.9 -1.4,-0.0 -0.8,-1.2 -0.7,-0.3 -0.0,0.3 -1.3,0.0 -0.4,-0.6 -1.3,-0.2 -1.1,1.3 -1.7,-0.3 -0.1,-2.0 -1.2,-0.2 0.5,-0.9 -0.1,-0.5 -1.7,1.1 -1.0,-0.1 -0.3,-0.8 0.2,-0.8 0.5,-1.0 1.3,-0.6 2.6,-0.0 -0.0,0.8 0.9,0.4 -0.0,-1.3 0.6,-0.6 1.3,-0.9 0.0,-0.6 1.3,-1.4 1.4,-0.8 -0.1,-0.1 0.9,-0.9 0.3,0.0 0.1,0.2 0.3,-0.4 0.0,-0.0 -0.4,-0.0 -0.4,-0.1 v -0.4 l 0.2,-0.1 h 0.4 l 0.2,0.0 0.1,0.3 0.2,-0.0 v -0.0 l 0.0,0.0 0.6,-0.1 0.0,-0.3 0.3,0.0 v 0.3 l -0.3,0.2 h 10e-4 l 0.0,0.3 1.2,0.3 c 0,0 10e-4,0.0 0.0,0.0 l 0.2,-0.0 0.0,-0.5 -0.9,-0.4 -0.0,-0.2 0.8,-0.2 0.0,-0.7 -0.8,-0.5 -0.0,-1.3 -1.1,0.5 h -0.4 l 0.1,-1.0 -1.5,-0.3 -0.6,0.4 v 1.5 l -1.1,0.3 -0.4,0.9 -0.5,0.0 V 10.5 L 16.9,10.3 16.3,10.0 16.1,9.2 18.1,8.0 19.0,7.7 19.1,8.4 19.7,8.3 19.7,8.0 20.3,7.9 20.3,7.8 20.1,7.7 20.0,7.4 l 0.6,-0.0 0.4,-0.4 0.0,-0.0 0.0,0.0 0.1,-0.1 1.4,-0.1 0.6,0.5 -1.6,0.9 2.1,0.5 0.2,-0.7 h 0.9 L 25.4,7.1 24.7,7.0 V 6.2 L 22.6,5.2 21.2,5.4 20.4,5.8 20.4,6.9 19.6,6.7 19.5,6.2 20.3,5.4 18.8,5.3 l -0.4,0.1 -0.1,0.5 0.5,0.0 -0.1,0.5 -0.9,0.0 -0.1,0.3 -1.3,0.0 c 0,0 -0.0,-0.7 -0.0,-0.7 -0.0,0 1.0,-0.0 1.0,-0.0 L 18.0,5.5 17.5,5.3 16.9,5.8 15.9,5.8 15.3,5.0 H 14.1 L 12.8,6.0 h 1.2 l 0.1,0.3 -0.3,0.2 1.3,0.0 0.2,0.4 L 13.8,7.1 13.7,6.7 12.8,6.5 12.3,6.2 11.2,6.2 C 14.8,3.5 19.4,2 24.3,2 c 5.6,0 10.7,2.1 14.7,5.5 l -0.2,0.4 -1.0,0.4 -0.4,0.4 0.1,0.5 0.5,0.0 0.3,0.8 0.9,-0.3 0.1,1.0 h -0.2 l -0.7,-0.1 -0.8,0.1 -0.8,1.1 -1.1,0.1 -0.1,0.9 0.4,0.1 -0.1,0.6 -1.1,-0.2 -1.0,0.2 -0.2,0.5 0.1,1.2 0.6,0.2 1.0,-0.0 0.6,-0.0 0.2,-0.5 1.0,-1.4 0.7,0.1 0.7,-0.6 0.1,0.5 1.7,1.1 -0.2,0.2 -0.7,-0.0 0.3,0.4 0.4,0.1 0.5,-0.2 -0.0,-0.6 0.2,-0.1 -0.2,-0.2 -1.1,-0.6 -0.3,-0.8 h 0.9 l 0.3,0.3 0.8,0.7 0.0,0.8 0.8,0.9 0.3,-1.2 0.5,-0.3 0.1,1.0 0.5,0.6 1.1,-0.0 c 0.2,0.5 0.4,1.1 0.6,1.7 l -0.1,0.1 z m -32.3,-7.0 0.5,-0.2 0.5,0.1 -0.1,0.7 -0.5,0.1 -0.3,-0.7 z m 3.0,1.6 v 0.4 h -1.3 l -0.5,-0.1 0.1,-0.3 0.6,-0.2 h 0.8 v 0.2 h 0.1 z m 0.6,0.6 V 13.8 l -0.3,0.2 -0.4,0.0 c 0,0 0,-0.6 0,-0.7 h 0.7 z m -0.3,-0.1 v -0.5 l 0.4,0.4 -0.4,0.1 z m 0.2,1.0 v 0.4 l -0.3,0.3 h -0.7 l 0.1,-0.4 0.3,-0.0 0.0,-0.1 0.5,-0.0 z m -1.7,-0.8 h 0.7 l -0.9,1.3 -0.3,-0.2 0.0,-0.5 0.5,-0.5 z m 3.0,0.7 v 0.4 H 17.3 l -0.1,-0.2 v -0.4 h 0.0 l 0.8,0.2 z m -0.6,-0.5 0.2,-0.2 0.3,0.2 -0.2,0.2 -0.2,-0.2 z m 28.5,5.7 0.0,-0.0 c 0.0,0.1 0.0,0.2 0.0,0.3 l -0.1,-0.2 z&#34;
-   inkscape:connector-curvature=&#34;0&#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-		&lt;path
-   id=&#34;path6050&#34;
-   d=&#34;M 3.7,14.8 V 15.5 C 4.0,15.0 4.2,14.4 4.5,13.9 l -0.7,0.9 z&#34;
-   inkscape:connector-curvature=&#34;0&#34;
-   style=&#34;fill:#ffffff&#34; /&gt;
-
-	&lt;/g&gt;
-
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6052&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6054&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6056&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6058&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6060&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6062&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6064&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6066&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6068&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6070&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6072&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6074&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6076&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6078&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-      &lt;g
-         id=&#34;g6080&#34;
-         style=&#34;fill:#ffffff&#34;&gt;
-&lt;/g&gt;
-    &lt;/g&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#96281b;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 292.9,394.7 c 0,0 85.8,-133.3 186.8,20.2&#34;
-       id=&#34;path6115&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 479.8,414.9 c 0,0 87.8,-141.4 56.5,63.6&#34;
-       id=&#34;path6625&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#90c695;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 401.4,247.1 c 0,0 -142.8,-90.7 -216.4,33.5&#34;
-       id=&#34;path6627&#34;
-       inkscape:connector-curvature=&#34;0&#34;
-       transform=&#34;translate(135.6,230.9)&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#f4b350;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 185.7,280.0 c 0,0 17.8,-149.2 -93.5,-107.1&#34;
-       id=&#34;path6629&#34;
-       inkscape:connector-curvature=&#34;0&#34;
-       transform=&#34;translate(135.6,230.9)&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#96281b;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 688.2,283.4 39.3,0&#34;
-       id=&#34;path6631&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 688.7,338.5 39.3,0&#34;
-       id=&#34;path6631-4&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#90c695;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 688.7,393.5 39.3,0&#34;
-       id=&#34;path6631-6&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;path
-       style=&#34;fill:none;stroke:#f4b350;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-       d=&#34;m 688.7,452.1 39.3,0&#34;
-       id=&#34;path6631-0&#34;
-       inkscape:connector-curvature=&#34;0&#34; /&gt;
-    &lt;text
-       xml:space=&#34;preserve&#34;
-       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
-       x=&#34;740.7&#34;
-       y=&#34;288.3&#34;
-       id=&#34;text6740&#34;
-       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-         sodipodi:role=&#34;line&#34;
-         x=&#34;740.7&#34;
-         y=&#34;288.3&#34;
-         id=&#34;tspan6742&#34;&gt;&lt;tspan
-           x=&#34;740.7&#34;
-           y=&#34;288.3&#34;
-           style=&#34;font-weight:300;fill:#ffffff;&#34;
-           id=&#34;tspan6744&#34;&gt;Guard Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-    &lt;text
-       xml:space=&#34;preserve&#34;
-       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
-       x=&#34;743.0&#34;
-       y=&#34;344.3&#34;
-       id=&#34;text6746&#34;
-       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-         sodipodi:role=&#34;line&#34;
-         x=&#34;743.0&#34;
-         y=&#34;344.3&#34;
-         id=&#34;tspan6748&#34;&gt;&lt;tspan
-           x=&#34;743.0&#34;
-           y=&#34;344.3&#34;
-           style=&#34;font-weight:300;fill:#ffffff;&#34;
-           id=&#34;tspan6750&#34;&gt;Middle Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-    &lt;text
-       xml:space=&#34;preserve&#34;
-       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
-       x=&#34;741.4&#34;
-       y=&#34;399.8&#34;
-       id=&#34;text6752&#34;
-       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-         sodipodi:role=&#34;line&#34;
-         x=&#34;741.4&#34;
-         y=&#34;399.8&#34;
-         id=&#34;tspan6754&#34;&gt;&lt;tspan
-           x=&#34;741.4&#34;
-           y=&#34;399.8&#34;
-           style=&#34;font-weight:300;fill:#ffffff;&#34;
-           id=&#34;tspan6756&#34;&gt;Exit Node&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-    &lt;text
-       xml:space=&#34;preserve&#34;
-       style=&#34;font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;
-       x=&#34;742.3&#34;
-       y=&#34;458.5&#34;
-       id=&#34;text6758&#34;
-       sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-         sodipodi:role=&#34;line&#34;
-         x=&#34;742.3&#34;
-         y=&#34;458.5&#34;
-         id=&#34;tspan6760&#34;&gt;&lt;tspan
-           x=&#34;742.3&#34;
-           y=&#34;458.5&#34;
-           style=&#34;font-weight:300;fill:#ffffff;&#34;
-           id=&#34;tspan6762&#34;&gt;Final Destination&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-  &lt;/g&gt;
-&lt;/svg&gt;
-&lt;/div&gt;
-&lt;br/&gt;
-
-
-&lt;p&gt;Currently, there are &lt;a href=&#34;https://metrics.torproject.org/networksize.html&#34;&gt;about 6000 relays&lt;/a&gt; routing traffic through the Tor network. These relays are located all across the world and run completely by volunteers willing to give up some bandwidth for the cause. It&amp;rsquo;s important to note that most relays don&amp;rsquo;t have special hardware or software to run. They just have the Tor software configured to act as a relay.&lt;/p&gt;
-
-&lt;p&gt;When it comes to speed and anonymity of the Tor network - the more relays, the better! This makes sense, because every relay only has so much bandwidth to offer. Additionally, if there are more relays to choose from, it will be more difficult to track any one user.&lt;/p&gt;
-
-&lt;h3 id=&#34;types-of-relays:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Types of Relays&lt;/h3&gt;
-
-&lt;p&gt;By default, Tor bounces connections through 3 relays. Each of these have a specific role to play (we&amp;rsquo;ll cover each in more detail in later posts):&lt;/p&gt;
-
-&lt;p&gt;&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
-&lt;svg
-   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
-   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
-   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
-   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
-   xmlns=&#34;http://www.w3.org/2000/svg&#34;
-   width=&#34;100%&#34;
-   height=&#34;1236.6&#34;
-   id=&#34;network&#34;
-   version=&#34;1.1&#34;
-   style=&#34;max-height:300px;&#34;
-   onclick=&#34;e.reset().play(1.25);&#34;
-   viewBox=&#34;0 0 1956 1236&#34;&gt;
-  &lt;defs
-     id=&#34;defs8112&#34; /&gt;
-     &lt;g
-        inkscape:label=&#34;Layer 1&#34;
-        inkscape:groupmode=&#34;layer&#34;
-        id=&#34;layer1&#34;
-        transform=&#34;translate(885.83545,44.405879)&#34;&gt;
-       &lt;g
-          id=&#34;g8200&#34;
-          transform=&#34;matrix(0.38940404,0,0,0.37354888,832.4136,424.91373)&#34;
-          style=&#34;fill:#ffffff&#34;&gt;
-         &lt;g
-            id=&#34;g8160&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   	&lt;path
-      id=&#34;path8162&#34;
-      d=&#34;M 578.766,51.487 V 50.592 H 575.77 35.93 32.934 v 0.895 C 15.272,52.701 2.095,66.753 0,83.808 v 3.002 355.724 c 0,6.898 1.795,12.712 4.791,17.949 6.893,12.137 17.068,18.269 31.14,18.269 h 197.012 v 49.695 h -37.425 c -9.281,0 -16.467,7.218 -16.467,16.48 0,9.262 7.186,16.479 16.467,16.479 h 220.666 c 9.281,0 16.768,-7.218 16.768,-16.479 0,-9.263 -7.486,-16.48 -16.768,-16.48 H 378.759 V 478.752 H 575.77 c 14.078,0 24.343,-6.132 31.14,-18.269 3.085,-5.493 5.091,-11.37 5.091,-17.949 V 86.811 83.809 C 609.905,66.753 595.833,52.701 578.766,51.487 z m 0,35.324 v 355.724 c 0,2.108 -0.895,3.002 -2.996,3.002 H 35.93 c -2.095,0 -2.996,-0.894 -2.996,-3.002 V 86.811 83.809 h 545.831 v 3.002 z&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      style=&#34;fill:#ffffff&#34; /&gt;
-
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8164&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8166&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8168&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8170&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8172&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8174&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8176&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8178&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8180&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8182&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8184&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8186&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8188&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8190&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8192&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-       &lt;/g&gt;
-       &lt;path
-          id=&#34;path8222&#34;
-          d=&#34;m -228.29943,189.87983 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 V 360.385 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;g
-          id=&#34;g8414&#34;
-          transform=&#34;matrix(2.4669289,0,0,2.4669289,-885.8347,435.09715)&#34;
-          style=&#34;fill:#ffffff&#34;&gt;
-         &lt;g
-            id=&#34;g8370&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   	&lt;g
-      id=&#34;g8372&#34;
-      style=&#34;fill:#ffffff&#34;&gt;
-   		&lt;path
-      id=&#34;path8374&#34;
-      d=&#34;m 97.265,71.261 c -0.093,-0.108 -0.23,-0.172 -0.374,-0.172 H 0.494 c -0.144,0 -0.28,0.063 -0.374,0.172 -0.094,0.108 -0.136,0.253 -0.115,0.396 0.014,0.09 1.468,9.016 12.753,9.016 h 71.869 c 11.284,0 12.738,-8.926 12.753,-9.016 0.02,-0.143 -0.022,-0.288 -0.115,-0.396 z m -41.323,6.286 h -14.5 v -3.334 h 14.5 v 3.334 z&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      style=&#34;fill:#ffffff&#34; /&gt;
-
-   		&lt;path
-      id=&#34;path8376&#34;
-      d=&#34;m 10.507,67.619 h 76.37 c 1.104,0 2,-0.896 2,-2 V 18.713 c 0,-1.104 -0.896,-2 -2,-2 h -76.37 c -1.104,0 -2,0.896 -2,2 v 46.906 c 0,1.104 0.896,2 2,2 z m 5,-43.906 h 66.37 V 60.619 H 15.507 V 23.713 z&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      style=&#34;fill:#ffffff&#34; /&gt;
-
-   	&lt;/g&gt;
-
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8378&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8380&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8382&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8384&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8386&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8388&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8390&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8392&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8394&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8396&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8398&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8400&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8402&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8404&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-         &lt;g
-            id=&#34;g8406&#34;
-            style=&#34;fill:#ffffff&#34;&gt;
-   &lt;/g&gt;
-       &lt;/g&gt;
-       &lt;path
-          id=&#34;path8222-9&#34;
-          d=&#34;m -234.01367,435.59412 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90&#34;
-          d=&#34;m -242.5851,692.73698 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-7&#34;
-          d=&#34;M 191.70061,-44.405879 H 76.870013 c -2.063349,0 -3.732221,1.67169 -3.732221,3.733428 v 33.93777 c 0,2.061738 1.668872,3.7322207 3.732221,3.7322207 H 191.70101 c 2.06536,0 3.73262,-1.6704827 3.73262,-3.7322207 v -33.935354 c 0,-2.064154 -1.66766,-3.735844 -3.73302,-3.735844 z M 134.28632,-14.85846 H 85.27395 v -19.604625 h 49.01237 V -14.85846 z M 191.70061,5.6598986 H 76.870013 c -2.063349,0 -3.732221,1.6704828 -3.732221,3.7322208 V 43.331097 c 0,2.062945 1.668872,3.734636 3.732221,3.734636 H 191.70101 c 2.06536,0 3.73262,-1.671691 3.73262,-3.734636 V 9.3921194 c 0,-2.061738 -1.66766,-3.7322208 -3.73302,-3.7322208 z M 134.28632,34.701745 H 85.27395 V 15.096717 h 49.01237 v 19.605028 z m 57.41429,20.538887 H 76.870013 c -2.063349,0 -3.732221,1.674106 -3.732221,3.735844 v 33.93777 c 0,2.061335 1.668872,3.731013 3.732221,3.731013 H 191.70101 c 2.06536,0 3.73262,-1.669275 3.73262,-3.731013 v -33.93777 c 0,-2.061738 -1.66766,-3.735844 -3.73302,-3.735844 z M 134.28632,85.747271 H 85.27395 V 66.143853 h 49.01237 v 19.603418 z m 25.89932,45.955179 h 29.29383 v 5.34837 h -29.24633 v 0.25077 c 0,3.3792 -2.73557,6.11437 -6.11034,6.11437 h -39.6786 c -3.37437,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25077 H 79.088736 v -5.34837 h 29.295034 c 0.26084,-3.13648 2.85995,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8224-3-3&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8226-0-4&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8228-3-0&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8230-50-8&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8232-7-8&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8234-6-1&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8236-7-5&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8238-83-2&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8240-6-3&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8242-4-2&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8244-4-4&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8246-1-6&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8248-9-6&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8250-5-6&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;g
-          style=&#34;fill:#ffffff&#34;
-          id=&#34;g8252-5-2&#34;
-          transform=&#34;matrix(0.40252597,0,0,0.40252597,40.374593,-44.405879)&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-4&#34;
-          d=&#34;M 183.12918,244.16555 H 68.298585 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 183.12958 c 2.06536,0 3.73263,-1.67048 3.73263,-3.73222 v -33.93536 c 0,-2.06415 -1.66767,-3.73584 -3.73303,-3.73584 z m -57.41429,29.54742 H 76.702522 v -19.60463 h 49.012368 v 19.60463 z m 57.41429,20.51836 H 68.298585 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 183.12958 c 2.06536,0 3.73263,-1.67169 3.73263,-3.73463 v -33.93898 c 0,-2.06174 -1.66767,-3.73222 -3.73303,-3.73222 z m -57.41429,29.04184 H 76.702522 v -19.60502 h 49.012368 v 19.60502 z m 57.41429,20.53889 H 68.298585 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 v 33.93777 c 0,2.06134 1.668872,3.73102 3.732221,3.73102 H 183.12958 c 2.06536,0 3.73263,-1.66928 3.73263,-3.73102 V 347.5479 c 0,-2.06173 -1.66767,-3.73584 -3.73303,-3.73584 z M 125.71489,374.3187 H 76.702522 v -19.60342 h 49.012368 v 19.60342 z m 25.89932,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73556,6.11437 -6.11034,6.11437 h -39.6786 c -3.37437,0 -6.112756,-2.73557 -6.112756,-6.11437 v -0.25078 H 70.517308 v -5.34836 h 29.295035 c 0.260837,-3.13648 2.859947,-5.60316 6.060837,-5.60316 h 12.17721 v -12.21988 c 0,-3.37478 2.73517,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-3&#34;
-          d=&#34;M 174.55775,549.87984 H 59.727153 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 174.55815 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.41429,29.54742 H 68.13109 v -19.60463 h 49.01237 v 19.60463 z m 57.41429,20.51836 H 59.727153 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 174.55815 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.41429,29.04184 H 68.13109 v -19.60502 h 49.01237 v 19.60502 z m 57.41429,20.53889 H 59.727153 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 v 33.93777 c 0,2.06134 1.668872,3.73102 3.732221,3.73102 H 174.55815 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.41429,30.50664 H 68.13109 v -19.60342 h 49.01237 v 19.60342 z m 25.89932,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11034,6.11437 H 97.301342 c -3.374375,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 H 61.945876 v -5.34836 h 29.295035 c 0.260837,-3.13648 2.859947,-5.60316 6.060833,-5.60316 h 12.177216 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.2025,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-39&#34;
-          d=&#34;M 183.12918,889.87983 H 68.298584 c -2.063349,0 -3.732221,1.67169 -3.732221,3.73343 v 33.93777 c 0,2.06174 1.668872,3.73222 3.732221,3.73222 H 183.12958 c 2.06536,0 3.73263,-1.67048 3.73263,-3.73222 v -33.93536 c 0,-2.06415 -1.66767,-3.73584 -3.73303,-3.73584 z m -57.41429,29.54742 H 76.702521 v -19.60463 h 49.012369 v 19.60463 z m 57.41429,20.51836 H 68.298584 c -2.063349,0 -3.732221,1.67048 -3.732221,3.73222 v 33.93898 c 0,2.06294 1.668872,3.73463 3.732221,3.73463 H 183.12958 c 2.06536,0 3.73263,-1.67169 3.73263,-3.73463 v -33.93898 c 0,-2.06174 -1.66767,-3.73222 -3.73303,-3.73222 z m -57.41429,29.04184 H 76.702521 v -19.60502 h 49.012369 v 19.60502 z m 57.41429,20.53889 H 68.298584 c -2.063349,0 -3.732221,1.67411 -3.732221,3.73584 V 1027.2 c 0,2.0613 1.668872,3.731 3.732221,3.731 H 183.12958 c 2.06536,0 3.73263,-1.6693 3.73263,-3.731 v -33.93782 c 0,-2.06173 -1.66767,-3.73584 -3.73303,-3.73584 z M 125.71489,1020.033 H 76.702521 v -19.6034 h 49.012369 v 19.6034 z m 25.89932,45.9552 h 29.29383 v 5.3483 h -29.24633 v 0.2508 c 0,3.3792 -2.73556,6.1144 -6.11034,6.1144 h -39.6786 c -3.37437,0 -6.112757,-2.7356 -6.112757,-6.1144 v -0.2508 H 70.517307 v -5.3483 h 29.295035 c 0.260838,-3.1365 2.859948,-5.6032 6.060838,-5.6032 h 12.17721 v -12.2199 c 0,-3.3748 2.73516,-6.1148 6.10994,-6.1148 h 3.05598 c 3.37518,0 6.11115,2.7404 6.11115,6.1148 v 12.2199 h 12.22431 c 3.2025,0 5.79758,2.4715 6.06244,5.6032 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-38&#34;
-          d=&#34;m 603.12919,138.45126 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 V 142.1871 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-8&#34;
-          d=&#34;m 603.12919,404.16555 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 V 507.5479 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          id=&#34;path8222-90-2&#34;
-          d=&#34;m 603.12919,675.59412 h -114.8306 c -2.06335,0 -3.73222,1.67169 -3.73222,3.73343 v 33.93777 c 0,2.06174 1.66887,3.73222 3.73222,3.73222 h 114.831 c 2.06536,0 3.73262,-1.67048 3.73262,-3.73222 v -33.93536 c 0,-2.06415 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,29.54742 h -49.01236 v -19.60463 h 49.01236 v 19.60463 z m 57.4143,20.51836 h -114.8306 c -2.06335,0 -3.73222,1.67048 -3.73222,3.73222 v 33.93898 c 0,2.06294 1.66887,3.73463 3.73222,3.73463 h 114.831 c 2.06536,0 3.73262,-1.67169 3.73262,-3.73463 v -33.93898 c 0,-2.06174 -1.66766,-3.73222 -3.73302,-3.73222 z m -57.4143,29.04184 h -49.01236 v -19.60502 h 49.01236 v 19.60502 z m 57.4143,20.53889 h -114.8306 c -2.06335,0 -3.73222,1.67411 -3.73222,3.73584 v 33.93777 c 0,2.06134 1.66887,3.73102 3.73222,3.73102 h 114.831 c 2.06536,0 3.73262,-1.66928 3.73262,-3.73102 v -33.93777 c 0,-2.06173 -1.66766,-3.73584 -3.73302,-3.73584 z m -57.4143,30.50664 h -49.01236 v -19.60342 h 49.01236 v 19.60342 z m 25.89933,45.95518 h 29.29383 v 5.34836 h -29.24633 v 0.25078 c 0,3.3792 -2.73557,6.11437 -6.11035,6.11437 h -39.67859 c -3.37438,0 -6.11276,-2.73557 -6.11276,-6.11437 v -0.25078 h -29.24271 v -5.34836 h 29.29504 c 0.26083,-3.13648 2.85994,-5.60316 6.06083,-5.60316 h 12.17722 v -12.21988 c 0,-3.37478 2.73516,-6.11477 6.10994,-6.11477 h 3.05598 c 3.37518,0 6.11115,2.74039 6.11115,6.11477 v 12.21988 h 12.22431 c 3.20249,0 5.79758,2.47151 6.06244,5.60316 z&#34;
-          inkscape:connector-curvature=&#34;0&#34;
-          style=&#34;fill:#ffffff&#34; /&gt;
-       &lt;path
-          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-          d=&#34;M -605.71457,586.64818 -339.19506,367.78404&#34;
-          id=&#34;path8901&#34;
-          inkscape:connector-curvature=&#34;0&#34; /&gt;
-       &lt;path
-          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-          d=&#34;M -232.62393,367.1089 72.821982,1070.2735&#34;
-          id=&#34;path8903&#34;
-          inkscape:connector-curvature=&#34;0&#34; /&gt;
-       &lt;path
-          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-          d=&#34;M 178.42094,1070.3735 492.84919,315.40803&#34;
-          id=&#34;path8905&#34;
-          inkscape:connector-curvature=&#34;0&#34; /&gt;
-       &lt;path
-          style=&#34;fill:none;stroke:#ffffff;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-          d=&#34;M 598.64615,315.96501 814.29764,589.51697&#34;
-          id=&#34;path8907&#34;
-          inkscape:connector-curvature=&#34;0&#34; /&gt;
-       &lt;text
-          xml:space=&#34;preserve&#34;
-          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
-          x=&#34;-840.00891&#34;
-          y=&#34;1171.5078&#34;
-          id=&#34;text9491&#34;
-          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-            sodipodi:role=&#34;line&#34;
-            x=&#34;-840.00891&#34;
-            y=&#34;1171.5078&#34;
-            id=&#34;tspan9493&#34;&gt;&lt;tspan
-              x=&#34;-840.00891&#34;
-              y=&#34;1171.5078&#34;
-              id=&#34;tspan9495&#34;
-              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Client&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-       &lt;text
-          xml:space=&#34;preserve&#34;
-          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
-          x=&#34;-411.45981&#34;
-          y=&#34;1177.25&#34;
-          id=&#34;text9497&#34;
-          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-            sodipodi:role=&#34;line&#34;
-            x=&#34;-411.45981&#34;
-            y=&#34;1177.25&#34;
-            id=&#34;tspan9499&#34;&gt;&lt;tspan
-              x=&#34;-411.45981&#34;
-              y=&#34;1177.25&#34;
-              id=&#34;tspan9501&#34;
-              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Guard Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-       &lt;text
-          xml:space=&#34;preserve&#34;
-          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
-          x=&#34;2.2544701&#34;
-          y=&#34;1178.1072&#34;
-          id=&#34;text9503&#34;
-          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-            sodipodi:role=&#34;line&#34;
-            x=&#34;2.2544701&#34;
-            y=&#34;1178.1072&#34;
-            id=&#34;tspan9505&#34;&gt;&lt;tspan
-              x=&#34;2.2544701&#34;
-              y=&#34;1178.1072&#34;
-              id=&#34;tspan9507&#34;
-              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Middle Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-       &lt;text
-          xml:space=&#34;preserve&#34;
-          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
-          x=&#34;462.25449&#34;
-          y=&#34;1183.8215&#34;
-          id=&#34;text9509&#34;
-          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-            sodipodi:role=&#34;line&#34;
-            x=&#34;462.25449&#34;
-            y=&#34;1183.8215&#34;
-            id=&#34;tspan9511&#34;&gt;&lt;tspan
-              x=&#34;462.25449&#34;
-              y=&#34;1183.8215&#34;
-              id=&#34;tspan9513&#34;
-              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Exit Relay&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-       &lt;text
-          xml:space=&#34;preserve&#34;
-          style=&#34;font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;font-stretch:normal;font-variant:normal&#34;
-          x=&#34;856.54022&#34;
-          y=&#34;1189.5358&#34;
-          id=&#34;text9515&#34;
-          sodipodi:linespacing=&#34;125%&#34;&gt;&lt;tspan
-            sodipodi:role=&#34;line&#34;
-            x=&#34;856.54022&#34;
-            y=&#34;1189.5358&#34;
-            id=&#34;tspan9517&#34;&gt;&lt;tspan
-              x=&#34;856.54022&#34;
-              y=&#34;1189.5358&#34;
-              id=&#34;tspan9519&#34;
-              style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;Desination&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-     &lt;/g&gt;
-   &lt;/svg&gt;
-&lt;/div&gt;
-&lt;br/&gt;
-&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Entry/Guard Relay&lt;/strong&gt; - This is the entry point to the Tor network. Relays are selected to serve as guard relays after being around for a while, as well as having shown to be stable and having high bandwidth.&lt;sup&gt;&lt;a href=&#34;https://blog.torproject.org/blog/lifecycle-of-a-new-relay&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Middle Relay&lt;/strong&gt; - Middle relays are exactly that - middle nodes used to transport traffic from the guard relay to the exit relay. This prevents the guard and exit relay from knowing each other.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Exit Relay&lt;/strong&gt; - These relays are the exit point at the edge of the Tor network. These relays send traffic to the final destination intended by the client.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Generally, it is safe to run a guard or middle relay on any VPS or shared server (such as  &lt;a href=&#34;https://www.digitalocean.com/?refcode=2895d5b6c219&#34;&gt;DigitalOcean&lt;/a&gt; or &lt;a href=&#34;https://aws.amazon.com/ec2/&#34;&gt;EC2&lt;/a&gt;), since all the server operators will see is harmless encrypted traffic (more on this later).&lt;/p&gt;
-
-&lt;p&gt;However, there are &lt;a href=&#34;https://blog.torproject.org/blog/tips-running-exit-node-minimal-harassment&#34;&gt;special responsibilities&lt;/a&gt; to consider when running an exit node. Since exit relays send traffic directly to the end destination, any illicit activity done through Tor appears to come from the exit relay. This leads to the rare possibility of raids, abuse notices, or more.&lt;/p&gt;
-
-&lt;p&gt;If you meet an exit relay operator - thank them. &lt;strong&gt;They deserve it.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;why-onions:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Why Onions?&lt;/h3&gt;
-
-&lt;p&gt;Now that we know how connections are routed through relays, how do we know we can actually &lt;em&gt;trust&lt;/em&gt; relays? How can we be sure relays won&amp;rsquo;t track who we&amp;rsquo;re connecting to and sniff the data we send across the wire? The short answer is, &lt;em&gt;we don&amp;rsquo;t have to!&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Tor is designed to put as little trust in relays as possible. It does this through the use of &lt;strong&gt;encryption&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;So what&amp;rsquo;s the deal with all the references to onions? To answer this question, let&amp;rsquo;s take a high-level look at how the encryption works when a client makes a connection through the Tor network.&lt;/p&gt;
-
-&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
-&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
-&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;1&lt;/i&gt;
-&lt;/span&gt;
-The client encrypts the original data in such a way that only the exit relay can decrypt it.&lt;/p&gt;
-
-&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
-&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
-&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;2&lt;/i&gt;
-&lt;/span&gt;
-This encrypted data is then encrypted again in such a way that only the middle relay can decrypt it.&lt;/p&gt;
-
-&lt;p&gt;&lt;span class=&#34;fa-stack fa-lg fa-1x&#34;&gt;
-&lt;i class=&#34;fa fa-circle fa-stack-2x&#34; style=&#34;color:#3498DB&#34;&gt;&lt;/i&gt;
-&lt;i class=&#34;fa fa-stack-1x&#34; style=&#34;color:white; font-family:inherit;&#34;&gt;3&lt;/i&gt;
-&lt;/span&gt;
-Finally, this encrypted data is encrypted once more in such a way that only the guard relay can decrypt it.&lt;/p&gt;
-
-&lt;p&gt;&lt;div style=&#34;padding:10px;background:#3498DB;border-radius:5px;&#34;&gt;
-&lt;svg
-   xmlns:dc=&#34;http://purl.org/dc/elements/1.1/&#34;
-   xmlns:cc=&#34;http://creativecommons.org/ns#&#34;
-   xmlns:rdf=&#34;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#34;
-   xmlns:svg=&#34;http://www.w3.org/2000/svg&#34;
-   xmlns=&#34;http://www.w3.org/2000/svg&#34;
-   id=&#34;encryption&#34;
-   width=&#34;100%&#34;
-   height=&#34;191&#34;
-   viewBox=&#34;0 0 577 192&#34;
-   style=&#34;max-height:190px&#34;
-   onclick=&#34;s.reset().play();&#34;
-   version=&#34;1.0&#34;&gt;
-   &lt;style
-      id=&#34;style3946&#34;&gt;
- 	.style0{
- 		fill:	none;
- 		stroke:	#000000;
- 		stroke-width:	3;
- 		stroke-linejoin:	round;
- 	}
- 	.style1{
- 		fill:	none;
- 		stroke:	#000000;
- 		stroke-width:	3;
- 	}
- 	.style2{
- 		font-size:	11.9px;
- 		line-height:	125%;
- 		letter-spacing:	0px;
- 		word-spacing:	0px;
- 		fill:	#000000;
- 		font-family:	Sans;
- 	}
- 	.style3{
- 		font-size:	11.9px;
- 	}
- &lt;/style&gt;
-   &lt;metadata
-      id=&#34;metadata1928&#34;&gt;
-     &lt;rdf:RDF&gt;
-       &lt;cc:Work
-          rdf:about=&#34;&#34;&gt;
-         &lt;dc:format&gt;image/svg+xml&lt;/dc:format&gt;
-         &lt;dc:type
-            rdf:resource=&#34;http://purl.org/dc/dcmitype/StillImage&#34; /&gt;
-         &lt;dc:title&gt;&lt;/dc:title&gt;
-       &lt;/cc:Work&gt;
-     &lt;/rdf:RDF&gt;
-   &lt;/metadata&gt;
-   &lt;defs
-      id=&#34;defs1926&#34; /&gt;
-   &lt;path
-      id=&#34;path1934&#34;
-      d=&#34;m 354.4,37.8 c 12.5,0 22.9,34.2 22.9,75.7 0,41.6 -10.2,76.4 -22.7,76.4 -12.5,0 -22.7,-34.9 -22.7,-76.4 0,-41.5 9.9,-75.7 22.5,-75.7 z m 0,0 197,-0.3 c 11,0 24.3,34 24.3,75.8 0,41.9 -13,76.7 -24,76.7 l -197.2,-0.1&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      class=&#34;style0&#34;
-      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;fill-opacity:1;stroke-opacity:1&#34; /&gt;
-   &lt;path
-      id=&#34;path1934-1&#34;
-      d=&#34;m 292.9,56.4 c 4.6,0 8.5,25.5 8.5,56.7 0,31.1 -3.7,57.2 -8.4,57.2 -4.6,0 -8.4,-26.0 -8.4,-57.2 0,-31.1 3.7,-56.7 8.4,-56.7 z m 0,0 73.6,-0.2 c 4.1,0 9.1,25.4 9.1,56.8 0,31.3 -4.8,57.4 -8.9,57.4 l -73.6,-0.1&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      class=&#34;style0&#34;
-      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1;stroke-opacity:1&#34; /&gt;
-   &lt;path
-      id=&#34;path1934-1-7&#34;
-      d=&#34;m 254.9,82.9 c 2.6,0 4.9,14.9 4.9,33.3 0,18.2 -2.1,33.6 -4.8,33.6 -2.6,0 -4.8,-15.2 -4.8,-33.6 0,-18.2 2.1,-33.3 4.8,-33.3 z m 0,0 42.3,-0.1 c 2.3,0 5.2,14.9 5.2,33.3 0,18.4 -2.7,33.7 -5.1,33.7 l -42.3,0&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      class=&#34;style0&#34;
-      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1&#34; /&gt;
-   &lt;path
-      id=&#34;path1934-1-4&#34;
-      d=&#34;m 228.2,97.7 c 1.8,0 3.4,9.2 3.4,20.5 0,11.3 -1.5,20.7 -3.3,20.7 -1.8,0 -3.3,-9.4 -3.3,-20.7 0,-11.3 1.4,-20.5 3.3,-20.5 z m 0,0 29.4,-0.1 c 1.6,0 3.6,9.2 3.6,20.5 0,11.4 -1.9,20.7 -3.5,20.7 l -29.4,0&#34;
-      inkscape:connector-curvature=&#34;0&#34;
-      class=&#34;style0&#34;
-      style=&#34;fill:#ffffff;stroke:#4183d7;stroke-width:2.2;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1&#34; /&gt;
-   &lt;text
-      xml:space=&#34;preserve&#34;
-      x=&#34;-4.7&#34;
-      y=&#34;10.2&#34;
-      id=&#34;text4004&#34;
-      style=&#34;font-size:14.0px;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;&lt;tspan
-        sodipodi:role=&#34;line&#34;
-        x=&#34;-4.7&#34;
-        y=&#34;10.2&#34;
-        id=&#34;tspan4006&#34;
-        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
-          x=&#34;-4.7&#34;
-          y=&#34;10.2&#34;
-          id=&#34;tspan4008&#34;
-          style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;fill:#ffffff&#34;&gt;Guard Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-   &lt;text
-      xml:space=&#34;preserve&#34;
-      x=&#34;-5.8&#34;
-      y=&#34;32.1&#34;
-      id=&#34;text3998&#34;
-      style=&#34;font-size:14.1px;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;fill:#ffffff&#34;&gt;&lt;tspan
-        sodipodi:role=&#34;line&#34;
-        x=&#34;-5.8&#34;
-        y=&#34;32.1&#34;
-        id=&#34;tspan4000&#34;
-        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
-          x=&#34;-5.8&#34;
-          y=&#34;32.1&#34;
-          id=&#34;tspan4002&#34;
-          style=&#34;-inkscape-font-specification:Segoe UI;font-family:Segoe UI;font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;font-size:12px;fill:#ffffff&#34;&gt;Middle Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-   &lt;text
-      xml:space=&#34;preserve&#34;
-      x=&#34;-5.1&#34;
-      y=&#34;52.7&#34;
-      id=&#34;text3992&#34;
-      style=&#34;font-size:14.0px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;fill:#ffffff&#34;&gt;&lt;tspan
-        sodipodi:role=&#34;line&#34;
-        x=&#34;-5.1&#34;
-        y=&#34;52.7&#34;
-        id=&#34;tspan3994&#34;
-        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;&lt;tspan
-          x=&#34;-5.1&#34;
-          y=&#34;52.7&#34;
-          id=&#34;tspan3996&#34;
-          style=&#34;font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Segoe UI;-inkscape-font-specification:Segoe UI;fill:#ffffff&#34;&gt;Exit Relay Encryption&lt;/tspan&gt;&lt;/tspan&gt;&lt;/text&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 548.4,36.3 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 533.9,37.6 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-2&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 517.8,37.7 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-8-4&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 503.3,36.7 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-5&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 487.1,36.8 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-8-2&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 470.8,37.9 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-8-8&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 451.6,39.1 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-8-9&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 433.6,35.6 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-23&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 414.4,36.7 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-62&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 396.1,36.7 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-57&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 380.0,36.8 c 0,0 41.8,75.0 0,153.5&#34;
-      id=&#34;path6775-8-827&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 360.4,170.4 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 353.0,170.9 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-0&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 344.8,171.8 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 336.7,170.7 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5-5&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 328.7,170.7 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5-2&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 320.1,169.6 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5-7&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 311.5,169.6 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5-6&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 303.5,171.3 c 0,0 18.9,-42.4 0,-114.0&#34;
-      id=&#34;path6924-5-78&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 293.1,149.8 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 288.8,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-7&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 283.7,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-8&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 278.5,149.5 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-1&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 273.9,149.8 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-6&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 268.8,148.6 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-0&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1&#34;
-      d=&#34;m 263.3,148.9 c 0,0 7.4,-30.9 0,-65.8&#34;
-      id=&#34;path7008-9&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 254.8,97.7 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 252.7,97.9 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-8&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 250.6,97.4 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-9&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 248.6,96.8 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-0&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 246.1,97.2 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-00&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 243.6,98.2 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-7&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 241.1,98.1 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-2&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 238.7,97.9 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-5&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 236.3,97.2 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-52&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 233.8,98.2 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-1&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#4183d7;stroke-width:0.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 231.5,98.2 c 0,0 8.0,17.9 0,41.2&#34;
-      id=&#34;path7074-4&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
-      d=&#34;m 345.5,37.5 -153.5,0 -51.4,-29.7&#34;
-      id=&#34;path7159&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
-      d=&#34;m 287.0,56.4 -98.3,0 -49.3,-28.2&#34;
-      id=&#34;path7161&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none&#34;
-      d=&#34;m 248.7,82.2 -57.3,0 -53.0,-28.3&#34;
-      id=&#34;path7163&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;path
-      style=&#34;fill:none;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none&#34;
-      d=&#34;m 221.7,117.7 -33.2,0 -55.3,-31.9&#34;
-      id=&#34;path7165&#34;
-      inkscape:connector-curvature=&#34;0&#34; /&gt;
-   &lt;text
-      xml:space=&#34;preserve&#34;
-      x=&#34;-5.1&#34;
-      y=&#34;80.6&#34;
-      id=&#34;text3992-8&#34;
-      style=&#34;font-size:14.0px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ffffff;font-family:Segoe UI;-inkscape-font-specification:Segoe UI&#34;&gt;&lt;tspan
-        sodipodi:role=&#34;line&#34;
-        x=&#34;-5.1&#34;
-        y=&#34;80.6&#34;
-        id=&#34;tspan3994-6&#34;
-        style=&#34;font-size:12px;fill:#ffffff&#34;&gt;Original Data&lt;/tspan&gt;&lt;/text&gt;
- &lt;/svg&gt;
-       &lt;/div&gt;
-&lt;br/&gt;
-&lt;/p&gt;
-
-&lt;p&gt;This means that we have wrapped our original data in layers of encryption, much like an onion is wrapped in layers of&amp;hellip;well, more onion, I guess.&lt;/p&gt;
-
-&lt;p&gt;By doing this, each relay only has the information it needs to know - where it got the encrypted data from, and where to send it to next. Encrypting data this way is beneficial to both parties: client traffic isn&amp;rsquo;t compromised and relays can&amp;rsquo;t be held liable for data they can&amp;rsquo;t see.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Note: It&amp;rsquo;s important to remember that exit relays &lt;strong&gt;can see the original data sent by the client&lt;/strong&gt;, since they have to pass that data to the destination. This means that, if credentials are passed over HTTP, FTP, or other cleartext protocols, the exit relays can sniff the traffic!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&#34;next-steps:b6a2f7f7305d0d4a88042f3de1458bb0&#34;&gt;Next Steps&lt;/h3&gt;
-
-&lt;p&gt;Our journey into the operation of Tor is just beginning. In future posts, we&amp;rsquo;ll take a look at how the Tor network is organized, discuss the differences between relays and bridges, take a deep-dive into how exactly the encryption works, take a step-by-step view of what happens behind the scenes when you start up your Tor client for the first time, and more.&lt;/p&gt;
-
-&lt;p&gt;We have a lot to cover! Until then, feel free to read up on the official &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/&#34;&gt;Tor specifications&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/&#34;&gt;Part two - &amp;ldquo;Relays vs. Bridges&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
-
-&lt;div&gt;
-&lt;script&gt;
-d= new Vivus(&#39;earth&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
-s= new Vivus(&#39;encryption&#39;, {type: &#39;async&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
-e= new Vivus(&#39;network&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: &#39;inViewport&#39;, forceRender: false, dashGap: 20});
-&lt;/script&gt;
-&lt;/div&gt;
 </description>
     </item>
     

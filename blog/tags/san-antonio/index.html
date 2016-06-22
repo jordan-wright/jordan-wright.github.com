@@ -5,16 +5,16 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  	<meta property="og:title" content=" Csaw2015 &middot;  Jordan Wright" />
+  	<meta property="og:title" content=" San Antonio &middot;  Jordan Wright" />
   	<meta property="og:site_name" content="Jordan Wright" />
-  	<meta property="og:url" content="http://jordan-wright.com/blog/tags/csaw2015/" />
+  	<meta property="og:url" content="http://jordan-wright.com/blog/tags/san-antonio/" />
 
     
     <meta property="og:type" content="website" />
     
 
   <title>
-     Csaw2015 &middot;  Jordan Wright
+     San Antonio &middot;  Jordan Wright
   </title>
 
     <meta name="description" content="Security and Programming Blog" />
@@ -35,12 +35,12 @@
           <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
       
       
-        <link href="http://jordan-wright.com/blog/tags/csaw2015/index.xml" rel="alternate" type="application/rss+xml" title="Csaw2015 &middot; Jordan Wright" />
+        <link href="http://jordan-wright.com/blog/tags/san-antonio/index.xml" rel="alternate" type="application/rss+xml" title="San Antonio &middot; Jordan Wright" />
       
     
     <meta name="generator" content="Hugo 0.15" />
 
-    <link rel="canonical" href="http://jordan-wright.com/blog/tags/csaw2015/" />
+    <link rel="canonical" href="http://jordan-wright.com/blog/tags/san-antonio/" />
 
     
     <script>
@@ -96,7 +96,7 @@
     </ul>
     
     
-    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/tags/csaw2015/index.xml">Subscribe</a>
+    <a class="subscribe-button icon-feed" href="http://jordan-wright.com/blog/tags/san-antonio/index.xml">Subscribe</a>
     
 </div>
 <span class="nav-cover"></span>
@@ -116,7 +116,7 @@
     </nav>
     <div class="vertical">
         <div class="main-header-content inner">
-            <h1 class="page-title">Posts tagged #csaw2015</h1>
+            <h1 class="page-title">Posts tagged #san antonio</h1>
             <h2 class="page-description">
                 
             </h2>
@@ -140,19 +140,20 @@
 	   
 <article class="post post">
     <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">CSAW CTF 2015 - Forensics 100 Transfer Writeup</a></h2>
+        <h2 class="post-title"><a href="/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/">Analyzing 5 Years of Police Call Data</a></h2>
     </header>
     <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
+	    <p><img src="/blog/images/headers/sapd.png" alt="" class="pure-img" >
 
 
-<p>This challenge starts off with the following hint:</p>
+<p>San Antonio is a great city. <a href="http://www.yelp.com/search?cflt=mexican&amp;find_loc=San+Antonio%2C+TX%2C+USA">According to Yelp</a>, there are over 1200 places to get a taco - how could it <em>not</em> be great?</p>
 
-<pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
-</code></pre>
+<p>Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy <sup>24</sup>&frasl;<sub>7</sub>, constantly putting their lives on the line to keep the city safe, and I&rsquo;m thankful for all the work they do.</p>
 
-<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:</p>
- <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">Read More</a></p>
+<p>Being an amateur API aficionado, I was excited to find the <a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data">SAPD Open Data Initiative</a> that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.</p>
+
+<p>In this post, I&rsquo;ll explain how I was able to gather and analyze <strong>4.3 million call data records</strong>, or how I basically became the extremely boring part of Batman.</p>
+ <a class="read-more icon-standard" href="/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -164,87 +165,17 @@
         
         on
             
-                <a href="http://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
+                <a href="http://jordan-wright.com/blog/tags/analytics/">#analytics</a>,
             
-                <a href="http://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
+                <a href="http://jordan-wright.com/blog/tags/san-antonio/">#san antonio</a>,
             
-                <a href="http://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
+                <a href="http://jordan-wright.com/blog/tags/sapd/">#sapd</a>,
             
-        
-        <time class="post-date" datetime="2015-09-22T19:05:18Z">
-            22 Sep 2015
-        </time>
-    </footer>
-</article>
-
-	
-	   
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">CSAW CTF 2015 - Web 200 Writeup</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_200.png" alt="" class="pure-img" >
-
-
-<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="http://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
-            
-                <a href="http://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
-            
-                <a href="http://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
+                <a href="http://jordan-wright.com/blog/tags/elk/">#elk</a>,
             
         
-        <time class="post-date" datetime="2015-09-21T00:00:00Z">
-            21 Sep 2015
-        </time>
-    </footer>
-</article>
-
-	
-	   
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/">CSAW CTF 2015 - Web 600 Writeup</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_600.png" alt="" class="pure-img" >
-
-
-<p>This one was surprisingly easy if you knew where to look.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="http://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
-            
-                <a href="http://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
-            
-                <a href="http://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
-            
-        
-        <time class="post-date" datetime="2015-09-20T00:00:00Z">
-            20 Sep 2015
+        <time class="post-date" datetime="2016-06-22T06:30:00-05:00">
+            22 Jun 2016
         </time>
     </footer>
 </article>
