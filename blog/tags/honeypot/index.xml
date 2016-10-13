@@ -20,7 +20,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
 
@@ -28,7 +28,7 @@
 
 &lt;p&gt;Here are the results.&lt;/p&gt;
 
-&lt;h3 id=&#34;who-s-attacking-me:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
+&lt;h3 id=&#34;who-s-attacking-me&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/jordan-wright/elastichoney&#34;&gt;Elastichoney&lt;/a&gt; keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.&lt;/p&gt;
 
@@ -42,7 +42,7 @@
 
 &lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;what-are-the-attackers-doing:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
+&lt;h3 id=&#34;what-are-the-attackers-doing&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
 
 &lt;p&gt;I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like &lt;code&gt;whoami&lt;/code&gt;, etc. However, in quite a few cases, the malware attempted to use &lt;code&gt;wget&lt;/code&gt; to download and run malware - similar to what happened to my DO instance.&lt;/p&gt;
 
@@ -53,7 +53,7 @@
 
 &lt;p&gt;These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&amp;rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&amp;hellip;&lt;/p&gt;
 
-&lt;h3 id=&#34;the-raw-data:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;The Raw Data&lt;/h3&gt;
+&lt;h3 id=&#34;the-raw-data&#34;&gt;The Raw Data&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
 
@@ -118,11 +118,11 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:c0ae86186de728bbad406ae19d00e422&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
 
-&lt;h3 id=&#34;how-it-works:c0ae86186de728bbad406ae19d00e422&#34;&gt;How it Works&lt;/h3&gt;
+&lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 
 &lt;p&gt;This honeypot is pretty simple. It takes requests on the &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/_search&lt;/code&gt;, and &lt;code&gt;/_nodes&lt;/code&gt; endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical - I took the responses straight from one of my hosts that got 0wned).&lt;/p&gt;
 
@@ -130,7 +130,7 @@
 
 &lt;p&gt;It&amp;rsquo;s important to note that this is by no means foolproof. Clever people can take a look at &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;the code&lt;/a&gt; and quickly find ways to detect the honeypot. It&amp;rsquo;s not perfect, but it works. Let&amp;rsquo;s take a look at some results.&lt;/p&gt;
 
-&lt;h3 id=&#34;results:c0ae86186de728bbad406ae19d00e422&#34;&gt;Results&lt;/h3&gt;
+&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
 
 &lt;p&gt;Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&amp;rsquo;ve seen approx. 2000 attacks from over 60 unique IP&amp;rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.&lt;/p&gt;
 
@@ -158,7 +158,7 @@
 
 &lt;p&gt;Enjoy!&lt;/p&gt;
 
-&lt;h3 id=&#34;want-to-run-this-yourself:c0ae86186de728bbad406ae19d00e422&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
+&lt;h3 id=&#34;want-to-run-this-yourself&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
 
 &lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; Let&amp;rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&amp;hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&amp;rsquo;re interested in running elastichoney yourself, just download &lt;a href=&#34;http://github.com/jordan-wright/elastichoney/releases&#34;&gt;the right binary&lt;/a&gt; for your system, edit the config to your liking, and start it up!&lt;/p&gt;
 

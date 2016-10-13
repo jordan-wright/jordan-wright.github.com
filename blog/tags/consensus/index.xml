@@ -20,13 +20,13 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:92f80a714c92adf518d9200d85295a2a&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
 
 &lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
 
-&lt;h3 id=&#34;respect-my-authoritah:92f80a714c92adf518d9200d85295a2a&#34;&gt;Respect My Authoritah&lt;/h3&gt;
+&lt;h3 id=&#34;respect-my-authoritah&#34;&gt;Respect My Authoritah&lt;/h3&gt;
 
 &lt;p&gt;In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about &lt;em&gt;how&lt;/em&gt; this list is maintained, we need to talk about &lt;em&gt;who&lt;/em&gt; maintains it.&lt;/p&gt;
 
@@ -40,7 +40,7 @@
 
 &lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;reaching-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Reaching a Consensus&lt;/h3&gt;
+&lt;h3 id=&#34;reaching-a-consensus&#34;&gt;Reaching a Consensus&lt;/h3&gt;
 
 &lt;p&gt;So there are DA&amp;rsquo;s and they maintain the status of the Tor network. But, &lt;strong&gt;how&lt;/strong&gt;?&lt;/p&gt;
 
@@ -61,7 +61,7 @@
 
 &lt;p&gt;So we see a consensus&amp;hellip; but what does it mean?&lt;/p&gt;
 
-&lt;h3 id=&#34;anatomy-of-a-consensus:92f80a714c92adf518d9200d85295a2a&#34;&gt;Anatomy of a Consensus&lt;/h3&gt;
+&lt;h3 id=&#34;anatomy-of-a-consensus&#34;&gt;Anatomy of a Consensus&lt;/h3&gt;
 
 &lt;p&gt;The consensus document is a bit tough to get a handle on right away just by reading &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt&#34;&gt;the spec&lt;/a&gt;. I find it helps to have things broken down visually to get an idea of how things are structured.&lt;/p&gt;
 
@@ -70,7 +70,7 @@
 &lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 &lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;next-steps:92f80a714c92adf518d9200d85295a2a&#34;&gt;Next Steps&lt;/h3&gt;
+&lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;
 
 &lt;p&gt;The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.&lt;/p&gt;
 

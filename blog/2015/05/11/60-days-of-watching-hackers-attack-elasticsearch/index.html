@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/" />
 
@@ -160,7 +160,7 @@
 <img src="/blog/images/headers/elk_results.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c2f7a687b0f5cbc5c5a21adfebefeddd">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
 
@@ -168,7 +168,7 @@
 
 <p>Here are the results.</p>
 
-<h3 id="who-s-attacking-me:c2f7a687b0f5cbc5c5a21adfebefeddd">Who&rsquo;s Attacking Me?</h3>
+<h3 id="who-s-attacking-me">Who&rsquo;s Attacking Me?</h3>
 
 <p><a href="https://github.com/jordan-wright/elastichoney">Elastichoney</a> keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.</p>
 
@@ -182,7 +182,7 @@
 
 <p>You&rsquo;ll notice a spike between March 20<sup>th</sup> and April 11<sup>th</sup>. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. <a href="http://cdn.meme.am/instances/500x/58834359.jpg">You can&rsquo;t explain that.</a></p>
 
-<h3 id="what-are-the-attackers-doing:c2f7a687b0f5cbc5c5a21adfebefeddd">What are the Attackers Doing?</h3>
+<h3 id="what-are-the-attackers-doing">What are the Attackers Doing?</h3>
 
 <p>I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like <code>whoami</code>, etc. However, in quite a few cases, the malware attempted to use <code>wget</code> to download and run malware - similar to what happened to my DO instance.</p>
 
@@ -193,7 +193,7 @@
 
 <p>These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&hellip;</p>
 
-<h3 id="the-raw-data:c2f7a687b0f5cbc5c5a21adfebefeddd">The Raw Data</h3>
+<h3 id="the-raw-data">The Raw Data</h3>
 
 <p>I&rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&rsquo;ve decided to release all the logs I currently have.</p>
 
@@ -279,7 +279,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=60%20Days%20of%20Watching%20Hackers%20Attack%20Elasticsearch&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f05%2f11%2f60-days-of-watching-hackers-attack-elasticsearch%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=60%20Days%20of%20Watching%20Hackers%20Attack%20Elasticsearch&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f05%2f11%2f60-days-of-watching-hackers-attack-elasticsearch%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

@@ -40,7 +40,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/" />
 
@@ -148,13 +148,13 @@
 <img src="/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c3e220fe137858e19964dc8e2605b764">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
 
 <p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em></p>
 
-<h3 id="ghost-of-hacking-past:c3e220fe137858e19964dc8e2605b764">Ghost of Hacking Past</h3>
+<h3 id="ghost-of-hacking-past">Ghost of Hacking Past</h3>
 
 <p>Let&rsquo;s start with a basic nmap:</p>
 
@@ -207,7 +207,7 @@ User-Agent: Mozilla/5.0 (Bombe; Rotors:36) Eliza Secret: &quot;Machines take me 
 
 <p>Awesome - one down. Let&rsquo;s move on.</p>
 
-<h3 id="ghost-of-hacking-present:c3e220fe137858e19964dc8e2605b764">Ghost of Hacking Present</h3>
+<h3 id="ghost-of-hacking-present">Ghost of Hacking Present</h3>
 
 <p>SANS is great at incorporating big vulnerabilities found in the previous year into their holiday challenges. As such, I was hoping there would be a mention to Heartbleed and Shellshock somewhere in their challenges. Sure enough, the Ghost of Hacking Present allowed us to leverage both vulnerabilities to our advantage.</p>
 
@@ -271,7 +271,7 @@ Website Secret #2: Use your skills for good.
 
 <p><em>Fun fact: the <code>/server-status</code> page was accessible on the server, allowing us to essentially watch as requests are being made to the server. Big shout-out to everyone trying to brute force hidden files/directories :)</em></p>
 
-<h3 id="ghost-of-hacking-future:c3e220fe137858e19964dc8e2605b764">Ghost of Hacking Future</h3>
+<h3 id="ghost-of-hacking-future">Ghost of Hacking Future</h3>
 
 <p>This one was tougher than the first two - largely because I&rsquo;m not great at filesystem forensics. To follow along, you can download the file <a href="http://pen-testing.sans.org/hhusb.dd.bin">here</a>.</p>
 
@@ -419,7 +419,7 @@ USB Secret #4: You can prevent much grief and cause much joy. Hack for good, not
 
 <p>There it is! All the secrets have been retrieved.</p>
 
-<h3 id="conclusion:c3e220fe137858e19964dc8e2605b764">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>As always, this was a fantastic challenge created by the folks at SANS. I enjoyed that this year&rsquo;s challenge contained bits and pieces from many aspects of infosec, and am already looking forward to next year&rsquo;s challenge!</p>
 
@@ -461,7 +461,7 @@ USB Secret #4: You can prevent much grief and cause much joy. Hack for good, not
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=SANS%20Holiday%20Challenge%202014%20-%20Writeup&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=SANS%20Holiday%20Challenge%202014%20-%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

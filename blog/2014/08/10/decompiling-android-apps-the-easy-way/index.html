@@ -48,7 +48,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/" />
 
@@ -164,27 +164,27 @@
 <img src="/blog/images/headers/android_apps.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:63400f08d09db64e22ecc762efbc8d27">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.</p>
 
 <p>In a <a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">previous post</a>, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.</p>
 
-<h3 id="step-one-get-the-apk:63400f08d09db64e22ecc762efbc8d27">Step One: Get the APK</h3>
+<h3 id="step-one-get-the-apk">Step One: Get the APK</h3>
 
 <p>The first step in analyzing an Android app is to get the actual APK that&rsquo;s loaded onto the device. Fortunately, there is a site called <a href="http://apps.evozi.com/apk-downloader/">APK Downloader</a> which allows us to do just that. By getting the link to the app of your choice from the <a href="https://play.google.com/store/apps?hl=en">Google Play Store</a> and pasting it into APK Downloader, you can download a local copy of the app APK.</p>
 
-<h3 id="step-two-unpack-and-decompile:63400f08d09db64e22ecc762efbc8d27">Step Two: Unpack and Decompile</h3>
+<h3 id="step-two-unpack-and-decompile">Step Two: Unpack and Decompile</h3>
 
 <p>After we have the APK, we need to unpack and decompile the contents into its equivalent Java code. This used to be a pretty lengthy process using tools such as the <a href="https://code.google.com/p/android-apktool/">android apktool</a>. Fortunately for us, someone has also setup a web-based service which automatically performs the decompilation process on a given APK.</p>
 
 <p>By uploading the APK to <a href="http://www.decompileandroid.com/">decompileandroid.com</a>, the user will be presented with the option to download the decompiled contents of the app, including the Java source code. <em>Awesome.</em></p>
 
-<h3 id="things-to-look-for:63400f08d09db64e22ecc762efbc8d27">Things to Look For</h3>
+<h3 id="things-to-look-for">Things to Look For</h3>
 
 <p>Decompiling Android apps can allow researchers to analyze the exact code that is running on the app for vulnerabilities, as well as reveal any hardcoded credentials or other sensitive data. For example, in June of 2014, researchers from Columbia university created a tool called <a href="https://github.com/nviennot/playdrone">PlayDrone</a> which automatically crawled thousands of Android apps found on the Google Play store and <a href="http://www.cs.columbia.edu/~nieh/pubs/sigmetrics2014_playdrone.pdf">discovered the existence of sensitive credentials</a> in many of them.</p>
 
-<h3 id="conclusion:63400f08d09db64e22ecc762efbc8d27">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>Hopefully this short post not only shows researchers how to easily decompile Android apps, but also sends a gentle reminder to app developers that the source code of the app can easily be recovered. As such, precautions should be taken to ensure there is no sensitive information &ldquo;hidden in plain sight&rdquo;. As always, leave any questions or comments below!</p>
 
@@ -224,7 +224,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Decompiling%20Android%20Apps%20the%20Easy%20Way&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f08%2f10%2fdecompiling-android-apps-the-easy-way%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Decompiling%20Android%20Apps%20the%20Easy%20Way&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f08%2f10%2fdecompiling-android-apps-the-easy-way%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

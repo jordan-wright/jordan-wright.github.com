@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/" />
 
@@ -156,23 +156,23 @@
 <img src="/blog/images/headers/download_domains.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:f02c1fdb4a3462e911a59de78bed39bf">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.</p>
 
 <p>Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.</p>
 
-<h3 id="zone-files:f02c1fdb4a3462e911a59de78bed39bf">Zone Files</h3>
+<h3 id="zone-files">Zone Files</h3>
 
 <p>Before being swamped with domains, let&rsquo;s talk a little about how these lists of domains are organized. Someone has to keep track of all the domains for a certain TLD (.com, .net, .ninja, etc.). These are called the <em>registries</em>. Each registry maintains a master list of all the domains they are responsible for. This master list is called a &ldquo;<a href="https://en.wikipedia.org/wiki/Zone_file">zone file</a>&rdquo;.</p>
 
 <p>It&rsquo;s the registry&rsquo;s responsibility to maintain this zone file. As you can imagine, the zone file for TLD&rsquo;s updates many times a day as new domains are registered, other domains expire, and nameserver records are changed.</p>
 
-<h3 id="i-just-want-to-download-the-data:f02c1fdb4a3462e911a59de78bed39bf">I Just Want to Download the Data!</h3>
+<h3 id="i-just-want-to-download-the-data">I Just Want to Download the Data!</h3>
 
 <p>So we know what zone files are for, but how do we access them? As mentioned before, each registry is responsible for maintaining the zone file for their TLD, but they are also responsible for maintaining <em>access to</em> the zone file. This means that in some cases we&rsquo;ll need to go directly to the registrar, but there are some helpful exceptions.</p>
 
-<h4 id="com-net-and-name:f02c1fdb4a3462e911a59de78bed39bf">.COM, .NET, and .NAME</h4>
+<h4 id="com-net-and-name">.COM, .NET, and .NAME</h4>
 
 <p>Let&rsquo;s start with the most obvious ones: .com, .net, and .name (since it&rsquo;s bundled). These are maintained by Verisign. <a href="https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml">Access to these zone files</a> consists of downloading a <a href="https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx">Zone Access Form</a> and emailing the completed form to <code>tldzone@verisign-grs.com</code>.</p>
 
@@ -211,7 +211,7 @@ ftp&gt; ls
 
 <p>We&rsquo;ll take a look at what we can do with these soon. First, let&rsquo;s talk about how we can catch all that malware on <code>.ninja</code>.</p>
 
-<h4 id="the-centralized-zone-data-service-czds:f02c1fdb4a3462e911a59de78bed39bf">The Centralized Zone Data Service (CZDS)</h4>
+<h4 id="the-centralized-zone-data-service-czds">The Centralized Zone Data Service (CZDS)</h4>
 
 <p>You&rsquo;ve likely noticed that there are a <em>ton</em> of new gTLDs appearing. At the time of this writing, there are <a href="https://www.iana.org/domains/root/db">1070 valid and sponsored TLDs</a> approved by the IANA - a department of ICANN.</p>
 
@@ -227,7 +227,7 @@ ftp&gt; ls
 
 <p>Ok, we have enough data. Let&rsquo;s start parsing.</p>
 
-<h3 id="parsing-zone-files:f02c1fdb4a3462e911a59de78bed39bf">Parsing Zone Files</h3>
+<h3 id="parsing-zone-files">Parsing Zone Files</h3>
 
 <p>If you want to parse everything about the zone files, you can read about the full format in <a href="https://tools.ietf.org/html/rfc1035">RFC 1035</a>, but this post is only interested in the domain -&gt; nameserver mappings. So, let&rsquo;s just start by taking a look at the contents of the file.</p>
 
@@ -308,7 +308,7 @@ root@tld:~# grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone | wc -l
 
 <p><strong>Awesome.</strong> We can parse this output to do anything we want with our list of domains.</p>
 
-<h3 id="conclusion:f02c1fdb4a3462e911a59de78bed39bf">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>There are a <em>ton</em> of use cases for this data in terms of information security, such as typo-squat monitoring, DGA monitoring, bit flip monitoring, etc.
 However, while this is an infosec blog, zone files can be used for far more than that. It could be used to detect name trends, watch for certain keywords, and more.</p>
@@ -355,7 +355,7 @@ However, while this is an infosec blog, zone files can be used for far more than
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20to%20Download%20a%20List%20of%20All%20Registered%20Domain%20Names&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f30%2fhow-to-download-a-list-of-all-registered-domain-names%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20to%20Download%20a%20List%20of%20All%20Registered%20Domain%20Names&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f30%2fhow-to-download-a-list-of-all-registered-domain-names%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

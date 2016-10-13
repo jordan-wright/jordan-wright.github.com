@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/" />
 
@@ -160,17 +160,17 @@
 <img src="/blog/images/headers/rapportive_small.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:578e8f3d2f79388ccb3407934a96543b">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>When performing a social engineering engagement, recon is key. In a <a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html">previous post</a>, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.</p>
 
 <p>During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.</p>
 
-<h3 id="what-is-rapportive:578e8f3d2f79388ccb3407934a96543b">What is Rapportive?</h3>
+<h3 id="what-is-rapportive">What is Rapportive?</h3>
 
 <p><a href="http://rapportive.com/">Rapporitve</a>, acquired by Linkedin in February 2012, is an add-on for multiple browsers which embeds information about your contacts directly into Gmail. The extension sends your contact&rsquo;s email address to the Rapportive server, which responds with known public information associated with the email address such as social networking profiles.</p>
 
-<h3 id="reverse-engineering-the-rapportive-extension:578e8f3d2f79388ccb3407934a96543b">Reverse Engineering the Rapportive Extension</h3>
+<h3 id="reverse-engineering-the-rapportive-extension">Reverse Engineering the Rapportive Extension</h3>
 
 <p>Let&rsquo;s take a look at how the Rapportive Extension works (disclosure: I&rsquo;m using Chrome). The extension simply consists of a Javascript file called &ldquo;user.js&rdquo;. When we navigate to Gmail, this file will load another JS file called <a href="https://rapportive.com/load/launchpad">&ldquo;launchpad&rdquo;</a>. The launchpad file then fetches the main file called <a href="https://rapportive.com/load/application">&ldquo;application&rdquo;</a>, which implements all the functionality provided by Rapportive. If you want to do a full static analysis of them - feel free. For this post, we&rsquo;ll take a look at the behavior of the extension, and see if we can automate its functionality.</p>
 
@@ -258,7 +258,7 @@
 
 <p>Let&rsquo;s take a look at how we can at least automate the process of getting the session token and querying for an email address.</p>
 
-<h3 id="automating-rapportive-queries:578e8f3d2f79388ccb3407934a96543b">Automating Rapportive Queries</h3>
+<h3 id="automating-rapportive-queries">Automating Rapportive Queries</h3>
 
 <p>Now that we know how Rapportive works, we can automate the process to perform lookups for users of our choosing. Let&rsquo;s start by getting the session token for a particular email address:</p>
 
@@ -277,7 +277,7 @@ print response['session_token']
 
 <p>The profile returned will now be in JSON format where we can parse out any information such as social networking profile links, usernames, etc. I won&rsquo;t bore you with the implementation of all the parsing - so let&rsquo;s move onto the final script!</p>
 
-<h3 id="introducing-rapportive-py:578e8f3d2f79388ccb3407934a96543b">Introducing rapportive.py</h3>
+<h3 id="introducing-rapportive-py">Introducing rapportive.py</h3>
 
 <p>I&rsquo;ve created a simple Python script called <a href="https://github.com/jordan-wright/rapportive">rapportive.py</a> to do this work for us. It takes in a list of email addresses from STDIN or a single email via the -e argument and prints out any results found. This can be useful if we want to pass in emails from other tools such as <a href="https://github.com/pentestgeek/jigsaw/blob/master/jigsaw.rb">jigsaw.rb</a>. It can also log to an output file, if needed.</p>
 
@@ -347,7 +347,7 @@ Company: CoNetrix
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Automated%20Social%20Engineering%20Recon%20Using%20Rapportive&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2013%2f10%2f14%2fautomated-social-engineering-recon-using-rapportive%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Automated%20Social%20Engineering%20Recon%20Using%20Rapportive&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2013%2f10%2f14%2fautomated-social-engineering-recon-using-rapportive%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

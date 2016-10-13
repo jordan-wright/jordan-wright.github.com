@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data on Jordan Wright</title>
+    <link>http://jordan-wright.com/blog/tags/data/</link>
+    <description>Recent content in Data on Jordan Wright</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 12 Oct 2016 18:57:33 -0500</lastBuildDate>
+    <atom:link href="http://jordan-wright.com/blog/tags/data/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Mapping the Clinton Emails</title>
+      <link>http://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</link>
+      <pubDate>Wed, 12 Oct 2016 18:57:33 -0500</pubDate>
+      
+      <guid>http://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</guid>
+      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/clinton-emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;Back in March, &lt;a href=&#34;https://wikileaks.org/clinton-emails/&#34;&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.&lt;/p&gt;
+
+&lt;p&gt;First, I needed the emails. I didn&amp;rsquo;t see an official bulk download from Wikileaks, and I didn&amp;rsquo;t need all the data anyway - just the sender and recipient. It turned out to be another job for Python, some good whiskey, and &lt;code&gt;BeautifulSoup&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I iterated through each page of &lt;a href=&#34;https://wikileaks.org/clinton-emails/?q=&amp;amp;mfrom=&amp;amp;mto=&amp;amp;title=&amp;amp;notitle=&amp;amp;date_from=1995-03-02&amp;amp;date_to=2014-12-14&amp;amp;nofrom=&amp;amp;noto=&amp;amp;count=200&amp;amp;sort=0#searchresult&#34;&gt;search result data&lt;/a&gt; (searching for anything in the &amp;ldquo;All&amp;rdquo; date range) at 200 results per page. Then, I used &lt;code&gt;BeautifulSoup&lt;/code&gt; to parse out each record.&lt;/p&gt;
+
+&lt;p&gt;After I had the data, I put it into a weighted directed graph using &lt;code&gt;networkx&lt;/code&gt;. This also let me dump the results into &lt;code&gt;gexf&lt;/code&gt; format - the native format for use with Gephi.&lt;/p&gt;
+
+&lt;p&gt;Finally, I used Gephi to make the data pretty. I just applied a ForceAtlas layout, adjusted the size of the nodes by degree, and ran the automatic community detection to color each node.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s the final result (click for higher res)!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails_large.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find all the code and raw data files &lt;a href=&#34;https://github.com/jordan-wright/clinton-emails&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

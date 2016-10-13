@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/" />
 
@@ -160,13 +160,13 @@
 <img src="/blog/images/headers/hidden_services.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:54944f3420c798213d41ea2f3a002046">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via <a href="https://www.torproject.org/docs/hidden-services.html.en"><strong><em>hidden services</em></strong></a>. These services, operating under the <code>.onion</code> TLD, allow publishers to anonymously create and host content viewable only by other Tor users.</p>
 
 <p>The Tor project has <a href="https://www.torproject.org/docs/tor-hidden-service.html.en">instructions</a> on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic <code>stem</code> Python library to automatically create and host a Tor hidden service.</p>
 
-<h3 id="creating-hidden-services-manually:54944f3420c798213d41ea2f3a002046">Creating Hidden Services Manually</h3>
+<h3 id="creating-hidden-services-manually">Creating Hidden Services Manually</h3>
 
 <p>The <a href="https://www.torproject.org/docs/tor-hidden-service.html.en#two">instructions provided by the Tor project</a> show that creating hidden services simply involves setting up the service locally (such as a web server listening on localhost), and then setting a few configuration options to make the service available via Tor.</p>
 
@@ -178,7 +178,7 @@
 HiddenServicePort 80 127.0.0.1:5000
 </code></pre>
 
-<h3 id="a-bit-about-the-tor-control-protocol:54944f3420c798213d41ea2f3a002046">A Bit About the Tor Control Protocol</h3>
+<h3 id="a-bit-about-the-tor-control-protocol">A Bit About the Tor Control Protocol</h3>
 
 <p>Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.</p>
 
@@ -195,11 +195,11 @@ PROTOCOLINFO
 
 <p>Other examples using this extensive protocol can be found <a href="https://www.thesprawl.org/research/tor-control-protocol/">here</a> or in the full protocol spec.</p>
 
-<h3 id="introducing-stem:54944f3420c798213d41ea2f3a002046">Introducing Stem</h3>
+<h3 id="introducing-stem">Introducing Stem</h3>
 
 <p>To make interacting with the Tor control port both easier and programmatic, the Tor project maintains a fantastic Python library called <a href="https://stem.torproject.org/">Stem</a>.</p>
 
-<h4 id="stem-controller:54944f3420c798213d41ea2f3a002046"><code>stem.Controller</code></h4>
+<h4 id="stem-controller"><code>stem.Controller</code></h4>
 
 <p>Interaction with the Tor control port is performed using the <code>stem.Controller</code> class. Creating an instance of the class involves connecting to the port and authenticating as follows:</p>
 
@@ -228,7 +228,7 @@ print &quot;Created host: %s&quot; % svc_name
 
 <p>Easy as that! Now that we have the configuration setup, our service should be ready to go.</p>
 
-<h3 id="an-example-service:54944f3420c798213d41ea2f3a002046">An Example Service</h3>
+<h3 id="an-example-service">An Example Service</h3>
 
 <p>Now that we&rsquo;ve seen a little about how Stem works, here&rsquo;s an extremely basic example showing how the hidden service can be setup to work with a Flask application:</p>
 
@@ -270,11 +270,11 @@ if __name__ == &quot;__main__&quot;:
 
 <p><img src="/blog/images/blog/hidden_services/screenshot.png"/></p>
 
-<h3 id="caveats:54944f3420c798213d41ea2f3a002046">Caveats</h3>
+<h3 id="caveats">Caveats</h3>
 
 <p>It is important to note that the security of the hidden service depends on protecting the location of the server. To do this, consider ways to prevent leaking the real server IP through debug messages, etc. There has been some <a href="https://news.ycombinator.com/item?id=8404511">great discussion</a> on the topic that might be worth looking into.</p>
 
-<h3 id="conclusion:54944f3420c798213d41ea2f3a002046">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>Hidden services deliver freedom of speech and the free exchange of ideas without censorship. By using Stem Python library, it&rsquo;s possible to take the pain out of manual configuration and instead programmatically create and manage multiple hidden services.</p>
 
@@ -316,7 +316,7 @@ if __name__ == &quot;__main__&quot;:
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Creating%20Tor%20Hidden%20Services%20with%20Python&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f06%2fcreating-tor-hidden-services-with-python%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Creating%20Tor%20Hidden%20Services%20with%20Python&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f06%2fcreating-tor-hidden-services-with-python%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

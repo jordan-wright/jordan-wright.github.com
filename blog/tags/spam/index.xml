@@ -20,7 +20,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/spam_gen.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:f193c4faf114f3a461845ceccf974e9f&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;It&amp;rsquo;s been a while! I&amp;rsquo;ve been busy getting &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; closer and closer to beta. Should be ready soon!&lt;/p&gt;
 
@@ -28,7 +28,7 @@
 
 &lt;p&gt;&lt;em&gt;As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&amp;rsquo;t seem to relate to the content of the spam scripts at all.&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;the-spam-scripts:f193c4faf114f3a461845ceccf974e9f&#34;&gt;The Spam Scripts&lt;/h3&gt;
+&lt;h3 id=&#34;the-spam-scripts&#34;&gt;The Spam Scripts&lt;/h3&gt;
 
 &lt;p&gt;Here are the scripts - the format looks very similar to &lt;a href=&#34;http://alexking.org/blog/2013/12/22/spam-comment-generator-script&#34;&gt;those found by Alex King&lt;/a&gt;. I&amp;rsquo;m guessing that one choice from each &lt;code&gt;{block}&lt;/code&gt; is used at random to make every comment unique.&lt;/p&gt;
 

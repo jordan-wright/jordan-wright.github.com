@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/" />
 
@@ -156,11 +156,11 @@
 <img src="/blog/images/headers/phishing_kit.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:097ea0cb3fa9b5149cf80e9dc524b44e">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Sites like <a href="http://www.phishtank.com/phish_archive.php">phishtank</a> and <a href="http://support.clean-mx.com/clean-mx/phishing.php">clean-mx</a> act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find <a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/">interesting information</a> about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how <em>phishing kits</em> are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.</p>
 
-<h3 id="how-phishing-kits-work:097ea0cb3fa9b5149cf80e9dc524b44e">How Phishing Kits Work</h3>
+<h3 id="how-phishing-kits-work">How Phishing Kits Work</h3>
 
 <p>To perform a phishing attack, attackers commonly employ prebuilt <em>phishing kits</em>. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:</p>
 
@@ -197,7 +197,7 @@ foreach ($arr as $recipient)
 
 <p>In this example, to reuse the phishing kit, an attacker simply needs to change the <code>$recipient</code> variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).</p>
 
-<h3 id="how-to-find-phishing-kits:097ea0cb3fa9b5149cf80e9dc524b44e">How to Find Phishing Kits</h3>
+<h3 id="how-to-find-phishing-kits">How to Find Phishing Kits</h3>
 
 <p>We&rsquo;ve seen that these kits generally require the credentials to be processed by server-side code. Unless there is a misconfiguration on the server, we will not be able to view this code, only that credentials are being passed to it.</p>
 
@@ -209,7 +209,7 @@ foreach ($arr as $recipient)
 
 <p>In some cases, finding the original phishing kit can reveal even more information about the tools and techniques used by attackers. Here&rsquo;s an example of one of those cases.</p>
 
-<h3 id="a-look-into-a-compromised-website:097ea0cb3fa9b5149cf80e9dc524b44e">A Look into a Compromised Website</h3>
+<h3 id="a-look-into-a-compromised-website">A Look into a Compromised Website</h3>
 
 <p>While performing random checks on many of the sites listed on phishtank and clean-mx, I came across one site that had a phishing kit located in the /phpmyadmin directory. When checking the files in the phishing kit, I found reference to a c100.php web shell. Sure enough, this file was still in place on the server:</p>
 
@@ -225,7 +225,7 @@ foreach ($arr as $recipient)
 <li><a href="https://gist.github.com/jordan-wright/966cea37b8c01c360a2a#file-wso-php">wso.php</a> - Another web shell</li>
 </ul>
 
-<h3 id="fellow-phish-hunters:097ea0cb3fa9b5149cf80e9dc524b44e">Fellow Phish Hunters</h3>
+<h3 id="fellow-phish-hunters">Fellow Phish Hunters</h3>
 
 <p>In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:</p>
 
@@ -247,7 +247,7 @@ foreach ($arr as $recipient)
 
 <p>We can see that someone has a Java bot that is performing the same technique I described above, by automatically sending requests for common phishing kits. In fact, this and another bot submitted a <strong>substantial</strong> number of requests for common files to be found on phishing kits. I&rsquo;ll likely parse these out and make another blog post with the full list for those interested.</p>
 
-<h3 id="conclusion:097ea0cb3fa9b5149cf80e9dc524b44e">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>Hopefully this post not only shows a few of the interesting pieces of information we can find when investigating servers used for phishing campaigns, but also that there is still an incredible amount of work to be done in identifying threat actors behind phishing campaigns. As always, let me know if you have any questions or comments below!</p>
 
@@ -287,7 +287,7 @@ foreach ($arr as $recipient)
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20to%20Hunt%20Down%20Phishing%20Kits&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f07%2f30%2fhow-to-hunt-down-phishing-kits%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20to%20Hunt%20Down%20Phishing%20Kits&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f07%2f30%2fhow-to-hunt-down-phishing-kits%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

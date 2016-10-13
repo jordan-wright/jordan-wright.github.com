@@ -42,7 +42,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/" />
 
@@ -152,11 +152,11 @@
 <img src="/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:8e4713039018ec25aef66173ac2e0c46">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Welcome back to my series on how Tor works! In the <a href="/blog/2015/02/28/how-tor-works-part-one/">last post</a>, we took a look at how Tor operates from a very high level. In this post, we&rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: <strong>bridges</strong>.</p>
 
-<h3 id="relay-recap:8e4713039018ec25aef66173ac2e0c46">Relay Recap</h3>
+<h3 id="relay-recap">Relay Recap</h3>
 
 <p>In the last post, we introduced relays as systems designed to move traffic in the Tor network. You&rsquo;ll recall that there were three types of relays:</p>
 
@@ -168,7 +168,7 @@
 
 <p>Relays are created by volunteers by simply configuring the Tor software to act as a relay. As a reminder, if you have bandwidth to spare, consider setting up a Tor relay!</p>
 
-<h3 id="the-problem-with-relays:8e4713039018ec25aef66173ac2e0c46">The Problem With Relays</h3>
+<h3 id="the-problem-with-relays">The Problem With Relays</h3>
 
 <p>When a Tor client starts up, it needs a way to fetch a list of all the entry, middle, and exit relays available. This list of all relays isn&rsquo;t a secret. In fact, in the next post I&rsquo;ll explain in detail how this list is distributed (for a sneak peek check out documents on the <em>concensus</em>). While making this list public is necessary, it also presents a problem.</p>
 
@@ -187,7 +187,7 @@
 
 <p>Thankfully, the Tor project thought of exactly this situation and came up with a clever solution around it. Say hello to <strong>bridges</strong>.</p>
 
-<h3 id="introducing-bridges:8e4713039018ec25aef66173ac2e0c46">Introducing Bridges</h3>
+<h3 id="introducing-bridges">Introducing Bridges</h3>
 
 <p><a href="https://www.torproject.org/docs/bridges.html.en">Bridges</a> are a clever solution to this problem. At their core, bridges are just unpublished entry relays. Users that are behind censored networks can use bridges as a way to access the Tor network.</p>
 
@@ -199,7 +199,7 @@
 
 <p>By only giving users a few bridges at a time, it is possible to prevent OG&rsquo;s from blocking all possible entry points into the Tor network. Sure, as relays are discovered they can be blocked, but can anyone really discover all the bridges?</p>
 
-<h3 id="can-anyone-find-every-bridge:8e4713039018ec25aef66173ac2e0c46">Can Anyone Find Every Bridge?</h3>
+<h3 id="can-anyone-find-every-bridge">Can Anyone Find Every Bridge?</h3>
 
 <p>The list of all bridges is a closely guarded secret. If a real OG were able to gain access to this list, it would be able to completely block users from using Tor. With this being the case, there has been <a href="https://blog.torproject.org/blog/research-problems-ten-ways-discover-tor-bridges">research</a> done by the Tor project into possible ways people could discover all the bridges.</p>
 
@@ -207,7 +207,7 @@
 
 <p>The second scenario is a neat one and introduces an important challenge for Tor (or any network for that matter). It all comes down to a simple concept - <em>users can&rsquo;t be trusted</em>. In order to keep the Tor network as anonymous and locked down as possible, the Tor network is designed in such a way to intentionally distrust relay operators. We&rsquo;ll see more examples of this later.</p>
 
-<h3 id="next-steps:8e4713039018ec25aef66173ac2e0c46">Next Steps</h3>
+<h3 id="next-steps">Next Steps</h3>
 
 <p>In this post, we&rsquo;ve talked about the need for relays that aren&rsquo;t published in some &ldquo;master list&rdquo;. But, you&rsquo;ll notice I didn&rsquo;t give many details about <em>how</em> this master list is created, or how Tor clients get access to the list.</p>
 
@@ -255,7 +255,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20Tor%20Works%3a%20Part%20Two%20-%20Relays%20vs.%20Bridges&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f05%2f09%2fhow-tor-works-part-two-relays-vs-bridges%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20Tor%20Works%3a%20Part%20Two%20-%20Relays%20vs.%20Bridges&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f05%2f09%2fhow-tor-works-part-two-relays-vs-bridges%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

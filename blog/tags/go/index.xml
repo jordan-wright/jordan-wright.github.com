@@ -20,11 +20,11 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:c0ae86186de728bbad406ae19d00e422&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
 
-&lt;h3 id=&#34;how-it-works:c0ae86186de728bbad406ae19d00e422&#34;&gt;How it Works&lt;/h3&gt;
+&lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 
 &lt;p&gt;This honeypot is pretty simple. It takes requests on the &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/_search&lt;/code&gt;, and &lt;code&gt;/_nodes&lt;/code&gt; endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical - I took the responses straight from one of my hosts that got 0wned).&lt;/p&gt;
 
@@ -32,7 +32,7 @@
 
 &lt;p&gt;It&amp;rsquo;s important to note that this is by no means foolproof. Clever people can take a look at &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;the code&lt;/a&gt; and quickly find ways to detect the honeypot. It&amp;rsquo;s not perfect, but it works. Let&amp;rsquo;s take a look at some results.&lt;/p&gt;
 
-&lt;h3 id=&#34;results:c0ae86186de728bbad406ae19d00e422&#34;&gt;Results&lt;/h3&gt;
+&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
 
 &lt;p&gt;Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&amp;rsquo;ve seen approx. 2000 attacks from over 60 unique IP&amp;rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.&lt;/p&gt;
 
@@ -60,7 +60,7 @@
 
 &lt;p&gt;Enjoy!&lt;/p&gt;
 
-&lt;h3 id=&#34;want-to-run-this-yourself:c0ae86186de728bbad406ae19d00e422&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
+&lt;h3 id=&#34;want-to-run-this-yourself&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
 
 &lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; Let&amp;rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&amp;hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&amp;rsquo;re interested in running elastichoney yourself, just download &lt;a href=&#34;http://github.com/jordan-wright/elastichoney/releases&#34;&gt;the right binary&lt;/a&gt; for your system, edit the config to your liking, and start it up!&lt;/p&gt;
 
@@ -90,7 +90,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:04122820eae1345d676d25dffa9afb36&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;It&amp;rsquo;s been a busy couple of months!&lt;/p&gt;
 
@@ -98,17 +98,17 @@
 
 &lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.&lt;/p&gt;
 
-&lt;h3 id=&#34;design:04122820eae1345d676d25dffa9afb36&#34;&gt;Design&lt;/h3&gt;
+&lt;h3 id=&#34;design&#34;&gt;Design&lt;/h3&gt;
 
 &lt;p&gt;I moved away from the previous black and white look to a friendlier color scheme using the fantastic &lt;a href=&#34;http://designmodo.github.io/Flat-UI/&#34;&gt;Flat-UI&lt;/a&gt; package from DesignModo.&lt;/p&gt;
 
-&lt;h3 id=&#34;features:04122820eae1345d676d25dffa9afb36&#34;&gt;Features&lt;/h3&gt;
+&lt;h3 id=&#34;features&#34;&gt;Features&lt;/h3&gt;
 
 &lt;p&gt;My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&amp;rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s take a look at a few:&lt;/p&gt;
 
-&lt;h4 id=&#34;wysiwyg-editing-of-html-templates:04122820eae1345d676d25dffa9afb36&#34;&gt;WYSIWYG Editing of HTML Templates&lt;/h4&gt;
+&lt;h4 id=&#34;wysiwyg-editing-of-html-templates&#34;&gt;WYSIWYG Editing of HTML Templates&lt;/h4&gt;
 
 &lt;p&gt;You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some &lt;code&gt;contenteditable&lt;/code&gt; hacks, I couldn&amp;rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that &lt;a href=&#34;http://ckeditor.com&#34;&gt;CKEditor&lt;/a&gt; which takes care of this and more!&lt;/p&gt;
 
@@ -116,11 +116,11 @@
 
 &lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_template.gif&#34;/&gt;&lt;/p&gt;
 
-&lt;h4 id=&#34;email-attachments:04122820eae1345d676d25dffa9afb36&#34;&gt;Email Attachments&lt;/h4&gt;
+&lt;h4 id=&#34;email-attachments&#34;&gt;Email Attachments&lt;/h4&gt;
 
 &lt;p&gt;Sending emails with links in them is great, but if we can&amp;rsquo;t add &amp;ldquo;malicious&amp;rdquo; attachments to emails we send, then we miss a &lt;em&gt;huge&lt;/em&gt; attack tactic deployed against our users. I&amp;rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &amp;ldquo;Add Files&amp;rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!&lt;/p&gt;
 
-&lt;h4 id=&#34;bulk-importing-of-users:04122820eae1345d676d25dffa9afb36&#34;&gt;Bulk Importing of Users&lt;/h4&gt;
+&lt;h4 id=&#34;bulk-importing-of-users&#34;&gt;Bulk Importing of Users&lt;/h4&gt;
 
 &lt;p&gt;Adding users to a group manually is a &lt;em&gt;pain&lt;/em&gt;. So, I&amp;rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:&lt;/p&gt;
 
@@ -133,19 +133,19 @@
 
 &lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_group.gif&#34;/&gt;&lt;/p&gt;
 
-&lt;h4 id=&#34;campaign-results-dashboard:04122820eae1345d676d25dffa9afb36&#34;&gt;Campaign Results Dashboard&lt;/h4&gt;
+&lt;h4 id=&#34;campaign-results-dashboard&#34;&gt;Campaign Results Dashboard&lt;/h4&gt;
 
 &lt;p&gt;Executing campaigns isn&amp;rsquo;t helpful if you don&amp;rsquo;t have a way to see the results. This is why I&amp;rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif&#34;/&gt;&lt;/p&gt;
 
-&lt;h4 id=&#34;full-api-support:04122820eae1345d676d25dffa9afb36&#34;&gt;Full API Support&lt;/h4&gt;
+&lt;h4 id=&#34;full-api-support&#34;&gt;Full API Support&lt;/h4&gt;
 
 &lt;p&gt;From the get-go, gophish was &lt;strong&gt;designed for automation&lt;/strong&gt;. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;To take a look at the API documentation, just load up gophish and head over to &lt;code&gt;/api&lt;/code&gt;!&lt;/p&gt;
 
-&lt;h4 id=&#34;coming-soon:04122820eae1345d676d25dffa9afb36&#34;&gt;Coming Soon&lt;/h4&gt;
+&lt;h4 id=&#34;coming-soon&#34;&gt;Coming Soon&lt;/h4&gt;
 
 &lt;p&gt;While I&amp;rsquo;m proud of all that&amp;rsquo;s been accomplished with gophish so far, it&amp;rsquo;s not even close to being done.&lt;/p&gt;
 
@@ -162,7 +162,7 @@
 &lt;li&gt;Client API libraries (eg Python)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;conclusion:04122820eae1345d676d25dffa9afb36&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
 &lt;p&gt;Gophish development continues to push forward as much as possible. While I&amp;rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&amp;rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on &lt;a href=&#34;http://github.com/jordan-wright/gophish/issues&#34;&gt;Github&lt;/a&gt;!&lt;/p&gt;
 </description>
@@ -179,7 +179,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:40d262a49665530f5104d62654400012&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href=&#34;http://www.matasano.com/articles/crypto-challenges/&#34;&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
 
@@ -187,7 +187,7 @@
 
 &lt;p&gt;Let&amp;rsquo;s see how to use it.&lt;/p&gt;
 
-&lt;h3 id=&#34;how-you-normally-send-an-email-in-go:40d262a49665530f5104d62654400012&#34;&gt;How You &lt;em&gt;Normally&lt;/em&gt; Send an Email in Go&lt;/h3&gt;
+&lt;h3 id=&#34;how-you-normally-send-an-email-in-go&#34;&gt;How You &lt;em&gt;Normally&lt;/em&gt; Send an Email in Go&lt;/h3&gt;
 
 &lt;p&gt;To send email in Go, one needs to:&lt;/p&gt;
 
@@ -198,16 +198,16 @@
 
 &lt;p&gt;The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.&lt;/p&gt;
 
-&lt;h3 id=&#34;sending-email-using-the-email-package:40d262a49665530f5104d62654400012&#34;&gt;Sending Email Using the &lt;code&gt;email&lt;/code&gt; Package&lt;/h3&gt;
+&lt;h3 id=&#34;sending-email-using-the-email-package&#34;&gt;Sending Email Using the &lt;code&gt;email&lt;/code&gt; Package&lt;/h3&gt;
 
 &lt;p&gt;To make this easier, I have created the &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;&lt;code&gt;email&lt;/code&gt;&lt;/a&gt; package (full documentation &lt;a href=&#34;http://godoc.org/github.com/jordan-wright/email&#34;&gt;here&lt;/a&gt;). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.&lt;/p&gt;
 
-&lt;h4 id=&#34;installing-the-package:40d262a49665530f5104d62654400012&#34;&gt;Installing the Package&lt;/h4&gt;
+&lt;h4 id=&#34;installing-the-package&#34;&gt;Installing the Package&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code&gt;go get github.com/jordan-wright/email
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;creating-a-new-email:40d262a49665530f5104d62654400012&#34;&gt;Creating a New Email&lt;/h4&gt;
+&lt;h4 id=&#34;creating-a-new-email&#34;&gt;Creating a New Email&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
 
@@ -218,7 +218,7 @@ func main() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;setting-the-subject-to-from-bcc-cc:40d262a49665530f5104d62654400012&#34;&gt;Setting the Subject, To, From, Bcc, Cc&lt;/h4&gt;
+&lt;h4 id=&#34;setting-the-subject-to-from-bcc-cc&#34;&gt;Setting the Subject, To, From, Bcc, Cc&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Subject = &amp;quot;Awesome Subject&amp;quot;
 e.From = &amp;quot;Jordan Wright &amp;lt;test@gmail.com&amp;gt;&amp;quot;
@@ -227,25 +227,25 @@ e.Bcc = []string{&amp;quot;test_bcc@example.com&amp;quot;}
 e.Cc = []string{&amp;quot;test_cc@example.com&amp;quot;}
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;setting-the-content-html-text:40d262a49665530f5104d62654400012&#34;&gt;Setting the Content (HTML &amp;amp; Text)&lt;/h4&gt;
+&lt;h4 id=&#34;setting-the-content-html-text&#34;&gt;Setting the Content (HTML &amp;amp; Text)&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Text = &amp;quot;Text Body is, of course, supported!&amp;quot;
 e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&amp;gt;&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;attaching-a-file:40d262a49665530f5104d62654400012&#34;&gt;Attaching a File&lt;/h4&gt;
+&lt;h4 id=&#34;attaching-a-file&#34;&gt;Attaching a File&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.AttachFile(&amp;quot;test.txt&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;You can also use the &lt;a href=&#34;http://godoc.org/github.com/jordan-wright/email#Email.Attach&#34;&gt;&lt;code&gt;Attach&lt;/code&gt;&lt;/a&gt; function to attach content directly from an io.Reader.&lt;/p&gt;
 
-&lt;h4 id=&#34;sending-the-email-using-gmail-as-example:40d262a49665530f5104d62654400012&#34;&gt;Sending the Email (Using Gmail as Example)&lt;/h4&gt;
+&lt;h4 id=&#34;sending-the-email-using-gmail-as-example&#34;&gt;Sending the Email (Using Gmail as Example)&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Send(&amp;quot;smtp.gmail.com:587&amp;quot;, smtp.PlainAuth(&amp;quot;&amp;quot;, &amp;quot;test@gmail.com&amp;quot;, &amp;quot;password123&amp;quot;, &amp;quot;smtp.gmail.com&amp;quot;))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;conclusion:40d262a49665530f5104d62654400012&#34;&gt;Conclusion&lt;/h4&gt;
+&lt;h4 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h4&gt;
 
 &lt;p&gt;I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.&lt;/p&gt;
 
@@ -264,7 +264,7 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:8210af38e84400c28742603efd411626&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Since the &lt;a href=&#34;http://sptoolkit.com/the_end.php&#34;&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;.&lt;/p&gt;
 
@@ -272,7 +272,7 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
 
 &lt;p&gt;With that being said - let&amp;rsquo;s get started!&lt;/p&gt;
 
-&lt;h3 id=&#34;why-go:8210af38e84400c28742603efd411626&#34;&gt;Why Go?&lt;/h3&gt;
+&lt;h3 id=&#34;why-go&#34;&gt;Why Go?&lt;/h3&gt;
 
 &lt;p&gt;In addition to learning a new language, here are a few reasons why I chose &lt;code&gt;go&lt;/code&gt; for this project:&lt;/p&gt;
 
@@ -284,7 +284,7 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
 
 &lt;p&gt;I believe the second point is crucial, in that it makes it &lt;em&gt;dead-simple&lt;/em&gt; to get up and running. Existing solutions (such as SPT or &lt;a href=&#34;https://github.com/pentestgeek/phishing-frenzy&#34;&gt;Phishing Frenzy&lt;/a&gt;) require an already running webserver or other framework installation.&lt;/p&gt;
 
-&lt;h3 id=&#34;gophish-requirements:8210af38e84400c28742603efd411626&#34;&gt;Gophish Requirements&lt;/h3&gt;
+&lt;h3 id=&#34;gophish-requirements&#34;&gt;Gophish Requirements&lt;/h3&gt;
 
 &lt;p&gt;Here are a few of the things I want to be able to do with gophish:&lt;/p&gt;
 
@@ -297,7 +297,7 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
 &lt;li&gt;If possible, integrate with existing products such as the Social Engineer&amp;rsquo;s Toolkit&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;getting-started:8210af38e84400c28742603efd411626&#34;&gt;Getting Started&lt;/h3&gt;
+&lt;h3 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h3&gt;
 
 &lt;p&gt;I am &lt;em&gt;tentatively&lt;/em&gt; planning on creating a REST API for all backend functionality, so as to allow developers to automate gophish. This will also make it easier to separate front-end logic from the backend.&lt;/p&gt;
 

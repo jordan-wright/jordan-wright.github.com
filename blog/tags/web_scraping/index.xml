@@ -20,17 +20,17 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
 
 &lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.&lt;/p&gt;
 
-&lt;h3 id=&#34;a-brief-intro-to-python-web-scraping:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;A Brief Intro to Python Web Scraping&lt;/h3&gt;
+&lt;h3 id=&#34;a-brief-intro-to-python-web-scraping&#34;&gt;A Brief Intro to Python Web Scraping&lt;/h3&gt;
 
 &lt;p&gt;Web scraping with Python is generally done using a mixture of the fantastic &lt;code&gt;requests&lt;/code&gt; and &lt;code&gt;beautifulsoup&lt;/code&gt; libraries. This post won&amp;rsquo;t go into detail about all the neat features of &lt;code&gt;beautifulsoup&lt;/code&gt;, instead aiming for simplicity to show the basics.&lt;/p&gt;
 
-&lt;h4 id=&#34;getting-a-beautifulsoup-object:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;Getting a BeautifulSoup Object&lt;/h4&gt;
+&lt;h4 id=&#34;getting-a-beautifulsoup-object&#34;&gt;Getting a BeautifulSoup Object&lt;/h4&gt;
 
 &lt;p&gt;The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with &lt;code&gt;requests.get()&lt;/code&gt; and, if successful, creating a BeautifulSoup object using the &lt;code&gt;BeautifulSoup()&lt;/code&gt; constructor with the &lt;code&gt;.text&lt;/code&gt; of our response.&lt;/p&gt;
 
@@ -41,7 +41,7 @@ if response.ok:
     soup = BeautifulSoup(response.text)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;getting-data-from-beautifulsoup:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;Getting Data From BeautifulSoup&lt;/h4&gt;
+&lt;h4 id=&#34;getting-data-from-beautifulsoup&#34;&gt;Getting Data From BeautifulSoup&lt;/h4&gt;
 
 &lt;p&gt;Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the &lt;code&gt;Tag&lt;/code&gt; object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:&lt;/p&gt;
 
@@ -55,7 +55,7 @@ soup.find() # Same as find_all(), but returns the first instance
 
 &lt;p&gt;This is &lt;em&gt;barely&lt;/em&gt; scratching the surface of BeautifulSoup&amp;rsquo;s API, so if you&amp;rsquo;re interested in learning more, you can take a look at the docs &lt;a href=&#34;http://www.crummy.com/software/BeautifulSoup/bs4/doc/&#34;&gt;here&lt;/a&gt;. That&amp;rsquo;s all we&amp;rsquo;ll need for this post, so let&amp;rsquo;s see this in action.&lt;/p&gt;
 
-&lt;h3 id=&#34;parsing-some-not-great-html:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;Parsing Some (Not Great) HTML&lt;/h3&gt;
+&lt;h3 id=&#34;parsing-some-not-great-html&#34;&gt;Parsing Some (Not Great) HTML&lt;/h3&gt;
 
 &lt;p&gt;The goal was to simply pull down the rate for each day, and dump it out to a CSV (&amp;ldquo;rates.csv&amp;rdquo;) for some sweet Excel graphing later.&lt;/p&gt;
 
@@ -124,7 +124,7 @@ if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip()
     rates.write(&amp;quot;2015-&amp;quot; + str(m) + &amp;quot;-&amp;quot; + str(d) + &amp;quot;,&amp;quot; + str(rate) + &amp;quot;\n&amp;quot;)
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;success:fe91443da304f39c7fb3c4eaf276cfbc&#34;&gt;Success!&lt;/h3&gt;
+&lt;h3 id=&#34;success&#34;&gt;Success!&lt;/h3&gt;
 
 &lt;p&gt;Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:&lt;/p&gt;
 

@@ -20,13 +20,13 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:f6b25775e0ac2c98f329e60180672675&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;When looking at the functionality of mobile apps, it&amp;rsquo;s clear that they aren&amp;rsquo;t &lt;em&gt;that&lt;/em&gt; different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&amp;rsquo;t careful to protect these apps, many of the &lt;a href=&#34;https://www.owasp.org/index.php/Top_10_2013&#34;&gt;same vulnerabilities&lt;/a&gt; we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.&lt;/p&gt;
 
 &lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href=&#34;http://portswigger.net/burp/download.html&#34;&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.&lt;/p&gt;
 
-&lt;h3 id=&#34;getting-the-ca-certificate-from-burp:f6b25775e0ac2c98f329e60180672675&#34;&gt;Getting the CA Certificate from Burp&lt;/h3&gt;
+&lt;h3 id=&#34;getting-the-ca-certificate-from-burp&#34;&gt;Getting the CA Certificate from Burp&lt;/h3&gt;
 
 &lt;p&gt;First, open up Burp, select the &amp;ldquo;Proxy&amp;rdquo; tab, and select the &amp;ldquo;Options&amp;rdquo; sub-tab. Then, under &amp;ldquo;Proxy-Listeners&amp;rdquo;, highlight the interface and select &amp;ldquo;Edit&amp;rdquo;. Then, open the &amp;ldquo;Certificate&amp;rdquo; sub-tab, and make sure it is set to &amp;ldquo;Generate CA-signed per-host certificate&amp;rdquo;. Since we will install the CA certificate on our iPhone, any certificate signed by Burp will be trusted.&lt;/p&gt;
 
@@ -59,13 +59,13 @@
 &lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34;/&gt;&lt;/a&gt;
 &lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;setting-the-iphone-proxy-settings:f6b25775e0ac2c98f329e60180672675&#34;&gt;Setting the iPhone Proxy Settings&lt;/h3&gt;
+&lt;h3 id=&#34;setting-the-iphone-proxy-settings&#34;&gt;Setting the iPhone Proxy Settings&lt;/h3&gt;
 
 &lt;p&gt;The last thing you will want to do is to set your iPhone to use the Burp proxy. You can do this by going into your wireless network settings and selecting &amp;ldquo;Manual&amp;rdquo; under &amp;ldquo;HTTP PROXY&amp;rdquo;. Then, just fill in the details!&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;testing:f6b25775e0ac2c98f329e60180672675&#34;&gt;Testing&lt;/h3&gt;
+&lt;h3 id=&#34;testing&#34;&gt;Testing&lt;/h3&gt;
 
 &lt;p&gt;You can test to see if this works by navigating to Google in Safari. If you don&amp;rsquo;t receive an error, and you can intercept the request in Burp, then you&amp;rsquo;re all set!&lt;/p&gt;
 

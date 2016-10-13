@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/" />
 
@@ -160,13 +160,13 @@
 <img src="/blog/images/headers/wireless_python.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c5c0201aec1e66254c20bf4e1dd58990">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>A while back, I <a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html">published a post</a> on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the <a href="http://www.aircrack-ng.org/">aircrack suite</a>.</p>
 
 <p>So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.</p>
 
-<h3 id="the-dnspwn-attack:c5c0201aec1e66254c20bf4e1dd58990">The &ldquo;Dnspwn Attack&rdquo;</h3>
+<h3 id="the-dnspwn-attack">The &ldquo;Dnspwn Attack&rdquo;</h3>
 
 <p>The first attack we&rsquo;ll explore is what I call the &ldquo;dnspwn attack&rdquo; (since, from what I can tell, this attack was first created targeting HTTP with the &ldquo;<a href="http://airpwn.sourceforge.net/Airpwn.html">airpwn</a>&rdquo; tool, and later extended to DNS) The idea behind the attack is pretty simple:</p>
 
@@ -180,7 +180,7 @@
 
 <p>So, now that we know how the attack works, let&rsquo;s automate it!</p>
 
-<h3 id="setting-up-the-alfa-awus06h:c5c0201aec1e66254c20bf4e1dd58990">Setting up the Alfa AWUS06H</h3>
+<h3 id="setting-up-the-alfa-awus06h">Setting up the Alfa AWUS06H</h3>
 
 <p>As was the case in my Raidersec post, we will be using the handy <a href="http://www.amazon.com/Alfa-AWUS036H-802-11b-Wireless-network/dp/B002WCEWU8">Alfa AWUS036H</a> for this attack. The first thing we want to do is to put our wireless card in monitor mode so that we can capture all traffic coming from the <code>demo_insecure</code> network.</p>
 
@@ -189,7 +189,7 @@
 
 <p>Now that we have monitor mode up and running on <code>mon0</code>, let&rsquo;s start coding!</p>
 
-<h3 id="coding-the-attack:c5c0201aec1e66254c20bf4e1dd58990">Coding the Attack</h3>
+<h3 id="coding-the-attack">Coding the Attack</h3>
 
 <p>We will utilize the <code>scapy</code> module to perform the attack. Let&rsquo;s start by sniffing any UDP packet with a destination of port 53, and send the packet to a function called <code>send_response</code> that we will make later:</p>
 
@@ -249,7 +249,7 @@ sniff(prn=lambda x: send_response(x),
 
 <p>That&rsquo;s all there is to it! You can find the full source on <a href="https://github.com/jordan-wright/python-wireless-attacks/blob/master/dnspwn.py">Github</a>.</p>
 
-<h3 id="demo:c5c0201aec1e66254c20bf4e1dd58990">Demo</h3>
+<h3 id="demo">Demo</h3>
 
 <p>For the demo, I have the following HTML response available on the host 192.168.2.138:</p>
 
@@ -268,7 +268,7 @@ sniff(prn=lambda x: send_response(x),
 <p><a href="/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png" target="_blank"><img src="/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png"/></a>
 <a href="/blog/images/blog/wireless-attacks/dnspwn/iphone.png" target="_blank"><img src="/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png"/></a></p>
 
-<h3 id="conclusion-future-improvements:c5c0201aec1e66254c20bf4e1dd58990">Conclusion &amp; Future Improvements</h3>
+<h3 id="conclusion-future-improvements">Conclusion &amp; Future Improvements</h3>
 
 <p>It&rsquo;s important to note that this attack will work just as well on other simple request/response protocols. For example, the original &ldquo;airpwn&rdquo; attack spoofed HTTP responses. There are also quite a few improvements we can make to this script. Here are a few:</p>
 
@@ -316,7 +316,7 @@ sniff(prn=lambda x: send_response(x),
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Wireless%20Attacks%20with%20Python%3a%20Part%20One%20-%20The%20%22Dnspwn%20Attack%22&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2013%2f11%2f15%2fwireless-attacks-with-python-part-one-the-airpwn-attack%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Wireless%20Attacks%20with%20Python%3a%20Part%20One%20-%20The%20%22Dnspwn%20Attack%22&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2013%2f11%2f15%2fwireless-attacks-with-python-part-one-the-airpwn-attack%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

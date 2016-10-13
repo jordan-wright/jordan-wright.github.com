@@ -42,7 +42,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/" />
 
@@ -152,13 +152,13 @@
 <img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:2a9445cd46ce65423aab69c1e387d2fb">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>I&rsquo;m excited to announce that the <a href="https://github.com/jordan-wright/gophish">gophish</a> &ldquo;alpha&rdquo; release is almost complete! I&rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.</p>
 
 <p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.</p>
 
-<h3 id="importing-sites:2a9445cd46ce65423aab69c1e387d2fb">Importing Sites</h3>
+<h3 id="importing-sites">Importing Sites</h3>
 
 <p>Attackers often <a href="/blog/2014/07/30/how-to-hunt-down-phishing-kits/">create phishing kits</a> containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.</p>
 
@@ -170,7 +170,7 @@
 
 <p>You could use this functionality to clone things such as your own webmail login, company webpage, or other services that the users may be prone to entering sensitive information into. Of course, once you import a site, you&rsquo;re free to edit it to add template variables, change links, etc. through the gophish editor.</p>
 
-<h3 id="importing-email:2a9445cd46ce65423aab69c1e387d2fb">Importing Email</h3>
+<h3 id="importing-email">Importing Email</h3>
 
 <p>The emails you use in your training are the bait to your phish. Having believable emails is the key to good training, since this will show users first-hand how legit phishing emails can look.</p>
 
@@ -182,7 +182,7 @@
 
 <p>This functionality is provided by the Go <a href="https://github.com/jordan-wright/email">email</a> library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by <a href="https://github.com/jordan-wright/gophish/issues">filing an issue!</a></p>
 
-<h3 id="conclusion:2a9445cd46ce65423aab69c1e387d2fb">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>I&rsquo;m really excited to release gophish in the upcoming month or so and bring enterprise-grade phishing training to <em>anyone</em> who wants it. Until then, keep checking out the pre-alpha and <a href="https://github.com/jordan-wright/gophish/issues">let me know</a> if you have any questions or comments!</p>
 
@@ -222,7 +222,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%20-%20Importing%20Sites%20and%20Emails&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f29%2fgophish-update-importing-sites-and-emails%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%20-%20Importing%20Sites%20and%20Emails&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f29%2fgophish-update-importing-sites-and-emails%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

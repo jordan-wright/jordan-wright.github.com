@@ -20,7 +20,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:81853524e3965a2dee92693b3bcde29d&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;This post is long overdue.&lt;/p&gt;
 
@@ -30,7 +30,7 @@
 
 &lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;collecting-the-data-mongo-elk:81853524e3965a2dee92693b3bcde29d&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
+&lt;h3 id=&#34;collecting-the-data-mongo-elk&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
 
 &lt;p&gt;Soon after dumpmon went live, I noticed that sensitive pastes were getting deleting shortly after being posted. This makes it difficult to use the data for any long term research, so I started keeping copies.&lt;/p&gt;
 
@@ -44,7 +44,7 @@
 
 &lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
 
-&lt;h3 id=&#34;analyzing-the-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Analyzing the Data&lt;/h3&gt;
+&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
 
 &lt;p&gt;Enough history - let&amp;rsquo;s take a look at the data!&lt;/p&gt;
 
@@ -56,7 +56,7 @@
 
 &lt;p&gt;After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, &lt;strong&gt;dumpmon found 46 significant (by its thresholds) database dumps every day.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h4 id=&#34;cumulative-results:81853524e3965a2dee92693b3bcde29d&#34;&gt;Cumulative Results&lt;/h4&gt;
+&lt;h4 id=&#34;cumulative-results&#34;&gt;Cumulative Results&lt;/h4&gt;
 
 &lt;p&gt;Here are a few more cumulative numbers for those interested:&lt;/p&gt;
 
@@ -67,7 +67,7 @@
 &lt;li&gt;1 million unique hashes found (since June)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;twitter-account-statistics:81853524e3965a2dee92693b3bcde29d&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
+&lt;h3 id=&#34;twitter-account-statistics&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
 
 &lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
 
@@ -79,7 +79,7 @@
 
 &lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;here-have-some-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Here, Have Some Data&lt;/h3&gt;
+&lt;h3 id=&#34;here-have-some-data&#34;&gt;Here, Have Some Data&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
 
@@ -105,7 +105,7 @@
 
 &lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;conclusion:81853524e3965a2dee92693b3bcde29d&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
 &lt;p&gt;I hope this post gave a long-overdue update of where dumpmon is today. I recently moved dumpmon to a new home on a Digital Ocean VPS that&amp;rsquo;s bigger, faster, and has more storage than my Pi.&lt;/p&gt;
 

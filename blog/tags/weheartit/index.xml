@@ -20,7 +20,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href=&#34;http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/&#34;&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href=&#34;http://weheartit.com&#34;&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
 
@@ -28,11 +28,11 @@
 
 &lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.&lt;/p&gt;
 
-&lt;h3 id=&#34;dynamic-analysis:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;Dynamic Analysis&lt;/h3&gt;
+&lt;h3 id=&#34;dynamic-analysis&#34;&gt;Dynamic Analysis&lt;/h3&gt;
 
 &lt;p&gt;Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By &lt;a href=&#34;http://jordan-wright.com/blog/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;intercepting traffic using a proxy&lt;/a&gt;, we can easily analyze the structure of requests/responses in use by the application.&lt;/p&gt;
 
-&lt;h4 id=&#34;registration-authentication:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;Registration &amp;amp; Authentication&lt;/h4&gt;
+&lt;h4 id=&#34;registration-authentication&#34;&gt;Registration &amp;amp; Authentication&lt;/h4&gt;
 
 &lt;p&gt;Loading up the WHI iPhone app and attempting to register an account shows the following request/response:&lt;/p&gt;
 
@@ -141,15 +141,15 @@ Authorization: Bearer [redacted]
 
 &lt;p&gt;Great - we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&amp;rsquo;s go straight to the source.&lt;/p&gt;
 
-&lt;h3 id=&#34;static-analysis:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;Static Analysis&lt;/h3&gt;
+&lt;h3 id=&#34;static-analysis&#34;&gt;Static Analysis&lt;/h3&gt;
 
 &lt;p&gt;Now that we have a feel of how the application operates, let&amp;rsquo;s verify our findings by &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/08/10/decompiling-android-apps-the-easy-way/&#34;&gt;decompiling the Android app&lt;/a&gt; and doing some static analysis.&lt;/p&gt;
 
-&lt;h4 id=&#34;app-structure:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;App Structure&lt;/h4&gt;
+&lt;h4 id=&#34;app-structure&#34;&gt;App Structure&lt;/h4&gt;
 
 &lt;p&gt;The app has quite a few dependencies, but the core package (&lt;code&gt;com.weheartit&lt;/code&gt;) is fairly straight-forward. The API we are concerned with is located at &lt;code&gt;com.weheartit.api&lt;/code&gt;. Searching for the string &amp;ldquo;/api&amp;rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java&lt;/p&gt;
 
-&lt;h4 id=&#34;apirequest-java:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;APIRequest.java&lt;/h4&gt;
+&lt;h4 id=&#34;apirequest-java&#34;&gt;APIRequest.java&lt;/h4&gt;
 
 &lt;p&gt;APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth &lt;code&gt;client_id&lt;/code&gt; and &lt;code&gt;client_secret&lt;/code&gt; parameters used by the Android app to get an access token:&lt;/p&gt;
 
@@ -204,7 +204,7 @@ Authorization: Bearer [redacted]
     }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;apirequestv2-java:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;APIRequestv2.java&lt;/h4&gt;
+&lt;h4 id=&#34;apirequestv2-java&#34;&gt;APIRequestv2.java&lt;/h4&gt;
 
 &lt;p&gt;It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at &lt;code&gt;/api/v2/*&lt;/code&gt;. Here are a couple of examples:&lt;/p&gt;
 
@@ -233,11 +233,11 @@ Authorization: Bearer [redacted]
     }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;api-documentation:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;API Documentation&lt;/h3&gt;
+&lt;h3 id=&#34;api-documentation&#34;&gt;API Documentation&lt;/h3&gt;
 
 &lt;p&gt;I have created a repository, &lt;a href=&#34;http://github.com/jordan-wright/weheartit-api&#34;&gt;weheartit-api&lt;/a&gt;, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.&lt;/p&gt;
 
-&lt;h3 id=&#34;whi-sitemaps:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;WHI Sitemaps&lt;/h3&gt;
+&lt;h3 id=&#34;whi-sitemaps&#34;&gt;WHI Sitemaps&lt;/h3&gt;
 
 &lt;p&gt;While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its &lt;code&gt;sitemaps&lt;/code&gt; files:&lt;/p&gt;
 
@@ -259,7 +259,7 @@ Authorization: Bearer [redacted]
 &lt;li&gt;&lt;a href=&#34;http://sitemaps.weheartit.com/tags.xml&#34;&gt;http://sitemaps.weheartit.com/tags.xml&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;conclusion:1cb8a5656dd3daeab715265a16a8ef50&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
 &lt;p&gt;For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.&lt;/p&gt;
 

@@ -20,7 +20,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
 
@@ -28,7 +28,7 @@
 
 &lt;p&gt;Here are the results.&lt;/p&gt;
 
-&lt;h3 id=&#34;who-s-attacking-me:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
+&lt;h3 id=&#34;who-s-attacking-me&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://github.com/jordan-wright/elastichoney&#34;&gt;Elastichoney&lt;/a&gt; keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.&lt;/p&gt;
 
@@ -42,7 +42,7 @@
 
 &lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;what-are-the-attackers-doing:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
+&lt;h3 id=&#34;what-are-the-attackers-doing&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
 
 &lt;p&gt;I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like &lt;code&gt;whoami&lt;/code&gt;, etc. However, in quite a few cases, the malware attempted to use &lt;code&gt;wget&lt;/code&gt; to download and run malware - similar to what happened to my DO instance.&lt;/p&gt;
 
@@ -53,7 +53,7 @@
 
 &lt;p&gt;These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&amp;rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&amp;hellip;&lt;/p&gt;
 
-&lt;h3 id=&#34;the-raw-data:c2f7a687b0f5cbc5c5a21adfebefeddd&#34;&gt;The Raw Data&lt;/h3&gt;
+&lt;h3 id=&#34;the-raw-data&#34;&gt;The Raw Data&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
 

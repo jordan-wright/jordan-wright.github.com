@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/" />
 
@@ -156,7 +156,7 @@
 <img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:04122820eae1345d676d25dffa9afb36">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>It&rsquo;s been a busy couple of months!</p>
 
@@ -164,17 +164,17 @@
 
 <p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
 
-<h3 id="design:04122820eae1345d676d25dffa9afb36">Design</h3>
+<h3 id="design">Design</h3>
 
 <p>I moved away from the previous black and white look to a friendlier color scheme using the fantastic <a href="http://designmodo.github.io/Flat-UI/">Flat-UI</a> package from DesignModo.</p>
 
-<h3 id="features:04122820eae1345d676d25dffa9afb36">Features</h3>
+<h3 id="features">Features</h3>
 
 <p>My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.</p>
 
 <p>Let&rsquo;s take a look at a few:</p>
 
-<h4 id="wysiwyg-editing-of-html-templates:04122820eae1345d676d25dffa9afb36">WYSIWYG Editing of HTML Templates</h4>
+<h4 id="wysiwyg-editing-of-html-templates">WYSIWYG Editing of HTML Templates</h4>
 
 <p>You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some <code>contenteditable</code> hacks, I couldn&rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that <a href="http://ckeditor.com">CKEditor</a> which takes care of this and more!</p>
 
@@ -182,11 +182,11 @@
 
 <p><img src="/blog/images/blog/gophish_screenshots/gophish_template.gif"/></p>
 
-<h4 id="email-attachments:04122820eae1345d676d25dffa9afb36">Email Attachments</h4>
+<h4 id="email-attachments">Email Attachments</h4>
 
 <p>Sending emails with links in them is great, but if we can&rsquo;t add &ldquo;malicious&rdquo; attachments to emails we send, then we miss a <em>huge</em> attack tactic deployed against our users. I&rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &ldquo;Add Files&rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!</p>
 
-<h4 id="bulk-importing-of-users:04122820eae1345d676d25dffa9afb36">Bulk Importing of Users</h4>
+<h4 id="bulk-importing-of-users">Bulk Importing of Users</h4>
 
 <p>Adding users to a group manually is a <em>pain</em>. So, I&rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:</p>
 
@@ -199,19 +199,19 @@
 
 <p><img src="/blog/images/blog/gophish_screenshots/gophish_group.gif"/></p>
 
-<h4 id="campaign-results-dashboard:04122820eae1345d676d25dffa9afb36">Campaign Results Dashboard</h4>
+<h4 id="campaign-results-dashboard">Campaign Results Dashboard</h4>
 
 <p>Executing campaigns isn&rsquo;t helpful if you don&rsquo;t have a way to see the results. This is why I&rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.</p>
 
 <p><img src="/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif"/></p>
 
-<h4 id="full-api-support:04122820eae1345d676d25dffa9afb36">Full API Support</h4>
+<h4 id="full-api-support">Full API Support</h4>
 
 <p>From the get-go, gophish was <strong>designed for automation</strong>. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near <em>everything</em>.</p>
 
 <p>To take a look at the API documentation, just load up gophish and head over to <code>/api</code>!</p>
 
-<h4 id="coming-soon:04122820eae1345d676d25dffa9afb36">Coming Soon</h4>
+<h4 id="coming-soon">Coming Soon</h4>
 
 <p>While I&rsquo;m proud of all that&rsquo;s been accomplished with gophish so far, it&rsquo;s not even close to being done.</p>
 
@@ -228,7 +228,7 @@
 <li>Client API libraries (eg Python)</li>
 </ul>
 
-<h3 id="conclusion:04122820eae1345d676d25dffa9afb36">Conclusion</h3>
+<h3 id="conclusion">Conclusion</h3>
 
 <p>Gophish development continues to push forward as much as possible. While I&rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on <a href="http://github.com/jordan-wright/gophish/issues">Github</a>!</p>
 
@@ -266,7 +266,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%3a%20Getting%20Closer%20to%20Alpha%21&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f26%2fgophish-update-getting-closer-to-alpha%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Gophish%20Update%3a%20Getting%20Closer%20to%20Alpha%21&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f26%2fgophish-update-getting-closer-to-alpha%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

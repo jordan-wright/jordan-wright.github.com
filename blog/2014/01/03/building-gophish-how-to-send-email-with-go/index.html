@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" />
 
@@ -156,7 +156,7 @@
 <img src="/blog/images/headers/go_email.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:40d262a49665530f5104d62654400012">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
 
@@ -164,7 +164,7 @@
 
 <p>Let&rsquo;s see how to use it.</p>
 
-<h3 id="how-you-normally-send-an-email-in-go:40d262a49665530f5104d62654400012">How You <em>Normally</em> Send an Email in Go</h3>
+<h3 id="how-you-normally-send-an-email-in-go">How You <em>Normally</em> Send an Email in Go</h3>
 
 <p>To send email in Go, one needs to:</p>
 
@@ -175,16 +175,16 @@
 
 <p>The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.</p>
 
-<h3 id="sending-email-using-the-email-package:40d262a49665530f5104d62654400012">Sending Email Using the <code>email</code> Package</h3>
+<h3 id="sending-email-using-the-email-package">Sending Email Using the <code>email</code> Package</h3>
 
 <p>To make this easier, I have created the <a href="https://github.com/jordan-wright/email"><code>email</code></a> package (full documentation <a href="http://godoc.org/github.com/jordan-wright/email">here</a>). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.</p>
 
-<h4 id="installing-the-package:40d262a49665530f5104d62654400012">Installing the Package</h4>
+<h4 id="installing-the-package">Installing the Package</h4>
 
 <pre><code>go get github.com/jordan-wright/email
 </code></pre>
 
-<h4 id="creating-a-new-email:40d262a49665530f5104d62654400012">Creating a New Email</h4>
+<h4 id="creating-a-new-email">Creating a New Email</h4>
 
 <pre><code class="language-go">package main
 
@@ -195,7 +195,7 @@ func main() {
 }
 </code></pre>
 
-<h4 id="setting-the-subject-to-from-bcc-cc:40d262a49665530f5104d62654400012">Setting the Subject, To, From, Bcc, Cc</h4>
+<h4 id="setting-the-subject-to-from-bcc-cc">Setting the Subject, To, From, Bcc, Cc</h4>
 
 <pre><code class="language-go">e.Subject = &quot;Awesome Subject&quot;
 e.From = &quot;Jordan Wright &lt;test@gmail.com&gt;&quot;
@@ -204,25 +204,25 @@ e.Bcc = []string{&quot;test_bcc@example.com&quot;}
 e.Cc = []string{&quot;test_cc@example.com&quot;}
 </code></pre>
 
-<h4 id="setting-the-content-html-text:40d262a49665530f5104d62654400012">Setting the Content (HTML &amp; Text)</h4>
+<h4 id="setting-the-content-html-text">Setting the Content (HTML &amp; Text)</h4>
 
 <pre><code class="language-go">e.Text = &quot;Text Body is, of course, supported!&quot;
 e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
 </code></pre>
 
-<h4 id="attaching-a-file:40d262a49665530f5104d62654400012">Attaching a File</h4>
+<h4 id="attaching-a-file">Attaching a File</h4>
 
 <pre><code class="language-go">e.AttachFile(&quot;test.txt&quot;)
 </code></pre>
 
 <p>You can also use the <a href="http://godoc.org/github.com/jordan-wright/email#Email.Attach"><code>Attach</code></a> function to attach content directly from an io.Reader.</p>
 
-<h4 id="sending-the-email-using-gmail-as-example:40d262a49665530f5104d62654400012">Sending the Email (Using Gmail as Example)</h4>
+<h4 id="sending-the-email-using-gmail-as-example">Sending the Email (Using Gmail as Example)</h4>
 
 <pre><code class="language-go">e.Send(&quot;smtp.gmail.com:587&quot;, smtp.PlainAuth(&quot;&quot;, &quot;test@gmail.com&quot;, &quot;password123&quot;, &quot;smtp.gmail.com&quot;))
 </code></pre>
 
-<h4 id="conclusion:40d262a49665530f5104d62654400012">Conclusion</h4>
+<h4 id="conclusion">Conclusion</h4>
 
 <p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
 
@@ -262,7 +262,7 @@ e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Building%20GoPhish%20-%20How%20to%20Send%20Email%20with%20Go&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f01%2f03%2fbuilding-gophish-how-to-send-email-with-go%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Building%20GoPhish%20-%20How%20to%20Send%20Email%20with%20Go&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f01%2f03%2fbuilding-gophish-how-to-send-email-with-go%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

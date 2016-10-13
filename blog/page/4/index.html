@@ -36,7 +36,7 @@
         <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/" />
 
@@ -207,6 +207,8 @@
     
         
     
+        
+    
 
     
         
@@ -233,13 +235,55 @@
         
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Building GoPhish - How to Send Email with Go</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/go_email.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction">Introduction</h3>
+
+<p>I&rsquo;ve been playing around with Go for about a month now, and I&rsquo;ve <em>really</em> grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&rsquo;m even using it for the <a href="http://www.matasano.com/articles/crypto-challenges/">Matasano Crypto Challenges</a> (which are <em>awesome</em>).</p>
+
+<p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
+
+<p>Let&rsquo;s see how to use it.</p>
+ <a class="read-more icon-standard" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+        
+        <time class="post-date" datetime="2014-01-03T00:00:00Z">
+            3 Jan 2014
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/blog/2013/11/29/building-gophish-day-1/">Building Gophish - Day 1</a></h2>
     </header>
     <section class="post-excerpt">
 	    <p><img src="/blog/images/headers/gophish.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:8210af38e84400c28742603efd411626">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Since the <a href="http://sptoolkit.com/the_end.php">Simple Phishing Toolkit (SPT)</a> was discontinued, I&rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called <a href="https://github.com/jordan-wright/gophish">gophish</a>.</p>
 
@@ -250,6 +294,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -279,7 +325,7 @@
 	    <p><img src="/blog/images/headers/wireless_python.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c5c0201aec1e66254c20bf4e1dd58990">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>A while back, I <a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html">published a post</a> on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the <a href="http://www.aircrack-ng.org/">aircrack suite</a>.</p>
 
@@ -288,6 +334,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -319,7 +367,7 @@
 	    <p><img src="/blog/images/headers/iphone_burp.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:f6b25775e0ac2c98f329e60180672675">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>When looking at the functionality of mobile apps, it&rsquo;s clear that they aren&rsquo;t <em>that</em> different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&rsquo;t careful to protect these apps, many of the <a href="https://www.owasp.org/index.php/Top_10_2013">same vulnerabilities</a> we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.</p>
 
@@ -328,6 +376,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -361,13 +411,15 @@
 	    <p><img src="/blog/images/headers/linkedin_gift.png" alt="" class="pure-img" >
 
 
-<h3 id="the-initial-post:13a67ad01f77a06b4a47e72881b8f7dd">The Initial Post</h3>
+<h3 id="the-initial-post">The Initial Post</h3>
 
 <p>I recently published a <a href="/blog/2013/10/26/phishing-with-linkedins-intro/">blog post</a> which showed a practical attack against Linkedin&rsquo;s Intro. The post reached the front page of <a href="http://news.ycombinator.com">Hacker News</a> (a full writeup of my experience with the &ldquo;Hacker News Effect&rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&rsquo;s security team. This was their response.</p>
  <a class="read-more icon-standard" href="/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -397,7 +449,7 @@
 
 <p><em>I would also like to thank Linkedin&rsquo;s security team for their quick and effective response to these findings.</em></p>
 
-<h3 id="intro-duction:f80351ff888298fda53ee2a6d21568e5">&ldquo;Intro&rdquo;duction</h3>
+<h3 id="intro-duction">&ldquo;Intro&rdquo;duction</h3>
 
 <p>On October 23, Linkedin introduced an application called <a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/">&ldquo;Intro&rdquo;</a>. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think <a href="http://rapportive.com/">Rapportive</a> for the iPhone Mail App, because that&rsquo;s <em>essentially</em> what this is (and made by the same people).</p>
 
@@ -414,6 +466,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -443,7 +497,7 @@
 	    <p><img src="/blog/images/headers/rapportive_small.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:578e8f3d2f79388ccb3407934a96543b">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>When performing a social engineering engagement, recon is key. In a <a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html">previous post</a>, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.</p>
 
@@ -452,6 +506,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -484,6 +540,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         

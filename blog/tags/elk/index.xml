@@ -28,9 +28,9 @@
 
 &lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;
 
-&lt;h3 id=&#34;getting-the-call-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Getting the Call Data&lt;/h3&gt;
+&lt;h3 id=&#34;getting-the-call-data&#34;&gt;Getting the Call Data&lt;/h3&gt;
 
-&lt;h4 id=&#34;a-little-about-the-format:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;A Little About the Format&lt;/h4&gt;
+&lt;h4 id=&#34;a-little-about-the-format&#34;&gt;A Little About the Format&lt;/h4&gt;
 
 &lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
 
@@ -51,7 +51,7 @@
 
 &lt;p&gt;This is a &lt;em&gt;ton&lt;/em&gt; of great data. However, searching through the data manually is a pain, and I didn&amp;rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.&lt;/p&gt;
 
-&lt;h4 id=&#34;scraping-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Scraping the Data&lt;/h4&gt;
+&lt;h4 id=&#34;scraping-the-data&#34;&gt;Scraping the Data&lt;/h4&gt;
 
 &lt;p&gt;Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the &lt;a href=&#34;https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;amp;hideResults=on&#34;&gt;SSL configuration in use&lt;/a&gt;. I wound up having to use a custom TLS adapter just to get the &lt;code&gt;requests&lt;/code&gt; library to negotiate a TLS connection.&lt;/p&gt;
 
@@ -79,7 +79,7 @@
 
 &lt;p&gt;After finishing up the scraping, I was left with &lt;strong&gt;4.3 million records&lt;/strong&gt; to work with.&lt;/p&gt;
 
-&lt;h3 id=&#34;analyzing-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Analyzing the Data&lt;/h3&gt;
+&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
 
 &lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
 
@@ -138,7 +138,7 @@
 
 &lt;p&gt;Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.&lt;/p&gt;
 
-&lt;h3 id=&#34;sweet-sweet-dashboards:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
+&lt;h3 id=&#34;sweet-sweet-dashboards&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
 
 &lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
 
@@ -154,7 +154,7 @@
 
 &lt;br&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;have-some-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Have Some Data&lt;/h3&gt;
+&lt;h3 id=&#34;have-some-data&#34;&gt;Have Some Data&lt;/h3&gt;
 
 &lt;p&gt;Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.&lt;/p&gt;
 
@@ -179,7 +179,7 @@
 &lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;h3 id=&#34;introduction:81853524e3965a2dee92693b3bcde29d&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;This post is long overdue.&lt;/p&gt;
 
@@ -189,7 +189,7 @@
 
 &lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;collecting-the-data-mongo-elk:81853524e3965a2dee92693b3bcde29d&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
+&lt;h3 id=&#34;collecting-the-data-mongo-elk&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
 
 &lt;p&gt;Soon after dumpmon went live, I noticed that sensitive pastes were getting deleting shortly after being posted. This makes it difficult to use the data for any long term research, so I started keeping copies.&lt;/p&gt;
 
@@ -203,7 +203,7 @@
 
 &lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
 
-&lt;h3 id=&#34;analyzing-the-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Analyzing the Data&lt;/h3&gt;
+&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
 
 &lt;p&gt;Enough history - let&amp;rsquo;s take a look at the data!&lt;/p&gt;
 
@@ -215,7 +215,7 @@
 
 &lt;p&gt;After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, &lt;strong&gt;dumpmon found 46 significant (by its thresholds) database dumps every day.&lt;/strong&gt;&lt;/p&gt;
 
-&lt;h4 id=&#34;cumulative-results:81853524e3965a2dee92693b3bcde29d&#34;&gt;Cumulative Results&lt;/h4&gt;
+&lt;h4 id=&#34;cumulative-results&#34;&gt;Cumulative Results&lt;/h4&gt;
 
 &lt;p&gt;Here are a few more cumulative numbers for those interested:&lt;/p&gt;
 
@@ -226,7 +226,7 @@
 &lt;li&gt;1 million unique hashes found (since June)&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;twitter-account-statistics:81853524e3965a2dee92693b3bcde29d&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
+&lt;h3 id=&#34;twitter-account-statistics&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
 
 &lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
 
@@ -238,7 +238,7 @@
 
 &lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;here-have-some-data:81853524e3965a2dee92693b3bcde29d&#34;&gt;Here, Have Some Data&lt;/h3&gt;
+&lt;h3 id=&#34;here-have-some-data&#34;&gt;Here, Have Some Data&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
 
@@ -264,7 +264,7 @@
 
 &lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;conclusion:81853524e3965a2dee92693b3bcde29d&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
 &lt;p&gt;I hope this post gave a long-overdue update of where dumpmon is today. I recently moved dumpmon to a new home on a Digital Ocean VPS that&amp;rsquo;s bigger, faster, and has more storage than my Pi.&lt;/p&gt;
 

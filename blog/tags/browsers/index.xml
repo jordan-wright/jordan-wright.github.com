@@ -21,11 +21,11 @@
 
 &amp;gt; Friendly Reminder: Browser makers may track every key you type in the URL bar&lt;/p&gt;
 
-&lt;h3 id=&#34;introduction:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Technologies like Google Chrome&amp;rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.&lt;/p&gt;
 
-&lt;h3 id=&#34;how-the-omnibox-works:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;How the Omnibox Works&lt;/h3&gt;
+&lt;h3 id=&#34;how-the-omnibox-works&#34;&gt;How the Omnibox Works&lt;/h3&gt;
 
 &lt;p&gt;Predictive search isn&amp;rsquo;t magic. Chrome doesn&amp;rsquo;t come shipped with a built-in collection of popular searches. No, the only way to get suggestions for what you are searching is to &lt;em&gt;ask Google&lt;/em&gt;. This happens by sending a request to Google for search suggestions &lt;strong&gt;for every key typed in the omnibox&lt;/strong&gt; - by default.&lt;/p&gt;
 
@@ -48,7 +48,7 @@ GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&
 
 &lt;p&gt;Sure, this might be fine for searches, but what else could be sent via this method? Hostnames, web addresses, and IP addresses are &lt;strong&gt;&lt;em&gt;all&lt;/em&gt;&lt;/strong&gt; sent to Google before you press enter. This means that Google knows if you visit a website, even if you don&amp;rsquo;t visit the site from search results.&lt;/p&gt;
 
-&lt;h4 id=&#34;disabling-omnibox:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Disabling Omnibox&lt;/h4&gt;
+&lt;h4 id=&#34;disabling-omnibox&#34;&gt;Disabling Omnibox&lt;/h4&gt;
 
 &lt;p&gt;Since this setting is enabled by default, here&amp;rsquo;s how to disable it:&lt;/p&gt;
 
@@ -69,11 +69,11 @@ GET /complete/search?client=chrome-omni&amp;amp;gs_ri=chrome-ext&amp;amp;xssi=t&
 
 &lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/browser_track/omnibox.png&#34;/&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;chrome-isn-t-the-only-one:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Chrome Isn&amp;rsquo;t the Only One&lt;/h3&gt;
+&lt;h3 id=&#34;chrome-isn-t-the-only-one&#34;&gt;Chrome Isn&amp;rsquo;t the Only One&lt;/h3&gt;
 
 &lt;p&gt;It&amp;rsquo;s important to note that Chrome isn&amp;rsquo;t the only browser that has this capability. Internet Explorer has the same feature from Bing. The only difference is that this isn&amp;rsquo;t default behavior, and has to be explicitly enabled.&lt;/p&gt;
 
-&lt;h3 id=&#34;putting-things-in-perspective:268c7d5c9bd2fa0c881d4454ee46a6e1&#34;&gt;Putting Things in Perspective&lt;/h3&gt;
+&lt;h3 id=&#34;putting-things-in-perspective&#34;&gt;Putting Things in Perspective&lt;/h3&gt;
 
 &lt;p&gt;This isn&amp;rsquo;t new information - more of a friendly reminder. It&amp;rsquo;s important to put these privacy &amp;ldquo;risks&amp;rdquo; in perspective and determine what is more important to you - keeping your browsing history and IP/hostname scheme private, or getting solid search suggestions.&lt;/p&gt;
 

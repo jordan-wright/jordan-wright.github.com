@@ -42,7 +42,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/" />
 
@@ -152,29 +152,29 @@
 <img src="/blog/images/headers/tor_seized.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:945cc41d8052557b224927a93c0a481d">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>The Tor Project <a href="https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network">has announced</a> that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&rsquo;t know the legitimacy behind these threats, it&rsquo;s worth looking at the role DA&rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*</p>
 
-<h3 id="what-are-directory-authorities:945cc41d8052557b224927a93c0a481d">What are Directory Authorities?</h3>
+<h3 id="what-are-directory-authorities">What are Directory Authorities?</h3>
 
 <p>Simply put, think of the DA servers as the trusted providers of a phonebook. This phonebook - called the <em>consensus</em> - contains the complete information about each known Tor relay, and is updated every hour. When it&rsquo;s time to update the list, a majority of the directory authorities must agree on the accuracy of the new list by cryptographically signing the proposed consensus. Once this process is complete, clients are able to download the updated list of relays.</p>
 
 <p>There are currently 10 DA&rsquo;s whose information is <a href="https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824">hardcoded into Tor clients</a> - one of which (Tonga) is used for bridge access. This means that, to keep the network updated and stable, <strong>5 DA&rsquo;s must still be operational</strong>. If a seizure attempt is able to take down 5 or more DA&rsquo;s, the network will enter an unstable state, and the integrity of any updates to the consensus cannot be guaranteed.</p>
 
-<h3 id="where-are-the-da-s-located:945cc41d8052557b224927a93c0a481d">Where are the DA&rsquo;s Located?</h3>
+<h3 id="where-are-the-da-s-located">Where are the DA&rsquo;s Located?</h3>
 
 <p>The seizure of 5 or more DA&rsquo;s would be a large feat, but it is absolutely possible. As one commenter on HN <a href="https://news.ycombinator.com/item?id=8775028">mentioned</a>, it would only take a joint effort by the US and Germany to take down 5 DA servers. Another <a href="https://news.ycombinator.com/item?id=8775009">comment</a> provides the geolocation and organization of each DA.</p>
 
-<h3 id="the-aftermath:945cc41d8052557b224927a93c0a481d">The Aftermath</h3>
+<h3 id="the-aftermath">The Aftermath</h3>
 
 <p>An attack seizing the DA servers would severely cripple the Tor network. The Tor Project would not only need to replace the DA servers, but would then need to introduce a client update with the new DA information. During this time, the integrity of the consensus could not be trusted, and it would be <a href="https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network#comment-83762">increasingly difficult</a> for new clients to be introduced into the Tor network.</p>
 
-<h3 id="this-doesn-t-solve-the-problem:945cc41d8052557b224927a93c0a481d">This Doesn&rsquo;t Solve the Problem</h3>
+<h3 id="this-doesn-t-solve-the-problem">This Doesn&rsquo;t Solve the Problem</h3>
 
 <p>It&rsquo;s important to note that severing the Tor network doesn&rsquo;t solve any problem. Tor provides an invaluable escape from censorship, and the means to having privacy from otherwise prying eyes. I&rsquo;m confident that the Tor Project will be resilient in recovering from any attempted takedown attempts.</p>
 
-<h3 id="more-information:945cc41d8052557b224927a93c0a481d">More Information</h3>
+<h3 id="more-information">More Information</h3>
 
 <p>Further information and detailed status (obtained from the updated consensus) about each of the Tor Directory Authorities can be found at the following links:</p>
 
@@ -233,7 +233,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=What%20Happens%20if%20Tor%20Directory%20Authorities%20are%20Seized%3f&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f12%2f19%2fwhat-happens-if-tor-directory-authorities-are-seized%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=What%20Happens%20if%20Tor%20Directory%20Authorities%20are%20Seized%3f&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f12%2f19%2fwhat-happens-if-tor-directory-authorities-are-seized%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

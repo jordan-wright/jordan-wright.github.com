@@ -26,7 +26,7 @@
 
 &lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.&lt;/p&gt;
 
-&lt;h3 id=&#34;drinking-from-github-s-firehose:08dcf3f5675aaa5fba39a7d99af796dc&#34;&gt;Drinking from Github&amp;rsquo;s Firehose&lt;/h3&gt;
+&lt;h3 id=&#34;drinking-from-github-s-firehose&#34;&gt;Drinking from Github&amp;rsquo;s Firehose&lt;/h3&gt;
 
 &lt;p&gt;Github has an extensive API. One of the most useful endpoints is located at &lt;a href=&#34;https://developer.github.com/v3/activity/events/&#34;&gt;&lt;code&gt;/events&lt;/code&gt;&lt;/a&gt;. This endpoint basically provides a firehose of &lt;em&gt;all&lt;/em&gt; public events as they happen. This includes account creation, code commits, and more. Just &amp;ldquo;star&amp;rdquo; a repository? It was published at &lt;code&gt;/events&lt;/code&gt;.&lt;/p&gt;
 
@@ -36,7 +36,7 @@
 
 &lt;p&gt;These 4 requests are made in a matter of seconds, and can be sped up by caching the SHA1 of files to determine if the file has been changed. It&amp;rsquo;s a good thing that no one has made a system that&amp;rsquo;s been caching all this data this entire time, right?&lt;/p&gt;
 
-&lt;h3 id=&#34;say-hello-to-ghtorrent:08dcf3f5675aaa5fba39a7d99af796dc&#34;&gt;Say Hello to GHTorrent&lt;/h3&gt;
+&lt;h3 id=&#34;say-hello-to-ghtorrent&#34;&gt;Say Hello to GHTorrent&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://ghtorrent.org/&#34;&gt;GHTorrent&lt;/a&gt; advertises itself as an &amp;ldquo;offline mirror of data&amp;rdquo;. In a nutshell, it keeps track of &lt;em&gt;a ton&lt;/em&gt; of data that flows through Github&amp;rsquo;s Events API stream, and recursively resolves dependencies to relate, say, a commit object to an event object. Currently, they suggest they have accumulated the data from 2012-2014.&lt;/p&gt;
 
@@ -50,7 +50,7 @@
 
 &lt;p&gt;GHTorrent is just an example. While it doesn&amp;rsquo;t appear to store all content, it would be trivial for hackers to reproduce the project with the added feature of searching commits for sensitive information as the events are generated. This searching can be done using keywords such as &amp;ldquo;password&amp;rdquo;, &amp;ldquo;key&amp;rdquo;, etc.&lt;/p&gt;
 
-&lt;h3 id=&#34;the-only-way-to-be-safe:08dcf3f5675aaa5fba39a7d99af796dc&#34;&gt;The Only Way to be Safe&lt;/h3&gt;
+&lt;h3 id=&#34;the-only-way-to-be-safe&#34;&gt;The Only Way to be Safe&lt;/h3&gt;
 
 &lt;p&gt;Hopefully it&amp;rsquo;s clear that deleting sensitive information from Github doesn&amp;rsquo;t solve the problem. The &lt;strong&gt;only&lt;/strong&gt; way to protect your assets after committing sensitive information is to consider the information compromised and to change the password/API key/whatever. Then, make sure to avoid committing this data in the future!&lt;/p&gt;
 

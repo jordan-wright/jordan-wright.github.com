@@ -28,9 +28,9 @@
 
 &lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;
 
-&lt;h3 id=&#34;getting-the-call-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Getting the Call Data&lt;/h3&gt;
+&lt;h3 id=&#34;getting-the-call-data&#34;&gt;Getting the Call Data&lt;/h3&gt;
 
-&lt;h4 id=&#34;a-little-about-the-format:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;A Little About the Format&lt;/h4&gt;
+&lt;h4 id=&#34;a-little-about-the-format&#34;&gt;A Little About the Format&lt;/h4&gt;
 
 &lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
 
@@ -51,7 +51,7 @@
 
 &lt;p&gt;This is a &lt;em&gt;ton&lt;/em&gt; of great data. However, searching through the data manually is a pain, and I didn&amp;rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.&lt;/p&gt;
 
-&lt;h4 id=&#34;scraping-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Scraping the Data&lt;/h4&gt;
+&lt;h4 id=&#34;scraping-the-data&#34;&gt;Scraping the Data&lt;/h4&gt;
 
 &lt;p&gt;Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the &lt;a href=&#34;https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;amp;hideResults=on&#34;&gt;SSL configuration in use&lt;/a&gt;. I wound up having to use a custom TLS adapter just to get the &lt;code&gt;requests&lt;/code&gt; library to negotiate a TLS connection.&lt;/p&gt;
 
@@ -79,7 +79,7 @@
 
 &lt;p&gt;After finishing up the scraping, I was left with &lt;strong&gt;4.3 million records&lt;/strong&gt; to work with.&lt;/p&gt;
 
-&lt;h3 id=&#34;analyzing-the-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Analyzing the Data&lt;/h3&gt;
+&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
 
 &lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
 
@@ -138,7 +138,7 @@
 
 &lt;p&gt;Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.&lt;/p&gt;
 
-&lt;h3 id=&#34;sweet-sweet-dashboards:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
+&lt;h3 id=&#34;sweet-sweet-dashboards&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
 
 &lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
 
@@ -154,7 +154,7 @@
 
 &lt;br&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;have-some-data:8175b79b7dc19e8a6016758bd8f0507c&#34;&gt;Have Some Data&lt;/h3&gt;
+&lt;h3 id=&#34;have-some-data&#34;&gt;Have Some Data&lt;/h3&gt;
 
 &lt;p&gt;Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.&lt;/p&gt;
 

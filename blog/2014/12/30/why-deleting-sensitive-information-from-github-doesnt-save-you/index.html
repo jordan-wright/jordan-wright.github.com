@@ -42,7 +42,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/" />
 
@@ -158,7 +158,7 @@
 
 <p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
 
-<h3 id="drinking-from-github-s-firehose:08dcf3f5675aaa5fba39a7d99af796dc">Drinking from Github&rsquo;s Firehose</h3>
+<h3 id="drinking-from-github-s-firehose">Drinking from Github&rsquo;s Firehose</h3>
 
 <p>Github has an extensive API. One of the most useful endpoints is located at <a href="https://developer.github.com/v3/activity/events/"><code>/events</code></a>. This endpoint basically provides a firehose of <em>all</em> public events as they happen. This includes account creation, code commits, and more. Just &ldquo;star&rdquo; a repository? It was published at <code>/events</code>.</p>
 
@@ -168,7 +168,7 @@
 
 <p>These 4 requests are made in a matter of seconds, and can be sped up by caching the SHA1 of files to determine if the file has been changed. It&rsquo;s a good thing that no one has made a system that&rsquo;s been caching all this data this entire time, right?</p>
 
-<h3 id="say-hello-to-ghtorrent:08dcf3f5675aaa5fba39a7d99af796dc">Say Hello to GHTorrent</h3>
+<h3 id="say-hello-to-ghtorrent">Say Hello to GHTorrent</h3>
 
 <p><a href="http://ghtorrent.org/">GHTorrent</a> advertises itself as an &ldquo;offline mirror of data&rdquo;. In a nutshell, it keeps track of <em>a ton</em> of data that flows through Github&rsquo;s Events API stream, and recursively resolves dependencies to relate, say, a commit object to an event object. Currently, they suggest they have accumulated the data from 2012-2014.</p>
 
@@ -182,7 +182,7 @@
 
 <p>GHTorrent is just an example. While it doesn&rsquo;t appear to store all content, it would be trivial for hackers to reproduce the project with the added feature of searching commits for sensitive information as the events are generated. This searching can be done using keywords such as &ldquo;password&rdquo;, &ldquo;key&rdquo;, etc.</p>
 
-<h3 id="the-only-way-to-be-safe:08dcf3f5675aaa5fba39a7d99af796dc">The Only Way to be Safe</h3>
+<h3 id="the-only-way-to-be-safe">The Only Way to be Safe</h3>
 
 <p>Hopefully it&rsquo;s clear that deleting sensitive information from Github doesn&rsquo;t solve the problem. The <strong>only</strong> way to protect your assets after committing sensitive information is to consider the information compromised and to change the password/API key/whatever. Then, make sure to avoid committing this data in the future!</p>
 
@@ -224,7 +224,7 @@
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Why%20Deleting%20Sensitive%20Information%20from%20Github%20Doesn%27t%20Save%20You&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f12%2f30%2fwhy-deleting-sensitive-information-from-github-doesnt-save-you%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Why%20Deleting%20Sensitive%20Information%20from%20Github%20Doesn%27t%20Save%20You&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f12%2f30%2fwhy-deleting-sensitive-information-from-github-doesnt-save-you%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

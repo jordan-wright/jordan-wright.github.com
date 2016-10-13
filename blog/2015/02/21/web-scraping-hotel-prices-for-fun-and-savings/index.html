@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/" />
 
@@ -156,17 +156,17 @@
 <img src="/blog/images/headers/web_scraping.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:fe91443da304f39c7fb3c4eaf276cfbc">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
 
 <p>Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.</p>
 
-<h3 id="a-brief-intro-to-python-web-scraping:fe91443da304f39c7fb3c4eaf276cfbc">A Brief Intro to Python Web Scraping</h3>
+<h3 id="a-brief-intro-to-python-web-scraping">A Brief Intro to Python Web Scraping</h3>
 
 <p>Web scraping with Python is generally done using a mixture of the fantastic <code>requests</code> and <code>beautifulsoup</code> libraries. This post won&rsquo;t go into detail about all the neat features of <code>beautifulsoup</code>, instead aiming for simplicity to show the basics.</p>
 
-<h4 id="getting-a-beautifulsoup-object:fe91443da304f39c7fb3c4eaf276cfbc">Getting a BeautifulSoup Object</h4>
+<h4 id="getting-a-beautifulsoup-object">Getting a BeautifulSoup Object</h4>
 
 <p>The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with <code>requests.get()</code> and, if successful, creating a BeautifulSoup object using the <code>BeautifulSoup()</code> constructor with the <code>.text</code> of our response.</p>
 
@@ -177,7 +177,7 @@ if response.ok:
     soup = BeautifulSoup(response.text)
 </code></pre>
 
-<h4 id="getting-data-from-beautifulsoup:fe91443da304f39c7fb3c4eaf276cfbc">Getting Data From BeautifulSoup</h4>
+<h4 id="getting-data-from-beautifulsoup">Getting Data From BeautifulSoup</h4>
 
 <p>Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the <code>Tag</code> object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:</p>
 
@@ -191,7 +191,7 @@ soup.find() # Same as find_all(), but returns the first instance
 
 <p>This is <em>barely</em> scratching the surface of BeautifulSoup&rsquo;s API, so if you&rsquo;re interested in learning more, you can take a look at the docs <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/">here</a>. That&rsquo;s all we&rsquo;ll need for this post, so let&rsquo;s see this in action.</p>
 
-<h3 id="parsing-some-not-great-html:fe91443da304f39c7fb3c4eaf276cfbc">Parsing Some (Not Great) HTML</h3>
+<h3 id="parsing-some-not-great-html">Parsing Some (Not Great) HTML</h3>
 
 <p>The goal was to simply pull down the rate for each day, and dump it out to a CSV (&ldquo;rates.csv&rdquo;) for some sweet Excel graphing later.</p>
 
@@ -260,7 +260,7 @@ if king.find(&quot;div&quot;, &quot;roomType&quot;).text.strip() == &quot;King&q
     rates.write(&quot;2015-&quot; + str(m) + &quot;-&quot; + str(d) + &quot;,&quot; + str(rate) + &quot;\n&quot;)
 </code></pre>
 
-<h3 id="success:fe91443da304f39c7fb3c4eaf276cfbc">Success!</h3>
+<h3 id="success">Success!</h3>
 
 <p>Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:</p>
 
@@ -302,7 +302,7 @@ if king.find(&quot;div&quot;, &quot;roomType&quot;).text.strip() == &quot;King&q
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Web%20Scraping%20Hotel%20Prices%20for%20Fun%20and%20Savings&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f21%2fweb-scraping-hotel-prices-for-fun-and-savings%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Web%20Scraping%20Hotel%20Prices%20for%20Fun%20and%20Savings&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f21%2fweb-scraping-hotel-prices-for-fun-and-savings%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

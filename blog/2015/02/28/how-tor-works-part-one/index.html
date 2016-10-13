@@ -42,7 +42,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/" />
 
@@ -152,19 +152,19 @@
 <img src="/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:b6a2f7f7305d0d4a88042f3de1458bb0">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.</p>
 
 <p>But how does Tor work under the hood? In this series of posts, we&rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.</p>
 
-<h3 id="brief-history-of-tor:b6a2f7f7305d0d4a88042f3de1458bb0">Brief History of Tor</h3>
+<h3 id="brief-history-of-tor">Brief History of Tor</h3>
 
 <p>The concept of Onion Routing (more on why it&rsquo;s called this later) was first <a href="http://www.onion-router.net/History.html">proposed</a> in 1995, where it was first funded by the <a href="http://www.onr.navy.mil/">Office of Naval Research</a> (ONR) and later helped out by DARPA in 1997. Since then, funding for the Tor Project has been provided by a <a href="https://www.torproject.org/about/sponsors.html.en">number of different sponsors</a>, and the Tor Project was recently announced a winner of the <a href="http://www.redditblog.com/2015/02/announcing-winners-of-reddit-donate.html">reddit donate</a> campaign.</p>
 
 <p>The Tor software as we know it today was originally open-sourced in October of 2003, and is the 3<sup>rd</sup> generation of Onion Routing software. This idea of Onion Routing was (and is!) simply that we can wrap traffic in encrypted layers (like <em>onions</em>) in order to protect the contents of the data as well as the anonymity of the sender and receiver.</p>
 
-<h3 id="tor-101:b6a2f7f7305d0d4a88042f3de1458bb0">Tor 101</h3>
+<h3 id="tor-101">Tor 101</h3>
 
 <p>Now that we know a bit about Tor&rsquo;s history, let&rsquo;s talk about how it works. At an <em>extremely</em> high level, Tor works by bouncing connections from your computer to destinations (such as google.com) through a series of intermediate computers, or <strong>relays</strong>.</p>
 
@@ -408,7 +408,7 @@
 
 <p>When it comes to speed and anonymity of the Tor network - the more relays, the better! This makes sense, because every relay only has so much bandwidth to offer. Additionally, if there are more relays to choose from, it will be more difficult to track any one user.</p>
 
-<h3 id="types-of-relays:b6a2f7f7305d0d4a88042f3de1458bb0">Types of Relays</h3>
+<h3 id="types-of-relays">Types of Relays</h3>
 
 <p>By default, Tor bounces connections through 3 relays. Each of these have a specific role to play (we&rsquo;ll cover each in more detail in later posts):</p>
 
@@ -819,7 +819,7 @@
 
 <p>If you meet an exit relay operator - thank them. <strong>They deserve it.</strong></p>
 
-<h3 id="why-onions:b6a2f7f7305d0d4a88042f3de1458bb0">Why Onions?</h3>
+<h3 id="why-onions">Why Onions?</h3>
 
 <p>Now that we know how connections are routed through relays, how do we know we can actually <em>trust</em> relays? How can we be sure relays won&rsquo;t track who we&rsquo;re connecting to and sniff the data we send across the wire? The short answer is, <em>we don&rsquo;t have to!</em>.</p>
 
@@ -1196,7 +1196,7 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
 <p>Note: It&rsquo;s important to remember that exit relays <strong>can see the original data sent by the client</strong>, since they have to pass that data to the destination. This means that, if credentials are passed over HTTP, FTP, or other cleartext protocols, the exit relays can sniff the traffic!</p>
 </blockquote>
 
-<h3 id="next-steps:b6a2f7f7305d0d4a88042f3de1458bb0">Next Steps</h3>
+<h3 id="next-steps">Next Steps</h3>
 
 <p>Our journey into the operation of Tor is just beginning. In future posts, we&rsquo;ll take a look at how the Tor network is organized, discuss the differences between relays and bridges, take a deep-dive into how exactly the encryption works, take a step-by-step view of what happens behind the scenes when you start up your Tor client for the first time, and more.</p>
 
@@ -1250,7 +1250,7 @@ e= new Vivus('network', {type: 'oneByOne', duration: 30, start: 'inViewport', fo
     
 <section class="share">
   <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20Tor%20Works%3a%20Part%20One&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f28%2fhow-tor-works-part-one%2f"
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=How%20Tor%20Works%3a%20Part%20One&nbsp;-&nbsp;Jordan%20Wright&amp;url=http%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f02%2f28%2fhow-tor-works-part-one%2f"
       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
       <span class="hidden">Twitter</span>
   </a>

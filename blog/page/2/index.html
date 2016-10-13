@@ -36,7 +36,7 @@
         <link href="http://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
       
     
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
 
     <link rel="canonical" href="http://jordan-wright.com/blog/" />
 
@@ -207,6 +207,8 @@
     
         
     
+        
+    
 
     
         
@@ -235,13 +237,57 @@
         
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/blog/2015/05/26/two-years-of-at-dumpmon/">2 Years of @dumpmon</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/dumpmon_header.png" alt="" class="pure-img" >
+
+
+<h3 id="introduction">Introduction</h3>
+
+<p>This post is long overdue.</p>
+
+<p>Back in May 2013, I <a href="http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html">released</a> a Twitter bot called <a href="http://twitter.com/dumpmon">@dumpmon</a> whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in <a href="http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/">news articles</a>, Defcon slides, and <a href="http://haveibeenpwned.com">HIBP</a>!</p>
+
+<p>After two years, it&rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.</p>
+
+<p><em>Note: This is a pretty long post, so feel free to skip <a href="#data">here</a> if you just want the data.</em></p>
+ <a class="read-more icon-standard" href="/blog/2015/05/26/two-years-of-at-dumpmon/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="http://jordan-wright.com/blog/tags/dumpmon/">#dumpmon</a>,
+            
+                <a href="http://jordan-wright.com/blog/tags/elk/">#elk</a>,
+            
+        
+        <time class="post-date" datetime="2015-05-26T00:00:00Z">
+            26 May 2015
+        </time>
+    </footer>
+</article>
+
+    
+        
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/blog/2015/05/14/how-tor-works-part-three-the-consensus/">How Tor Works Part Three - The Consensus</a></h2>
     </header>
     <section class="post-excerpt">
 	    <p><img src="/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:92f80a714c92adf518d9200d85295a2a">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Welcome to the third post in my series on how Tor works! In the <a href="/blog/categories/tor/">past two posts</a>, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.</p>
 
@@ -250,6 +296,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -279,13 +327,15 @@
 	    <p><img src="/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:8e4713039018ec25aef66173ac2e0c46">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Welcome back to my series on how Tor works! In the <a href="/blog/2015/02/28/how-tor-works-part-one/">last post</a>, we took a look at how Tor operates from a very high level. In this post, we&rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: <strong>bridges</strong>.</p>
  <a class="read-more icon-standard" href="/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -313,7 +363,7 @@
 	    <p><img src="/blog/images/headers/elk_results.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c2f7a687b0f5cbc5c5a21adfebefeddd">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">RCE vulnerability in Elasticsearch</a> to automatically download and run malware.</p>
 
@@ -324,6 +374,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -355,13 +407,15 @@
 	    <p><img src="/blog/images/headers/elastichoney.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c0ae86186de728bbad406ae19d00e422">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>I recently <a href="/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/">wrote</a> about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to <a href="http://github.com/jordan-wright/elastichoney">elastichoney</a>!</p>
  <a class="read-more icon-standard" href="/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -407,6 +461,8 @@
     <footer class="post-meta">
         
         
+
+        
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
         
@@ -435,7 +491,7 @@
 	    <p><img src="/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:b6a2f7f7305d0d4a88042f3de1458bb0">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.</p>
 
@@ -444,6 +500,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -471,7 +529,7 @@
 	    <p><img src="/blog/images/headers/gophish_purple.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:04122820eae1345d676d25dffa9afb36">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>It&rsquo;s been a busy couple of months!</p>
 
@@ -482,6 +540,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -511,7 +571,7 @@
 	    <p><img src="/blog/images/headers/web_scraping.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:fe91443da304f39c7fb3c4eaf276cfbc">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate <em>dramatically</em>. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.</p>
 
@@ -520,6 +580,8 @@
     </section>
     <footer class="post-meta">
         
+        
+
         
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
@@ -549,7 +611,7 @@
 	    <p><img src="/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" >
 
 
-<h3 id="introduction:c3e220fe137858e19964dc8e2605b764">Introduction</h3>
+<h3 id="introduction">Introduction</h3>
 
 <p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
 
@@ -559,6 +621,8 @@
     <footer class="post-meta">
         
         
+
+        
             <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
         
         
@@ -567,42 +631,6 @@
         
         <time class="post-date" datetime="2015-01-05T00:00:00Z">
             5 Jan 2015
-        </time>
-    </footer>
-</article>
-
-    
-        
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Why Deleting Sensitive Information from Github Doesn&#39;t Save You</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/harvest_github.png" alt="" class="pure-img" >
-
-
-<p>So you accidentally committed a password or API key to Github. <strong><em>Ouch.</em></strong></p>
-
-<p>&ldquo;No problem!&rdquo;, you think, &ldquo;I&rsquo;ll just follow Github&rsquo;s helpful information on <a href="https://help.github.com/articles/remove-sensitive-data/">how to delete sensitive information</a> and I&rsquo;ll be fine!&rdquo;</p>
-
-<p>Just today, I saw a <a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/">great article</a> detailing one developer&rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&rsquo;m going to show exactly how hackers <em>instantly</em> harvest information committed to public Github repositories, and why deleting this information doesn&rsquo;t solve the problem.</p>
- <a class="read-more icon-standard" href="/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-            <img class="author-thumb" src="http://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="http://jordan-wright.com/blog/tags/github/">#github</a>,
-            
-        
-        <time class="post-date" datetime="2014-12-30T00:00:00Z">
-            30 Dec 2014
         </time>
     </footer>
 </article>

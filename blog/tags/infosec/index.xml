@@ -26,7 +26,7 @@
 
 &lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;no-software-is-safe-or-why-your-vulnerability-doesn-t-need-a-logo:6bbaa6221bbe9c63cf0ea4cfd07b8866&#34;&gt;No Software is Safe, or Why Your Vulnerability Doesn&amp;rsquo;t Need a Logo&lt;/h3&gt;
+&lt;h3 id=&#34;no-software-is-safe-or-why-your-vulnerability-doesn-t-need-a-logo&#34;&gt;No Software is Safe, or Why Your Vulnerability Doesn&amp;rsquo;t Need a Logo&lt;/h3&gt;
 
 &lt;p&gt;Heartbleed and Shellshock were arguably two of the most critical vulnerabilities our industry has seen in a while. These vulnerabilities provided a stark reminder that - as the security community often quips - no software is safe. The importance and widespread use of both OpenSSL and Bash contributed to a large, immediate impact when the vulnerabilities were announced.&lt;/p&gt;
 
@@ -38,7 +38,7 @@
 
 &lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/router.png&#34;/&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;embedded-devices-hacking-like-it-s-1995:6bbaa6221bbe9c63cf0ea4cfd07b8866&#34;&gt;Embedded Devices: Hacking Like it&amp;rsquo;s 1995&lt;/h3&gt;
+&lt;h3 id=&#34;embedded-devices-hacking-like-it-s-1995&#34;&gt;Embedded Devices: Hacking Like it&amp;rsquo;s 1995&lt;/h3&gt;
 
 &lt;p&gt;While the (in)security of embedded devices such as SOHO routers isn&amp;rsquo;t particularly new, there were a substantial number of critical vulnerabilities recently released for these devices. These vulnerabilities includes &lt;a href=&#34;https://github.com/elvanderb/TCP-32764&#34;&gt;blatant&lt;/a&gt; &lt;a href=&#34;http://www.devttys0.com/2013/10/reverse-engineering-a-d-link-backdoor/&#34;&gt;backdoors&lt;/a&gt;, web-app security 101 &lt;a href=&#34;http://mis.fortunecook.ie/&#34;&gt;blunders&lt;/a&gt;, or just bad software.&lt;/p&gt;
 
@@ -50,7 +50,7 @@
 
 &lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/pos.png&#34;/&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;pos-software-pos:6bbaa6221bbe9c63cf0ea4cfd07b8866&#34;&gt;POS Software = POS&lt;/h3&gt;
+&lt;h3 id=&#34;pos-software-pos&#34;&gt;POS Software = POS&lt;/h3&gt;
 
 &lt;p&gt;Compromising Point-of-Sale (POS) devices became the new-hotness for cybercriminals this year. Notable breaches of retailers such as Target and Home Depot caused massive re-issuing of bank credit/debit cards, hefty financial losses, and resulted in some nice &lt;a href=&#34;http://cdn.arstechnica.net/wp-content/uploads/2014/12/document4.pdf&#34;&gt;class action complaint readings&lt;/a&gt;.&lt;/p&gt;
 
@@ -77,7 +77,7 @@
 
 &lt;p&gt;Don&amp;rsquo;t get me wrong - consumer malware families like Zeus will still have a place in the industry while there is money to be made in selling harvested information. However, I have no doubt that Target and Home Depot will only be the beginning of these retailer breaches, at least until chip-and-pin cards are the industry default.&lt;/p&gt;
 
-&lt;h3 id=&#34;conclusion:6bbaa6221bbe9c63cf0ea4cfd07b8866&#34;&gt;Conclusion&lt;/h3&gt;
+&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
 &lt;p&gt;It&amp;rsquo;s clear that our industry is showing no signs of slowing down (and hey, I &lt;span&gt;&lt;i class=&#34;fa fa-heart-o&#34;&gt;&lt;/i&gt; job security&lt;/span&gt;). However, we need to push forward into the next year with the mindset that &lt;em&gt;we&amp;rsquo;re still losing&lt;/em&gt;. This next year will bring more breaches, more vulnerabilities, and more lessons to be learned.&lt;/p&gt;
 
