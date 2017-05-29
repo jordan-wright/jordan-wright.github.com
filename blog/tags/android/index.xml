@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Android on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/android/</link>
+    <link>https://jordan-wright.com/blog/tags/android/</link>
     <description>Recent content in Android on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 10 Aug 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/android/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Decompiling Android Apps the Easy Way</title>
-      <link>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
+      <link>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
       <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
+      <guid>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;

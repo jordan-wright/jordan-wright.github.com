@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/post/</link>
+    <link>https://jordan-wright.com/blog/post/</link>
     <description>Recent content in Posts on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 12 Oct 2016 18:57:33 -0500</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Mapping the Clinton Emails</title>
-      <link>http://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</link>
+      <link>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</link>
       <pubDate>Wed, 12 Oct 2016 18:57:33 -0500</pubDate>
       
-      <guid>http://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/clinton-emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/clinton-emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;Back in March, &lt;a href=&#34;https://wikileaks.org/clinton-emails/&#34;&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;
@@ -32,7 +32,7 @@
 
 &lt;p&gt;Here&amp;rsquo;s the final result (click for higher res)!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails_large.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails_large.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;You can find all the code and raw data files &lt;a href=&#34;https://github.com/jordan-wright/clinton-emails&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
@@ -43,13 +43,13 @@
     
     <item>
       <title>Analyzing 5 Years of Police Call Data</title>
-      <link>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
+      <link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
       <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
       
-      <guid>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
+      <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
@@ -66,7 +66,7 @@
 
 &lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Each call record has the following details:&lt;/p&gt;
 
@@ -115,7 +115,7 @@
 
 &lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:&lt;/p&gt;
 
@@ -123,40 +123,40 @@
 
 &lt;p&gt;I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &amp;ldquo;theft&amp;rdquo; was consistently the highest:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &amp;ldquo;crimes against persons&amp;rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;When Does Crime Happen?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;This was an interesting one, since I couldn&amp;rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &amp;ldquo;Crimes Against Persons&amp;rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Traffic Related Calls&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The calls labelled as &amp;ldquo;traffic related&amp;rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Looking at the top addresses for traffic stops and DWI&amp;rsquo;s, we see that downtown is the place where most incidents happen:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Other Calls&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The &amp;ldquo;other&amp;rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &amp;ldquo;fireworks disturbance&amp;rdquo; calls always spikes around July 4th, New Year&amp;rsquo;s Eve, and my birthday &lt;sup&gt;not really&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Issues with Geocoding&lt;/strong&gt;&lt;/p&gt;
 
@@ -174,7 +174,7 @@
 
 &lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.&lt;/p&gt;
 
@@ -182,7 +182,7 @@
 
 &lt;p&gt;Didn&amp;rsquo;t think so.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
 
 &lt;br&gt;&lt;/p&gt;
 
@@ -202,13 +202,13 @@
     
     <item>
       <title>I Automated Infosec &#34;Thought Leadership&#34;, and it&#39;s Hilarious</title>
-      <link>http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link>
+      <link>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link>
       <pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate>
       
-      <guid>http://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
+      <guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
       <description>
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 &lt;br/&gt;&lt;/p&gt;
 
@@ -335,18 +335,18 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
     
     <item>
       <title>What Happens When Tor Exit Nodes Break Bad?</title>
-      <link>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
+      <link>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
       <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
+      <guid>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;When &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
+&lt;p&gt;When &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
 
 &lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
 
@@ -390,7 +390,7 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
 
 &lt;p&gt;While most Tor exit nodes (from what we can tell) play nice, it&amp;rsquo;s not terribly uncommon to find some that don&amp;rsquo;t. Remember all those theoretical attacks we just talked about? &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;They&lt;/a&gt; &lt;a href=&#34;http://packetstorm.foofus.com/papers/attack/jackin-tor.txt&#34;&gt;actually&lt;/a&gt; &lt;a href=&#34;http://www.leviathansecurity.com/blog/the-case-of-the-modified-binaries/&#34;&gt;happened&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;To address the problem of hunting down bad exit nodes, a slick system called &lt;a href=&#34;https://github.com/NullHypothesis/exitmap&#34;&gt;exitmap&lt;/a&gt; was created.&lt;/p&gt;
 
@@ -425,13 +425,13 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
     
     <item>
       <title>How to Download a List of All Registered Domain Names</title>
-      <link>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
+      <link>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
       <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
+      <guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -497,7 +497,7 @@ ftp&amp;gt; ls
 
 &lt;p&gt;CZDS &amp;ldquo;provides a centralized access point&amp;hellip; to the Zone Files provided by participating Top Level Domains&amp;rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;When you get access to a particular zone file, you&amp;rsquo;re able to download it via &lt;a href=&#34;https://czds.icann.org/en/help/api-access&#34;&gt;ICANN&amp;rsquo;s API&lt;/a&gt;. They even provide a &lt;a href=&#34;https://github.com/fourkitchens/czdap-tools&#34;&gt;Python client&lt;/a&gt; that can be used to bulk download all the zone files you have access to.&lt;/p&gt;
 
@@ -603,13 +603,13 @@ However, while this is an infosec blog, zone files can be used for far more than
     
     <item>
       <title>Gophish Update - Importing Sites and Emails</title>
-      <link>http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link>
+      <link>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link>
       <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
+      <guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -620,11 +620,11 @@ However, while this is an infosec blog, zone files can be used for far more than
 
 &lt;h3 id=&#34;importing-sites&#34;&gt;Importing Sites&lt;/h3&gt;
 
-&lt;p&gt;Attackers often &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/07/30/how-to-hunt-down-phishing-kits/&#34;&gt;create phishing kits&lt;/a&gt; containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.&lt;/p&gt;
+&lt;p&gt;Attackers often &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/07/30/how-to-hunt-down-phishing-kits/&#34;&gt;create phishing kits&lt;/a&gt; containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.&lt;/p&gt;
 
 &lt;p&gt;Let&amp;rsquo;s take a look at how easy it is to import a site using gophish:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_site.gif&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_site.gif&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;This works by grabbing the HTML content of the site and adding a &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; tag so that relative resources (like CSS, JS, etc.) are loaded from the site itself.&lt;/p&gt;
 
@@ -638,7 +638,7 @@ However, while this is an infosec blog, zone files can be used for far more than
 
 &lt;p&gt;Here&amp;rsquo;s an example showing how we can import an email from Gmail:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_email.gif&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_email.gif&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;This functionality is provided by the Go &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt; library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;filing an issue!&lt;/a&gt;&lt;/p&gt;
 
@@ -652,11 +652,11 @@ However, while this is an infosec blog, zone files can be used for far more than
     
     <item>
       <title>CSAW CTF 2015 - Forensics 100 Flash Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</link>
       <pubDate>Tue, 22 Sep 2015 20:51:43 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.&lt;/p&gt;
@@ -709,11 +709,11 @@ jordan@temp:/mnt$ ls
     
     <item>
       <title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
       <pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
@@ -723,7 +723,7 @@ jordan@temp:/mnt$ ls
 
 &lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&amp;rsquo;re welcome) and what appears to be the output of the script:&lt;/p&gt;
 
@@ -877,16 +877,16 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
     
     <item>
       <title>CSAW CTF 2015 - Web 200 Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
       <pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see there&amp;rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&amp;rsquo;s view the page source. Opening up the source, we see the following javascript snippet:&lt;/p&gt;
 
@@ -982,7 +982,7 @@ index.html  js         sign_up.php
 
 &lt;p&gt;The SQL statement is done via a &lt;code&gt;LIKE&lt;/code&gt; condition. This allows us to use the &lt;code&gt;%&lt;/code&gt; character as a wildcard. So, by trying the username &lt;code&gt;%&lt;/code&gt;, we should get the username from the database.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Awesome - our username is &lt;code&gt;~~FLAG~~&lt;/code&gt;. Now we need to find the password.&lt;/p&gt;
 
@@ -1096,11 +1096,11 @@ for i in range(32):
     
     <item>
       <title>CSAW CTF 2015 - Web 600 Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
       <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;
@@ -1123,13 +1123,13 @@ flag{at_least_it_isnt_php}
     
     <item>
       <title>2 Years of @dumpmon</title>
-      <link>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
+      <link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
       <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1152,7 +1152,7 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;However, I eventually got everything up and running with copies of the data going to both MongoDB (just in case), as well as ELK. Here&amp;rsquo;s a partial screenshot of the dashboard:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
 
@@ -1183,39 +1183,39 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;As you can see above, the number of followers has steadily increased over time. While Twitter won&amp;rsquo;t give me trends for the entire time dumpmon has been running, here is some data for the last 28 days:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;here-have-some-data&#34;&gt;Here, Have Some Data&lt;/h3&gt;
 
-&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
 
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
 &lt;strong&gt;Tweet Archive&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
 
 &lt;p&gt;Specifically, the &lt;code&gt;tweets.csv&lt;/code&gt; file in this archive contains the following fields:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
 &lt;strong&gt;Tweet Analytics&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;Tweet id, Tweet permalink, Tweet text, time, impressions, engagements, engagement rate, retweets, replies, favorites, user profile clicks, url clicks, hashtag clicks, detail expands, permalink clicks
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 
@@ -1233,18 +1233,18 @@ flag{at_least_it_isnt_php}
     
     <item>
       <title>How Tor Works Part Three - The Consensus</title>
-      <link>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
+      <link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
       <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
 
 &lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
 
@@ -1254,13 +1254,13 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
 
 &lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
 
 &lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;reaching-a-consensus&#34;&gt;Reaching a Consensus&lt;/h3&gt;
 
@@ -1289,7 +1289,7 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;
@@ -1306,18 +1306,18 @@ flag{at_least_it_isnt_php}
     
     <item>
       <title>How Tor Works: Part Two - Relays vs. Bridges</title>
-      <link>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
+      <link>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
       <pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;relay-recap&#34;&gt;Relay Recap&lt;/h3&gt;
 
@@ -1378,7 +1378,7 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 
@@ -1388,20 +1388,20 @@ flag{at_least_it_isnt_php}
     
     <item>
       <title>60 Days of Watching Hackers Attack Elasticsearch</title>
-      <link>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
+      <link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
       <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
+&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
 
-&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
+&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
 
 &lt;p&gt;Here are the results.&lt;/p&gt;
 
@@ -1411,11 +1411,11 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;So far, I&amp;rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;The second thing that I noticed was how fast the majority of exploit attempts died down. Here&amp;rsquo;s a histogram of attack attempts since the sensors have been running:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
 
@@ -1434,7 +1434,7 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
 
-&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;http://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
+&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;https://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
     &amp;quot;source&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
@@ -1486,18 +1486,18 @@ flag{at_least_it_isnt_php}
     
     <item>
       <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
-      <link>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
+      <link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
       <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
+      <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 

@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Csaw2015 on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/csaw2015/</link>
+    <link>https://jordan-wright.com/blog/tags/csaw2015/</link>
     <description>Recent content in Csaw2015 on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 22 Sep 2015 19:05:18 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/csaw2015/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/csaw2015/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
       <pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
@@ -25,7 +25,7 @@
 
 &lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&amp;rsquo;re welcome) and what appears to be the output of the script:&lt;/p&gt;
 
@@ -179,16 +179,16 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
     
     <item>
       <title>CSAW CTF 2015 - Web 200 Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
       <pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see there&amp;rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&amp;rsquo;s view the page source. Opening up the source, we see the following javascript snippet:&lt;/p&gt;
 
@@ -284,7 +284,7 @@ index.html  js         sign_up.php
 
 &lt;p&gt;The SQL statement is done via a &lt;code&gt;LIKE&lt;/code&gt; condition. This allows us to use the &lt;code&gt;%&lt;/code&gt; character as a wildcard. So, by trying the username &lt;code&gt;%&lt;/code&gt;, we should get the username from the database.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
 
 &lt;p&gt;Awesome - our username is &lt;code&gt;~~FLAG~~&lt;/code&gt;. Now we need to find the password.&lt;/p&gt;
 
@@ -398,11 +398,11 @@ for i in range(32):
     
     <item>
       <title>CSAW CTF 2015 - Web 600 Writeup</title>
-      <link>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
+      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
       <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
-      <description>&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;

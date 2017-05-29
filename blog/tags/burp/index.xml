@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Burp on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/burp/</link>
+    <link>https://jordan-wright.com/blog/tags/burp/</link>
     <description>Recent content in Burp on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 05 Nov 2013 21:50:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/burp/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/burp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>How to Pentest iPhone Apps with Burp</title>
-      <link>http://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</link>
+      <link>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</link>
       <pubDate>Tue, 05 Nov 2013 21:50:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid>
+      <guid>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -30,46 +30,46 @@
 
 &lt;p&gt;First, open up Burp, select the &amp;ldquo;Proxy&amp;rdquo; tab, and select the &amp;ldquo;Options&amp;rdquo; sub-tab. Then, under &amp;ldquo;Proxy-Listeners&amp;rdquo;, highlight the interface and select &amp;ldquo;Edit&amp;rdquo;. Then, open the &amp;ldquo;Certificate&amp;rdquo; sub-tab, and make sure it is set to &amp;ldquo;Generate CA-signed per-host certificate&amp;rdquo;. Since we will install the CA certificate on our iPhone, any certificate signed by Burp will be trusted.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34;/&gt;&lt;/a&gt;
+&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Next, open up a desktop browser and set the proxy settings to use Burp. In this example, I&amp;rsquo;ll use Chrome. Change your settings so that the browser uses Burp as shown below (IP address and port may differ).&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Then, go to a site using HTTPS (ie: &lt;a href=&#34;https://www.google.com&#34;&gt;google.com&lt;/a&gt;. Once the page comes up, click the icon in the left side of the address bar, select the &amp;ldquo;Certificate&amp;rdquo; sub-tab, and make sure that the certificate is signed by &amp;ldquo;PortSwigger CA&amp;rdquo;.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Next, click &amp;ldquo;Certificate Information&amp;rdquo;, and select &amp;ldquo;Certification Path&amp;rdquo; in the window that appears.&lt;/p&gt;
 
 &lt;p&gt;Highlight the root &lt;strong&gt;PortSwigger CA certificate&lt;/strong&gt; and click &amp;ldquo;View Certificate&amp;rdquo;. Then, open up the &amp;ldquo;Details&amp;rdquo; tab and click &amp;ldquo;Copy to File&amp;rdquo;. Follow the Certificate Export wizard, making sure to save the certificate in DER encoded binary X.509 (.CER) format.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Once the certificate has been exported, we need to get it onto the iPhone. You can email it to yourself and open it in the iPhone, but I just chose to start a simple Python web server so that I could browse to the certificate as follows:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;After opening the certificate link in Safari, the following screen will be presented asking you if you want to install the certificate. Click &amp;ldquo;Install&amp;rdquo;, enter your PIN, and you&amp;rsquo;re all set!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34;/&gt;&lt;/a&gt;
+&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;setting-the-iphone-proxy-settings&#34;&gt;Setting the iPhone Proxy Settings&lt;/h3&gt;
 
 &lt;p&gt;The last thing you will want to do is to set your iPhone to use the Burp proxy. You can do this by going into your wireless network settings and selecting &amp;ldquo;Manual&amp;rdquo; under &amp;ldquo;HTTP PROXY&amp;rdquo;. Then, just fill in the details!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;testing&#34;&gt;Testing&lt;/h3&gt;
 
 &lt;p&gt;You can test to see if this works by navigating to Google in Safari. If you don&amp;rsquo;t receive an error, and you can intercept the request in Burp, then you&amp;rsquo;re all set!&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
 

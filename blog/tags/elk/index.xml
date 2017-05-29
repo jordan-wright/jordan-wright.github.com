@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Elk on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/elk/</link>
+    <link>https://jordan-wright.com/blog/tags/elk/</link>
     <description>Recent content in Elk on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/elk/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/elk/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Analyzing 5 Years of Police Call Data</title>
-      <link>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
+      <link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
       <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
       
-      <guid>http://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
+      <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
@@ -34,7 +34,7 @@
 
 &lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Each call record has the following details:&lt;/p&gt;
 
@@ -83,7 +83,7 @@
 
 &lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:&lt;/p&gt;
 
@@ -91,40 +91,40 @@
 
 &lt;p&gt;I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &amp;ldquo;theft&amp;rdquo; was consistently the highest:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &amp;ldquo;crimes against persons&amp;rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;When Does Crime Happen?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;This was an interesting one, since I couldn&amp;rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &amp;ldquo;Crimes Against Persons&amp;rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Traffic Related Calls&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The calls labelled as &amp;ldquo;traffic related&amp;rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Looking at the top addresses for traffic stops and DWI&amp;rsquo;s, we see that downtown is the place where most incidents happen:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Other Calls&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The &amp;ldquo;other&amp;rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &amp;ldquo;fireworks disturbance&amp;rdquo; calls always spikes around July 4th, New Year&amp;rsquo;s Eve, and my birthday &lt;sup&gt;not really&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Issues with Geocoding&lt;/strong&gt;&lt;/p&gt;
 
@@ -142,7 +142,7 @@
 
 &lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.&lt;/p&gt;
 
@@ -150,7 +150,7 @@
 
 &lt;p&gt;Didn&amp;rsquo;t think so.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
 
 &lt;br&gt;&lt;/p&gt;
 
@@ -170,13 +170,13 @@
     
     <item>
       <title>2 Years of @dumpmon</title>
-      <link>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
+      <link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
       <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -199,7 +199,7 @@
 
 &lt;p&gt;However, I eventually got everything up and running with copies of the data going to both MongoDB (just in case), as well as ELK. Here&amp;rsquo;s a partial screenshot of the dashboard:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
 
@@ -230,39 +230,39 @@
 
 &lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;As you can see above, the number of followers has steadily increased over time. While Twitter won&amp;rsquo;t give me trends for the entire time dumpmon has been running, here is some data for the last 28 days:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;here-have-some-data&#34;&gt;Here, Have Some Data&lt;/h3&gt;
 
-&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
 
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
 &lt;strong&gt;Tweet Archive&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
 
 &lt;p&gt;Specifically, the &lt;code&gt;tweets.csv&lt;/code&gt; file in this archive contains the following fields:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
+&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
 &lt;strong&gt;Tweet Analytics&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;Tweet id, Tweet permalink, Tweet text, time, impressions, engagements, engagement rate, retweets, replies, favorites, user profile clicks, url clicks, hashtag clicks, detail expands, permalink clicks
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
 

@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linkedin on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/linkedin/</link>
+    <link>https://jordan-wright.com/blog/tags/linkedin/</link>
     <description>Recent content in Linkedin on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Oct 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Phishing with Linkedin&#39;s Intro</title>
-      <link>http://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link>
+      <link>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link>
       <pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
+      <guid>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;I would also like to thank Linkedin&amp;rsquo;s security team for their quick and effective response to these findings.&lt;/em&gt;&lt;/p&gt;
 
@@ -76,7 +76,7 @@
 
 &lt;p&gt;Here&amp;rsquo;s a diagram of how this works:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now that we have the username and password used for this mail account, let&amp;rsquo;s grab the first email and see what content Linkedin&amp;rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.&lt;/p&gt;
 
@@ -147,11 +147,11 @@ email_content_here
 
 &lt;p&gt;I&amp;rsquo;ve taken the liberty of setting up a basic PoC &lt;a href=&#34;https://gist.github.com/jordan-wright/7189765#file-template-html&#34;&gt;template&lt;/a&gt; for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now - it works. Let&amp;rsquo;s see what it looks like if I spoof the example from Linkedin&amp;rsquo;s original post, David (pardon the non-IOS7 - I don&amp;rsquo;t see any major IOS7 styling issues which would cause much trouble):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Here&amp;rsquo;s what the details look like when I open the Intro tab (they are customizable as well - I left them as me to show that I really do control the content):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.&lt;/p&gt;
 
@@ -159,7 +159,7 @@ email_content_here
 
 &lt;p&gt;While Linkedin Intro &lt;em&gt;seems&lt;/em&gt; like it would be useful on the surface - the security risks of using it are simply too high. With that being said, as a social engineer, &lt;strong&gt;&lt;em&gt;I hope my targets use Intro&lt;/em&gt;&lt;/strong&gt;. By giving users a false sense of security when they see the Intro information in an email, Linkedin has made my pretext much stronger and the SE engagement that much easier.&lt;/p&gt;
 
-&lt;p&gt;I have yet to get comments setup on the new blog, but &lt;a href=&#34;http://jordan-wright.com/blog/contact&#34;&gt;shoot me an email&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
+&lt;p&gt;I have yet to get comments setup on the new blog, but &lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;shoot me an email&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
 
 &lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 </description>

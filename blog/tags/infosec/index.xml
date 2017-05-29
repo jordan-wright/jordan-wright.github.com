@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Infosec on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/infosec/</link>
+    <link>https://jordan-wright.com/blog/tags/infosec/</link>
     <description>Recent content in Infosec on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 28 Dec 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>What InfoSec Learned in 2014</title>
-      <link>http://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link>
+      <link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link>
       <pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
+      <guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;&lt;em&gt;Busy year.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;no-software-is-safe-or-why-your-vulnerability-doesn-t-need-a-logo&#34;&gt;No Software is Safe, or Why Your Vulnerability Doesn&amp;rsquo;t Need a Logo&lt;/h3&gt;
 
@@ -36,7 +36,7 @@
 
 &lt;p&gt;I have no doubt that 2015 will bring with it more critical vulnerabilities in well-known, established pieces of software. I only hope that we can use the lessons-learned from Heartbleed and Shellshock to mature as an industry and approach the marketing and distribution of these details in a responsible, controlled way. Not every vulnerability needs a full marketing team behind it.&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/router.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/router.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;embedded-devices-hacking-like-it-s-1995&#34;&gt;Embedded Devices: Hacking Like it&amp;rsquo;s 1995&lt;/h3&gt;
 
@@ -48,7 +48,7 @@
 
 &lt;p&gt;Here&amp;rsquo;s hoping for the best.&lt;/p&gt;
 
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;http://jordan-wright.com/blog/blog/images/blog/infosec_2014/pos.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/pos.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;pos-software-pos&#34;&gt;POS Software = POS&lt;/h3&gt;
 

@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tutorial on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/tutorial/</link>
+    <link>https://jordan-wright.com/blog/tags/tutorial/</link>
     <description>Recent content in Tutorial on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 30 Sep 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>How to Download a List of All Registered Domain Names</title>
-      <link>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
+      <link>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
       <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
+      <guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -83,7 +83,7 @@ ftp&amp;gt; ls
 
 &lt;p&gt;CZDS &amp;ldquo;provides a centralized access point&amp;hellip; to the Zone Files provided by participating Top Level Domains&amp;rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;When you get access to a particular zone file, you&amp;rsquo;re able to download it via &lt;a href=&#34;https://czds.icann.org/en/help/api-access&#34;&gt;ICANN&amp;rsquo;s API&lt;/a&gt;. They even provide a &lt;a href=&#34;https://github.com/fourkitchens/czdap-tools&#34;&gt;Python client&lt;/a&gt; that can be used to bulk download all the zone files you have access to.&lt;/p&gt;
 
@@ -189,13 +189,13 @@ However, while this is an infosec blog, zone files can be used for far more than
     
     <item>
       <title>Decompiling Android Apps the Easy Way</title>
-      <link>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
+      <link>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
       <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
+      <guid>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;

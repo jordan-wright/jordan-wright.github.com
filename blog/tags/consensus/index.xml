@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Consensus on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/consensus/</link>
+    <link>https://jordan-wright.com/blog/tags/consensus/</link>
     <description>Recent content in Consensus on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 14 May 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/consensus/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/consensus/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>How Tor Works Part Three - The Consensus</title>
-      <link>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
+      <link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
       <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
 
 &lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
 
@@ -32,13 +32,13 @@
 
 &lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
 
 &lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
 
 &lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;reaching-a-consensus&#34;&gt;Reaching a Consensus&lt;/h3&gt;
 
@@ -67,7 +67,7 @@
 
 &lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;

@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tor on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/tor/</link>
+    <link>https://jordan-wright.com/blog/tags/tor/</link>
     <description>Recent content in Tor on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 05 Apr 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/tor/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/tor/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>What Happens When Tor Exit Nodes Break Bad?</title>
-      <link>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
+      <link>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
       <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
+      <guid>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;When &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
+&lt;p&gt;When &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
 
 &lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
 
@@ -66,7 +66,7 @@
 
 &lt;p&gt;While most Tor exit nodes (from what we can tell) play nice, it&amp;rsquo;s not terribly uncommon to find some that don&amp;rsquo;t. Remember all those theoretical attacks we just talked about? &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;They&lt;/a&gt; &lt;a href=&#34;http://packetstorm.foofus.com/papers/attack/jackin-tor.txt&#34;&gt;actually&lt;/a&gt; &lt;a href=&#34;http://www.leviathansecurity.com/blog/the-case-of-the-modified-binaries/&#34;&gt;happened&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;To address the problem of hunting down bad exit nodes, a slick system called &lt;a href=&#34;https://github.com/NullHypothesis/exitmap&#34;&gt;exitmap&lt;/a&gt; was created.&lt;/p&gt;
 
@@ -101,18 +101,18 @@
     
     <item>
       <title>How Tor Works Part Three - The Consensus</title>
-      <link>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
+      <link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
       <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
 
 &lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
 
@@ -122,13 +122,13 @@
 
 &lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
 
-&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
+&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
 
 &lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
 
 &lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;reaching-a-consensus&#34;&gt;Reaching a Consensus&lt;/h3&gt;
 
@@ -157,7 +157,7 @@
 
 &lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;
@@ -174,18 +174,18 @@
     
     <item>
       <title>How Tor Works: Part Two - Relays vs. Bridges</title>
-      <link>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
+      <link>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
       <pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;relay-recap&#34;&gt;Relay Recap&lt;/h3&gt;
 
@@ -246,7 +246,7 @@
 
 &lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 
@@ -256,13 +256,13 @@
     
     <item>
       <title>How Tor Works: Part One</title>
-      <link>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
+      <link>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
       <pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
+      <guid>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1319,7 +1319,7 @@ Finally, this encrypted data is encrypted once more in such a way that only the 
 
 &lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/&#34;&gt;Part two - &amp;ldquo;Relays vs. Bridges&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/&#34;&gt;Part two - &amp;ldquo;Relays vs. Bridges&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
 
 &lt;div&gt;
 &lt;script&gt;
@@ -1333,13 +1333,13 @@ e= new Vivus(&#39;network&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: 
     
     <item>
       <title>What Happens if Tor Directory Authorities are Seized?</title>
-      <link>http://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</link>
+      <link>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</link>
       <pubDate>Fri, 19 Dec 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</guid>
+      <guid>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/tor_seized.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/tor_seized.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1387,19 +1387,19 @@ e= new Vivus(&#39;network&#39;, {type: &#39;oneByOne&#39;, duration: 30, start: 
 
 &lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
 
-&lt;p&gt;*&lt;em&gt;It is worth noting that I am by no means a Tor expert, and am relying on knowledge gained from &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/10/06/creating-tor-hidden-services-with-python/&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://raidersec.blogspot.com/2013/09/mapping-tor-relays-and-exit-nodes.html&#34;&gt;research&lt;/a&gt; into the Tor network structure.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;em&gt;It is worth noting that I am by no means a Tor expert, and am relying on knowledge gained from &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/10/06/creating-tor-hidden-services-with-python/&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://raidersec.blogspot.com/2013/09/mapping-tor-relays-and-exit-nodes.html&#34;&gt;research&lt;/a&gt; into the Tor network structure.&lt;/em&gt;&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Creating Tor Hidden Services with Python</title>
-      <link>http://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
+      <link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
       <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
+      <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1510,7 +1510,7 @@ if __name__ == &amp;quot;__main__&amp;quot;:
  * Running on http://127.0.0.1:5000/
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/hidden_services/screenshot.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/hidden_services/screenshot.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;caveats&#34;&gt;Caveats&lt;/h3&gt;
 

@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Wireless on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/wireless/</link>
+    <link>https://jordan-wright.com/blog/tags/wireless/</link>
     <description>Recent content in Wireless on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 15 Nov 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/wireless/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/wireless/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
-      <link>http://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
+      <link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
       <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
+      <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -36,7 +36,7 @@
 
 &lt;p&gt;Let&amp;rsquo;s see what this would look like:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;So, now that we know how the attack works, let&amp;rsquo;s automate it!&lt;/p&gt;
 
@@ -125,8 +125,8 @@ sniff(prn=lambda x: send_response(x),
 
 &lt;p&gt;Here&amp;rsquo;s a screenshot of it in action (I am using my iPhone as the victim):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
+&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;conclusion-future-improvements&#34;&gt;Conclusion &amp;amp; Future Improvements&lt;/h3&gt;
 

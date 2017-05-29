@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Dynamic Analysis on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/dynamic-analysis/</link>
+    <link>https://jordan-wright.com/blog/tags/dynamic-analysis/</link>
     <description>Recent content in Dynamic Analysis on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 09 Aug 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/dynamic-analysis/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/dynamic-analysis/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Reverse Engineering the We Heart It API</title>
-      <link>http://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link>
+      <link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link>
       <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid>
+      <guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -30,7 +30,7 @@
 
 &lt;h3 id=&#34;dynamic-analysis&#34;&gt;Dynamic Analysis&lt;/h3&gt;
 
-&lt;p&gt;Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By &lt;a href=&#34;http://jordan-wright.com/blog/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;intercepting traffic using a proxy&lt;/a&gt;, we can easily analyze the structure of requests/responses in use by the application.&lt;/p&gt;
+&lt;p&gt;Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By &lt;a href=&#34;https://jordan-wright.com/blog/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;intercepting traffic using a proxy&lt;/a&gt;, we can easily analyze the structure of requests/responses in use by the application.&lt;/p&gt;
 
 &lt;h4 id=&#34;registration-authentication&#34;&gt;Registration &amp;amp; Authentication&lt;/h4&gt;
 
@@ -143,7 +143,7 @@ Authorization: Bearer [redacted]
 
 &lt;h3 id=&#34;static-analysis&#34;&gt;Static Analysis&lt;/h3&gt;
 
-&lt;p&gt;Now that we have a feel of how the application operates, let&amp;rsquo;s verify our findings by &lt;a href=&#34;http://jordan-wright.com/blog/blog/2014/08/10/decompiling-android-apps-the-easy-way/&#34;&gt;decompiling the Android app&lt;/a&gt; and doing some static analysis.&lt;/p&gt;
+&lt;p&gt;Now that we have a feel of how the application operates, let&amp;rsquo;s verify our findings by &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/08/10/decompiling-android-apps-the-easy-way/&#34;&gt;decompiling the Android app&lt;/a&gt; and doing some static analysis.&lt;/p&gt;
 
 &lt;h4 id=&#34;app-structure&#34;&gt;App Structure&lt;/h4&gt;
 

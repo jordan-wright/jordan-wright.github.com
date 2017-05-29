@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Github on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/github/</link>
+    <link>https://jordan-wright.com/blog/tags/github/</link>
     <description>Recent content in Github on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Dec 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Why Deleting Sensitive Information from Github Doesn&#39;t Save You</title>
-      <link>http://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link>
+      <link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link>
       <pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
+      <guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;So you accidentally committed a password or API key to Github. &lt;strong&gt;&lt;em&gt;Ouch.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
@@ -44,7 +44,7 @@
 
 &lt;p&gt;Consider the email address used to create a Github account, or commit a code change. Both of these actions created an event that was harvested by GHTorrent. Here&amp;rsquo;s an example showing the details of a particularly &lt;a href=&#34;https://github.com/jordan-wright&#34;&gt;talented developer&lt;/a&gt;:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/harvest_github/db.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/harvest_github/db.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;Currently, it looks like there are about 4.7 million accounts cached in GHTorrent, with over 3.4 million having a non-null email address. That&amp;rsquo;s a lot of email addresses.&lt;/p&gt;
 

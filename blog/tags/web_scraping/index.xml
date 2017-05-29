@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Web_scraping on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/web_scraping/</link>
+    <link>https://jordan-wright.com/blog/tags/web_scraping/</link>
     <description>Recent content in Web_scraping on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 21 Feb 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/web_scraping/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/web_scraping/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Web Scraping Hotel Prices for Fun and Savings</title>
-      <link>http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
+      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
       <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
+      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -128,7 +128,7 @@ if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip()
 
 &lt;p&gt;Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/web scraping/rates.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/web scraping/rates.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.&lt;/p&gt;
 </description>

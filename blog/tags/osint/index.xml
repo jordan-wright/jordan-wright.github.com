@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Osint on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/osint/</link>
+    <link>https://jordan-wright.com/blog/tags/osint/</link>
     <description>Recent content in Osint on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 14 Oct 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/osint/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/osint/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Automated Social Engineering Recon Using Rapportive</title>
-      <link>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
+      <link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
       <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
+      <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -36,7 +36,7 @@
 
 &lt;p&gt;Here are the requests made when using the extension:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&amp;rsquo;s &lt;a href=&#34;https://developers.google.com/accounts/docs/OpenID&#34;&gt;OpenID&lt;/a&gt;. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&amp;rsquo;ve only removed unneccessary data for brevity):&lt;/p&gt;
 
@@ -91,7 +91,7 @@
 
 &lt;p&gt;Let&amp;rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see an interesting header being sent with the request titled &amp;ldquo;X-Session-Token&amp;rdquo;. It turns out that &lt;strong&gt;the entire authentication of the request relies on sending this token&lt;/strong&gt;. We can test this using an API console like &lt;a href=&#34;https://apigee.com/console/others&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
 

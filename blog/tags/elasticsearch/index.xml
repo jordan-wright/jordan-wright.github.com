@@ -2,29 +2,29 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Elasticsearch on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/elasticsearch/</link>
+    <link>https://jordan-wright.com/blog/tags/elasticsearch/</link>
     <description>Recent content in Elasticsearch on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 30 Apr 2015 20:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/elasticsearch/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>60 Days of Watching Hackers Attack Elasticsearch</title>
-      <link>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
+      <link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
       <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
+      <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
+&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
 
-&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
+&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
 
 &lt;p&gt;Here are the results.&lt;/p&gt;
 
@@ -34,11 +34,11 @@
 
 &lt;p&gt;So far, I&amp;rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;The second thing that I noticed was how fast the majority of exploit attempts died down. Here&amp;rsquo;s a histogram of attack attempts since the sensors have been running:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
 
@@ -57,7 +57,7 @@
 
 &lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
 
-&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;http://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
+&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;https://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
     &amp;quot;source&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
@@ -109,18 +109,18 @@
     
     <item>
       <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
-      <link>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
+      <link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
       <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
+      <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 
@@ -179,13 +179,13 @@
     
     <item>
       <title>Remote Code Execution in Elasticsearch - CVE-2015-1427</title>
-      <link>http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link>
+      <link>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link>
       <pubDate>Sun, 08 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid>
+      <guid>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elk_rce.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_rce.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;blockquote&gt;
@@ -284,7 +284,7 @@
 
 &lt;p&gt;Vulnerabilities can often be reverse-engineered by inspecting the patches since the previous release. The commit that we will look at is &lt;a href=&#34;https://github.com/elasticsearch/elasticsearch/commit/68c4a6201e6c889b272c1b64550237fe6d172b47&#34;&gt;here&lt;/a&gt;. The changes in this commit give us some hints about how we can exploit the vulnerability:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/elk/rce.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elk/rce.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;This makes it pretty clear that we can probably do something with the &lt;code&gt;.class&lt;/code&gt; and &lt;code&gt;.forName()&lt;/code&gt; method calls. These methods, chained together, allow us to take one package class (such as one found in the whitelist) and use it to load a reference to a completely separate class (such as &lt;code&gt;java.lang.Runtime&lt;/code&gt;) via reflection.&lt;/p&gt;
 

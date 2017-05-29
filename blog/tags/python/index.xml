@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Python on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/python/</link>
+    <link>https://jordan-wright.com/blog/tags/python/</link>
     <description>Recent content in Python on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 21 Feb 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Web Scraping Hotel Prices for Fun and Savings</title>
-      <link>http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
+      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
       <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
+      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -128,7 +128,7 @@ if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip()
 
 &lt;p&gt;Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/web scraping/rates.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/web scraping/rates.png&#34;/&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.&lt;/p&gt;
 </description>
@@ -136,13 +136,13 @@ if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip()
     
     <item>
       <title>Creating Tor Hidden Services with Python</title>
-      <link>http://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
+      <link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
       <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
+      <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -253,7 +253,7 @@ if __name__ == &amp;quot;__main__&amp;quot;:
  * Running on http://127.0.0.1:5000/
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/hidden_services/screenshot.png&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/hidden_services/screenshot.png&#34;/&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;caveats&#34;&gt;Caveats&lt;/h3&gt;
 
@@ -271,13 +271,13 @@ if __name__ == &amp;quot;__main__&amp;quot;:
     
     <item>
       <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
-      <link>http://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
+      <link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
       <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
+      <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -296,7 +296,7 @@ if __name__ == &amp;quot;__main__&amp;quot;:
 
 &lt;p&gt;Let&amp;rsquo;s see what this would look like:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;So, now that we know how the attack works, let&amp;rsquo;s automate it!&lt;/p&gt;
 
@@ -385,8 +385,8 @@ sniff(prn=lambda x: send_response(x),
 
 &lt;p&gt;Here&amp;rsquo;s a screenshot of it in action (I am using my iPhone as the victim):&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
+&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;h3 id=&#34;conclusion-future-improvements&#34;&gt;Conclusion &amp;amp; Future Improvements&lt;/h3&gt;
 
@@ -406,13 +406,13 @@ sniff(prn=lambda x: send_response(x),
     
     <item>
       <title>Automated Social Engineering Recon Using Rapportive</title>
-      <link>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
+      <link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
       <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
+      <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -431,7 +431,7 @@ sniff(prn=lambda x: send_response(x),
 
 &lt;p&gt;Here are the requests made when using the extension:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&amp;rsquo;s &lt;a href=&#34;https://developers.google.com/accounts/docs/OpenID&#34;&gt;OpenID&lt;/a&gt;. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&amp;rsquo;ve only removed unneccessary data for brevity):&lt;/p&gt;
 
@@ -486,7 +486,7 @@ sniff(prn=lambda x: send_response(x),
 
 &lt;p&gt;Let&amp;rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;We can immediately see an interesting header being sent with the request titled &amp;ldquo;X-Session-Token&amp;rdquo;. It turns out that &lt;strong&gt;the entire authentication of the request relies on sending this token&lt;/strong&gt;. We can test this using an API console like &lt;a href=&#34;https://apigee.com/console/others&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
 

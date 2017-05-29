@@ -2,27 +2,27 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Jordan Wright</title>
-    <link>http://jordan-wright.com/blog/tags/go/</link>
+    <link>https://jordan-wright.com/blog/tags/go/</link>
     <description>Recent content in Go on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 23 Mar 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jordan-wright.com/blog/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jordan-wright.com/blog/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
-      <link>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
+      <link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
       <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
+      <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;I recently &lt;a href=&#34;http://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
 
 &lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 
@@ -81,13 +81,13 @@
     
     <item>
       <title>Gophish Update: Getting Closer to Alpha!</title>
-      <link>http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
+      <link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
       <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
+      <guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -114,7 +114,7 @@
 
 &lt;p&gt;Now we can switch between a raw HTML source view and a fully rendered view in just one-click. Want to see what a template would look like full-screen? Also no problem!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_template.gif&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_template.gif&#34;/&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;email-attachments&#34;&gt;Email Attachments&lt;/h4&gt;
 
@@ -131,13 +131,13 @@
 &lt;li&gt;Position&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_group.gif&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_group.gif&#34;/&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;campaign-results-dashboard&#34;&gt;Campaign Results Dashboard&lt;/h4&gt;
 
 &lt;p&gt;Executing campaigns isn&amp;rsquo;t helpful if you don&amp;rsquo;t have a way to see the results. This is why I&amp;rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif&#34;/&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif&#34;/&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;full-api-support&#34;&gt;Full API Support&lt;/h4&gt;
 
@@ -170,13 +170,13 @@
     
     <item>
       <title>Building GoPhish - How to Send Email with Go</title>
-      <link>http://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link>
+      <link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link>
       <pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
+      <guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -255,13 +255,13 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
     
     <item>
       <title>Building Gophish - Day 1</title>
-      <link>http://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link>
+      <link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link>
       <pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
+      <guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
       <description>
 
-&lt;img src=&#34;http://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
