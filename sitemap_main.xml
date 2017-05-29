@@ -2,20 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://jordan-wright.com/resume.pdf</loc>
-    <lastmod>2016-04-07T13:05:58-06:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://jordan-wright.com/projects</loc>
-    <lastmod>2016-04-07T13:05:58-06:00</lastmod>
+    <loc>https://jordan-wright.com/projects</loc>
+    <lastmod>2017-05-29T16:00:00-06:00</lastmod>
     <priority>0</priority>
   </url>
 
   <url>
-    <loc>http://jordan-wright.com/contact</loc>
-    <lastmod>2016-04-07T22:05:58-06:00</lastmod>
+    <loc>https://jordan-wright.com/contact</loc>
+    <lastmod>2017-05-29T16:00:00-06:00</lastmod>
     <priority>0</priority>
   </url>
 </urlset>
