@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
 
@@ -163,9 +163,9 @@
 <pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
 </code></pre>
 
-<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:</p>
+<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
 
-<p><img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
+<img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
 
 <p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p>
 
@@ -314,7 +314,6 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
 <p>There&rsquo;s the flag! <code>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></p>
 
 <p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
-
     </section>
 
 

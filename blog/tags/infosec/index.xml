@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 28 Dec 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>What InfoSec Learned in 2014</title>
@@ -15,78 +17,14 @@
       <pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;&lt;em&gt;Busy year.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:&lt;/p&gt;
+&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:
 
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;no-software-is-safe-or-why-your-vulnerability-doesn-t-need-a-logo&#34;&gt;No Software is Safe, or Why Your Vulnerability Doesn&amp;rsquo;t Need a Logo&lt;/h3&gt;
-
-&lt;p&gt;Heartbleed and Shellshock were arguably two of the most critical vulnerabilities our industry has seen in a while. These vulnerabilities provided a stark reminder that - as the security community often quips - no software is safe. The importance and widespread use of both OpenSSL and Bash contributed to a large, immediate impact when the vulnerabilities were announced.&lt;/p&gt;
-
-&lt;p&gt;This impact was also largely fueled by the media. Now, many people would take the stark stance that assigning names and logos to vulnerabilities is ridiculous, and I mostly agree. However, it&amp;rsquo;s important to at least consider the benefits this approach had. Too often, vulnerabilities aren&amp;rsquo;t patched because they simply aren&amp;rsquo;t kept up with. It&amp;rsquo;s mind numbing trying to keep up with every CVE-&lt;em&gt;xxxx&lt;/em&gt; affecting every piece of software. In these cases, since the vulnerabilities were critical enough, this approach of marketing to the media worked really well - many systems were patched quickly&lt;sup&gt;1&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;But sadly, we can already see this being overused. It seems as though anyone who thinks they have found a critical vulnerability needs to find some kind of catchy name to put with it. And I get it - CVE-2014-0160 isn&amp;rsquo;t as dangerous sounding as &lt;strong&gt;&lt;em&gt;Heartbleed&lt;/em&gt;&lt;/strong&gt;, and CVE-2014-6271 + related isn&amp;rsquo;t as hacker-scary sounding as &lt;strong&gt;&lt;em&gt;Shellshock&lt;/em&gt;&lt;/strong&gt;. Add logos to go with the catchy names? Marketing people &lt;strong&gt;love&lt;/strong&gt; it.&lt;/p&gt;
-
-&lt;p&gt;I have no doubt that 2015 will bring with it more critical vulnerabilities in well-known, established pieces of software. I only hope that we can use the lessons-learned from Heartbleed and Shellshock to mature as an industry and approach the marketing and distribution of these details in a responsible, controlled way. Not every vulnerability needs a full marketing team behind it.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/router.png&#34;/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;embedded-devices-hacking-like-it-s-1995&#34;&gt;Embedded Devices: Hacking Like it&amp;rsquo;s 1995&lt;/h3&gt;
-
-&lt;p&gt;While the (in)security of embedded devices such as SOHO routers isn&amp;rsquo;t particularly new, there were a substantial number of critical vulnerabilities recently released for these devices. These vulnerabilities includes &lt;a href=&#34;https://github.com/elvanderb/TCP-32764&#34;&gt;blatant&lt;/a&gt; &lt;a href=&#34;http://www.devttys0.com/2013/10/reverse-engineering-a-d-link-backdoor/&#34;&gt;backdoors&lt;/a&gt;, web-app security 101 &lt;a href=&#34;http://mis.fortunecook.ie/&#34;&gt;blunders&lt;/a&gt;, or just bad software.&lt;/p&gt;
-
-&lt;p&gt;The primary cause for concern with these vulnerabilities is that they affect a &lt;em&gt;ton&lt;/em&gt; of devices. For example, the recently reported &lt;a href=&#34;http://mis.fortunecook.ie/&#34;&gt;&amp;ldquo;Misfortune Cookie&amp;rdquo;&lt;/a&gt; vulnerability - complete with a name and logo - claims to affect &amp;ldquo;12 million &amp;hellip; unique devices&amp;rdquo;. Unfortunately, security appears to be put on the backburner when it comes to the development of embedded devices, likely due to either infosec ignorance or simply because manufacturers don&amp;rsquo;t think attackers will target their systems - I am a fan of the latter.&lt;/p&gt;
-
-&lt;p&gt;I wholeheartedly expect to see a wider emphasis put on attacking embedded devices - particularly network devices - in 2015. The fact that in 2012 over 400,000 devices can be &lt;a href=&#34;http://internetcensus2012.bitbucket.org/paper.html&#34;&gt;commandeered using default passwords&lt;/a&gt; alone should be considered a substantial threat. Sadly, it will only get worse before it gets better. The only way to fix the situation will be to continue finding and publishing vulnerabilities in these devices in the hopes that manufacturers will start placing a higher emphasis on device security.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s hoping for the best.&lt;/p&gt;
-
-&lt;p&gt;&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/pos.png&#34;/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;pos-software-pos&#34;&gt;POS Software = POS&lt;/h3&gt;
-
-&lt;p&gt;Compromising Point-of-Sale (POS) devices became the new-hotness for cybercriminals this year. Notable breaches of retailers such as Target and Home Depot caused massive re-issuing of bank credit/debit cards, hefty financial losses, and resulted in some nice &lt;a href=&#34;http://cdn.arstechnica.net/wp-content/uploads/2014/12/document4.pdf&#34;&gt;class action complaint readings&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;The key thing to note about these breaches is that POS malware such as &lt;a href=&#34;http://blog.spiderlabs.com/2013/05/alina-shedding-some-light-on-this-malware-family.html&#34;&gt;Alina&lt;/a&gt;, &lt;a href=&#34;http://blog.spiderlabs.com/2014/02/jackpos-the-house-always-wins.html&#34;&gt;JackPOS&lt;/a&gt;, etc. &lt;strong&gt;is not sophisticated&lt;/strong&gt;. It&amp;rsquo;s not. Generally, it works like this:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Check if a POS software process is running&lt;/li&gt;
-&lt;li&gt;Dump the memory of that process&lt;/li&gt;
-&lt;li&gt;Grep for 16 numbers in a row&lt;/li&gt;
-&lt;li&gt;Validate it&amp;rsquo;s a valid CC using something like Luhn&amp;rsquo;s algorithm&lt;/li&gt;
-&lt;li&gt;Send it off to a server&lt;/li&gt;
-&lt;li&gt;Repeat&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;em&gt;Groundbreaking.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;So why did this work so well? Turns out, these POS systems (like embedded devices) have not gone through through the gamut of security scrutiny that standard software has. This makes sense, since the market-share for this software was much smaller (meaning less installs of the software than, say, Java or Flash).&lt;/p&gt;
-
-&lt;p&gt;But the criminals figured something out. Maybe market share isn&amp;rsquo;t as important as we thought it was. Maybe there is low-hanging fruit that can give enough yield when compromised that it&amp;rsquo;s worth looking into. A &lt;a href=&#34;https://www.fox-it.com/en/files/2014/12/Anunak_APT-against-financial-institutions2.pdf&#34;&gt;recent report&lt;/a&gt; by security firm Fox-IT summed it up nicely:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;[Hackers] can steal $2000 a thousand times, and earn $2 million, but also they can steal it in one time and immediately get it with much less effort&amp;hellip;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Don&amp;rsquo;t get me wrong - consumer malware families like Zeus will still have a place in the industry while there is money to be made in selling harvested information. However, I have no doubt that Target and Home Depot will only be the beginning of these retailer breaches, at least until chip-and-pin cards are the industry default.&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;It&amp;rsquo;s clear that our industry is showing no signs of slowing down (and hey, I &lt;span&gt;&lt;i class=&#34;fa fa-heart-o&#34;&gt;&lt;/i&gt; job security&lt;/span&gt;). However, we need to push forward into the next year with the mindset that &lt;em&gt;we&amp;rsquo;re still losing&lt;/em&gt;. This next year will bring more breaches, more vulnerabilities, and more lessons to be learned.&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments below.&lt;/p&gt;
-
-&lt;p&gt;[1] &lt;a href=&#34;https://jhalderm.com/pub/papers/heartbleed-imc14.pdf&#34;&gt;https://jhalderm.com/pub/papers/heartbleed-imc14.pdf&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

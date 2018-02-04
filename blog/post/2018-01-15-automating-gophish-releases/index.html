@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  	<meta property="og:title" content=" Automating Gophish Releases With Ansible and Docker &middot;  Jordan Wright" />
+  	<meta property="og:site_name" content="Jordan Wright" />
+  	<meta property="og:url" content="https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2018-02-04T11:00:59-06:00" />
+
+    
+    <meta property="og:article:tag" content="docker" />
+    
+    <meta property="og:article:tag" content="ansible" />
+    
+    <meta property="og:article:tag" content="digitalocean" />
+    
+    <meta property="og:article:tag" content="gophish" />
+    
+    
+
+  <title>
+     Automating Gophish Releases With Ansible and Docker &middot;  Jordan Wright
+  </title>
+
+    <meta name="description" content="Security and Programming Blog" />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.27-DEV" />
+
+    <link rel="canonical" href="https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/" />
+
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-44718701-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://jordan-wright.com/">Home</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://jordan-wright.com/contact/">Contact</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://jordan-wright.com/projects/">Projects</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://jordan-wright.com/blog/">Blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://raidersec.blogspot.com">Raidersec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+<header class="main-header post-head no-cover">
+  <nav class="main-nav clearfix">
+
+
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Automating Gophish Releases With Ansible and Docker</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2018-02-04T11:00:59-06:00">
+            Feb 4, 2018
+          </time>
+        
+         
+          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/docker/">#docker</a></span>
+         
+          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/ansible/">#ansible</a></span>
+         
+          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/digitalocean/">#digitalocean</a></span>
+         
+          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/gophish/">#gophish</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      <p><img src="/blog/images/headers/gophish_releases.png" alt="" class="pure-img" >
+
+<br>
+It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been writing quite a bit <a href="https://duo.com/blog/post_author/jwright">over on Duo&rsquo;s blog</a> about the really cool research I&rsquo;ve gotten to do this past year with the incredible Duo Labs team.</p>
+
+<p>Any spare time I&rsquo;ve had has been spent working on Gophish. This past year I&rsquo;ve released a <a href="https://getgophish.com">new hand-crafted, artisinal website</a>, responded to nearly 400 support requests, and made too many improvements to count!</p>
+
+<p>Now, most people who use Gophish use a pre-built binary<a href="#footnote-1">*</a>, which means that it&rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&rsquo;m left answering support requests with the advice of &ldquo;build from source&rdquo;, which is not ideal.</p>
+
+<p>The previous release process was manual, making it a <strong>huge pain</strong>. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.</p>
+
+<p>This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&rsquo;s, and more.</p>
+
+<p></p>
+
+<h4 id="how-gophish-releases-are-made">How Gophish Releases Are Made</h4>
+
+<p>At a high level, the previous (completely manual) release process for Gophish was something like this:</p>
+
+<ul>
+<li>Spin up a new DigitalOcean droplet</li>
+<li>Install Go</li>
+<li>Install Docker</li>
+<li>Clone the current <code>master</code> branch in Gophish</li>
+<li>Build cross-compiled binaries using <a href="https://github.com/karalabe/xgo">xgo</a></li>
+<li>Manually package the binaries and static assets into a zip (or tar.gz) archive</li>
+<li>Get the hash for all the archives</li>
+<li>Upload the assets and their hashes to Github</li>
+</ul>
+
+<p>Now, before the pitchforks come out explaining how I should have been doing <em>[insert devops concept]</em>, keep in mind that at the time the process <em>worked</em> and successfully made Gophish releases. I started from doing everything completely manually, and moved to a hacky Bash script that I can copy/paste commands from.</p>
+
+<p><strong>The lesson here is to start <em>somewhere</em>. Automation (and security!) is a process. Keep improving and making small steps, and eventually you&rsquo;ll be miles ahead of where you started.</strong></p>
+
+<p>This post describes another one of those small steps.</p>
+
+<h4 id="the-goal">The Goal</h4>
+
+<p>In a perfect world, I&rsquo;d like a process something like this:</p>
+
+<ul>
+<li>Create a new release on Github and write the changelog</li>
+<li>Run a command indicating the release number</li>
+<li>Binaries are automatically compiled and archives are created</li>
+<li>The assets are automatically uploaded to Github</li>
+</ul>
+
+<p>In a nutshell, this process will basically be automating the manual flow I used previously.</p>
+
+<blockquote>
+<p><strong>Note:</strong> I could consider automating the changelog, but I think there&rsquo;s value in personally writing release notes that give your project a voice.</p>
+</blockquote>
+
+<img src="/blog/images/blog/gophish_releases/architecture.png" alt="" class="pure-img" >
+
+
+<h5 id="automating-the-setup-with-ansible">Automating the Setup with Ansible</h5>
+
+<p>We&rsquo;ll leverage <a href="https://www.ansible.com/">Ansible</a> to do the heavy lifting. Ansible is an automation framework that makes configuration management and deployment easy.</p>
+
+<p>You can find the final release files <a href="https://github.com/gophish/release-scripts">here</a>, but let&rsquo;s see how we can build the process from scratch. We&rsquo;ll do everything from a new folder, <code>release-scripts/</code>, where we&rsquo;ll set up the following directory structure:</p>
+
+<pre><code>ansible
+├── roles
+│   └── release
+│       ├── files
+│       │   └── upload_release.py
+│       ├── tasks
+│       │   └── main.yml
+│       └── vars
+|           └── main.yml
+└── site.yml
+</code></pre>
+
+<blockquote>
+<p><strong>Note:</strong> I&rsquo;m using Ansible on Windows through the Windows Subsystem for Linux (WSL). I installed Ansible using <a href="https://www.jeffgeerling.com/blog/2017/using-ansible-through-windows-10s-subsystem-linux">this tutorial</a>.</p>
+</blockquote>
+
+<h6 id="setting-up-the-droplet">Setting up the Droplet</h6>
+
+<p>With the directories created and Ansible up and running, we can define the tasks that we want to run. Ansible works by defining <em>playbooks</em> containing multiple <em>tasks</em> to execute. We&rsquo;ll keep the first set of tasks in a file called <code>site.yml</code>.</p>
+
+<p>The first task we need to build is to automatically create a <a href="https://m.do.co/c/2895d5b6c219">DigitalOcean</a> droplet. Ansible provides a <a href="https://docs.ansible.com/ansible/latest/digital_ocean_module.html"><code>digital_ocean</code></a> module, making it easy to interact with DigitalOcean droplets. <a href="https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2-with-ansible-2-0-on-ubuntu-16-04">This article</a> gives a good, quick overview of how to use Ansible and DigitalOcean together.</p>
+
+<p>The first step is to ensure we have our SSH key generated, and uploaded to our DigitalOcean account:</p>
+
+<pre><code class="language-yaml">- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: ensure ssh key exists
+      user:
+        name: &quot;{{ ansible_user_id }}&quot;
+        generate_ssh_key: yes
+        ssh_key_file: .ssh/gophish_dev
+        ssh_key_bits: 4096
+
+    - name: ensure ssh key is uploaded to DigitalOcean
+      digital_ocean:
+        state: present
+        command: ssh
+        name: gophish-dev
+        ssh_pub_key: &quot;{{ lookup('file', '~/.ssh/gophish_dev.pub') }}&quot;
+        api_token: &quot;{{ do_token }}&quot;
+        register: gophish_ssh_key
+</code></pre>
+
+<p>The first task ensures there&rsquo;s an 4096 bit SSH key at <code>~/.ssh/gophish_dev</code>, creating a new one if necessary. Then, the next task makes sure that the SSH key is uploaded to DigitalOcean using Ansible&rsquo;s <code>digital_ocean</code> module.</p>
+
+<p><strong>A Quick Note About Secrets</strong></p>
+
+<p>You&rsquo;ll notice the reference to the variable <code>{{ do_token }}</code>. This is my DigitalOcean API token, which ideally should only be accessible in memory when it&rsquo;s needed.</p>
+
+<p>To manage secrets, I used <a href="https://docs.ansible.com/ansible/2.4/vault.html">Ansible Vault</a>. You can find information on how to use Vault in playbooks <a href="https://docs.ansible.com/ansible/latest/playbooks_vault.html">here</a>.</p>
+
+<p><strong>Ok, Back to the Tasks</strong></p>
+
+<p>With our SSH key uploaded, we can define a task that creates the droplet and adds our SSH key.</p>
+
+<pre><code class="language-yaml">- name: create the droplet used to build releases
+  digital_ocean:
+    state: present
+    command: droplet
+    name: gophish-release
+    api_token: &quot;{{ do_token }}&quot;
+    size_id: s-1vcpu-1gb
+    region_id: nyc1
+    image_id: debian-9-x64
+    wait_timeout: 500
+    ssh_key_ids: &quot;{{ gophish_ssh_key.ssh_key.id }}&quot;
+    unique_name: yes
+  register: gophish_droplet
+
+- add_host:
+    name: &quot;{{ gophish_droplet.droplet.ip_address }}&quot;
+    groups: droplets
+    ansible_ssh_private_key_file: ~/.ssh/gophish_dev
+</code></pre>
+
+<p>After creating the droplet using the DigitalOcean API, we can use the <a href="docs.ansible.com/ansible/latest/add_host_module.html"><code>add_host</code></a> module to add the new droplet to a group called <code>droplets</code> so future tasks can operate on the droplet.</p>
+
+<p>With the droplet created, we can start configuring everything. This involves:</p>
+
+<ul>
+<li>Updating tools via <code>apt-get</code></li>
+<li>Installing <code>git</code> and <code>docker</code></li>
+<li>Cloning the Gophish repository <a href="https://github.com/gophish/gophish">from Github</a></li>
+</ul>
+
+<p>For the first two, I won&rsquo;t bore you with the details. You can find them in the release files - it&rsquo;s basically just standard <code>apt</code> usage.</p>
+
+<blockquote>
+<p><strong>Note:</strong> The rest of these tasks will be under the <code>release/</code> directory, since we&rsquo;re assigning the &ldquo;release&rdquo; role to the droplet we just created. This helps us organize our tasks and variables in a meaningful way.</p>
+</blockquote>
+
+<p>Speaking of variables, we&rsquo;ll use these variables in the rest of the tasks:</p>
+
+<pre><code class="language-yaml">gophish_golang_package: &quot;github.com/gophish/gophish&quot;
+gophish_directory: &quot;/root/go/src/{{ gophish_golang_package }}&quot;
+# I have one of these variables for every architecture and x86/x64
+gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXbit.zip&quot;
+</code></pre>
+
+<p>Let&rsquo;s jump to the fun stuff, starting with cloning the latest code from Github:</p>
+
+<pre><code class="language-yaml">tasks:
+  - name: clone the gophish repo
+    shell: &quot;/usr/local/go/bin/go get {{ gophish_golang_package }}&quot;
+</code></pre>
+
+<p>With the latest code in our <code>$GOPATH</code>, we can build it using Docker.</p>
+
+<h5 id="compiling-the-binaries">Compiling the Binaries</h5>
+
+<p>Two of the best things about building Gophish in Go are that it compiles to a single binary, and I can &ldquo;easily&rdquo; cross-compile binaries for different platforms. So, I can, for example, compile a Windows binary from a Linux host. <strong>Neat.</strong></p>
+
+<p>But, there&rsquo;s a wrench thrown in anytime you try to compile code that uses <code>cgo</code>. The library Gophish uses to manage the SQLite database, <a href="https://github.com/mattn/go-sqlite3"><code>github.com/mattn/sqlite3</code></a>, does just that.</p>
+
+<p>So, we need to do a bit more legwork in order to cross-compile Gophish, but fortunately for us there is tooling available that makes that easier. One of these tools is <a href="https://github.com/karalabe/xgo"><code>xgo</code></a>, which uses <a href="https://www.docker.com/">Docker</a> to handle the more complex aspects of cross-compiling <code>cgo</code> dependencies.</p>
+
+<p>The tooling provides a command line wrapper around the underlying Docker commands being run, but for our purposes we&rsquo;ll just invoke the container directly using Ansible&rsquo;s <code>docker_image</code> and <code>docker_container</code> modules.</p>
+
+<pre><code class="language-yaml">- name: download the xgo docker image
+  docker_image:
+    name: &quot;{{ xgo_image }}&quot;
+
+- name: build gophish
+  docker_container:
+    name: &quot;gophish_build&quot;
+    image: &quot;{{ xgo_image }}&quot;
+    auto_remove: true
+    volumes:
+      - &quot;{{ gophish_directory }}/bin:/build&quot;
+      - &quot;/root/.xgo-cache:/deps-cache:ro&quot;
+    env:
+      TARGETS: &quot;linux/386 linux/amd64 windows/386 windows/amd64 darwin/386 darwin/amd64&quot;
+    command: &quot;github.com/gophish/gophish&quot;
+</code></pre>
+
+<p>These tasks run the <code>xgo</code> container, building both the x86 and x64 binaries for Windows, OSX, and Linux. Once the binaries are built, I set up Ansible tasks to create ZIP archives with all the necessary static assets, and our Gophish releases are ready to be uploaded!</p>
+
+<h5 id="uploading-the-assets">Uploading the Assets</h5>
+
+<p>After all the binaries are compiled and packaged with our static assets, the last thing to do is to upload the releases to Github. To do this, I created a simple Python script using the <a href="https://github.com/PyGithub/PyGithub">PyGithub</a> library that leveraged <a href="https://developer.github.com/v3/repos/releases/">Github&rsquo;s Releases API</a> to upload the assets.</p>
+
+<p>You can find the script <a href="https://github.com/gophish/release-scripts/blob/master/ansible/roles/release/files/upload_release.py">here.</a></p>
+
+<p>Putting the script in the <code>files/</code> directory within the Ansible role makes it easy to reference from the Ansible tasks. Here&rsquo;s the task that executes the script, uploading each file to Github:</p>
+
+<pre><code class="language-yaml">- name: upload assets to github release
+  shell: &gt;
+    {{upload_release}} --repo gophish/gophish --version {{ version }} 
+    --assets {{ gophish_windows_32bit }} {{ gophish_windows_64bit }}
+    {{ gophish_linux_32bit }} {{ gophish_linux_64bit }}
+    {{ gophish_osx_32bit}} {{ gophish_osx_64bit }}
+  environment:
+    github_api_key: &quot;{{github_token}}&quot;
+  register:
+    upload
+</code></pre>
+
+<p>All that&rsquo;s left is to run the playbook! This is done using a command like this:</p>
+
+<pre><code class="language-bash">$ ansible-playbook site.yml --extra-vars &quot;version=v0.5.0&quot; --ask-vault-pass
+</code></pre>
+
+<h4 id="conclusion">Conclusion</h4>
+
+<p>I&rsquo;m not going to pretend that this is a perfect solution. It&rsquo;s not. However, it&rsquo;s <em>better</em> than the previous manual process and that&rsquo;s the important thing. This will allow more frequent and consistent releases, letting users get the benefits of new changes much quicker than before.</p>
+
+<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
+
+<p><span id="footnote-1"><em>* I have absolutely no data to back this up, but it sounds good.</em></span></p>
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <figure class="author-image">
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+    </figure>
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
+  
+  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio, Texas</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Automating%20Gophish%20Releases%20With%20Ansible%20and%20Docker&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-01-15-automating-gophish-releases%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-01-15-automating-gophish-releases%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-01-15-automating-gophish-releases%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+  var disqus_shortname = 'jordan-wright';
+  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/post\/2018-01-15-automating-gophish-releases\/';
+  (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">Jordan Wright</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
+    
+</body>
+</html>
+

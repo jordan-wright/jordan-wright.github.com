@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Oct 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/linkedin/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Phishing with Linkedin&#39;s Intro</title>
@@ -15,9 +17,7 @@
       <pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
@@ -38,131 +38,8 @@
 &lt;p&gt;With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.&lt;/p&gt;
-
-&lt;h3 id=&#34;what-linkedin-does-to-your-email&#34;&gt;What Linkedin Does to Your Email&lt;/h3&gt;
-
-&lt;p&gt;While I am currently performing a much more in-depth analysis of Intro which will give a much better look into its behavior (to be posted soon), for now we will just take a look at the basics of how Intro works, and look specifically into how it manipulates user&amp;rsquo;s email.&lt;/p&gt;
-
-&lt;p&gt;Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since &lt;a href=&#34;https://developers.google.com/gmail/oauth_overview&#34;&gt;Google implemented OAuth support into Gmail&amp;rsquo;s IMAP and SMTP&lt;/a&gt;. After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin&amp;rsquo;s IMAP and SMTP servers. I&amp;rsquo;m not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;&amp;lt;dict&amp;gt;
-    &amp;lt;key&amp;gt;PayloadDisplayName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Email Settings&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;PayloadType&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;com.apple.mail.managed&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;PayloadVersion&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;1&amp;lt;/integer&amp;gt;
-    &amp;lt;key&amp;gt;PayloadUUID&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[redacted]&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;PayloadIdentifier&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;com.rapportive.iphone.settings.email.[redacted]&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;EmailAccountName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Test Account&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;EmailAccountType&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailTypeIMAP&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;EmailAddress&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;linkedin.intro.test@gmail.com&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;EmailAccountDescription&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;Gmail +Intro&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;IncomingMailServerAuthentication&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailAuthPassword&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;IncomingMailServerHostName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;imap.intro.linkedin.com&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;IncomingMailServerPortNumber&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;143&amp;lt;/integer&amp;gt;
-    &amp;lt;key&amp;gt;IncomingMailServerUseSSL&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
-    &amp;lt;key&amp;gt;IncomingMailServerUsername&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[username_redacted]&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;IncomingPassword&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[password_redacted]&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingPasswordSameAsIncomingPassword&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingMailServerAuthentication&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;EmailAuthPassword&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingMailServerHostName&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;smtp.intro.linkedin.com&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingMailServerPortNumber&amp;lt;/key&amp;gt;&amp;lt;integer&amp;gt;587&amp;lt;/integer&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingMailServerUseSSL&amp;lt;/key&amp;gt;&amp;lt;true/&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingMailServerUsername&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt; Gmail +Intro ?[username_redacted]&amp;lt;/string&amp;gt;
-    &amp;lt;key&amp;gt;OutgoingPassword&amp;lt;/key&amp;gt;&amp;lt;string&amp;gt;[password_redacted]&amp;lt;/string&amp;gt;
-&amp;lt;/dict&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;By intercepting the profile, we can get the username and password used to log into Linkedin&amp;rsquo;s IMAP (imap.intro.linkedin.com) and SMTP (smtp.intro.linkedin.com) services. The username was a base64 encoded string, and the password was a 32 character hash.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a diagram of how this works:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/diagram.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Now that we have the username and password used for this mail account, let&amp;rsquo;s grab the first email and see what content Linkedin&amp;rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;# openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
-depth=2 C = US, O = &amp;quot;thawte, Inc.&amp;quot;, OU = Certification Services Division, OU = &amp;quot;(c) 2006 thawte, Inc. - For authorized use only&amp;quot;, CN = thawte Primary Root CA
-verify error:num=19:self signed certificate in certificate chain
-verify return:0
-. OK More capabilities after LOGIN
-a LOGIN username_redacted password_redacted
-* CAPABILITY IMAP4rev1 IDLE NAMESPACE ID CHILDREN UIDPLUS COMPRESS=DEFLATE
-A OK linkedin.intro.test@gmail.com Test Account authenticated (Success)
-b SELECT INBOX
-* FLAGS (\Answered \Flagged \Draft \Deleted \Seen)
-* OK [PERMANENTFLAGS (\Answered \Flagged \Draft \Deleted \Seen \*)] Flags permitted.
-* OK [UIDVALIDITY 1] UIDs valid.
-* 4 EXISTS
-* 0 RECENT
-* OK [UIDNEXT 5] Predicted next UID.
-* OK [HIGHESTMODSEQ 1049]
-b OK [READ-WRITE] INBOX selected. (Success)
-c FETCH 4 BODY[]
-* 4 FETCH (FLAGS (\Seen) BODY[] {36510}
-email_content_here
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As it turns out, Linkedin injects quite a bit of content into your email. The basic structure looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html PUBLIC &amp;quot;-//W3C//DTD HTML 4.0 Transitional//EN&amp;quot; &amp;quot;http://www.w3.org/TR/REC-html40/loose.dtd&amp;quot;&amp;gt;
-&amp;lt;html&amp;gt;
-	&amp;lt;head&amp;gt;
-	    &amp;lt;meta http-equiv=&amp;quot;Content-Type&amp;quot; content=&amp;quot;text/html; charset=utf-8&amp;quot;&amp;gt;
-	    User specified CSS (if any)
-	    &amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
-	        /*BEGIN RAPPORTIVE*/
-	        Injected Linkedin Intro CSS
-	        /*END RAPPORTIVE*/
-	    &amp;lt;/style&amp;gt;
-	&amp;lt;/head&amp;gt;
-	&amp;lt;body&amp;gt;
-	    &amp;lt;!--BEGIN RAPPORTIVE--&amp;gt;
-	    Injected Linkedin Intro HTML Content
-	    &amp;lt;!--END RAPPORTIVE--&amp;gt;
-	    Original Message
-	&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can find the full email &lt;a href=&#34;https://gist.github.com/jordan-wright/7189765#file-original_email-html&#34;&gt;here&lt;/a&gt; (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let&amp;rsquo;s see how we can use it to make our phishing emails appear to be legitimate.&lt;/p&gt;
-
-&lt;h3 id=&#34;setting-up-the-bait&#34;&gt;Setting up the Bait&lt;/h3&gt;
-
-&lt;p&gt;Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to &lt;code&gt;display:none;&lt;/code&gt;. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our &lt;code&gt;head&lt;/code&gt; block, and they were pretty specific in ensuring the &lt;code&gt;!important&lt;/code&gt; keyword is set for things such as the display, height, etc.&lt;/p&gt;
-
-&lt;p&gt;But they weren&amp;rsquo;t specific enough. If we look at the CSS, we can see that the rules apply to the &lt;code&gt;#rapportive.iphone&lt;/code&gt; element. If we look closely, we can see that in fact the HTML element we want to hide has a full spec of &lt;code&gt;#rapportive.rapportive.topbar.iphone&lt;/code&gt;. Therefore, we can simply set the following style block to hide the element:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;
-    #rapportive.rapportive.topbar.iphone {
-        display:none !important;
-    }
-&amp;lt;/style&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy as that.&lt;/p&gt;
-
-&lt;p&gt;Now that we have removed the existing Intro data, we are free to inject our own. To do this, we can copy the existing HTML provided by Linkedin. To make sure that our data is not hidden by our previous CSS, we can simply remove the &lt;code&gt;topbar&lt;/code&gt; class from the root element, since it will have no effect on styling. The last things we will want to do are to clean up the margins Linkedin puts on the original message, as well as changing the actual data itself to be whatever we want. In addition to this, I copied some of the CSS and HTML and changed the IDs which are generated automatically. This will make sure our template is always consistent.&lt;/p&gt;
-
-&lt;h3 id=&#34;going-phishing&#34;&gt;Going Phishing&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve taken the liberty of setting up a basic PoC &lt;a href=&#34;https://gist.github.com/jordan-wright/7189765#file-template-html&#34;&gt;template&lt;/a&gt; for educational purposes. To use it, just visit the Linkedin profile for the person you are pretexting as, and fill in the CSS information as needed. Ideally, in the future there could be improvements to automatically scrape this information, check to make sure that the Intro data is only shown on mobile devices, etc. For now - it works. Let&amp;rsquo;s see what it looks like if I spoof the example from Linkedin&amp;rsquo;s original post, David (pardon the non-IOS7 - I don&amp;rsquo;t see any major IOS7 styling issues which would cause much trouble):&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what the details look like when I open the Intro tab (they are customizable as well - I left them as me to show that I really do control the content):&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/intro_phish/david_details.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Obviously, this was an extremely benign example. It would be just as easy to attach a malicious payload, request sensitive information, etc.&lt;/p&gt;
-
-&lt;h3 id=&#34;final-thoughts&#34;&gt;Final Thoughts&lt;/h3&gt;
-
-&lt;p&gt;While Linkedin Intro &lt;em&gt;seems&lt;/em&gt; like it would be useful on the surface - the security risks of using it are simply too high. With that being said, as a social engineer, &lt;strong&gt;&lt;em&gt;I hope my targets use Intro&lt;/em&gt;&lt;/strong&gt;. By giving users a false sense of security when they see the Intro information in an email, Linkedin has made my pretext much stronger and the SE engagement that much easier.&lt;/p&gt;
-
-&lt;p&gt;I have yet to get comments setup on the new blog, but &lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;shoot me an email&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.
+&lt;/p&gt;</description>
     </item>
     
   </channel>

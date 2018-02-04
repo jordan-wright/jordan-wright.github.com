@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 14 Oct 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/osint/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/osint/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Automated Social Engineering Recon Using Rapportive</title>
@@ -15,9 +17,7 @@
       <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -26,153 +26,7 @@
 
 &lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
 
-&lt;h3 id=&#34;what-is-rapportive&#34;&gt;What is Rapportive?&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapporitve&lt;/a&gt;, acquired by Linkedin in February 2012, is an add-on for multiple browsers which embeds information about your contacts directly into Gmail. The extension sends your contact&amp;rsquo;s email address to the Rapportive server, which responds with known public information associated with the email address such as social networking profiles.&lt;/p&gt;
-
-&lt;h3 id=&#34;reverse-engineering-the-rapportive-extension&#34;&gt;Reverse Engineering the Rapportive Extension&lt;/h3&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how the Rapportive Extension works (disclosure: I&amp;rsquo;m using Chrome). The extension simply consists of a Javascript file called &amp;ldquo;user.js&amp;rdquo;. When we navigate to Gmail, this file will load another JS file called &lt;a href=&#34;https://rapportive.com/load/launchpad&#34;&gt;&amp;ldquo;launchpad&amp;rdquo;&lt;/a&gt;. The launchpad file then fetches the main file called &lt;a href=&#34;https://rapportive.com/load/application&#34;&gt;&amp;ldquo;application&amp;rdquo;&lt;/a&gt;, which implements all the functionality provided by Rapportive. If you want to do a full static analysis of them - feel free. For this post, we&amp;rsquo;ll take a look at the behavior of the extension, and see if we can automate its functionality.&lt;/p&gt;
-
-&lt;p&gt;Here are the requests made when using the extension:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/burp.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&amp;rsquo;s &lt;a href=&#34;https://developers.google.com/accounts/docs/OpenID&#34;&gt;OpenID&lt;/a&gt;. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&amp;rsquo;ve only removed unneccessary data for brevity):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-   &amp;quot;contact&amp;quot;:{
-      &amp;quot;image_url_raw&amp;quot;:&amp;quot;https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&amp;amp;d=404&amp;quot;,
-      &amp;quot;raplets&amp;quot;:[],
-      &amp;quot;memberships&amp;quot;:[
-         {
-            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/www.linkedin.com\/pub\/54\/795\/752&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;LinkedIn&amp;quot;,
-         },
-         {
-            &amp;quot;display_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
-            &amp;quot;username&amp;quot;:null,
-            &amp;quot;profile_url&amp;quot;:&amp;quot;http:\/\/raidersec.blogspot.com&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on Blogger&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;Blogger&amp;quot;,
-         },
-         {
-            &amp;quot;display_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
-            &amp;quot;username&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
-            &amp;quot;profile_id&amp;quot;:&amp;quot;jordan-wright&amp;quot;,
-            &amp;quot;profile_url&amp;quot;:&amp;quot;https:\/\/github.com\/jordan-wright&amp;quot;,
-            &amp;quot;view_text&amp;quot;:&amp;quot;View Jordan&#39;s profile on GitHub&amp;quot;,
-            &amp;quot;site_name&amp;quot;:&amp;quot;GitHub&amp;quot;,
-         }
-      ],
-      &amp;quot;headline&amp;quot;:&amp;quot;Jordan Wright - Security Engineer&amp;quot;,
-      &amp;quot;email&amp;quot;:&amp;quot;jmwright798@gmail.com&amp;quot;,
-      &amp;quot;location&amp;quot;:&amp;quot;Texas Area&amp;quot;,
-      &amp;quot;occupations&amp;quot;:[
-         {
-            &amp;quot;job_title&amp;quot;:&amp;quot;Security Engineer&amp;quot;
-         }
-      ],
-      &amp;quot;name&amp;quot;:&amp;quot;Jordan Wright&amp;quot;,
-   },
-   &amp;quot;success&amp;quot;:&amp;quot;image_or_occupation_or_useful_membership&amp;quot;,
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We can see that quite a bit of data was returned by this query. As social engineers, not only would we know that this is likely a valid email address (and therefore a valid email address format for other potential targets of the same organization), but we could also see the social networking profiles linked to this email address. This could reveal other infrmation which may be useful to us later.&lt;/p&gt;
-
-&lt;p&gt;So now we want to see how we can:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Automate the login process (&lt;em&gt;if needed&lt;/em&gt;)&lt;/li&gt;
-&lt;li&gt;Deconstruct the /contact/email query to find any special parameters that we need to pass&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start by taking a look at the parameters passed to the /contact/email request, and see what kind of information is needed:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/rapportive/contact_email_headers.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;We can immediately see an interesting header being sent with the request titled &amp;ldquo;X-Session-Token&amp;rdquo;. It turns out that &lt;strong&gt;the entire authentication of the request relies on sending this token&lt;/strong&gt;. We can test this using an API console like &lt;a href=&#34;https://apigee.com/console/others&#34;&gt;this one&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Now we just need to figure out where to get our session token. There was one request that Burp didn&amp;rsquo;t catch that is made once we first log into Gmail. It is a request to /login_status?[email_address]. The response to this query looks like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-   &amp;quot;user_full_name&amp;quot;:&amp;quot; &amp;quot;,
-   &amp;quot;status&amp;quot;:200,
-   &amp;quot;authenticated_as&amp;quot;:null,
-   &amp;quot;active_auths&amp;quot;:[],
-   &amp;quot;claimed_emails&amp;quot;:null,
-   &amp;quot;plan&amp;quot;:{
-      &amp;quot;key&amp;quot;:&amp;quot;free&amp;quot;,
-      &amp;quot;price&amp;quot;:0,
-      &amp;quot;name&amp;quot;:&amp;quot;Free&amp;quot;
-   },
-   &amp;quot;session_token&amp;quot;:&amp;quot;BAgiX09ON0&amp;amp;lt;snip&amp;amp;lt;ece684be8&amp;quot;,
-   &amp;quot;user_preferences&amp;quot;:{&amp;amp;lt;snip&amp;amp;lt;},
-   &amp;quot;authenticity_token&amp;quot;:&amp;quot;7KNIosqb&amp;amp;lt;snip&amp;amp;gt;csaXzbQFOFi7jg=&amp;quot;,
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This request will return a session token for the currently logged in user. However, here&amp;rsquo;s the trick: &lt;strong&gt;&lt;em&gt;any email will work&lt;/em&gt;&lt;/strong&gt;. Seriously - &lt;a href=&#34;http://rapportive.com/login_status?user_email=this_doesnt_exist_@gmail.com&#34;&gt;try it&lt;/a&gt;. Even without being logged in to Rapportive (ie, by using a random email address), we can still receive a session token and can still make valid queries on email addresses like the one seen originally. So - we don&amp;rsquo;t need to worry about automating the authentication.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how we can at least automate the process of getting the session token and querying for an email address.&lt;/p&gt;
-
-&lt;h3 id=&#34;automating-rapportive-queries&#34;&gt;Automating Rapportive Queries&lt;/h3&gt;
-
-&lt;p&gt;Now that we know how Rapportive works, we can automate the process to perform lookups for users of our choosing. Let&amp;rsquo;s start by getting the session token for a particular email address:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import requests
-random_email = &#39;asdfqwer@gmail.com&#39;
-response = requests.get(&#39;https://rapportive.com/login_status?user_email=&#39; + random_email).json()
-print response[&#39;session_token&#39;]
-# output - BAgiX0IvUmJHMUQ3Z2pOUWhmM0ZKRX...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy as that! Now that we have the session token, we can make a request for a given target email address as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;profile = requests.get(&#39;https://profiles.rapportive.com/contacts/email/&#39; + target_email,
-            headers = {&#39;X-Session-Token&#39; : response[&#39;session_token&#39;]}).json()
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The profile returned will now be in JSON format where we can parse out any information such as social networking profile links, usernames, etc. I won&amp;rsquo;t bore you with the implementation of all the parsing - so let&amp;rsquo;s move onto the final script!&lt;/p&gt;
-
-&lt;h3 id=&#34;introducing-rapportive-py&#34;&gt;Introducing rapportive.py&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve created a simple Python script called &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;rapportive.py&lt;/a&gt; to do this work for us. It takes in a list of email addresses from STDIN or a single email via the -e argument and prints out any results found. This can be useful if we want to pass in emails from other tools such as &lt;a href=&#34;https://github.com/pentestgeek/jigsaw/blob/master/jigsaw.rb&#34;&gt;jigsaw.rb&lt;/a&gt;. It can also log to an output file, if needed.&lt;/p&gt;
-
-&lt;p&gt;Here is an example of how to use it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~# cat emails.txt | ./rapportive.py
-10-25 23:37 rapportive   INFO     Using owcdf@gmail.com
-10-25 23:37 rapportive   INFO     Found match for jmwright798@gmail.com
-
-Name: Jordan Wright
-Position: Security  Engineer
-Company: CoNetrix
-        LinkedIn - http://www.linkedin.com/pub/54/795/752
-        Blogger - http://raidersec.blogspot.com
-        GitHub - https://github.com/jordan-wright
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;~# ./rapportive.py -e jmwright798@gmail.com
-10-25 23:31 rapportive   INFO     Using ntmai@gmail.com
-10-25 23:31 rapportive   INFO     Found match for jmwright798@gmail.com
-Name: Jordan Wright
-Position: Security  Engineer
-Company: CoNetrix
-        LinkedIn - http://www.linkedin.com/pub/54/795/752
-        Blogger - http://raidersec.blogspot.com
-        GitHub - https://github.com/jordan-wright
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can find it on &lt;a href=&#34;https://github.com/jordan-wright/rapportive&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;/p&gt;</description>
     </item>
     
   </channel>

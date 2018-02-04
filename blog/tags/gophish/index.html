@@ -38,7 +38,7 @@
         <link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="alternate" type="application/rss+xml" title="Gophish &middot; Jordan Wright" />
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/tags/gophish/" />
 
@@ -140,6 +140,55 @@
 	   
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/blog/post/2018-01-15-automating-gophish-releases/">Automating Gophish Releases With Ansible and Docker</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><p><img src="/blog/images/headers/gophish_releases.png" alt="" class="pure-img" >
+
+<br>
+It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been writing quite a bit <a href="https://duo.com/blog/post_author/jwright">over on Duo&rsquo;s blog</a> about the really cool research I&rsquo;ve gotten to do this past year with the incredible Duo Labs team.</p>
+
+<p>Any spare time I&rsquo;ve had has been spent working on Gophish. This past year I&rsquo;ve released a <a href="https://getgophish.com">new hand-crafted, artisinal website</a>, responded to nearly 400 support requests, and made too many improvements to count!</p>
+
+<p>Now, most people who use Gophish use a pre-built binary<a href="#footnote-1">*</a>, which means that it&rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&rsquo;m left answering support requests with the advice of &ldquo;build from source&rdquo;, which is not ideal.</p>
+
+<p>The previous release process was manual, making it a <strong>huge pain</strong>. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.</p>
+
+<p>This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&rsquo;s, and more.</p>
+
+<p></p> <a class="read-more icon-standard" href="/blog/post/2018-01-15-automating-gophish-releases/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="https://jordan-wright.com/blog/tags/docker/">#docker</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/ansible/">#ansible</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/digitalocean/">#digitalocean</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+        
+        <time class="post-date" datetime="2018-02-04T11:00:59-06:00">
+            4 Feb 2018
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/blog/2015/09/29/gophish-update-importing-sites-and-emails/">Gophish Update - Importing Sites and Emails</a></h2>
     </header>
     <section class="post-excerpt">
@@ -150,8 +199,8 @@
 
 <p>I&rsquo;m excited to announce that the <a href="https://github.com/jordan-wright/gophish">gophish</a> &ldquo;alpha&rdquo; release is almost complete! I&rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.</p>
 
-<p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/29/gophish-update-importing-sites-and-emails/">Read More</a></p>
+<p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.
+</p> <a class="read-more icon-standard" href="/blog/2015/09/29/gophish-update-importing-sites-and-emails/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -190,8 +239,8 @@
 
 <p>I thought it would be worth providing a long-overdue update into the development status of <a href="http://github.com/jordan-wright/gophish">gophish</a>. Overall, the project is getting closer to beta status every day, and I&rsquo;m hoping to see a <a href="https://github.com/jordan-wright/gophish/milestones">0.1 release</a> at the end of March.</p>
 
-<p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.</p>
- <a class="read-more icon-standard" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Read More</a></p>
+<p>Without further ado, let&rsquo;s dive in and see where we&rsquo;re at.
+</p> <a class="read-more icon-standard" href="/blog/2015/02/26/gophish-update-getting-closer-to-alpha/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -232,8 +281,8 @@
 
 <p>While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&rsquo;t yet included. Sending email is one of them. Don&rsquo;t get me wrong, Go has a wonderful <a href="http://golang.org/pkg/net/smtp/">SMTP</a> package, <a href="http://golang.org/pkg/mime/">MIME</a> package, and even a <a href="http://golang.org/pkg/net/mail/">Mail</a> package (which <em>only</em> parses existing email messages). However, there is no library to actually <strong>create</strong> emails in a meaningful way. Since <a href="https://github.com/jordan-wright/gophish">Gophish</a> relies heavily on sending emails, I&rsquo;ve sought to change this. And, after reading more RFC&rsquo;s than I normally prefer, I believe I&rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called <a href="https://github.com/jordan-wright/email">email</a>.</p>
 
-<p>Let&rsquo;s see how to use it.</p>
- <a class="read-more icon-standard" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read More</a></p>
+<p>Let&rsquo;s see how to use it.
+</p> <a class="read-more icon-standard" href="/blog/2014/01/03/building-gophish-how-to-send-email-with-go/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -274,8 +323,8 @@
 
 <p>In addition to this, I&rsquo;ve been casually poking around at <a href="http://golang.org/"><code>go</code></a> for a while now, and have decided it would be good to finally put it to use in a larger project. I&rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced <code>go</code> developers so that <a href="https://github.com/jordan-wright/gophish">gophish</a> can be the best product possible.</p>
 
-<p>With that being said - let&rsquo;s get started!</p>
- <a class="read-more icon-standard" href="/blog/2013/11/29/building-gophish-day-1/">Read More</a></p>
+<p>With that being said - let&rsquo;s get started!
+</p> <a class="read-more icon-standard" href="/blog/2013/11/29/building-gophish-day-1/">Read More</a></p>
     </section>
     <footer class="post-meta">
         

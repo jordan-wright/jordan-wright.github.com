@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 30 Dec 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Why Deleting Sensitive Information from Github Doesn&#39;t Save You</title>
@@ -15,49 +17,15 @@
       <pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;So you accidentally committed a password or API key to Github. &lt;strong&gt;&lt;em&gt;Ouch.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href=&#34;https://help.github.com/articles/remove-sensitive-data/&#34;&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.&lt;/p&gt;
-
-&lt;h3 id=&#34;drinking-from-github-s-firehose&#34;&gt;Drinking from Github&amp;rsquo;s Firehose&lt;/h3&gt;
-
-&lt;p&gt;Github has an extensive API. One of the most useful endpoints is located at &lt;a href=&#34;https://developer.github.com/v3/activity/events/&#34;&gt;&lt;code&gt;/events&lt;/code&gt;&lt;/a&gt;. This endpoint basically provides a firehose of &lt;em&gt;all&lt;/em&gt; public events as they happen. This includes account creation, code commits, and more. Just &amp;ldquo;star&amp;rdquo; a repository? It was published at &lt;code&gt;/events&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Hackers can use this endpoint to watch for any and all code commits. Once a commit is found, they can instantly make a request to the &lt;a href=&#34;https://developer.github.com/v3/git/commits/&#34;&gt;&lt;code&gt;repos/:owner/:repo/git/commits/:sha1&lt;/code&gt;&lt;/a&gt; endpoint to get the details for that commit. Part of these details is a reference to the project snapshot, or &lt;code&gt;tree&lt;/code&gt;, for that commit (the files themselves). This tree has it&amp;rsquo;s own SHA1, that can be used in the &lt;a href=&#34;https://developer.github.com/v3/git/trees/&#34;&gt;&lt;code&gt;repos/:owner/:repo/git/tree/:sha1?recursive=1&lt;/code&gt;&lt;/a&gt; endpoint to get a full listing of files in the repository.&lt;/p&gt;
-
-&lt;p&gt;Each of these listings has a reference to the file&amp;rsquo;s actual content for the commit. A request can be made to the &lt;a href=&#34;https://developer.github.com/v3/git/blobs/&#34;&gt;&lt;code&gt;/repos/:owner/:repo/git/blobs/:sha1&lt;/code&gt;&lt;/a&gt; endpoint to get this file content, which will include the sensitive information!&lt;/p&gt;
-
-&lt;p&gt;These 4 requests are made in a matter of seconds, and can be sped up by caching the SHA1 of files to determine if the file has been changed. It&amp;rsquo;s a good thing that no one has made a system that&amp;rsquo;s been caching all this data this entire time, right?&lt;/p&gt;
-
-&lt;h3 id=&#34;say-hello-to-ghtorrent&#34;&gt;Say Hello to GHTorrent&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://ghtorrent.org/&#34;&gt;GHTorrent&lt;/a&gt; advertises itself as an &amp;ldquo;offline mirror of data&amp;rdquo;. In a nutshell, it keeps track of &lt;em&gt;a ton&lt;/em&gt; of data that flows through Github&amp;rsquo;s Events API stream, and recursively resolves dependencies to relate, say, a commit object to an event object. Currently, they suggest they have accumulated the data from 2012-2014.&lt;/p&gt;
-
-&lt;p&gt;This database has incredible potential for researchers, but also allows for hackers to pull previously deleted or changed data en masse. Granted, from what I can tell they don&amp;rsquo;t store the actual file content (so your accidentally committed password won&amp;rsquo;t be stored), but that doesn&amp;rsquo;t mean that there isn&amp;rsquo;t sensitive data to be had.&lt;/p&gt;
-
-&lt;p&gt;Consider the email address used to create a Github account, or commit a code change. Both of these actions created an event that was harvested by GHTorrent. Here&amp;rsquo;s an example showing the details of a particularly &lt;a href=&#34;https://github.com/jordan-wright&#34;&gt;talented developer&lt;/a&gt;:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/harvest_github/db.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Currently, it looks like there are about 4.7 million accounts cached in GHTorrent, with over 3.4 million having a non-null email address. That&amp;rsquo;s a lot of email addresses.&lt;/p&gt;
-
-&lt;p&gt;GHTorrent is just an example. While it doesn&amp;rsquo;t appear to store all content, it would be trivial for hackers to reproduce the project with the added feature of searching commits for sensitive information as the events are generated. This searching can be done using keywords such as &amp;ldquo;password&amp;rdquo;, &amp;ldquo;key&amp;rdquo;, etc.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-only-way-to-be-safe&#34;&gt;The Only Way to be Safe&lt;/h3&gt;
-
-&lt;p&gt;Hopefully it&amp;rsquo;s clear that deleting sensitive information from Github doesn&amp;rsquo;t solve the problem. The &lt;strong&gt;only&lt;/strong&gt; way to protect your assets after committing sensitive information is to consider the information compromised and to change the password/API key/whatever. Then, make sure to avoid committing this data in the future!&lt;/p&gt;
-
-&lt;p&gt;Be smart - protect your data.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.
+&lt;/p&gt;</description>
     </item>
     
   </channel>

@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/analytics/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/analytics/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Analyzing 5 Years of Police Call Data</title>
@@ -15,9 +17,7 @@
       <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
       
       <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
@@ -26,146 +26,8 @@
 
 &lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
 
-&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;
-
-&lt;h3 id=&#34;getting-the-call-data&#34;&gt;Getting the Call Data&lt;/h3&gt;
-
-&lt;h4 id=&#34;a-little-about-the-format&#34;&gt;A Little About the Format&lt;/h4&gt;
-
-&lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Each call record has the following details:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Incident Number&lt;/strong&gt; - A unique identifier for the call in SAPD-YYYY-xxxxxxx format&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Category&lt;/strong&gt; - The category of the call (e.g. &amp;ldquo;Crimes Against Person Calls&amp;rdquo;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Problem Type&lt;/strong&gt; - The sub-type of the call that narrows down from the root category (e.g. &amp;ldquo;Robbery of Individual&amp;rdquo;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Response Date&lt;/strong&gt; - The date/time a response was given to the call&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Address&lt;/strong&gt; - The address where the incident occurred&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;HOA&lt;/strong&gt; - The Homeowner&amp;rsquo;s Association where the incident occurred (if applicable)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;School District&lt;/strong&gt; - The school district where the incident occurred&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Council District&lt;/strong&gt; - The council district where the incident occurred&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This is a &lt;em&gt;ton&lt;/em&gt; of great data. However, searching through the data manually is a pain, and I didn&amp;rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.&lt;/p&gt;
-
-&lt;h4 id=&#34;scraping-the-data&#34;&gt;Scraping the Data&lt;/h4&gt;
-
-&lt;p&gt;Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the &lt;a href=&#34;https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;amp;hideResults=on&#34;&gt;SSL configuration in use&lt;/a&gt;. I wound up having to use a custom TLS adapter just to get the &lt;code&gt;requests&lt;/code&gt; library to negotiate a TLS connection.&lt;/p&gt;
-
-&lt;p&gt;Then I had to address the restrictions on how I could search. I had to filter by a certain category and I could only get at most 10k results per query. To put things in perspective, that lets me &lt;em&gt;usually&lt;/em&gt; get a week of calls labelled as &amp;ldquo;Other&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;No one can say our officers aren&amp;rsquo;t busy.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;I ended up hacking together a scraper that ran like this:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;For every category
-
-&lt;ul&gt;
-&lt;li&gt;Try to get a week&amp;rsquo;s worth of calls&lt;/li&gt;
-&lt;li&gt;If # calls = 10000
-
-&lt;ul&gt;
-&lt;li&gt;Get that week a day at a time to make sure we don&amp;rsquo;t miss anything&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Store the results&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/92e209d89a4174e3ccb50ed4f909e58e&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; the current code - be warned, it&amp;rsquo;s hacky. I was manually changing the categories to make sure things were going smoothly, so YMMV.&lt;/p&gt;
-
-&lt;p&gt;After finishing up the scraping, I was left with &lt;strong&gt;4.3 million records&lt;/strong&gt; to work with.&lt;/p&gt;
-
-&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
-
-&lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Theft and Crimes Against People&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &amp;ldquo;theft&amp;rdquo; was consistently the highest:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &amp;ldquo;crimes against persons&amp;rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;When Does Crime Happen?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This was an interesting one, since I couldn&amp;rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &amp;ldquo;Crimes Against Persons&amp;rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Traffic Related Calls&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The calls labelled as &amp;ldquo;traffic related&amp;rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Looking at the top addresses for traffic stops and DWI&amp;rsquo;s, we see that downtown is the place where most incidents happen:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Other Calls&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;other&amp;rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &amp;ldquo;fireworks disturbance&amp;rdquo; calls always spikes around July 4th, New Year&amp;rsquo;s Eve, and my birthday &lt;sup&gt;not really&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Issues with Geocoding&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;It was my original intent to geocode the records so that I could plot them in a heatmap fashion. Unfortunately, I ran into a couple of challenges:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Finding a geocoder&lt;/strong&gt; - Even though there are only about 233k unique addresses found in the data, I still ran into issues finding a free service to geocode that many addresses. I started working with Mapzen (which is pretty awesome), when I discovered my other problem:&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Generic Addresses&lt;/strong&gt; - Many of the addresses in the dataset are &lt;em&gt;incredibly&lt;/em&gt; vague. For example, the address with the most number of &amp;ldquo;traffic related&amp;rdquo; calls? &amp;ldquo;IH 10 W&amp;rdquo;, followed by &amp;ldquo;NW Loop 410&amp;rdquo;. Go figure.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.&lt;/p&gt;
-
-&lt;h3 id=&#34;sweet-sweet-dashboards&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
-
-&lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.&lt;/p&gt;
-
-&lt;p&gt;I don&amp;rsquo;t think it&amp;rsquo;s any stretch to say that having this visibility into crime across the city &lt;strong&gt;basically makes me&lt;/strong&gt; &lt;sup&gt;the boring part of&lt;/sup&gt; &lt;strong&gt;Batman&lt;/strong&gt;. After all, have you ever seen Batman and me in the same room?&lt;/p&gt;
-
-&lt;p&gt;Didn&amp;rsquo;t think so.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
-
-&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;have-some-data&#34;&gt;Have Some Data&lt;/h3&gt;
-
-&lt;p&gt;Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.&lt;/p&gt;
-
-&lt;p&gt;The dataset contains all records from January 1, 2011 to November 30, 2015, which was when I pulled the data.&lt;/p&gt;
-
-&lt;p&gt;You can download the full dataset &lt;a href=&#34;https://drive.google.com/open?id=0B9Ile8onstUBbWgxakprZk9JYjA&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s help our officers make this city safer.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.
+&lt;/p&gt;</description>
     </item>
     
   </channel>

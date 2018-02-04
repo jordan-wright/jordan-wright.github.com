@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/" />
 
@@ -156,9 +156,9 @@
 
 <p>Back in March, <a href="https://wikileaks.org/clinton-emails/">Wikileaks released</a> over 30,000 emails &ldquo;sent to and from Hillary Clinton&rsquo;s private email server while she was Secretary of State&rdquo;.</p>
 
-<p>I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.</p>
+<p>I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.
 
-<p>First, I needed the emails. I didn&rsquo;t see an official bulk download from Wikileaks, and I didn&rsquo;t need all the data anyway - just the sender and recipient. It turned out to be another job for Python, some good whiskey, and <code>BeautifulSoup</code>.</p>
+First, I needed the emails. I didn&rsquo;t see an official bulk download from Wikileaks, and I didn&rsquo;t need all the data anyway - just the sender and recipient. It turned out to be another job for Python, some good whiskey, and <code>BeautifulSoup</code>.</p>
 
 <p>I iterated through each page of <a href="https://wikileaks.org/clinton-emails/?q=&amp;mfrom=&amp;mto=&amp;title=&amp;notitle=&amp;date_from=1995-03-02&amp;date_to=2014-12-14&amp;nofrom=&amp;noto=&amp;count=200&amp;sort=0#searchresult">search result data</a> (searching for anything in the &ldquo;All&rdquo; date range) at 200 results per page. Then, I used <code>BeautifulSoup</code> to parse out each record.</p>
 
@@ -174,7 +174,6 @@
 <p>You can find all the code and raw data files <a href="https://github.com/jordan-wright/clinton-emails">here</a>.</p>
 
 <p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
-
     </section>
 
 

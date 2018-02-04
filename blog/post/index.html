@@ -38,7 +38,7 @@
         <link href="https://jordan-wright.com/blog/post/index.xml" rel="alternate" type="application/rss+xml" title="Posts &middot; Jordan Wright" />
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/post/" />
 
@@ -132,11 +132,60 @@
 	
 	<span class="page-number">Page 1 of 4</span>
 	
-	    <a class="older-posts" href="/blog/post/page/2/">Older Posts &rarr;</a>
+	    <a class="older-posts" href="/blog/blog/post/page/2/">Older Posts &rarr;</a>
 	
 </nav>
 
 	</div>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/post/2018-01-15-automating-gophish-releases/">Automating Gophish Releases With Ansible and Docker</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><p><img src="/blog/images/headers/gophish_releases.png" alt="" class="pure-img" >
+
+<br>
+It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been writing quite a bit <a href="https://duo.com/blog/post_author/jwright">over on Duo&rsquo;s blog</a> about the really cool research I&rsquo;ve gotten to do this past year with the incredible Duo Labs team.</p>
+
+<p>Any spare time I&rsquo;ve had has been spent working on Gophish. This past year I&rsquo;ve released a <a href="https://getgophish.com">new hand-crafted, artisinal website</a>, responded to nearly 400 support requests, and made too many improvements to count!</p>
+
+<p>Now, most people who use Gophish use a pre-built binary<a href="#footnote-1">*</a>, which means that it&rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&rsquo;m left answering support requests with the advice of &ldquo;build from source&rdquo;, which is not ideal.</p>
+
+<p>The previous release process was manual, making it a <strong>huge pain</strong>. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.</p>
+
+<p>This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&rsquo;s, and more.</p>
+
+<p></p> <a class="read-more icon-standard" href="/blog/post/2018-01-15-automating-gophish-releases/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="https://jordan-wright.com/blog/tags/docker/">#docker</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/ansible/">#ansible</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/digitalocean/">#digitalocean</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+        
+        <time class="post-date" datetime="2018-02-04T11:00:59-06:00">
+            4 Feb 2018
+        </time>
+    </footer>
+</article>
 
 	
 	   
@@ -148,10 +197,7 @@
 	    <p><img src="/blog/images/headers/clinton-emails.png" alt="" class="pure-img" >
 
 
-<p>Back in March, <a href="https://wikileaks.org/clinton-emails/">Wikileaks released</a> over 30,000 emails &ldquo;sent to and from Hillary Clinton&rsquo;s private email server while she was Secretary of State&rdquo;.</p>
-
-<p>I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.</p>
- <a class="read-more icon-standard" href="/blog/post/2016-10-12-mapping-the-clinton-emails/">Read More</a></p>
+<p>Back in March, <a href="https://wikileaks.org/clinton-emails/">Wikileaks released</a> over 30,000 emails &ldquo;sent to and from Hillary Clinton&rsquo;s private email server while she was Secretary of State&rdquo;.</p> <a class="read-more icon-standard" href="/blog/post/2016-10-12-mapping-the-clinton-emails/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -192,8 +238,8 @@
 
 <p>Being an amateur API aficionado, I was excited to find the <a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data">SAPD Open Data Initiative</a> that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.</p>
 
-<p>In this post, I&rsquo;ll explain how I was able to gather and analyze <strong>4.3 million call data records</strong>, or how I basically became the extremely boring part of Batman.</p>
- <a class="read-more icon-standard" href="/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/">Read More</a></p>
+<p>In this post, I&rsquo;ll explain how I was able to gather and analyze <strong>4.3 million call data records</strong>, or how I basically became the extremely boring part of Batman.
+</p> <a class="read-more icon-standard" href="/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -245,8 +291,8 @@
 
 <p>Unfortunately, both of these take way too much time for me. In fact, I&rsquo;d argue that they take too long for our industry. So this weekend, I set out to <strong>automate thought leadership</strong>, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect <em>literally no one</em>.</p>
 
-<p>This resulted in <a href="https://twitter.com/thought__leader">@thought__leader</a>. And it&rsquo;s hilarious.</p>
- <a class="read-more icon-standard" href="/blog/post/2016-04-08-i-automated-infosec-thought-leadership/">Read More</a></p>
+<p>This resulted in <a href="https://twitter.com/thought__leader">@thought__leader</a>. And it&rsquo;s hilarious.
+</p> <a class="read-more icon-standard" href="/blog/post/2016-04-08-i-automated-infosec-thought-leadership/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -285,8 +331,8 @@
 
 <p>When <a href="/blog/categories/tor/">looking at how Tor works</a>, we&rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&rsquo;ll notice that we haven&rsquo;t dealt too much with <em>exit nodes</em>. Exit nodes are the final link in a Tor &ldquo;circuit&rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.</p>
 
-<p>This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&rsquo;t always the case. This post will take a look at what happens when a Tor <a href="https://i.imgur.com/L8L7k1Z.jpg">exit node operator</a> decides to &ldquo;break bad&rdquo; and wreak havoc on Tor users<a href="#end-1"><sup>1</sup></a>.</p>
- <a class="read-more icon-standard" href="/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/">Read More</a></p>
+<p>This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&rsquo;t always the case. This post will take a look at what happens when a Tor <a href="https://i.imgur.com/L8L7k1Z.jpg">exit node operator</a> decides to &ldquo;break bad&rdquo; and wreak havoc on Tor users<a href="#end-1"><sup>1</sup></a>.
+</p> <a class="read-more icon-standard" href="/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -323,8 +369,8 @@
 
 <p>Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.</p>
 
-<p>Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/">Read More</a></p>
+<p>Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.
+</p> <a class="read-more icon-standard" href="/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -363,8 +409,8 @@
 
 <p>I&rsquo;m excited to announce that the <a href="https://github.com/jordan-wright/gophish">gophish</a> &ldquo;alpha&rdquo; release is almost complete! I&rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.</p>
 
-<p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/29/gophish-update-importing-sites-and-emails/">Read More</a></p>
+<p>Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a <em>pain</em> to use as you needed the raw HTML or text for both the email and site content. In this post, let&rsquo;s take a look at how we can now <strong>import sites and emails directly into gophish</strong>.
+</p> <a class="read-more icon-standard" href="/blog/2015/09/29/gophish-update-importing-sites-and-emails/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -397,8 +443,9 @@
 	    <p><img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
 
 
-<p>For this challenge, we were given an HDD image and asked to find the flag on it.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/">Read More</a></p>
+<p>For this challenge, we were given an HDD image and asked to find the flag on it.
+
+Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -432,8 +479,9 @@
 <pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
 </code></pre>
 
-<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:</p>
- <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">Read More</a></p>
+<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
+
+<img src="/blog/images/blog/csaw2015/frame_contains.png"></p> <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -470,8 +518,9 @@
 	    <p><img src="/blog/images/headers/csaw_200.png" alt="" class="pure-img" >
 
 
-<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">Read More</a></p>
+<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.
+
+<img src="/blog/images/blog/csaw2015/lawn_care.png"></p> <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">Read More</a></p>
     </section>
     <footer class="post-meta">
         
@@ -499,50 +548,12 @@
 </article>
 
 	
-	   
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/">CSAW CTF 2015 - Web 600 Writeup</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_600.png" alt="" class="pure-img" >
-
-
-<p>This one was surprisingly easy if you knew where to look.</p>
- <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="https://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
-            
-        
-        <time class="post-date" datetime="2015-09-20T00:00:00Z">
-            20 Sep 2015
-        </time>
-    </footer>
-</article>
-
-	
 
 	<nav class="pagination" role="navigation">
 	
 	<span class="page-number">Page 1 of 4</span>
 	
-	    <a class="older-posts" href="/blog/post/page/2/">Older Posts &rarr;</a>
+	    <a class="older-posts" href="/blog/blog/post/page/2/">Older Posts &rarr;</a>
 	
 </nav>
 

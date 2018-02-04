@@ -6,8 +6,32 @@
     <description>Recent content in Gophish on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 29 Sep 2015 06:45:33 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Feb 2018 11:00:59 -0600</lastBuildDate>
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Automating Gophish Releases With Ansible and Docker</title>
+      <link>https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/</link>
+      <pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/post/2018-01-15-automating-gophish-releases/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_releases.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&lt;br&gt;
+It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href=&#34;https://duo.com/blog/post_author/jwright&#34;&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
+
+&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href=&#34;https://getgophish.com&#34;&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
+
+&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href=&#34;#footnote-1&#34;&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
+
+&lt;p&gt;The previous release process was manual, making it a &lt;strong&gt;huge pain&lt;/strong&gt;. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.&lt;/p&gt;
+
+&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Gophish Update - Importing Sites and Emails</title>
@@ -15,47 +39,15 @@
       <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
 
-&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;importing-sites&#34;&gt;Importing Sites&lt;/h3&gt;
-
-&lt;p&gt;Attackers often &lt;a href=&#34;https://jordan-wright.com/blog/blog/2014/07/30/how-to-hunt-down-phishing-kits/&#34;&gt;create phishing kits&lt;/a&gt; containing exact copies of web site content in an attempt to fool users into entering credentials. To have training that keeps up with this pace, we need the ability to mimic this behavior and clone a site effectively.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at how easy it is to import a site using gophish:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_site.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This works by grabbing the HTML content of the site and adding a &lt;code&gt;&amp;lt;base&amp;gt;&lt;/code&gt; tag so that relative resources (like CSS, JS, etc.) are loaded from the site itself.&lt;/p&gt;
-
-&lt;p&gt;You could use this functionality to clone things such as your own webmail login, company webpage, or other services that the users may be prone to entering sensitive information into. Of course, once you import a site, you&amp;rsquo;re free to edit it to add template variables, change links, etc. through the gophish editor.&lt;/p&gt;
-
-&lt;h3 id=&#34;importing-email&#34;&gt;Importing Email&lt;/h3&gt;
-
-&lt;p&gt;The emails you use in your training are the bait to your phish. Having believable emails is the key to good training, since this will show users first-hand how legit phishing emails can look.&lt;/p&gt;
-
-&lt;p&gt;What better way to get some believable looking email templates than to use &lt;em&gt;real&lt;/em&gt; emails? Now you can import an email in gophish via a simple copy/paste from your email client.&lt;/p&gt;
-
-&lt;p&gt;Here&amp;rsquo;s an example showing how we can import an email from Gmail:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/import_email.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;This functionality is provided by the Go &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt; library I initially created specifically for gophish. The import function takes care of most of the decoding for you, but if you have any issues please let me know by &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;filing an issue!&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m really excited to release gophish in the upcoming month or so and bring enterprise-grade phishing training to &lt;em&gt;anyone&lt;/em&gt; who wants it. Until then, keep checking out the pre-alpha and &lt;a href=&#34;https://github.com/jordan-wright/gophish/issues&#34;&gt;let me know&lt;/a&gt; if you have any questions or comments!&lt;/p&gt;
-
-&lt;p&gt;Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -64,9 +56,7 @@
       <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -75,76 +65,8 @@
 
 &lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href=&#34;https://github.com/jordan-wright/gophish/milestones&#34;&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
 
-&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.&lt;/p&gt;
-
-&lt;h3 id=&#34;design&#34;&gt;Design&lt;/h3&gt;
-
-&lt;p&gt;I moved away from the previous black and white look to a friendlier color scheme using the fantastic &lt;a href=&#34;http://designmodo.github.io/Flat-UI/&#34;&gt;Flat-UI&lt;/a&gt; package from DesignModo.&lt;/p&gt;
-
-&lt;h3 id=&#34;features&#34;&gt;Features&lt;/h3&gt;
-
-&lt;p&gt;My goal is to make using gophish both easy-to-use and powerful. With this in mind, I&amp;rsquo;ve implemented some neat features to make setting up awesome campaigns as simple as possible.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s take a look at a few:&lt;/p&gt;
-
-&lt;h4 id=&#34;wysiwyg-editing-of-html-templates&#34;&gt;WYSIWYG Editing of HTML Templates&lt;/h4&gt;
-
-&lt;p&gt;You can make pixel perfect email and landing page templates and customize the content seamlessly. While I started with some &lt;code&gt;contenteditable&lt;/code&gt; hacks, I couldn&amp;rsquo;t find a reliable way to allow full page rendering (without opening up security issues or design incompatibility problems). So, I looked around and found that &lt;a href=&#34;http://ckeditor.com&#34;&gt;CKEditor&lt;/a&gt; which takes care of this and more!&lt;/p&gt;
-
-&lt;p&gt;Now we can switch between a raw HTML source view and a fully rendered view in just one-click. Want to see what a template would look like full-screen? Also no problem!&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_template.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;email-attachments&#34;&gt;Email Attachments&lt;/h4&gt;
-
-&lt;p&gt;Sending emails with links in them is great, but if we can&amp;rsquo;t add &amp;ldquo;malicious&amp;rdquo; attachments to emails we send, then we miss a &lt;em&gt;huge&lt;/em&gt; attack tactic deployed against our users. I&amp;rsquo;m excited to report that attaching files to email templates is just a matter of selecting the &amp;ldquo;Add Files&amp;rdquo; button on the email template modal and choosing the file you want to attach. Easy as that!&lt;/p&gt;
-
-&lt;h4 id=&#34;bulk-importing-of-users&#34;&gt;Bulk Importing of Users&lt;/h4&gt;
-
-&lt;p&gt;Adding users to a group manually is a &lt;em&gt;pain&lt;/em&gt;. So, I&amp;rsquo;ve implemented bulk inserting that accepts a CSV file, and adds the users automatically. Right now, it allows for the following fields:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;First Name&lt;/li&gt;
-&lt;li&gt;Last Name&lt;/li&gt;
-&lt;li&gt;Email&lt;/li&gt;
-&lt;li&gt;Position&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_group.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;campaign-results-dashboard&#34;&gt;Campaign Results Dashboard&lt;/h4&gt;
-
-&lt;p&gt;Executing campaigns isn&amp;rsquo;t helpful if you don&amp;rsquo;t have a way to see the results. This is why I&amp;rsquo;ve been working on a campaign results dashboard that will serve as a one-stop-shop for viewing campaign results. The plan is to start by having information about the campaign itself, such as clicks over time and overall success rate. However, I want to expand this to also include information about the user, such as browser plugin information, demographics and location, etc.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/gophish_screenshots/gophish_campaign_results.gif&#34;/&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;full-api-support&#34;&gt;Full API Support&lt;/h4&gt;
-
-&lt;p&gt;From the get-go, gophish was &lt;strong&gt;designed for automation&lt;/strong&gt;. Setting up campaigns, importing users, getting results can all be done manually through the Web UI. However, all the UI does is call out to the API. For darn-near &lt;em&gt;everything&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;To take a look at the API documentation, just load up gophish and head over to &lt;code&gt;/api&lt;/code&gt;!&lt;/p&gt;
-
-&lt;h4 id=&#34;coming-soon&#34;&gt;Coming Soon&lt;/h4&gt;
-
-&lt;p&gt;While I&amp;rsquo;m proud of all that&amp;rsquo;s been accomplished with gophish so far, it&amp;rsquo;s not even close to being done.&lt;/p&gt;
-
-&lt;p&gt;Here are just a few of the &lt;em&gt;many&lt;/em&gt; features coming down the pipeline to get excited about:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;A more fleshed out Campaign Results dashboard (&lt;span&gt;&lt;i class=&#34;fa fa-heart-o&#34;&gt;&lt;/i&gt;&lt;/span&gt; metrics)&lt;/li&gt;
-&lt;li&gt;Ability to schedule campaigns in advance&lt;/li&gt;
-&lt;li&gt;Email tracking - know when an email is opened!&lt;/li&gt;
-&lt;li&gt;The ability to clone a landing page template with one click&lt;/li&gt;
-&lt;li&gt;Support for importing emails from the &amp;ldquo;Source&amp;rdquo; of an existing email (or hopefully even an IMAP service directly!)&lt;/li&gt;
-&lt;li&gt;&amp;ldquo;Teams&amp;rdquo; support to share and coordinate phishing campaigns&lt;/li&gt;
-&lt;li&gt;Realtime updates to campaign results dashboard&lt;/li&gt;
-&lt;li&gt;Client API libraries (eg Python)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;Gophish development continues to push forward as much as possible. While I&amp;rsquo;m balancing time between a few different projets, I hope to get gophish alpha out the door as soon as possible. As always, please don&amp;rsquo;t hesitate to let me know if you have any questions or comments! Also, if you use gophish and have any ideas/issues, let me know on &lt;a href=&#34;http://github.com/jordan-wright/gophish/issues&#34;&gt;Github&lt;/a&gt;!&lt;/p&gt;
-</description>
+&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -153,9 +75,7 @@
       <pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -164,72 +84,8 @@
 
 &lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href=&#34;http://golang.org/pkg/net/smtp/&#34;&gt;SMTP&lt;/a&gt; package, &lt;a href=&#34;http://golang.org/pkg/mime/&#34;&gt;MIME&lt;/a&gt; package, and even a &lt;a href=&#34;http://golang.org/pkg/net/mail/&#34;&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s see how to use it.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-you-normally-send-an-email-in-go&#34;&gt;How You &lt;em&gt;Normally&lt;/em&gt; Send an Email in Go&lt;/h3&gt;
-
-&lt;p&gt;To send email in Go, one needs to:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Create a byte slice of the email message (conforming to all needed RFC&amp;rsquo;s)&lt;/li&gt;
-&lt;li&gt;Send this email using the SMTP library&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The second part is easy, the first part is not. Sure, sending a simple text message may be straight forward, but things get tricky when you want to cover things like supporting HTML and text body types, attaching files, supporting CC and BCC recipients, etc.&lt;/p&gt;
-
-&lt;h3 id=&#34;sending-email-using-the-email-package&#34;&gt;Sending Email Using the &lt;code&gt;email&lt;/code&gt; Package&lt;/h3&gt;
-
-&lt;p&gt;To make this easier, I have created the &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;&lt;code&gt;email&lt;/code&gt;&lt;/a&gt; package (full documentation &lt;a href=&#34;http://godoc.org/github.com/jordan-wright/email&#34;&gt;here&lt;/a&gt;). This package allows users to create emails with a variety of options, and send them easily. Examples say more than I can, so here is some code showing how to use the package.&lt;/p&gt;
-
-&lt;h4 id=&#34;installing-the-package&#34;&gt;Installing the Package&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;go get github.com/jordan-wright/email
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;creating-a-new-email&#34;&gt;Creating a New Email&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
-
-import &amp;quot;github.com/jordan-wright/email&amp;quot;
-
-func main() {
-	e := email.NewEmail()
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;setting-the-subject-to-from-bcc-cc&#34;&gt;Setting the Subject, To, From, Bcc, Cc&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Subject = &amp;quot;Awesome Subject&amp;quot;
-e.From = &amp;quot;Jordan Wright &amp;lt;test@gmail.com&amp;gt;&amp;quot;
-e.To = []string{&amp;quot;test@example.com&amp;quot;}
-e.Bcc = []string{&amp;quot;test_bcc@example.com&amp;quot;}
-e.Cc = []string{&amp;quot;test_cc@example.com&amp;quot;}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;setting-the-content-html-text&#34;&gt;Setting the Content (HTML &amp;amp; Text)&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Text = &amp;quot;Text Body is, of course, supported!&amp;quot;
-e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&amp;gt;&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;attaching-a-file&#34;&gt;Attaching a File&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.AttachFile(&amp;quot;test.txt&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can also use the &lt;a href=&#34;http://godoc.org/github.com/jordan-wright/email#Email.Attach&#34;&gt;&lt;code&gt;Attach&lt;/code&gt;&lt;/a&gt; function to attach content directly from an io.Reader.&lt;/p&gt;
-
-&lt;h4 id=&#34;sending-the-email-using-gmail-as-example&#34;&gt;Sending the Email (Using Gmail as Example)&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;e.Send(&amp;quot;smtp.gmail.com:587&amp;quot;, smtp.PlainAuth(&amp;quot;&amp;quot;, &amp;quot;test@gmail.com&amp;quot;, &amp;quot;password123&amp;quot;, &amp;quot;smtp.gmail.com&amp;quot;))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h4&gt;
-
-&lt;p&gt;I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Let&amp;rsquo;s see how to use it.
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -238,9 +94,7 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
       <pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
@@ -249,43 +103,8 @@ e.HTML = &amp;quot;&amp;lt;h1&amp;gt;Fancy Html is supported, too!&amp;lt;/h1&am
 
 &lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href=&#34;http://golang.org/&#34;&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
 
-&lt;p&gt;With that being said - let&amp;rsquo;s get started!&lt;/p&gt;
-
-&lt;h3 id=&#34;why-go&#34;&gt;Why Go?&lt;/h3&gt;
-
-&lt;p&gt;In addition to learning a new language, here are a few reasons why I chose &lt;code&gt;go&lt;/code&gt; for this project:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Cross-compile binaries by default&lt;/li&gt;
-&lt;li&gt;Only distribute one binary - just download and run (no more dependencies!)&lt;/li&gt;
-&lt;li&gt;Low memory overhead&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I believe the second point is crucial, in that it makes it &lt;em&gt;dead-simple&lt;/em&gt; to get up and running. Existing solutions (such as SPT or &lt;a href=&#34;https://github.com/pentestgeek/phishing-frenzy&#34;&gt;Phishing Frenzy&lt;/a&gt;) require an already running webserver or other framework installation.&lt;/p&gt;
-
-&lt;h3 id=&#34;gophish-requirements&#34;&gt;Gophish Requirements&lt;/h3&gt;
-
-&lt;p&gt;Here are a few of the things I want to be able to do with gophish:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Create &amp;ldquo;campaigns&amp;rdquo;, each of which are a simulation of a phishing attack&lt;/li&gt;
-&lt;li&gt;Create HTML or text templates for phishing emails, providing as many as possible built-in&lt;/li&gt;
-&lt;li&gt;Allow users to clone existing sites for use in templates&lt;/li&gt;
-&lt;li&gt;Allow users to import and group phishing targets easily&lt;/li&gt;
-&lt;li&gt;Provide intuitive analytics, and allow reports to be exported&lt;/li&gt;
-&lt;li&gt;If possible, integrate with existing products such as the Social Engineer&amp;rsquo;s Toolkit&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h3&gt;
-
-&lt;p&gt;I am &lt;em&gt;tentatively&lt;/em&gt; planning on creating a REST API for all backend functionality, so as to allow developers to automate gophish. This will also make it easier to separate front-end logic from the backend.&lt;/p&gt;
-
-&lt;p&gt;I have looked around at different &lt;code&gt;go&lt;/code&gt; web frameworks, and I am going to start by taking a look at the tools provided in the &lt;a href=&#34;http://www.gorillatoolkit.org/&#34;&gt;Gorilla toolkit&lt;/a&gt;, since they seem to sit on top of the standard &lt;code&gt;net/http&lt;/code&gt; library without abstracting too many things away.&lt;/p&gt;
-
-&lt;p&gt;That&amp;rsquo;s all I have for now - stay tuned for progress updates (and a big initial commit)! And, as always, let me know if you have any questions or suggestions in the comments below!&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;http://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;With that being said - let&amp;rsquo;s get started!
+&lt;/p&gt;</description>
     </item>
     
   </channel>

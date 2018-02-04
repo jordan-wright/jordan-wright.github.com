@@ -40,7 +40,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.17-DEV" />
+    <meta name="generator" content="Hugo 0.27-DEV" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/" />
 
@@ -146,9 +146,9 @@
       <img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
 
 
-<p>For this challenge, we were given an HDD image and asked to find the flag on it.</p>
+<p>For this challenge, we were given an HDD image and asked to find the flag on it.
 
-<p>Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p>
+Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p>
 
 <pre><code class="language-text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
 flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &quot;mkfs.fat&quot;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)
@@ -191,7 +191,6 @@ jordan@temp:/mnt$ ls
 <p>Sweet. The flag is <code>flag{b3l0w_th3_r4dar}</code></p>
 
 <p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
-
     </section>
 
 

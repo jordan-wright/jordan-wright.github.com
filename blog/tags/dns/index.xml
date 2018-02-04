@@ -7,7 +7,9 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 30 Sep 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jordan-wright.com/blog/tags/dns/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="https://jordan-wright.com/blog/tags/dns/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>How to Download a List of All Registered Domain Names</title>
@@ -15,176 +17,15 @@
       <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
-      <description>
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
 
 
 &lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
 
 &lt;p&gt;Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.&lt;/p&gt;
 
-&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.&lt;/p&gt;
-
-&lt;h3 id=&#34;zone-files&#34;&gt;Zone Files&lt;/h3&gt;
-
-&lt;p&gt;Before being swamped with domains, let&amp;rsquo;s talk a little about how these lists of domains are organized. Someone has to keep track of all the domains for a certain TLD (.com, .net, .ninja, etc.). These are called the &lt;em&gt;registries&lt;/em&gt;. Each registry maintains a master list of all the domains they are responsible for. This master list is called a &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Zone_file&#34;&gt;zone file&lt;/a&gt;&amp;rdquo;.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s the registry&amp;rsquo;s responsibility to maintain this zone file. As you can imagine, the zone file for TLD&amp;rsquo;s updates many times a day as new domains are registered, other domains expire, and nameserver records are changed.&lt;/p&gt;
-
-&lt;h3 id=&#34;i-just-want-to-download-the-data&#34;&gt;I Just Want to Download the Data!&lt;/h3&gt;
-
-&lt;p&gt;So we know what zone files are for, but how do we access them? As mentioned before, each registry is responsible for maintaining the zone file for their TLD, but they are also responsible for maintaining &lt;em&gt;access to&lt;/em&gt; the zone file. This means that in some cases we&amp;rsquo;ll need to go directly to the registrar, but there are some helpful exceptions.&lt;/p&gt;
-
-&lt;h4 id=&#34;com-net-and-name&#34;&gt;.COM, .NET, and .NAME&lt;/h4&gt;
-
-&lt;p&gt;Let&amp;rsquo;s start with the most obvious ones: .com, .net, and .name (since it&amp;rsquo;s bundled). These are maintained by Verisign. &lt;a href=&#34;https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml&#34;&gt;Access to these zone files&lt;/a&gt; consists of downloading a &lt;a href=&#34;https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx&#34;&gt;Zone Access Form&lt;/a&gt; and emailing the completed form to &lt;code&gt;tldzone@verisign-grs.com&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;It took a couple of weeks for this access to be granted. After your form is approved, you will receive FTP credentials that can be used to download the zone files daily.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# ftp rz.verisign-grs.com
-Connected to rz.verisign-grs.com.
-220-**** Welcome to the VeriSign Global Registry Services gTLD Zone FTP Server ****
-220-***
-220-*** This computer system is owned and operated by VeriSign, Inc.
-220-*** All software or information that you access or download from this
-220-*** server is being licensed to you under the terms of our Registrar
-220-*** License and Agreement.  Unauthorized access to this system may
-220-*** result in criminal prosecution.
-220-***
-220-*** All sessions established with this server are monitored and logged.
-220-*** Disconnect now if you do not consent to having your actions monitored
-220-*** and logged.
-220-***
-220-******!
-220
-Name: [redacted]
-331 Please specify the password.
-Password:
-230 Login successful.
-Remote system type is UNIX.
-Using binary mode to transfer files.
-ftp&amp;gt; ls
-200 PORT command successful. Consider using PASV.
-150 Here comes the directory listing.
-&amp;lt;snip&amp;gt;
--rw-r--r--    1 ftp      ftp      2497503218 Sep 29 15:20 com.zone.gz
--rw-r--r--    1 ftp      ftp      321976673 Sep 29 15:12 net.zone.gz
-226 Directory send OK.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We&amp;rsquo;ll take a look at what we can do with these soon. First, let&amp;rsquo;s talk about how we can catch all that malware on &lt;code&gt;.ninja&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h4 id=&#34;the-centralized-zone-data-service-czds&#34;&gt;The Centralized Zone Data Service (CZDS)&lt;/h4&gt;
-
-&lt;p&gt;You&amp;rsquo;ve likely noticed that there are a &lt;em&gt;ton&lt;/em&gt; of new gTLDs appearing. At the time of this writing, there are &lt;a href=&#34;https://www.iana.org/domains/root/db&#34;&gt;1070 valid and sponsored TLDs&lt;/a&gt; approved by the IANA - a department of ICANN.&lt;/p&gt;
-
-&lt;p&gt;Since each registry maintains its own zone file, it&amp;rsquo;s overwhelming to try to get access to all of them separately. Fortunately, ICANN solved this problem by creating the Centralized Zone Data Service (CZDS).&lt;/p&gt;
-
-&lt;p&gt;CZDS &amp;ldquo;provides a centralized access point&amp;hellip; to the Zone Files provided by participating Top Level Domains&amp;rdquo;. This means that, by registering with CZDS, we can simultaneously request access to most of the TLD (including those gTLDs) zone files.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/download_domains/czds.png&#34;/&gt;&lt;/p&gt;
-
-&lt;p&gt;When you get access to a particular zone file, you&amp;rsquo;re able to download it via &lt;a href=&#34;https://czds.icann.org/en/help/api-access&#34;&gt;ICANN&amp;rsquo;s API&lt;/a&gt;. They even provide a &lt;a href=&#34;https://github.com/fourkitchens/czdap-tools&#34;&gt;Python client&lt;/a&gt; that can be used to bulk download all the zone files you have access to.&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, you may not get access to all zone files. In fact, looking at &lt;a href=&#34;https://czdap.icann.org/en/reports&#34;&gt;the most recent report&lt;/a&gt; released by ICANN, TLDs such as &lt;code&gt;.aaa&lt;/code&gt; only have &lt;strong&gt;3&lt;/strong&gt; people authorized to use CZDS to download the zone file. We&amp;rsquo;ll work with what we have, I suppose.&lt;/p&gt;
-
-&lt;p&gt;Ok, we have enough data. Let&amp;rsquo;s start parsing.&lt;/p&gt;
-
-&lt;h3 id=&#34;parsing-zone-files&#34;&gt;Parsing Zone Files&lt;/h3&gt;
-
-&lt;p&gt;If you want to parse everything about the zone files, you can read about the full format in &lt;a href=&#34;https://tools.ietf.org/html/rfc1035&#34;&gt;RFC 1035&lt;/a&gt;, but this post is only interested in the domain -&amp;gt; nameserver mappings. So, let&amp;rsquo;s just start by taking a look at the contents of the file.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# head com.zone -n 50
-; The use of the Data contained in Verisign Inc.&#39;s aggregated
-; .com, and .net top-level domain zone files (including the checksum
-; files) is subject to the restrictions described in the access Agreement
-; with Verisign Inc.
-
-$ORIGIN COM.
-$TTL 900
-@ IN    SOA     a.gtld-servers.net. nstld.verisign-grs.com. (
-                                  1443370544 ;serial
-                                  1800 ;refresh every 30 min
-                                  900 ;retry every 15 min
-                                  604800 ;expire after a week
-                                  86400 ;minimum of a day
-                                  )
-$TTL 172800
- NS A.GTLD-SERVERS.NET.
- NS G.GTLD-SERVERS.NET.
- NS H.GTLD-SERVERS.NET.
- NS C.GTLD-SERVERS.NET.
- NS I.GTLD-SERVERS.NET.
- NS B.GTLD-SERVERS.NET.
- NS D.GTLD-SERVERS.NET.
- NS L.GTLD-SERVERS.NET.
- NS F.GTLD-SERVERS.NET.
- NS J.GTLD-SERVERS.NET.
- NS K.GTLD-SERVERS.NET.
- NS E.GTLD-SERVERS.NET.
- NS M.GTLD-SERVERS.NET.
-COM. 86400 DNSKEY 257 3 8 AQPD&amp;lt;snip&amp;gt;
-COM. 86400 DNSKEY 256 3 8 AQOp&amp;lt;snip&amp;gt;
-COM. 86400 NSEC3PARAM 1 0 0 -
-COM. 900 RRSIG SOA 8 1 900 20151004161544 20150927150544 35864 COM. MpW&amp;lt;snip&amp;gt;
-COM. RRSIG NS 8 1 172800 20151003045209 20150926034209 35864 COM. mcxl&amp;lt;snip&amp;gt;
-COM. 86400 RRSIG NSEC3PARAM 8 1 86400 20151003045209 20150926034209 35864 COM. SLk71&amp;lt;snip&amp;gt;
-COM. 86400 RRSIG DNSKEY 8 1 86400 20150930182533 20150923182033 30909 COM. pDtt&amp;lt;snip&amp;gt;
-KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
-KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
-KITCHENFLOORTILE NS NS1.HOSTINGNET
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The first 35 lines of the file include some information about the zone file, the root name servers, etc. The actual meat of the file starts on line 36.&lt;/p&gt;
-
-&lt;p&gt;Typically, zone files contain lines that have the following format:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Name&lt;/li&gt;
-&lt;li&gt;TTL&lt;/li&gt;
-&lt;li&gt;Record Class&lt;/li&gt;
-&lt;li&gt;Record Type&lt;/li&gt;
-&lt;li&gt;Record Data&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In our example, we see that &lt;code&gt;KITCHENROKTOBERFEST.COM&lt;/code&gt; (the .com is understood) points to the name servers at &lt;code&gt;NS1.HOSTINGNET.COM&lt;/code&gt; and &lt;code&gt;NS2.HOSTINGNET.COM&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;In addition to lines showing how domain names map to nameservers, at the bottom of the file we have the A records (IP addresses) for each name server in the file. But what if we want to remove all the &amp;ldquo;fluff&amp;rdquo; and only keep the lines showing which domains map to which nameservers?&lt;/p&gt;
-
-&lt;p&gt;We can grab the &amp;ldquo;interesting&amp;rdquo; lines using a simple &lt;code&gt;grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone&lt;/code&gt;, which will give us only the lines with domains pointing to nameservers.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | head -n 10
-KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
-KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
-KITCHENFLOORTILE NS NS1.HOSTINGNET
-KITCHENFLOORTILE NS NS2.HOSTINGNET
-KITCHENTABLESET NS NS1.HOSTINGNET
-KITCHENTABLESET NS NS2.HOSTINGNET
-KITEPICTURES NS NS1.HOSTINGNET
-KITEPICTURES NS NS2.HOSTINGNET
-BOYSBOXERS NS NS1.HOSTINGNET
-BOYSBOXERS NS NS2.HOSTINGNET
-
-root@tld:~# grep -E &amp;quot;^[a-zA-Z0-9-]+ NS .&amp;quot; com.zone | wc -l
-281899907
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Awesome.&lt;/strong&gt; We can parse this output to do anything we want with our list of domains.&lt;/p&gt;
-
-&lt;h3 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h3&gt;
-
-&lt;p&gt;There are a &lt;em&gt;ton&lt;/em&gt; of use cases for this data in terms of information security, such as typo-squat monitoring, DGA monitoring, bit flip monitoring, etc.
-However, while this is an infosec blog, zone files can be used for far more than that. It could be used to detect name trends, watch for certain keywords, and more.&lt;/p&gt;
-
-&lt;p&gt;Now, consider what would happen if you kept a version controlled &lt;em&gt;diff&lt;/em&gt; of this data every day. That would allow you to see trends over time or, for infosec, watch how domains change. Domain move behind Cloudflare/Akamai? You&amp;rsquo;ll have a record of what nameserver they pointed to before the move.&lt;/p&gt;
-
-&lt;p&gt;I hope this sheds some light on not only how useful zone files are, but also how &lt;strong&gt;accessible&lt;/strong&gt; they are. ICANN, Verisign, and other registries deserve credit for making this data available to the public.&lt;/p&gt;
-
-&lt;p&gt;As always, let me know if you have questions/comments.&lt;/p&gt;
-
-&lt;p&gt;-Jordan (&lt;a href=&#34;https://twitter.com/jw_sec&#34;&gt;@jw_sec&lt;/a&gt;)&lt;/p&gt;
-</description>
+&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.
+&lt;/p&gt;</description>
     </item>
     
   </channel>
