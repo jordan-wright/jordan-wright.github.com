@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
 
@@ -159,56 +159,50 @@
 
 
 <p>This challenge starts off with the following hint:</p>
-
-<pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
 <p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
 
 <img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
 
 <p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">import</span> <span style="color:#289870">string</span>
+<span style="color:#2838b0">import</span> <span style="color:#289870">random</span>
+<span style="color:#2838b0">from</span> <span style="color:#289870">base64</span> <span style="color:#2838b0">import</span> b64encode<span style="color:#888">,</span> b64decode
 
-<pre><code class="language-python">import string
-import random
-from base64 import b64encode, b64decode
+FLAG <span style="color:#666">=</span> <span style="color:#b83838">&#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;</span>
 
-FLAG = 'flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}'
+enc_ciphers <span style="color:#666">=</span> <span style="color:#888">[</span><span style="color:#b83838">&#39;rot13&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;b64e&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;caesar&#39;</span><span style="color:#888">]</span>
+<span style="color:#888;font-style:italic"># dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]</span>
 
-enc_ciphers = ['rot13', 'b64e', 'caesar']
-# dec_ciphers = ['rot13', 'b64d', 'caesard']
+<span style="color:#2838b0">def</span> <span style="color:#785840">rot13</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
+    _rot13 <span style="color:#666">=</span> string<span style="color:#666">.</span>maketrans<span style="color:#888">(</span> 
+    <span style="color:#b83838">&#34;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&#34;</span><span style="color:#888">,</span> 
+    <span style="color:#b83838">&#34;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&#34;</span><span style="color:#888">)</span>
+    <span style="color:#2838b0">return</span> string<span style="color:#666">.</span>translate<span style="color:#888">(</span>s<span style="color:#888">,</span> _rot13<span style="color:#888">)</span>
 
-def rot13(s):
-    _rot13 = string.maketrans( 
-    &quot;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&quot;, 
-    &quot;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&quot;)
-    return string.translate(s, _rot13)
+<span style="color:#2838b0">def</span> <span style="color:#785840">b64e</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
+    <span style="color:#2838b0">return</span> b64encode<span style="color:#888">(</span>s<span style="color:#888">)</span>
 
-def b64e(s):
-    return b64encode(s)
+<span style="color:#2838b0">def</span> <span style="color:#785840">caesar</span><span style="color:#888">(</span>plaintext<span style="color:#888">,</span> shift<span style="color:#666">=</span><span style="color:#444">3</span><span style="color:#888">):</span>
+    alphabet <span style="color:#666">=</span> string<span style="color:#666">.</span>ascii_lowercase
+    shifted_alphabet <span style="color:#666">=</span> alphabet<span style="color:#888">[</span>shift<span style="color:#888">:]</span> <span style="color:#666">+</span> alphabet<span style="color:#888">[:</span>shift<span style="color:#888">]</span>
+    table <span style="color:#666">=</span> string<span style="color:#666">.</span>maketrans<span style="color:#888">(</span>alphabet<span style="color:#888">,</span> shifted_alphabet<span style="color:#888">)</span>
+    <span style="color:#2838b0">return</span> plaintext<span style="color:#666">.</span>translate<span style="color:#888">(</span>table<span style="color:#888">)</span>
 
-def caesar(plaintext, shift=3):
-    alphabet = string.ascii_lowercase
-    shifted_alphabet = alphabet[shift:] + alphabet[:shift]
-    table = string.maketrans(alphabet, shifted_alphabet)
-    return plaintext.translate(table)
+<span style="color:#2838b0">def</span> <span style="color:#785840">encode</span><span style="color:#888">(</span>pt<span style="color:#888">,</span> cnt<span style="color:#666">=</span><span style="color:#444">50</span><span style="color:#888">):</span>
+    tmp <span style="color:#666">=</span> <span style="color:#b83838">&#39;2{}&#39;</span><span style="color:#666">.</span>format<span style="color:#888">(</span>b64encode<span style="color:#888">(</span>pt<span style="color:#888">))</span>
+    <span style="color:#2838b0">for</span> cnt <span style="color:#a848a8">in</span> <span style="color:#388038">xrange</span><span style="color:#888">(</span>cnt<span style="color:#888">):</span>
+        c <span style="color:#666">=</span> random<span style="color:#666">.</span>choice<span style="color:#888">(</span>enc_ciphers<span style="color:#888">)</span>
+        i <span style="color:#666">=</span> enc_ciphers<span style="color:#666">.</span>index<span style="color:#888">(</span>c<span style="color:#888">)</span> <span style="color:#666">+</span> <span style="color:#444">1</span>
+        _tmp <span style="color:#666">=</span> <span style="color:#388038">globals</span><span style="color:#888">()[</span>c<span style="color:#888">](</span>tmp<span style="color:#888">)</span>
+        tmp <span style="color:#666">=</span> <span style="color:#b83838">&#39;{}{}&#39;</span><span style="color:#666">.</span>format<span style="color:#888">(</span>i<span style="color:#888">,</span> _tmp<span style="color:#888">)</span>
 
-def encode(pt, cnt=50):
-    tmp = '2{}'.format(b64encode(pt))
-    for cnt in xrange(cnt):
-        c = random.choice(enc_ciphers)
-        i = enc_ciphers.index(c) + 1
-        _tmp = globals()[c](tmp)
-        tmp = '{}{}'.format(i, _tmp)
+    <span style="color:#2838b0">return</span> tmp
 
-    return tmp
+<span style="color:#2838b0">if</span> <span style="color:#b85820">__name__</span> <span style="color:#666">==</span> <span style="color:#b83838">&#39;__main__&#39;</span><span style="color:#888">:</span>
+    <span style="color:#2838b0">print</span> encode<span style="color:#888">(</span>FLAG<span style="color:#888">,</span> cnt<span style="color:#666">=</span><span style="background-color:#a848a8">?</span><span style="color:#888">)</span>
 
-if __name__ == '__main__':
-    print encode(FLAG, cnt=?)
-
-2Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm&lt;snip&gt;
-</code></pre>
-
+<span style="color:#444">2</span>Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm<span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span></code></pre></div>
 <p>We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&rsquo;s dissect the <code>encode</code> function to see if we can figure out what&rsquo;s going on with the input.</p>
 
 <p>It looks like we start off by base64 encoding the input and prepending &ldquo;2&rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.</p>
@@ -224,30 +218,23 @@ if __name__ == '__main__':
 </ul>
 
 <p>All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change <code>shift=3</code> to <code>shift=-3</code>. Then, we only have to add the following base64 decode function:</p>
-
-<pre><code class="language-python">def b64d(s):
-    return b64decode(s)
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">def</span> <span style="color:#785840">b64d</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
+    <span style="color:#2838b0">return</span> b64decode<span style="color:#888">(</span>s<span style="color:#888">)</span></code></pre></div>
 <p>Finally, we just need to put the pieces together to do the reversing. I used the following <code>decode</code> and <code>main</code> functions:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">def</span> <span style="color:#785840">decode</span><span style="color:#888">(</span>pt<span style="color:#888">):</span>
+	<span style="color:#2838b0">while</span> <span style="color:#b83838">&#34;flag&#34;</span> <span style="color:#a848a8">not</span> <span style="color:#a848a8">in</span> pt<span style="color:#888">:</span>
+		i <span style="color:#666">=</span> <span style="color:#388038">int</span><span style="color:#888">(</span>pt<span style="color:#888">[</span><span style="color:#444">0</span><span style="color:#888">])</span>
+		raw <span style="color:#666">=</span> pt<span style="color:#888">[</span><span style="color:#444">1</span><span style="color:#888">:]</span>
+		<span style="color:#2838b0">print</span> <span style="color:#b83838">&#34;Running function &#34;</span> <span style="color:#666">+</span> dec_ciphers<span style="color:#888">[</span>i<span style="color:#666">-</span><span style="color:#444">1</span><span style="color:#888">]</span>
+		_pt <span style="color:#666">=</span> <span style="color:#388038">globals</span><span style="color:#888">()[</span>dec_ciphers<span style="color:#888">[</span>i<span style="color:#666">-</span><span style="color:#444">1</span><span style="color:#888">]](</span>raw<span style="color:#888">)</span>
+		pt <span style="color:#666">=</span> _pt
+	<span style="color:#2838b0">print</span> pt
 
-<pre><code class="language-python">def decode(pt):
-	while &quot;flag&quot; not in pt:
-		i = int(pt[0])
-		raw = pt[1:]
-		print &quot;Running function &quot; + dec_ciphers[i-1]
-		_pt = globals()[dec_ciphers[i-1]](raw)
-		pt = _pt
-	print pt
-
-if __name__ == '__main__':
-	with open('csaw_data.txt', 'r') as raw:
-		print decode(raw.read().strip())
-</code></pre>
-
+<span style="color:#2838b0">if</span> <span style="color:#b85820">__name__</span> <span style="color:#666">==</span> <span style="color:#b83838">&#39;__main__&#39;</span><span style="color:#888">:</span>
+	<span style="color:#2838b0">with</span> <span style="color:#388038">open</span><span style="color:#888">(</span><span style="color:#b83838">&#39;csaw_data.txt&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;r&#39;</span><span style="color:#888">)</span> <span style="color:#2838b0">as</span> raw<span style="color:#888">:</span>
+		<span style="color:#2838b0">print</span> decode<span style="color:#888">(</span>raw<span style="color:#666">.</span>read<span style="color:#888">()</span><span style="color:#666">.</span>strip<span style="color:#888">())</span></code></pre></div>
 <p>This gives us the following output:</p>
-
-<pre><code class="language-text">Running function b64d
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Running function b64d
 Running function b64d
 Running function caesard
 Running function b64d
@@ -308,9 +295,7 @@ Running function rot13
 Running function caesard
 Running function caesard
 Running function b64d
-flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
-</code></pre>
-
+flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></pre></div>
 <p>There&rsquo;s the flag! <code>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></p>
 
 <p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
@@ -322,7 +307,7 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -335,7 +320,7 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

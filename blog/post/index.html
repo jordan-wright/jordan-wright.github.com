@@ -38,7 +38,7 @@
         <link href="https://jordan-wright.com/blog/post/index.xml" rel="alternate" type="application/rss+xml" title="Posts &middot; Jordan Wright" />
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/post/" />
 
@@ -141,6 +141,49 @@
 	   
 <article class="post post">
     <header class="post-header">
+        <h2 class="post-title"><a href="/blog/post/2018-09-02-building-email-healthcheck/">Building Gophish Healthcheck: Part One</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><img src="/blog/images/headers/gophish_healthcheck.png" alt="" class="pure-img" >
+
+
+<p>One of the questions I see most often from Gophish users is &ldquo;how do I get past my spam filter?&rdquo; Generally, my answer to this is something along the lines of &ldquo;just whitelist the IP address,&rdquo; since it&rsquo;s my opinion that phishing simulations should be a test of the <em>people</em> and <em>processes</em>, not the email infrastructure.</p>
+
+<p><strong>But what if we do want to test the email infrastructure?</strong></p>
+
+<p>This post is the first in a two-part series about how I&rsquo;m creating the <a href="https://github.com/gophish/healthcheck">email healthcheck</a> service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.</p>
+
+<p></p> <a class="read-more icon-standard" href="/blog/post/2018-09-02-building-email-healthcheck/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="https://jordan-wright.com/blog/tags/gophish/">#gophish</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/healthcheck/">#healthcheck</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/go/">#go</a>,
+            
+        
+        <time class="post-date" datetime="2018-09-02T22:01:01-05:00">
+            2 Sep 2018
+        </time>
+    </footer>
+</article>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
         <h2 class="post-title"><a href="/blog/post/2018-02-04-automating-gophish-releases/">Automating Gophish Releases With Ansible and Docker</a></h2>
     </header>
     <section class="post-excerpt">
@@ -164,7 +207,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -203,7 +246,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -245,7 +288,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -298,7 +341,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -338,7 +381,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -376,7 +419,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -416,7 +459,7 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -451,7 +494,7 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -474,10 +517,7 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
 
 
 <p>This challenge starts off with the following hint:</p>
-
-<pre><code class="language-text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
 <p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
 
 <img src="/blog/images/blog/csaw2015/frame_contains.png"></p> <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">Read More</a></p>
@@ -487,7 +527,7 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
         
 
         
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
         
         
             Jordan Wright
@@ -503,45 +543,6 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
         
         <time class="post-date" datetime="2015-09-22T19:05:18Z">
             22 Sep 2015
-        </time>
-    </footer>
-</article>
-
-	
-	   
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">CSAW CTF 2015 - Web 200 Writeup</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_200.png" alt="" class="pure-img" >
-
-
-<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.
-
-<img src="/blog/images/blog/csaw2015/lawn_care.png"></p> <a class="read-more icon-standard" href="/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="https://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
-            
-        
-        <time class="post-date" datetime="2015-09-21T00:00:00Z">
-            21 Sep 2015
         </time>
     </footer>
 </article>

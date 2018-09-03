@@ -48,7 +48,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/" />
 
@@ -244,28 +244,25 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
 <p>The first task we need to build is to automatically create a <a href="https://m.do.co/c/2895d5b6c219">DigitalOcean</a> droplet. Ansible provides a <a href="https://docs.ansible.com/ansible/latest/digital_ocean_module.html"><code>digital_ocean</code></a> module, making it easy to interact with DigitalOcean droplets. <a href="https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-api-v2-with-ansible-2-0-on-ubuntu-16-04">This article</a> gives a good, quick overview of how to use Ansible and DigitalOcean together.</p>
 
 <p>The first step is to ensure we have our SSH key generated, and uploaded to our DigitalOcean account:</p>
-
-<pre><code class="language-yaml">- hosts: localhost
-  connection: local
-
-  tasks:
-    - name: ensure ssh key exists
-      user:
-        name: &quot;{{ ansible_user_id }}&quot;
-        generate_ssh_key: yes
-        ssh_key_file: .ssh/gophish_dev
-        ssh_key_bits: 4096
-
-    - name: ensure ssh key is uploaded to DigitalOcean
-      digital_ocean:
-        state: present
-        command: ssh
-        name: gophish-dev
-        ssh_pub_key: &quot;{{ lookup('file', '~/.ssh/gophish_dev.pub') }}&quot;
-        api_token: &quot;{{ do_token }}&quot;
-        register: gophish_ssh_key
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">-<span style="color:#a89028"> </span>hosts<span style="color:#888">:</span><span style="color:#a89028"> </span>localhost<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>connection<span style="color:#888">:</span><span style="color:#a89028"> </span>local<span style="color:#a89028">
+</span><span style="color:#a89028">
+</span><span style="color:#a89028">  </span>tasks<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>ensure<span style="color:#a89028"> </span>ssh<span style="color:#a89028"> </span>key<span style="color:#a89028"> </span>exists<span style="color:#a89028">
+</span><span style="color:#a89028">      </span>user<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">        </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ ansible_user_id }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">        </span>generate_ssh_key<span style="color:#888">:</span><span style="color:#a89028"> </span>yes<span style="color:#a89028">
+</span><span style="color:#a89028">        </span>ssh_key_file<span style="color:#888">:</span><span style="color:#a89028"> </span>.ssh/gophish_dev<span style="color:#a89028">
+</span><span style="color:#a89028">        </span>ssh_key_bits<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#444">4096</span><span style="color:#a89028">
+</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>ensure<span style="color:#a89028"> </span>ssh<span style="color:#a89028"> </span>key<span style="color:#a89028"> </span>is<span style="color:#a89028"> </span>uploaded<span style="color:#a89028"> </span>to<span style="color:#a89028"> </span>DigitalOcean<span style="color:#a89028">
+</span><span style="color:#a89028">      </span>digital_ocean<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">        </span>state<span style="color:#888">:</span><span style="color:#a89028"> </span>present<span style="color:#a89028">
+</span><span style="color:#a89028">        </span>command<span style="color:#888">:</span><span style="color:#a89028"> </span>ssh<span style="color:#a89028">
+</span><span style="color:#a89028">        </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>gophish-dev<span style="color:#a89028">
+</span><span style="color:#a89028">        </span>ssh_pub_key<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ lookup(&#39;file&#39;, &#39;~/.ssh/gophish_dev.pub&#39;) }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">        </span>api_token<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ do_token }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">        </span>register<span style="color:#888">:</span><span style="color:#a89028"> </span>gophish_ssh_key</code></pre></div>
 <p>The first task ensures there&rsquo;s an 4096 bit SSH key at <code>~/.ssh/gophish_dev</code>, creating a new one if necessary. Then, the next task makes sure that the SSH key is uploaded to DigitalOcean using Ansible&rsquo;s <code>digital_ocean</code> module.</p>
 
 <p><strong>A Quick Note About Secrets</strong></p>
@@ -277,27 +274,24 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
 <p><strong>Ok, Back to the Tasks</strong></p>
 
 <p>With our SSH key uploaded, we can define a task that creates the droplet and adds our SSH key.</p>
-
-<pre><code class="language-yaml">- name: create the droplet used to build releases
-  digital_ocean:
-    state: present
-    command: droplet
-    name: gophish-release
-    api_token: &quot;{{ do_token }}&quot;
-    size_id: s-1vcpu-1gb
-    region_id: nyc1
-    image_id: debian-9-x64
-    wait_timeout: 500
-    ssh_key_ids: &quot;{{ gophish_ssh_key.ssh_key.id }}&quot;
-    unique_name: yes
-  register: gophish_droplet
-
-- add_host:
-    name: &quot;{{ gophish_droplet.droplet.ip_address }}&quot;
-    groups: droplets
-    ansible_ssh_private_key_file: ~/.ssh/gophish_dev
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>create<span style="color:#a89028"> </span>the<span style="color:#a89028"> </span>droplet<span style="color:#a89028"> </span>used<span style="color:#a89028"> </span>to<span style="color:#a89028"> </span>build<span style="color:#a89028"> </span>releases<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>digital_ocean<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>state<span style="color:#888">:</span><span style="color:#a89028"> </span>present<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>command<span style="color:#888">:</span><span style="color:#a89028"> </span>droplet<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>gophish-release<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>api_token<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ do_token }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>size_id<span style="color:#888">:</span><span style="color:#a89028"> </span>s-1vcpu-1gb<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>region_id<span style="color:#888">:</span><span style="color:#a89028"> </span>nyc1<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>image_id<span style="color:#888">:</span><span style="color:#a89028"> </span>debian-<span style="color:#444">9</span>-x64<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>wait_timeout<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#444">500</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>ssh_key_ids<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ gophish_ssh_key.ssh_key.id }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>unique_name<span style="color:#888">:</span><span style="color:#a89028"> </span>yes<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>register<span style="color:#888">:</span><span style="color:#a89028"> </span>gophish_droplet<span style="color:#a89028">
+</span><span style="color:#a89028">
+</span><span style="color:#a89028"></span>-<span style="color:#a89028"> </span>add_host<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ gophish_droplet.droplet.ip_address }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>groups<span style="color:#888">:</span><span style="color:#a89028"> </span>droplets<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>ansible_ssh_private_key_file<span style="color:#888">:</span><span style="color:#a89028"> </span>~/.ssh/gophish_dev</code></pre></div>
 <p>After creating the droplet using the DigitalOcean API, we can use the <a href="docs.ansible.com/ansible/latest/add_host_module.html"><code>add_host</code></a> module to add the new droplet to a group called <code>droplets</code> so future tasks can operate on the droplet.</p>
 
 <p>With the droplet created, we can start configuring everything. This involves:</p>
@@ -315,20 +309,14 @@ It&rsquo;s been a while! While I haven&rsquo;t posted as much here, I have been 
 </blockquote>
 
 <p>Speaking of variables, we&rsquo;ll use these variables in the rest of the tasks:</p>
-
-<pre><code class="language-yaml">gophish_golang_package: &quot;github.com/gophish/gophish&quot;
-gophish_directory: &quot;/root/go/src/{{ gophish_golang_package }}&quot;
-# I have one of these variables for every architecture and x86/x64
-gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXbit.zip&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">gophish_golang_package<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;github.com/gophish/gophish&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028"></span>gophish_directory<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;/root/go/src/{{ gophish_golang_package }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028"></span><span style="color:#888;font-style:italic"># I have one of these variables for every architecture and x86/x64</span><span style="color:#a89028">
+</span><span style="color:#a89028"></span>gophish_ARCH_XXbit<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXbit.zip&#34;</span></code></pre></div>
 <p>Let&rsquo;s jump to the fun stuff, starting with cloning the latest code from Github:</p>
-
-<pre><code class="language-yaml">tasks:
-  - name: clone the gophish repo
-    shell: &quot;/usr/local/go/bin/go get {{ gophish_golang_package }}&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">tasks<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">  </span>-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>clone<span style="color:#a89028"> </span>the<span style="color:#a89028"> </span>gophish<span style="color:#a89028"> </span>repo<span style="color:#a89028">
+</span><span style="color:#a89028">    </span>shell<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;/usr/local/go/bin/go get {{ gophish_golang_package }}&#34;</span></code></pre></div>
 <p>With the latest code in our <code>$GOPATH</code>, we can build it using Docker.</p>
 
 <h5 id="compiling-the-binaries">Compiling the Binaries</h5>
@@ -340,24 +328,21 @@ gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXb
 <p>So, we need to do a bit more legwork in order to cross-compile Gophish, but fortunately for us there is tooling available that makes that easier. One of these tools is <a href="https://github.com/karalabe/xgo"><code>xgo</code></a>, which uses <a href="https://www.docker.com/">Docker</a> to handle the more complex aspects of cross-compiling <code>cgo</code> dependencies.</p>
 
 <p>The tooling provides a command line wrapper around the underlying Docker commands being run, but for our purposes we&rsquo;ll just invoke the container directly using Ansible&rsquo;s <code>docker_image</code> and <code>docker_container</code> modules.</p>
-
-<pre><code class="language-yaml">- name: download the xgo docker image
-  docker_image:
-    name: &quot;{{ xgo_image }}&quot;
-
-- name: build gophish
-  docker_container:
-    name: &quot;gophish_build&quot;
-    image: &quot;{{ xgo_image }}&quot;
-    auto_remove: true
-    volumes:
-      - &quot;{{ gophish_directory }}/bin:/build&quot;
-      - &quot;/root/.xgo-cache:/deps-cache:ro&quot;
-    env:
-      TARGETS: &quot;linux/386 linux/amd64 windows/386 windows/amd64 darwin/386 darwin/amd64&quot;
-    command: &quot;github.com/gophish/gophish&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>download<span style="color:#a89028"> </span>the<span style="color:#a89028"> </span>xgo<span style="color:#a89028"> </span>docker<span style="color:#a89028"> </span>image<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>docker_image<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ xgo_image }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">
+</span><span style="color:#a89028"></span>-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>build<span style="color:#a89028"> </span>gophish<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>docker_container<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;gophish_build&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>image<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ xgo_image }}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>auto_remove<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#444;font-style:italic">true</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>volumes<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">      </span>-<span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{ gophish_directory }}/bin:/build&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">      </span>-<span style="color:#a89028"> </span><span style="color:#b83838">&#34;/root/.xgo-cache:/deps-cache:ro&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>env<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">      </span>TARGETS<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;linux/386 linux/amd64 windows/386 windows/amd64 darwin/386 darwin/amd64&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>command<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;github.com/gophish/gophish&#34;</span></code></pre></div>
 <p>These tasks run the <code>xgo</code> container, building both the x86 and x64 binaries for Windows, OSX, and Linux. Once the binaries are built, I set up Ansible tasks to create ZIP archives with all the necessary static assets, and our Gophish releases are ready to be uploaded!</p>
 
 <h5 id="uploading-the-assets">Uploading the Assets</h5>
@@ -367,24 +352,18 @@ gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXb
 <p>You can find the script <a href="https://github.com/gophish/release-scripts/blob/master/ansible/roles/release/files/upload_release.py">here.</a></p>
 
 <p>Putting the script in the <code>files/</code> directory within the Ansible role makes it easy to reference from the Ansible tasks. Here&rsquo;s the task that executes the script, uploading each file to Github:</p>
-
-<pre><code class="language-yaml">- name: upload assets to github release
-  shell: &gt;
-    {{upload_release}} --repo gophish/gophish --version {{ version }} 
-    --assets {{ gophish_windows_32bit }} {{ gophish_windows_64bit }}
-    {{ gophish_linux_32bit }} {{ gophish_linux_64bit }}
-    {{ gophish_osx_32bit}} {{ gophish_osx_64bit }}
-  environment:
-    github_api_key: &quot;{{github_token}}&quot;
-  register:
-    upload
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">-<span style="color:#a89028"> </span>name<span style="color:#888">:</span><span style="color:#a89028"> </span>upload<span style="color:#a89028"> </span>assets<span style="color:#a89028"> </span>to<span style="color:#a89028"> </span>github<span style="color:#a89028"> </span>release<span style="color:#a89028">
+</span><span style="color:#a89028">  </span>shell<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b85820;font-style:italic">&gt;
+</span><span style="color:#b85820;font-style:italic">    {{upload_release}} --repo gophish/gophish --version {{ version }} 
+</span><span style="color:#b85820;font-style:italic">    --assets {{ gophish_windows_32bit }} {{ gophish_windows_64bit }}
+</span><span style="color:#b85820;font-style:italic">    {{ gophish_linux_32bit }} {{ gophish_linux_64bit }}
+</span><span style="color:#b85820;font-style:italic">    {{ gophish_osx_32bit}} {{ gophish_osx_64bit }}</span><span style="color:#a89028">
+</span><span style="color:#a89028">  </span>environment<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>github_api_key<span style="color:#888">:</span><span style="color:#a89028"> </span><span style="color:#b83838">&#34;{{github_token}}&#34;</span><span style="color:#a89028">
+</span><span style="color:#a89028">  </span>register<span style="color:#888">:</span><span style="color:#a89028">
+</span><span style="color:#a89028">    </span>upload</code></pre></div>
 <p>All that&rsquo;s left is to run the playbook! This is done using a command like this:</p>
-
-<pre><code class="language-bash">$ ansible-playbook site.yml --extra-vars &quot;version=v0.5.0&quot; --ask-vault-pass
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ansible-playbook site.yml --extra-vars <span style="color:#b83838">&#34;version=v0.5.0&#34;</span> --ask-vault-pass</code></pre></div>
 <h4 id="conclusion">Conclusion</h4>
 
 <p>I&rsquo;m not going to pretend that this is a perfect solution. It&rsquo;s not. However, it&rsquo;s <em>better</em> than the previous manual process and that&rsquo;s the important thing. This will allow more frequent and consistent releases, letting users get the benefits of new changes much quicker than before.</p>
@@ -400,7 +379,7 @@ gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXb
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -413,7 +392,7 @@ gophish_ARCH_XXbit: &quot;{{gophish_directory}}/bin/gophish-{{version}}-ARCH-XXb
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

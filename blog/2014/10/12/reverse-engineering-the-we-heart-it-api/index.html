@@ -48,7 +48,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/" />
 
@@ -232,56 +232,50 @@ client_id=redacted
 </code></pre>
 
 <p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
-
-<pre><code class="language-text">GET /api/v2/entries/85847648 HTTP/1.1
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">GET /api/v2/entries/85847648 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
 
 {
-    &quot;id&quot;: 85847648,
-    &quot;title&quot;: &quot;Colors&quot;,
+    &#34;id&#34;: 85847648,
+    &#34;title&#34;: &#34;Colors&#34;,
     &lt;snip&gt;
-    &quot;hearts_count&quot;: 11285,
-    &quot;created_at&quot;: &quot;2013-11-10T17:09:49Z&quot;,
-    &quot;hearted&quot;: false,
-    &quot;via_hearts_count&quot;: 9919,
-    &quot;tags&quot;: [&lt;snip&gt;],
-    &quot;creator&quot;: {
-        &quot;id&quot;: 6043210,
-        &quot;username&quot;: &quot;Natasja4205&quot;,
+    &#34;hearts_count&#34;: 11285,
+    &#34;created_at&#34;: &#34;2013-11-10T17:09:49Z&#34;,
+    &#34;hearted&#34;: false,
+    &#34;via_hearts_count&#34;: 9919,
+    &#34;tags&#34;: [&lt;snip&gt;],
+    &#34;creator&#34;: {
+        &#34;id&#34;: 6043210,
+        &#34;username&#34;: &#34;Natasja4205&#34;,
         &lt;snip&gt;
     },
-    &quot;user&quot;: {
-        &quot;id&quot;: 6043210,
-        &quot;username&quot;: &quot;Natasja4205&quot;,
+    &#34;user&#34;: {
+        &#34;id&#34;: 6043210,
+        &#34;username&#34;: &#34;Natasja4205&#34;,
         &lt;snip&gt;
     }
-}
-</code></pre>
-
-<pre><code class="language-text">GET /api/v2/users/27215547 HTTP/1.1
+}</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">GET /api/v2/users/27215547 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
 
 {
-    &quot;id&quot;: 27215547,
-    &quot;username&quot;: &quot;jordan_test2&quot;,
-    &quot;name&quot;: &quot;Jordan Test&quot;,
-    &quot;avatar&quot;: [&lt;snip&gt;],
-    &quot;public_account&quot;: true,
-    &quot;verified&quot;: false,
-    &quot;location&quot;: null,
-    &quot;bio&quot;: null,
-    &quot;link&quot;: null,
-    &quot;hearts_count&quot;: 0,
-    &quot;following_count&quot;: 1,
-    &quot;followers_count&quot;: 2,
-    &quot;sets_count&quot;: 0,
-    &quot;created_at&quot;: &quot;2014-10-12T18:38:35Z&quot;,
-    &quot;cover&quot;: {&lt;snip&gt;}
-}
-</code></pre>
-
+    &#34;id&#34;: 27215547,
+    &#34;username&#34;: &#34;jordan_test2&#34;,
+    &#34;name&#34;: &#34;Jordan Test&#34;,
+    &#34;avatar&#34;: [&lt;snip&gt;],
+    &#34;public_account&#34;: true,
+    &#34;verified&#34;: false,
+    &#34;location&#34;: null,
+    &#34;bio&#34;: null,
+    &#34;link&#34;: null,
+    &#34;hearts_count&#34;: 0,
+    &#34;following_count&#34;: 1,
+    &#34;followers_count&#34;: 2,
+    &#34;sets_count&#34;: 0,
+    &#34;created_at&#34;: &#34;2014-10-12T18:38:35Z&#34;,
+    &#34;cover&#34;: {&lt;snip&gt;}
+}</code></pre></div>
 <p>Great - we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p>
 
 <h3 id="static-analysis">Static Analysis</h3>
@@ -295,87 +289,72 @@ Authorization: Bearer [redacted]
 <h4 id="apirequest-java">APIRequest.java</h4>
 
 <p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
-
-<pre><code class="language-java">private void a(Map map, LoginServices loginservices, ApiResponseCallback apiresponsecallback)
-    {
-        HashMap hashmap = new HashMap();
-        hashmap.put(&quot;client_id&quot;, &quot;25ieooqr&quot;);
-        hashmap.put(&quot;client_secret&quot;, &quot;zlype4airg41b33uwafbe8a6p8bwcgiw&quot;);
-        hashmap.put(&quot;grant_type&quot;, &quot;password&quot;);
-        hashmap.putAll(map);
-        a.b(&quot;oauth/token&quot;, hashmap, new OAuthDataResponseHandler(apiresponsecallback, LoginServices.a(loginservices)));
-    }
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">private</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>Map map<span style="color:#666">,</span> LoginServices loginservices<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
+    <span style="color:#666">{</span>
+        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;client_id&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;25ieooqr&#34;</span><span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;client_secret&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;zlype4airg41b33uwafbe8a6p8bwcgiw&#34;</span><span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;grant_type&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;password&#34;</span><span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">putAll</span><span style="color:#666">(</span>map<span style="color:#666">);</span>
+        a<span style="color:#666">.</span><span style="color:#388038">b</span><span style="color:#666">(</span><span style="color:#b83838">&#34;oauth/token&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> OAuthDataResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> LoginServices<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span>loginservices<span style="color:#666">)));</span>
+    <span style="color:#666">}</span></code></pre></div>
 <p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
-
-<pre><code class="language-java">public void a(UserSettings usersettings, ApiResponseCallback apiresponsecallback)
-    {
-        User user = WhiSession.b();
-        String s = user.getAccessToken();
-        WhiLog.d(&quot;ApiRequest&quot;, (new StringBuilder()).append(&quot;updateUserSettings() for user (&quot;).append(user.getId()).append(&quot;)&quot;).toString());
-        HashMap hashmap = new HashMap(12);
-        hashmap.put(&quot;access_token&quot;, s);
-        hashmap.put(&quot;user[name]&quot;, usersettings.getFullName());
-        hashmap.put(&quot;user[username]&quot;, usersettings.getUsername());
-        hashmap.put(&quot;user[email]&quot;, usersettings.getEmail());
-        hashmap.put(&quot;user[bio]&quot;, usersettings.getBio());
-        hashmap.put(&quot;user[location]&quot;, usersettings.getLocation());
-        hashmap.put(&quot;user[link]&quot;, usersettings.getLink());
-        hashmap.put(&quot;user[show_unsafe_content]&quot;, Boolean.toString(usersettings.isUnsafeContentEnabled()));
-        &lt;snip: other settings&gt;
-        hashmap.put(&quot;privacy_options[public]&quot;, Boolean.toString(usersettings.isUserPublic()));
-        hashmap.put(&quot;privacy_options[findable]&quot;, Boolean.toString(usersettings.isUserFindable()));
-        a.c(&quot;api/settings&quot;, hashmap, new ApiOperationResponseHandler(apiresponsecallback, &quot;Failed to update user settings&quot;));
-    }
-</code></pre>
-
-<pre><code class="language-java">public void a(String s, long l, Long long1, ApiResponseCallback apiresponsecallback)
-    {
-        Object aobj[] = new Object[3];
-        aobj[0] = s;
-        aobj[1] = Long.valueOf(l);
-        aobj[2] = long1;
-        WhiLog.a(&quot;ApiRequest&quot;, String.format(&quot;getEntryCollectionDetails() with %s, %s, %s&quot;, aobj));
-        HashMap hashmap = new HashMap();
-        hashmap.put(&quot;access_token&quot;, s);
-        if (long1 != null)
-        {
-            hashmap.put(&quot;heart_id&quot;, long1.toString());
-        }
-        a.a((new StringBuilder()).append(&quot;api/entry_sets/&quot;).append(l).toString(), hashmap, new EntryListResponseHandler(apiresponsecallback, c));
-    }
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>UserSettings usersettings<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
+    <span style="color:#666">{</span>
+        User user <span style="color:#666">=</span> WhiSession<span style="color:#666">.</span><span style="color:#388038">b</span><span style="color:#666">();</span>
+        String s <span style="color:#666">=</span> user<span style="color:#666">.</span><span style="color:#388038">getAccessToken</span><span style="color:#666">();</span>
+        WhiLog<span style="color:#666">.</span><span style="color:#388038">d</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequest&#34;</span><span style="color:#666">,</span> <span style="color:#666">(</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;updateUserSettings() for user (&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>user<span style="color:#666">.</span><span style="color:#388038">getId</span><span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;)&#34;</span><span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
+        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">(</span>12<span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[name]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getFullName</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[username]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getUsername</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[email]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getEmail</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[bio]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getBio</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[location]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getLocation</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[link]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getLink</span><span style="color:#666">());</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[show_unsafe_content]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUnsafeContentEnabled</span><span style="color:#666">()));</span>
+        <span style="color:#666">&lt;</span><span style="color:#289870">snip:</span> other settings<span style="color:#666">&gt;</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;privacy_options[public]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUserPublic</span><span style="color:#666">()));</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;privacy_options[findable]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUserFindable</span><span style="color:#666">()));</span>
+        a<span style="color:#666">.</span><span style="color:#388038">c</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/settings&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> ApiOperationResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> <span style="color:#b83838">&#34;Failed to update user settings&#34;</span><span style="color:#666">));</span>
+    <span style="color:#666">}</span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">long</span> l<span style="color:#666">,</span> Long long1<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
+    <span style="color:#666">{</span>
+        Object aobj<span style="color:#666">[]</span> <span style="color:#666">=</span> <span style="color:#2838b0">new</span> Object<span style="color:#666">[</span>3<span style="color:#666">];</span>
+        aobj<span style="color:#666">[</span>0<span style="color:#666">]</span> <span style="color:#666">=</span> s<span style="color:#666">;</span>
+        aobj<span style="color:#666">[</span>1<span style="color:#666">]</span> <span style="color:#666">=</span> Long<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>l<span style="color:#666">);</span>
+        aobj<span style="color:#666">[</span>2<span style="color:#666">]</span> <span style="color:#666">=</span> long1<span style="color:#666">;</span>
+        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequest&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">format</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getEntryCollectionDetails() with %s, %s, %s&#34;</span><span style="color:#666">,</span> aobj<span style="color:#666">));</span>
+        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
+        <span style="color:#2838b0">if</span> <span style="color:#666">(</span>long1 <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">null</span><span style="color:#666">)</span>
+        <span style="color:#666">{</span>
+            hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;heart_id&#34;</span><span style="color:#666">,</span> long1<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
+        <span style="color:#666">}</span>
+        a<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">((</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/entry_sets/&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">(),</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> EntryListResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> c<span style="color:#666">));</span>
+    <span style="color:#666">}</span></code></pre></div>
 <h4 id="apirequestv2-java">APIRequestv2.java</h4>
 
 <p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
-
-<pre><code class="language-java">public void a(String s, long l, int i, ApiResponseCallback apiresponsecallback)
-    {
-        WhiLog.a(&quot;ApiRequestV2&quot;, (new StringBuilder()).append(&quot;getUserEntryCollections() with accessToken &quot;).append(s).append(&quot;, &quot;).append(l).append(&quot;, &quot;).append(i).toString());
-        HashMap hashmap = new HashMap();
-        hashmap.put(&quot;access_token&quot;, s);
-        hashmap.put(&quot;page&quot;, String.valueOf(i));
-        e.a((new StringBuilder()).append(&quot;api/v2/users/&quot;).append(l).append(&quot;/collections&quot;).toString(), hashmap, new EntryCollectionListV2ResponseHandler(apiresponsecallback, a));
-    }
-</code></pre>
-
-<pre><code class="language-java">public void a(String s, Long long1, ApiPagedResponseCallback apipagedresponsecallback)
-    {
-        WhiLog.a(&quot;ApiRequestV2&quot;, String.format(&quot;getUserDashboard() with %s, %d&quot;, new Object[] {
-            s, long1
-        }));
-        HashMap hashmap = new HashMap();
-        hashmap.put(&quot;access_token&quot;, s);
-        if (long1 != null)
-        {
-            hashmap.put(&quot;before&quot;, String.valueOf(long1));
-        }
-        e.a(&quot;api/v2/user/dashboard&quot;, hashmap, new UserDashboardResponseHandler(apipagedresponsecallback, b));
-    }
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">long</span> l<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">int</span> i<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
+    <span style="color:#666">{</span>
+        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequestV2&#34;</span><span style="color:#666">,</span> <span style="color:#666">(</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getUserEntryCollections() with accessToken &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>s<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;, &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;, &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>i<span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
+        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;page&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>i<span style="color:#666">));</span>
+        e<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">((</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/v2/users/&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;/collections&#34;</span><span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">(),</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> EntryCollectionListV2ResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> a<span style="color:#666">));</span>
+    <span style="color:#666">}</span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> Long long1<span style="color:#666">,</span> ApiPagedResponseCallback apipagedresponsecallback<span style="color:#666">)</span>
+    <span style="color:#666">{</span>
+        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequestV2&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">format</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getUserDashboard() with %s, %d&#34;</span><span style="color:#666">,</span> <span style="color:#2838b0">new</span> Object<span style="color:#666">[]</span> <span style="color:#666">{</span>
+            s<span style="color:#666">,</span> long1
+        <span style="color:#666">}));</span>
+        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
+        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
+        <span style="color:#2838b0">if</span> <span style="color:#666">(</span>long1 <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">null</span><span style="color:#666">)</span>
+        <span style="color:#666">{</span>
+            hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;before&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>long1<span style="color:#666">));</span>
+        <span style="color:#666">}</span>
+        e<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/v2/user/dashboard&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> UserDashboardResponseHandler<span style="color:#666">(</span>apipagedresponsecallback<span style="color:#666">,</span> b<span style="color:#666">));</span>
+    <span style="color:#666">}</span></code></pre></div>
 <h3 id="api-documentation">API Documentation</h3>
 
 <p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
@@ -417,7 +396,7 @@ Authorization: Bearer [redacted]
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -430,7 +409,7 @@ Authorization: Bearer [redacted]
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/" />
 
@@ -176,8 +176,7 @@
 <p>Let&rsquo;s start with the most obvious ones: .com, .net, and .name (since it&rsquo;s bundled). These are maintained by Verisign. <a href="https://www.verisign.com/en_US/channel-resources/domain-registry-products/zone-file/index.xhtml">Access to these zone files</a> consists of downloading a <a href="https://www.verisign.com/assets/VRSN_zonefile_access_request_form_201208.dotx">Zone Access Form</a> and emailing the completed form to <code>tldzone@verisign-grs.com</code>.</p>
 
 <p>It took a couple of weeks for this access to be granted. After your form is approved, you will receive FTP credentials that can be used to download the zone files daily.</p>
-
-<pre><code class="language-text">root@tld:~# ftp rz.verisign-grs.com
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">root@tld:~# ftp rz.verisign-grs.com
 Connected to rz.verisign-grs.com.
 220-**** Welcome to the VeriSign Global Registry Services gTLD Zone FTP Server ****
 220-***
@@ -205,9 +204,7 @@ ftp&gt; ls
 &lt;snip&gt;
 -rw-r--r--    1 ftp      ftp      2497503218 Sep 29 15:20 com.zone.gz
 -rw-r--r--    1 ftp      ftp      321976673 Sep 29 15:12 net.zone.gz
-226 Directory send OK.
-</code></pre>
-
+226 Directory send OK.</code></pre></div>
 <p>We&rsquo;ll take a look at what we can do with these soon. First, let&rsquo;s talk about how we can catch all that malware on <code>.ninja</code>.</p>
 
 <h4 id="the-centralized-zone-data-service-czds">The Centralized Zone Data Service (CZDS)</h4>
@@ -229,9 +226,8 @@ ftp&gt; ls
 <h3 id="parsing-zone-files">Parsing Zone Files</h3>
 
 <p>If you want to parse everything about the zone files, you can read about the full format in <a href="https://tools.ietf.org/html/rfc1035">RFC 1035</a>, but this post is only interested in the domain -&gt; nameserver mappings. So, let&rsquo;s just start by taking a look at the contents of the file.</p>
-
-<pre><code class="language-text">root@tld:~# head com.zone -n 50
-; The use of the Data contained in Verisign Inc.'s aggregated
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">root@tld:~# head com.zone -n 50
+; The use of the Data contained in Verisign Inc.&#39;s aggregated
 ; .com, and .net top-level domain zone files (including the checksum
 ; files) is subject to the restrictions described in the access Agreement
 ; with Verisign Inc.
@@ -268,9 +264,7 @@ COM. 86400 RRSIG NSEC3PARAM 8 1 86400 20151003045209 20150926034209 35864 COM. S
 COM. 86400 RRSIG DNSKEY 8 1 86400 20150930182533 20150923182033 30909 COM. pDtt&lt;snip&gt;
 KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
 KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
-KITCHENFLOORTILE NS NS1.HOSTINGNET
-</code></pre>
-
+KITCHENFLOORTILE NS NS1.HOSTINGNET</code></pre></div>
 <p>The first 35 lines of the file include some information about the zone file, the root name servers, etc. The actual meat of the file starts on line 36.</p>
 
 <p>Typically, zone files contain lines that have the following format:</p>
@@ -288,8 +282,7 @@ KITCHENFLOORTILE NS NS1.HOSTINGNET
 <p>In addition to lines showing how domain names map to nameservers, at the bottom of the file we have the A records (IP addresses) for each name server in the file. But what if we want to remove all the &ldquo;fluff&rdquo; and only keep the lines showing which domains map to which nameservers?</p>
 
 <p>We can grab the &ldquo;interesting&rdquo; lines using a simple <code>grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone</code>, which will give us only the lines with domains pointing to nameservers.</p>
-
-<pre><code class="language-text">root@tld:~# grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone | head -n 10
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">root@tld:~# grep -E &#34;^[a-zA-Z0-9-]+ NS .&#34; com.zone | head -n 10
 KITCHENEROKTOBERFEST NS NS1.HOSTINGNET
 KITCHENEROKTOBERFEST NS NS2.HOSTINGNET
 KITCHENFLOORTILE NS NS1.HOSTINGNET
@@ -301,10 +294,8 @@ KITEPICTURES NS NS2.HOSTINGNET
 BOYSBOXERS NS NS1.HOSTINGNET
 BOYSBOXERS NS NS2.HOSTINGNET
 
-root@tld:~# grep -E &quot;^[a-zA-Z0-9-]+ NS .&quot; com.zone | wc -l
-281899907
-</code></pre>
-
+root@tld:~# grep -E &#34;^[a-zA-Z0-9-]+ NS .&#34; com.zone | wc -l
+281899907</code></pre></div>
 <p><strong>Awesome.</strong> We can parse this output to do anything we want with our list of domains.</p>
 
 <h3 id="conclusion">Conclusion</h3>
@@ -327,7 +318,7 @@ However, while this is an infosec blog, zone files can be used for far more than
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -340,7 +331,7 @@ However, while this is an infosec blog, zone files can be used for far more than
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

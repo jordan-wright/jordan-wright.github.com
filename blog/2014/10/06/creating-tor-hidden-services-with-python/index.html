@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/" />
 
@@ -172,26 +172,20 @@
 <p>There are two configuration settings necessary to setup a hidden service: <code>HiddenServiceDir</code>, the directory to store the <code>hostname</code> and <code>private_key</code> files, and <code>HiddenServicePort</code>, the ports used to proxy hidden service connections.</p>
 
 <p>As the instructions show, each hidden service requires a variation of the following two lines to be present in the <code>torrc</code> configuration file (setting the directory, host, and ports appropriately):</p>
-
-<pre><code class="language-text">HiddenServiceDir /path/to/store/hidden_service/
-HiddenServicePort 80 127.0.0.1:5000
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">HiddenServiceDir /path/to/store/hidden_service/
+HiddenServicePort 80 127.0.0.1:5000</code></pre></div>
 <h3 id="a-bit-about-the-tor-control-protocol">A Bit About the Tor Control Protocol</h3>
 
 <p>Changing the configuration file and restarting Tor everytime a change is needed can be a pain. Fortunately, Tor provides a way to dynamically change the running configuration using a simple text based protocol (similar to Telnet) called the Tor Control Protocol.</p>
 
 <p>The <a href="https://gitweb.torproject.org/torspec.git?a=blob_plain;hb=HEAD;f=control-spec.txt">full specification</a> of the protocol is available, however here is a quick example of getting the valid authentication methods:</p>
-
-<pre><code class="language-text">$ telnet localhost 9151
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$ telnet localhost 9151
 PROTOCOLINFO
 
 250-PROTOCOLINFO 1
-250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE=&quot;Tor\\control_auth_cookie&quot;
-250-VERSION Tor=&quot;0.2.4.24&quot;
-250 OK
-</code></pre>
-
+250-AUTH METHODS=COOKIE,SAFECOOKIE,HASHEDPASSWORD COOKIEFILE=&#34;Tor\\control_auth_cookie&#34;
+250-VERSION Tor=&#34;0.2.4.24&#34;
+250 OK</code></pre></div>
 <p>Other examples using this extensive protocol can be found <a href="https://www.thesprawl.org/research/tor-control-protocol/">here</a> or in the full protocol spec.</p>
 
 <h3 id="introducing-stem">Introducing Stem</h3>
@@ -288,7 +282,7 @@ if __name__ == &quot;__main__&quot;:
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -301,7 +295,7 @@ if __name__ == &quot;__main__&quot;:
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

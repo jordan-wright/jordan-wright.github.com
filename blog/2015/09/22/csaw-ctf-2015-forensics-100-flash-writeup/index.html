@@ -40,7 +40,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/" />
 
@@ -149,14 +149,10 @@
 <p>For this challenge, we were given an HDD image and asked to find the flag on it.
 
 Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p>
-
-<pre><code class="language-text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
-flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &quot;mkfs.fat&quot;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
+flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &#34;mkfs.fat&#34;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)</code></pre></div>
 <p>Ok, a standard FAT volume. Let&rsquo;s try to mount it:</p>
-
-<pre><code class="language-text">jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
 jordan@temp:~$ cd /mnt/
 jordan@temp:/mnt$ ls
 100.txt  29.txt  48.txt  67.txt  86.txt      pg1184.txt  pg2000.txt  pg4300.txt
@@ -179,15 +175,10 @@ jordan@temp:/mnt$ ls
 25.txt   44.txt  63.txt  82.txt  pg1080.txt  pg16.txt    pg35.txt
 26.txt   45.txt  64.txt  83.txt  pg108.txt   pg174.txt   pg3600.txt
 27.txt   46.txt  65.txt  84.txt  pg10.txt    pg1952.txt  pg36.txt
-28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt
-</code></pre>
-
+28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt</code></pre></div>
 <p>Looks like we have quite a few files to dig through. Looks like it&rsquo;s going to take a while. Ooooorrr, we could just grep for the flag.</p>
-
-<pre><code class="language-text">root@malfirm:/mnt# grep -r &quot;flag{&quot; * .*
-./.10/.hidden:flag{b3l0w_th3_r4dar}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">root@malfirm:/mnt# grep -r &#34;flag{&#34; * .*
+./.10/.hidden:flag{b3l0w_th3_r4dar}</code></pre></div>
 <p>Sweet. The flag is <code>flag{b3l0w_th3_r4dar}</code></p>
 
 <p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
@@ -199,7 +190,7 @@ jordan@temp:/mnt$ ls
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -212,7 +203,7 @@ jordan@temp:/mnt$ ls
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

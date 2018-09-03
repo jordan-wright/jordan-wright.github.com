@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</loc>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</loc>
     <lastmod>2018-02-04T11:00:59-06:00</lastmod>
   </url>
@@ -331,13 +336,19 @@
   
   <url>
     <loc>https://jordan-wright.com/blog/tags/go/</loc>
-    <lastmod>2015-03-23T00:00:00+00:00</lastmod>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://jordan-wright.com/blog/tags/gophish/</loc>
-    <lastmod>2018-02-04T11:00:59-06:00</lastmod>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordan-wright.com/blog/tags/healthcheck/</loc>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -367,7 +378,7 @@
   
   <url>
     <loc>https://jordan-wright.com/blog/</loc>
-    <lastmod>2018-02-04T11:00:59-06:00</lastmod>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -415,7 +426,7 @@
   
   <url>
     <loc>https://jordan-wright.com/blog/post/</loc>
-    <lastmod>2018-02-04T11:00:59-06:00</lastmod>
+    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
     <priority>0</priority>
   </url>
   

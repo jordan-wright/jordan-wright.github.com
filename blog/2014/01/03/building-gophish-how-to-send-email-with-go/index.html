@@ -44,7 +44,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/" />
 
@@ -184,43 +184,28 @@
 </code></pre>
 
 <h4 id="creating-a-new-email">Creating a New Email</h4>
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#2838b0">package</span> main
 
-<pre><code class="language-go">package main
+<span style="color:#2838b0">import</span> <span style="color:#b83838">&#34;github.com/jordan-wright/email&#34;</span>
 
-import &quot;github.com/jordan-wright/email&quot;
-
-func main() {
-	e := email.NewEmail()
-}
-</code></pre>
-
+<span style="color:#2838b0;font-style:italic">func</span> main<span style="color:#888">()</span> <span style="color:#888">{</span>
+	e <span style="color:#666">:=</span> email<span style="color:#888">.</span>NewEmail<span style="color:#888">()</span>
+<span style="color:#888">}</span></code></pre></div>
 <h4 id="setting-the-subject-to-from-bcc-cc">Setting the Subject, To, From, Bcc, Cc</h4>
-
-<pre><code class="language-go">e.Subject = &quot;Awesome Subject&quot;
-e.From = &quot;Jordan Wright &lt;test@gmail.com&gt;&quot;
-e.To = []string{&quot;test@example.com&quot;}
-e.Bcc = []string{&quot;test_bcc@example.com&quot;}
-e.Cc = []string{&quot;test_cc@example.com&quot;}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">e<span style="color:#888">.</span>Subject <span style="color:#888">=</span> <span style="color:#b83838">&#34;Awesome Subject&#34;</span>
+e<span style="color:#888">.</span>From <span style="color:#888">=</span> <span style="color:#b83838">&#34;Jordan Wright &lt;test@gmail.com&gt;&#34;</span>
+e<span style="color:#888">.</span>To <span style="color:#888">=</span> <span style="color:#888">[]</span><span style="color:#2838b0;font-style:italic">string</span><span style="color:#888">{</span><span style="color:#b83838">&#34;test@example.com&#34;</span><span style="color:#888">}</span>
+e<span style="color:#888">.</span>Bcc <span style="color:#888">=</span> <span style="color:#888">[]</span><span style="color:#2838b0;font-style:italic">string</span><span style="color:#888">{</span><span style="color:#b83838">&#34;test_bcc@example.com&#34;</span><span style="color:#888">}</span>
+e<span style="color:#888">.</span>Cc <span style="color:#888">=</span> <span style="color:#888">[]</span><span style="color:#2838b0;font-style:italic">string</span><span style="color:#888">{</span><span style="color:#b83838">&#34;test_cc@example.com&#34;</span><span style="color:#888">}</span></code></pre></div>
 <h4 id="setting-the-content-html-text">Setting the Content (HTML &amp; Text)</h4>
-
-<pre><code class="language-go">e.Text = &quot;Text Body is, of course, supported!&quot;
-e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">e<span style="color:#888">.</span>Text <span style="color:#888">=</span> <span style="color:#b83838">&#34;Text Body is, of course, supported!&#34;</span>
+e<span style="color:#888">.</span>HTML <span style="color:#888">=</span> <span style="color:#b83838">&#34;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&#34;</span></code></pre></div>
 <h4 id="attaching-a-file">Attaching a File</h4>
-
-<pre><code class="language-go">e.AttachFile(&quot;test.txt&quot;)
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">e<span style="color:#888">.</span>AttachFile<span style="color:#888">(</span><span style="color:#b83838">&#34;test.txt&#34;</span><span style="color:#888">)</span></code></pre></div>
 <p>You can also use the <a href="http://godoc.org/github.com/jordan-wright/email#Email.Attach"><code>Attach</code></a> function to attach content directly from an io.Reader.</p>
 
 <h4 id="sending-the-email-using-gmail-as-example">Sending the Email (Using Gmail as Example)</h4>
-
-<pre><code class="language-go">e.Send(&quot;smtp.gmail.com:587&quot;, smtp.PlainAuth(&quot;&quot;, &quot;test@gmail.com&quot;, &quot;password123&quot;, &quot;smtp.gmail.com&quot;))
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">e<span style="color:#888">.</span>Send<span style="color:#888">(</span><span style="color:#b83838">&#34;smtp.gmail.com:587&#34;</span><span style="color:#888">,</span> smtp<span style="color:#888">.</span>PlainAuth<span style="color:#888">(</span><span style="color:#b83838">&#34;&#34;</span><span style="color:#888">,</span> <span style="color:#b83838">&#34;test@gmail.com&#34;</span><span style="color:#888">,</span> <span style="color:#b83838">&#34;password123&#34;</span><span style="color:#888">,</span> <span style="color:#b83838">&#34;smtp.gmail.com&#34;</span><span style="color:#888">))</span></code></pre></div>
 <h4 id="conclusion">Conclusion</h4>
 
 <p>I hope this package will be useful to those that need to send email from their Go projects. I am excited to continue working on Gophish - you can expect a big update soon! Until then, as always, feel free to leave any questions or comments below.</p>
@@ -234,7 +219,7 @@ e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -247,7 +232,7 @@ e.HTML = &quot;&lt;h1&gt;Fancy Html is supported, too!&lt;/h1&gt;&quot;
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>

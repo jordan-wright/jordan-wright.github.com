@@ -46,7 +46,7 @@
       
       
     
-    <meta name="generator" content="Hugo 0.27-DEV" />
+    <meta name="generator" content="Hugo 0.40.3" />
 
     <link rel="canonical" href="https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/" />
 
@@ -197,47 +197,44 @@
 <p>I&rsquo;m a fan of open-sourcing as much information as possible if it helps the community. As such, I&rsquo;ve decided to release all the logs I currently have.</p>
 
 <p>You can download the raw JSON logs <a href="/downloads/elastichoney_logs.json.gz">here</a>. Here&rsquo;s an example log to show how the logs are structured:</p>
-
-<pre><code class="language-json">{
-    &quot;source&quot;: &quot;222.186.56.46&quot;,
-    &quot;@timestamp&quot;: &quot;2015-05-10T15:44:56.803Z&quot;,
-    &quot;url&quot;: &quot;x.x.x.x:9200/_search?&quot;,
-    &quot;method&quot;: &quot;GET&quot;,
-    &quot;form&quot;: &quot;form_payload&quot;,
-    &quot;payload&quot;: &quot;json_payload&quot;,
-    &quot;headers&quot;: {
-        &quot;user_agent&quot;: &quot;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&quot;,
-        &quot;host&quot;: &quot;x.x.x.x:9200&quot;,
-        &quot;content_type&quot;: &quot;&quot;,
-        &quot;accept_language&quot;: &quot;&quot;
-    },
-    &quot;type&quot;: &quot;attack&quot;,
-    &quot;honeypot&quot;: &quot;x.x.x.x&quot;,
-    &quot;@version&quot;: &quot;1&quot;,
-    &quot;host&quot;: &quot;127.0.0.1:39642&quot;,
-    &quot;name&quot;: &quot;Python Requests&quot;,
-    &quot;os&quot;: &quot;Windows&quot;,
-    &quot;os_name&quot;: &quot;Windows&quot;,
-    &quot;device&quot;: &quot;Other&quot;,
-    &quot;major&quot;: &quot;2&quot;,
-    &quot;minor&quot;: &quot;4&quot;,
-    &quot;geoip&quot;: {
-        &quot;ip&quot;: &quot;222.186.56.46&quot;,
-        &quot;country_code2&quot;: &quot;CN&quot;,
-        &quot;country_code3&quot;: &quot;CHN&quot;,
-        &quot;country_name&quot;: &quot;China&quot;,
-        &quot;continent_code&quot;: &quot;AS&quot;,
-        &quot;region_name&quot;: &quot;04&quot;,
-        &quot;city_name&quot;: &quot;Nanjing&quot;,
-        &quot;latitude&quot;: 32.0617,
-        &quot;longitude&quot;: 118.77780000000001,
-        &quot;timezone&quot;: &quot;Asia/Shanghai&quot;,
-        &quot;real_region_name&quot;: &quot;Jiangsu&quot;,
-        &quot;location&quot;: [118.77780000000001, 32.0617]
-    }
-}
-</code></pre>
-
+<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#888">{</span>
+    <span style="color:#2838b0">&#34;source&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;222.186.56.46&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;@timestamp&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;2015-05-10T15:44:56.803Z&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;url&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;x.x.x.x:9200/_search?&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;method&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;GET&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;form&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;form_payload&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;payload&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;json_payload&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;headers&#34;</span><span style="color:#888">:</span> <span style="color:#888">{</span>
+        <span style="color:#2838b0">&#34;user_agent&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;python-requests/2.4.1 CPython/2.7.8 Windows/2003Server&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;host&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;x.x.x.x:9200&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;content_type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;accept_language&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span>
+    <span style="color:#888">},</span>
+    <span style="color:#2838b0">&#34;type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;attack&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;honeypot&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;x.x.x.x&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;@version&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;1&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;host&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;127.0.0.1:39642&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Python Requests&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;os&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Windows&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;os_name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Windows&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;device&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Other&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;major&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;2&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;minor&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;4&#34;</span><span style="color:#888">,</span>
+    <span style="color:#2838b0">&#34;geoip&#34;</span><span style="color:#888">:</span> <span style="color:#888">{</span>
+        <span style="color:#2838b0">&#34;ip&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;222.186.56.46&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;country_code2&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;CN&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;country_code3&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;CHN&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;country_name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;China&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;continent_code&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;AS&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;region_name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;04&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;city_name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Nanjing&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;latitude&#34;</span><span style="color:#888">:</span> <span style="color:#444">32.0617</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;longitude&#34;</span><span style="color:#888">:</span> <span style="color:#444">118.77780000000001</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;timezone&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Asia/Shanghai&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;real_region_name&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Jiangsu&#34;</span><span style="color:#888">,</span>
+        <span style="color:#2838b0">&#34;location&#34;</span><span style="color:#888">:</span> <span style="color:#888">[</span><span style="color:#444">118.77780000000001</span><span style="color:#888">,</span> <span style="color:#444">32.0617</span><span style="color:#888">]</span>
+    <span style="color:#888">}</span>
+<span style="color:#888">}</span></code></pre></div>
 <p>As always, let me know if you have any questions or comments below!</p>
 
 <p>Enjoy!</p>
@@ -251,7 +248,7 @@
 
     
     <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-wright-2-crop.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
+        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
     </figure>
     
 
@@ -264,7 +261,7 @@
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer, Time&#39;s 2006 Person of the Year</p>
+  <p>Security Researcher, Programmer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
