@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Reverse Engineering the We Heart It API &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Reverse Engineering the We Heart It API" />
+  <meta property="twitter:title" content="Reverse Engineering the We Heart It API" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">
+
 
   
   <meta property="og:type" content="article" />
@@ -24,10 +29,15 @@
   
   <meta property="og:article:tag" content="static analysis" />
   
+
+  
+
+  
+
   
 
   <title>
-     Reverse Engineering the We Heart It API &middot;  Jordan Wright
+     Reverse Engineering the We Heart It API 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -39,6 +49,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -237,7 +248,7 @@ client_id=redacted
 </code></pre>
 
 <p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">GET /api/v2/entries/85847648 HTTP/1.1
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">GET /api/v2/entries/85847648 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
 
@@ -260,7 +271,7 @@ Authorization: Bearer [redacted]
         &#34;username&#34;: &#34;Natasja4205&#34;,
         &lt;snip&gt;
     }
-}</code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">GET /api/v2/users/27215547 HTTP/1.1
+}</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">GET /api/v2/users/27215547 HTTP/1.1
 Host: api.weheartit.com
 Authorization: Bearer [redacted]
 
@@ -294,72 +305,72 @@ Authorization: Bearer [redacted]
 <h4 id="apirequest-java">APIRequest.java</h4>
 
 <p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">private</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>Map map<span style="color:#666">,</span> LoginServices loginservices<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
-    <span style="color:#666">{</span>
-        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;client_id&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;25ieooqr&#34;</span><span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;client_secret&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;zlype4airg41b33uwafbe8a6p8bwcgiw&#34;</span><span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;grant_type&#34;</span><span style="color:#666">,</span> <span style="color:#b83838">&#34;password&#34;</span><span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">putAll</span><span style="color:#666">(</span>map<span style="color:#666">);</span>
-        a<span style="color:#666">.</span><span style="color:#388038">b</span><span style="color:#666">(</span><span style="color:#b83838">&#34;oauth/token&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> OAuthDataResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> LoginServices<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span>loginservices<span style="color:#666">)));</span>
-    <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">Map</span> <span class="n">map</span><span class="o">,</span> <span class="n">LoginServices</span> <span class="n">loginservices</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;client_id&#34;</span><span class="o">,</span> <span class="s">&#34;25ieooqr&#34;</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;client_secret&#34;</span><span class="o">,</span> <span class="s">&#34;zlype4airg41b33uwafbe8a6p8bwcgiw&#34;</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;grant_type&#34;</span><span class="o">,</span> <span class="s">&#34;password&#34;</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
+        <span class="n">a</span><span class="o">.</span><span class="na">b</span><span class="o">(</span><span class="s">&#34;oauth/token&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">OAuthDataResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">LoginServices</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="n">loginservices</span><span class="o">)));</span>
+    <span class="o">}</span></code></pre></div>
 <p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>UserSettings usersettings<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
-    <span style="color:#666">{</span>
-        User user <span style="color:#666">=</span> WhiSession<span style="color:#666">.</span><span style="color:#388038">b</span><span style="color:#666">();</span>
-        String s <span style="color:#666">=</span> user<span style="color:#666">.</span><span style="color:#388038">getAccessToken</span><span style="color:#666">();</span>
-        WhiLog<span style="color:#666">.</span><span style="color:#388038">d</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequest&#34;</span><span style="color:#666">,</span> <span style="color:#666">(</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;updateUserSettings() for user (&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>user<span style="color:#666">.</span><span style="color:#388038">getId</span><span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;)&#34;</span><span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
-        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">(</span>12<span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[name]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getFullName</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[username]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getUsername</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[email]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getEmail</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[bio]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getBio</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[location]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getLocation</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[link]&#34;</span><span style="color:#666">,</span> usersettings<span style="color:#666">.</span><span style="color:#388038">getLink</span><span style="color:#666">());</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;user[show_unsafe_content]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUnsafeContentEnabled</span><span style="color:#666">()));</span>
-        <span style="color:#666">&lt;</span><span style="color:#289870">snip:</span> other settings<span style="color:#666">&gt;</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;privacy_options[public]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUserPublic</span><span style="color:#666">()));</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;privacy_options[findable]&#34;</span><span style="color:#666">,</span> Boolean<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">(</span>usersettings<span style="color:#666">.</span><span style="color:#388038">isUserFindable</span><span style="color:#666">()));</span>
-        a<span style="color:#666">.</span><span style="color:#388038">c</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/settings&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> ApiOperationResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> <span style="color:#b83838">&#34;Failed to update user settings&#34;</span><span style="color:#666">));</span>
-    <span style="color:#666">}</span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">long</span> l<span style="color:#666">,</span> Long long1<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
-    <span style="color:#666">{</span>
-        Object aobj<span style="color:#666">[]</span> <span style="color:#666">=</span> <span style="color:#2838b0">new</span> Object<span style="color:#666">[</span>3<span style="color:#666">];</span>
-        aobj<span style="color:#666">[</span>0<span style="color:#666">]</span> <span style="color:#666">=</span> s<span style="color:#666">;</span>
-        aobj<span style="color:#666">[</span>1<span style="color:#666">]</span> <span style="color:#666">=</span> Long<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>l<span style="color:#666">);</span>
-        aobj<span style="color:#666">[</span>2<span style="color:#666">]</span> <span style="color:#666">=</span> long1<span style="color:#666">;</span>
-        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequest&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">format</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getEntryCollectionDetails() with %s, %s, %s&#34;</span><span style="color:#666">,</span> aobj<span style="color:#666">));</span>
-        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
-        <span style="color:#2838b0">if</span> <span style="color:#666">(</span>long1 <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">null</span><span style="color:#666">)</span>
-        <span style="color:#666">{</span>
-            hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;heart_id&#34;</span><span style="color:#666">,</span> long1<span style="color:#666">.</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
-        <span style="color:#666">}</span>
-        a<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">((</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/entry_sets/&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">(),</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> EntryListResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> c<span style="color:#666">));</span>
-    <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">UserSettings</span> <span class="n">usersettings</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">WhiSession</span><span class="o">.</span><span class="na">b</span><span class="o">();</span>
+        <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">();</span>
+        <span class="n">WhiLog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">&#34;ApiRequest&#34;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;updateUserSettings() for user (&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;)&#34;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">(</span><span class="n">12</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[name]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getFullName</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[username]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[email]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[bio]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getBio</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[location]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLocation</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[link]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLink</span><span class="o">());</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[show_unsafe_content]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUnsafeContentEnabled</span><span class="o">()));</span>
+        <span class="o">&lt;</span><span class="nl">snip:</span> <span class="n">other</span> <span class="n">settings</span><span class="o">&gt;</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;privacy_options[public]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserPublic</span><span class="o">()));</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;privacy_options[findable]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserFindable</span><span class="o">()));</span>
+        <span class="n">a</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">&#34;api/settings&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">ApiOperationResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="s">&#34;Failed to update user settings&#34;</span><span class="o">));</span>
+    <span class="o">}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">Object</span> <span class="n">aobj</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="n">3</span><span class="o">];</span>
+        <span class="n">aobj</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
+        <span class="n">aobj</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
+        <span class="n">aobj</span><span class="o">[</span><span class="n">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">long1</span><span class="o">;</span>
+        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequest&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;getEntryCollectionDetails() with %s, %s, %s&#34;</span><span class="o">,</span> <span class="n">aobj</span><span class="o">));</span>
+        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;heart_id&#34;</span><span class="o">,</span> <span class="n">long1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="n">a</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;api/entry_sets/&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryListResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">c</span><span class="o">));</span>
+    <span class="o">}</span></code></pre></div>
 <h4 id="apirequestv2-java">APIRequestv2.java</h4>
 
 <p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">long</span> l<span style="color:#666">,</span> <span style="color:#2838b0;font-style:italic">int</span> i<span style="color:#666">,</span> ApiResponseCallback apiresponsecallback<span style="color:#666">)</span>
-    <span style="color:#666">{</span>
-        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequestV2&#34;</span><span style="color:#666">,</span> <span style="color:#666">(</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getUserEntryCollections() with accessToken &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>s<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;, &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;, &#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>i<span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">());</span>
-        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;page&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>i<span style="color:#666">));</span>
-        e<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">((</span><span style="color:#2838b0">new</span> StringBuilder<span style="color:#666">()).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/v2/users/&#34;</span><span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span>l<span style="color:#666">).</span><span style="color:#388038">append</span><span style="color:#666">(</span><span style="color:#b83838">&#34;/collections&#34;</span><span style="color:#666">).</span><span style="color:#388038">toString</span><span style="color:#666">(),</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> EntryCollectionListV2ResponseHandler<span style="color:#666">(</span>apiresponsecallback<span style="color:#666">,</span> a<span style="color:#666">));</span>
-    <span style="color:#666">}</span></code></pre></div><div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#2838b0;font-style:italic">public</span> <span style="color:#2838b0;font-style:italic">void</span> <span style="color:#785840">a</span><span style="color:#666">(</span>String s<span style="color:#666">,</span> Long long1<span style="color:#666">,</span> ApiPagedResponseCallback apipagedresponsecallback<span style="color:#666">)</span>
-    <span style="color:#666">{</span>
-        WhiLog<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;ApiRequestV2&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">format</span><span style="color:#666">(</span><span style="color:#b83838">&#34;getUserDashboard() with %s, %d&#34;</span><span style="color:#666">,</span> <span style="color:#2838b0">new</span> Object<span style="color:#666">[]</span> <span style="color:#666">{</span>
-            s<span style="color:#666">,</span> long1
-        <span style="color:#666">}));</span>
-        HashMap hashmap <span style="color:#666">=</span> <span style="color:#2838b0">new</span> HashMap<span style="color:#666">();</span>
-        hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;access_token&#34;</span><span style="color:#666">,</span> s<span style="color:#666">);</span>
-        <span style="color:#2838b0">if</span> <span style="color:#666">(</span>long1 <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">null</span><span style="color:#666">)</span>
-        <span style="color:#666">{</span>
-            hashmap<span style="color:#666">.</span><span style="color:#388038">put</span><span style="color:#666">(</span><span style="color:#b83838">&#34;before&#34;</span><span style="color:#666">,</span> String<span style="color:#666">.</span><span style="color:#388038">valueOf</span><span style="color:#666">(</span>long1<span style="color:#666">));</span>
-        <span style="color:#666">}</span>
-        e<span style="color:#666">.</span><span style="color:#388038">a</span><span style="color:#666">(</span><span style="color:#b83838">&#34;api/v2/user/dashboard&#34;</span><span style="color:#666">,</span> hashmap<span style="color:#666">,</span> <span style="color:#2838b0">new</span> UserDashboardResponseHandler<span style="color:#666">(</span>apipagedresponsecallback<span style="color:#666">,</span> b<span style="color:#666">));</span>
-    <span style="color:#666">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequestV2&#34;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;getUserEntryCollections() with accessToken &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;page&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;api/v2/users/&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;/collections&#34;</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryCollectionListV2ResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">a</span><span class="o">));</span>
+    <span class="o">}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiPagedResponseCallback</span> <span class="n">apipagedresponsecallback</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequestV2&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;getUserDashboard() with %s, %d&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span>
+            <span class="n">s</span><span class="o">,</span> <span class="n">long1</span>
+        <span class="o">}));</span>
+        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="o">{</span>
+            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;before&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">long1</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;api/v2/user/dashboard&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserDashboardResponseHandler</span><span class="o">(</span><span class="n">apipagedresponsecallback</span><span class="o">,</span> <span class="n">b</span><span class="o">));</span>
+    <span class="o">}</span></code></pre></div>
 <h3 id="api-documentation">API Documentation</h3>
 
 <p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
@@ -414,7 +425,7 @@ Authorization: Bearer [redacted]
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -445,18 +456,6 @@ Authorization: Bearer [redacted]
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2014\/10\/12\/reverse-engineering-the-we-heart-it-api\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -464,12 +463,6 @@ Authorization: Bearer [redacted]
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

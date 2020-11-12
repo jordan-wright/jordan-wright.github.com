@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Building Gophish Healthcheck: Part One &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Building Gophish Healthcheck: Part One" />
+  <meta property="twitter:title" content="Building Gophish Healthcheck: Part One" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/">
+
 
   
   <meta property="og:type" content="article" />
@@ -22,10 +27,15 @@
   
   <meta property="og:article:tag" content="go" />
   
+
+  
+
+  
+
   
 
   <title>
-     Building Gophish Healthcheck: Part One &middot;  Jordan Wright
+     Building Gophish Healthcheck: Part One 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -37,6 +47,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -222,80 +233,80 @@
 <h4 id="registering-the-plugin">Registering the Plugin</h4>
 
 <p>This is the easiest part. We&rsquo;ll just make a new file called <code>setup.go</code> and create a new plugin we&rsquo;ll call <code>healthcheck</code>. This starts with the <code>init</code> function:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#2838b0;font-style:italic">func</span> init<span style="color:#888">()</span> <span style="color:#888">{</span>
-	caddy<span style="color:#888">.</span>RegisterPlugin<span style="color:#888">(</span><span style="color:#b83838">&#34;healthcheck&#34;</span><span style="color:#888">,</span> caddy<span style="color:#888">.</span>Plugin<span style="color:#888">{</span>
-		ServerType<span style="color:#888">:</span> <span style="color:#b83838">&#34;dns&#34;</span><span style="color:#888">,</span>
-		Action<span style="color:#888">:</span>     setup<span style="color:#888">,</span>
-	<span style="color:#888">})</span>
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">caddy</span><span class="p">.</span><span class="nx">RegisterPlugin</span><span class="p">(</span><span class="s">&#34;healthcheck&#34;</span><span class="p">,</span> <span class="nx">caddy</span><span class="p">.</span><span class="nx">Plugin</span><span class="p">{</span>
+		<span class="nx">ServerType</span><span class="p">:</span> <span class="s">&#34;dns&#34;</span><span class="p">,</span>
+		<span class="nx">Action</span><span class="p">:</span>     <span class="nx">setup</span><span class="p">,</span>
+	<span class="p">})</span>
+<span class="p">}</span></code></pre></div>
 <p>This expects to call a function called <code>setup</code> when the plugin is created. This function will set up our local app config and establish a connection to the database so we can look up messages later. Finally, it registers an instance of <code>HealthCheckPlugin</code> (we&rsquo;ll define that later) to the global list of plugins:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#2838b0;font-style:italic">func</span> setup<span style="color:#888">(</span>c <span style="color:#666">*</span>caddy<span style="color:#888">.</span>Controller<span style="color:#888">)</span> <span style="color:#2838b0;font-style:italic">error</span> <span style="color:#888">{</span>
-	c<span style="color:#888">.</span>Next<span style="color:#888">()</span> <span style="color:#888;font-style:italic">// healthcheck
-</span><span style="color:#888;font-style:italic"></span>    
- 	<span style="color:#888;font-style:italic">// Load our configuration file
-</span><span style="color:#888;font-style:italic"></span>	err <span style="color:#666">:=</span> config<span style="color:#888">.</span>LoadConfig<span style="color:#888">(</span><span style="color:#b83838">&#34;./config.json&#34;</span><span style="color:#888">)</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> err
-	<span style="color:#888">}</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">setup</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">caddy</span><span class="p">.</span><span class="nx">Controller</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">c</span><span class="p">.</span><span class="nx">Next</span><span class="p">()</span> <span class="c1">// healthcheck
+</span><span class="c1"></span>    
+ 	<span class="c1">// Load our configuration file
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">LoadConfig</span><span class="p">(</span><span class="s">&#34;./config.json&#34;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
 
-	<span style="color:#888;font-style:italic">// Set up the database, running migrations if needed
-</span><span style="color:#888;font-style:italic"></span>	<span style="color:#888;font-style:italic">// and get a handle to the database so we can look
-</span><span style="color:#888;font-style:italic"></span> 	<span style="color:#888;font-style:italic">// up messages later.
-</span><span style="color:#888;font-style:italic"></span>	err <span style="color:#888">=</span> db<span style="color:#888">.</span>Setup<span style="color:#888">()</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> err
-	<span style="color:#888">}</span>
+	<span class="c1">// Set up the database, running migrations if needed
+</span><span class="c1"></span>	<span class="c1">// and get a handle to the database so we can look
+</span><span class="c1"></span> 	<span class="c1">// up messages later.
+</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">Setup</span><span class="p">()</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">err</span>
+	<span class="p">}</span>
 
-	<span style="color:#888;font-style:italic">// Register the plugin with CoreDNS
-</span><span style="color:#888;font-style:italic"></span>	dnsserver<span style="color:#888">.</span>GetConfig<span style="color:#888">(</span>c<span style="color:#888">).</span>AddPlugin<span style="color:#888">(</span><span style="color:#2838b0;font-style:italic">func</span><span style="color:#888">(</span>next plugin<span style="color:#888">.</span>Handler<span style="color:#888">)</span> plugin<span style="color:#888">.</span>Handler <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> HealthCheckPlugin<span style="color:#888">{</span>
-			Next<span style="color:#888">:</span> next<span style="color:#888">,</span>
-		<span style="color:#888">}</span>
-	<span style="color:#888">})</span>
+	<span class="c1">// Register the plugin with CoreDNS
+</span><span class="c1"></span>	<span class="nx">dnsserver</span><span class="p">.</span><span class="nx">GetConfig</span><span class="p">(</span><span class="nx">c</span><span class="p">).</span><span class="nx">AddPlugin</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span><span class="p">)</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">HealthCheckPlugin</span><span class="p">{</span>
+			<span class="nx">Next</span><span class="p">:</span> <span class="nx">next</span><span class="p">,</span>
+		<span class="p">}</span>
+	<span class="p">})</span>
 
-	<span style="color:#2838b0">return</span> <span style="color:#444;font-style:italic">nil</span>
-<span style="color:#888">}</span></code></pre></div>
+	<span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span></code></pre></div>
 <p>Piece of cake.</p>
 
 <p>So now CoreDNS knows that our plugin exists, but it still doesn&rsquo;t know what our plugin actually does. To build out the plugin, we can create a file (uncreatively) named <code>plugin.go</code>.</p>
 
 <p>The first step is to make our plugin struct:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#888;font-style:italic">// HealthCheckPlugin is a CoreDNS plugin that emulates various email
-</span><span style="color:#888;font-style:italic">// authentication states.
-</span><span style="color:#888;font-style:italic"></span><span style="color:#2838b0;font-style:italic">type</span> HealthCheckPlugin <span style="color:#2838b0;font-style:italic">struct</span> <span style="color:#888">{</span>
-	Next plugin<span style="color:#888">.</span>Handler
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// HealthCheckPlugin is a CoreDNS plugin that emulates various email
+</span><span class="c1">// authentication states.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">HealthCheckPlugin</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">Next</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span>
+<span class="p">}</span></code></pre></div>
 <p>The real magic happens in the <code>ServeDNS</code> function. This function takes a DNS request and a DNS response writer. The general idea is that, if the request is something we&rsquo;re interested in, we can return a response. Otherwise, we can just move on to the next plugin (or in our case, fail).</p>
 
 <p>For the rest of this section, we&rsquo;ll be implementing a function that looks like this:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#2838b0;font-style:italic">func</span> <span style="color:#888">(</span>hc HealthCheckPlugin<span style="color:#888">)</span> ServeDNS<span style="color:#888">(</span>ctx context<span style="color:#888">.</span>Context<span style="color:#888">,</span> w dns<span style="color:#888">.</span>ResponseWriter<span style="color:#888">,</span> r <span style="color:#666">*</span>dns<span style="color:#888">.</span>Msg<span style="color:#888">)</span> <span style="color:#888">(</span><span style="color:#2838b0;font-style:italic">int</span><span style="color:#888">,</span> <span style="color:#2838b0;font-style:italic">error</span><span style="color:#888">)</span> <span style="color:#888">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">hc</span> <span class="nx">HealthCheckPlugin</span><span class="p">)</span> <span class="nx">ServeDNS</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">w</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">dns</span><span class="p">.</span><span class="nx">Msg</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
 
-	<span style="color:#888;font-style:italic">// TODO: ✨MAGIC✨ HAPPENS
-</span><span style="color:#888;font-style:italic"></span>
-	<span style="color:#888;font-style:italic">// Return a status telling CoreDNS we processed this request
-</span><span style="color:#888;font-style:italic"></span>	<span style="color:#2838b0">return</span> dns<span style="color:#888">.</span>RcodeSuccess<span style="color:#888">,</span> <span style="color:#444;font-style:italic">nil</span></code></pre></div>
+	<span class="c1">// TODO: ✨MAGIC✨ HAPPENS
+</span><span class="c1"></span>
+	<span class="c1">// Return a status telling CoreDNS we processed this request
+</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">RcodeSuccess</span><span class="p">,</span> <span class="kc">nil</span></code></pre></div>
 <p>The general structure of the <code>ServeDNS</code> function is pretty simple, we can just check to make sure the request type is one we support and, if so, we can process it. For our case, we only care to support MX and TXT requests. We&rsquo;ll also be nice and support the deprecated SPF request type. Here&rsquo;s an example of the type of <code>switch</code> statement we can do to process the request based on it&rsquo;s type:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">a <span style="color:#666">:=</span> <span style="color:#388038">new</span><span style="color:#888">(</span>dns<span style="color:#888">.</span>Msg<span style="color:#888">)</span>
-<span style="color:#888;font-style:italic">// Fill in the response based on the result of us processing the request
-</span><span style="color:#888;font-style:italic"></span><span style="color:#2838b0">switch</span> state<span style="color:#888">.</span>QType<span style="color:#888">()</span> <span style="color:#888">{</span>
-<span style="color:#2838b0">case</span> dns<span style="color:#888">.</span>TypeTXT<span style="color:#888">:</span>
-	a<span style="color:#888">.</span>Answer<span style="color:#888">,</span> err <span style="color:#888">=</span> hc<span style="color:#888">.</span>processTXTRecord<span style="color:#888">(</span>state<span style="color:#888">)</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> plugin<span style="color:#888">.</span>NextOrFailure<span style="color:#888">(</span>hc<span style="color:#888">.</span>Name<span style="color:#888">(),</span> hc<span style="color:#888">.</span>Next<span style="color:#888">,</span> ctx<span style="color:#888">,</span> w<span style="color:#888">,</span> r<span style="color:#888">)</span>
-	<span style="color:#888">}</span>
-<span style="color:#2838b0">case</span> dns<span style="color:#888">.</span>TypeMX<span style="color:#888">:</span>
-	a<span style="color:#888">.</span>Answer<span style="color:#888">,</span> err <span style="color:#888">=</span> hc<span style="color:#888">.</span>processMXRecord<span style="color:#888">(</span>state<span style="color:#888">)</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> plugin<span style="color:#888">.</span>NextOrFailure<span style="color:#888">(</span>hc<span style="color:#888">.</span>Name<span style="color:#888">(),</span> hc<span style="color:#888">.</span>Next<span style="color:#888">,</span> ctx<span style="color:#888">,</span> w<span style="color:#888">,</span> r<span style="color:#888">)</span>
-	<span style="color:#888">}</span>
-<span style="color:#888;font-style:italic">// This is really only supported for odd legacy issues. Per RFC 7208, SPF
-</span><span style="color:#888;font-style:italic">// records must be TXT records
-</span><span style="color:#888;font-style:italic"></span><span style="color:#2838b0">case</span> dns<span style="color:#888">.</span>TypeSPF<span style="color:#888">:</span>
-	a<span style="color:#888">.</span>Answer<span style="color:#888">,</span> err <span style="color:#888">=</span> hc<span style="color:#888">.</span>processSPFRecord<span style="color:#888">(</span>state<span style="color:#888">)</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> plugin<span style="color:#888">.</span>NextOrFailure<span style="color:#888">(</span>hc<span style="color:#888">.</span>Name<span style="color:#888">(),</span> hc<span style="color:#888">.</span>Next<span style="color:#888">,</span> ctx<span style="color:#888">,</span> w<span style="color:#888">,</span> r<span style="color:#888">)</span>
-	<span style="color:#888">}</span>
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">a</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">dns</span><span class="p">.</span><span class="nx">Msg</span><span class="p">)</span>
+<span class="c1">// Fill in the response based on the result of us processing the request
+</span><span class="c1"></span><span class="k">switch</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QType</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeTXT</span><span class="p">:</span>
+	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processTXTRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeMX</span><span class="p">:</span>
+	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processMXRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="c1">// This is really only supported for odd legacy issues. Per RFC 7208, SPF
+</span><span class="c1">// records must be TXT records
+</span><span class="c1"></span><span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeSPF</span><span class="p">:</span>
+	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processSPFRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></div>
 <p>The flow of each <code>process*Record</code> function is simple. It goes something like this:</p>
 
 <ul>
@@ -311,42 +322,42 @@
 <li><strong>Invalid MX record</strong> - Return <code>invalid.mail.healthcheck.getgophish.com</code></li>
 <li><strong>Valid MX record</strong> - Return the hostname of our email service, <code>mail.healthcheck.getgophish.com</code></li>
 </ul>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#2838b0;font-style:italic">func</span> <span style="color:#888">(</span>hc HealthCheckPlugin<span style="color:#888">)</span> processMXRecord<span style="color:#888">(</span>state request<span style="color:#888">.</span>Request<span style="color:#888">)</span> <span style="color:#888">([]</span>dns<span style="color:#888">.</span>RR<span style="color:#888">,</span> <span style="color:#2838b0;font-style:italic">error</span><span style="color:#888">)</span> <span style="color:#888">{</span>
-	rrs <span style="color:#666">:=</span> <span style="color:#888">[]</span>dns<span style="color:#888">.</span>RR<span style="color:#888">{}</span>
-	<span style="color:#888;font-style:italic">// Get our message
-</span><span style="color:#888;font-style:italic"></span>	messageID <span style="color:#666">:=</span> strings<span style="color:#888">.</span>Split<span style="color:#888">(</span>state<span style="color:#888">.</span>QName<span style="color:#888">(),</span> <span style="color:#b83838">&#34;.&#34;</span><span style="color:#888">)[</span><span style="color:#444">0</span><span style="color:#888">]</span>
-	message<span style="color:#888">,</span> err <span style="color:#666">:=</span> db<span style="color:#888">.</span>GetMessage<span style="color:#888">(</span>messageID<span style="color:#888">)</span>
-	<span style="color:#2838b0">if</span> err <span style="color:#666">!=</span> <span style="color:#444;font-style:italic">nil</span> <span style="color:#888">{</span>
-		<span style="color:#2838b0">return</span> rrs<span style="color:#888">,</span> err
-	<span style="color:#888">}</span>
-	<span style="color:#888;font-style:italic">// Create our DNS response
-</span><span style="color:#888;font-style:italic"></span>	rr <span style="color:#666">:=</span> <span style="color:#388038">new</span><span style="color:#888">(</span>dns<span style="color:#888">.</span>MX<span style="color:#888">)</span>
-	rr<span style="color:#888">.</span>Hdr <span style="color:#888">=</span> dns<span style="color:#888">.</span>RR_Header<span style="color:#888">{</span>Name<span style="color:#888">:</span> state<span style="color:#888">.</span>QName<span style="color:#888">(),</span> Rrtype<span style="color:#888">:</span> dns<span style="color:#888">.</span>TypeMX<span style="color:#888">,</span> Class<span style="color:#888">:</span> state<span style="color:#888">.</span>QClass<span style="color:#888">()}</span>
-	rr<span style="color:#888">.</span>Preference <span style="color:#888">=</span> <span style="color:#444">10</span>
-	<span style="color:#888;font-style:italic">// Fill in the response based on the requested configuration
-</span><span style="color:#888;font-style:italic"></span>	<span style="color:#2838b0">switch</span> message<span style="color:#888">.</span>MessageConfiguration<span style="color:#888">.</span>MX <span style="color:#888">{</span>
-	<span style="color:#2838b0">case</span> db<span style="color:#888">.</span>None<span style="color:#888">:</span>
-		<span style="color:#2838b0">return</span> rrs<span style="color:#888">,</span> <span style="color:#444;font-style:italic">nil</span>
-	<span style="color:#2838b0">case</span> db<span style="color:#888">.</span>HardFail<span style="color:#888">:</span>
-		rr<span style="color:#888">.</span>Mx <span style="color:#888">=</span> dns<span style="color:#888">.</span>Fqdn<span style="color:#888">(</span>fmt<span style="color:#888">.</span>Sprintf<span style="color:#888">(</span><span style="color:#b83838">&#34;invalid.%s&#34;</span><span style="color:#888">,</span> config<span style="color:#888">.</span>Config<span style="color:#888">.</span>EmailHostname<span style="color:#888">))</span>
-	<span style="color:#2838b0">case</span> db<span style="color:#888">.</span>Pass<span style="color:#888">:</span>
-		rr<span style="color:#888">.</span>Mx <span style="color:#888">=</span> dns<span style="color:#888">.</span>Fqdn<span style="color:#888">(</span>config<span style="color:#888">.</span>Config<span style="color:#888">.</span>EmailHostname<span style="color:#888">)</span>
-	<span style="color:#888">}</span>
-	rrs <span style="color:#888">=</span> <span style="color:#388038">append</span><span style="color:#888">(</span>rrs<span style="color:#888">,</span> rr<span style="color:#888">)</span>
-	<span style="color:#2838b0">return</span> rrs<span style="color:#888">,</span> <span style="color:#444;font-style:italic">nil</span>
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">hc</span> <span class="nx">HealthCheckPlugin</span><span class="p">)</span> <span class="nx">processMXRecord</span><span class="p">(</span><span class="nx">state</span> <span class="nx">request</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">([]</span><span class="nx">dns</span><span class="p">.</span><span class="nx">RR</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">rrs</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">dns</span><span class="p">.</span><span class="nx">RR</span><span class="p">{}</span>
+	<span class="c1">// Get our message
+</span><span class="c1"></span>	<span class="nx">messageID</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">QName</span><span class="p">(),</span> <span class="s">&#34;.&#34;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="nx">message</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">GetMessage</span><span class="p">(</span><span class="nx">messageID</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="nx">err</span>
+	<span class="p">}</span>
+	<span class="c1">// Create our DNS response
+</span><span class="c1"></span>	<span class="nx">rr</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">dns</span><span class="p">.</span><span class="nx">MX</span><span class="p">)</span>
+	<span class="nx">rr</span><span class="p">.</span><span class="nx">Hdr</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">RR_Header</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QName</span><span class="p">(),</span> <span class="nx">Rrtype</span><span class="p">:</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeMX</span><span class="p">,</span> <span class="nx">Class</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QClass</span><span class="p">()}</span>
+	<span class="nx">rr</span><span class="p">.</span><span class="nx">Preference</span> <span class="p">=</span> <span class="mi">10</span>
+	<span class="c1">// Fill in the response based on the requested configuration
+</span><span class="c1"></span>	<span class="k">switch</span> <span class="nx">message</span><span class="p">.</span><span class="nx">MessageConfiguration</span><span class="p">.</span><span class="nx">MX</span> <span class="p">{</span>
+	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">None</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="kc">nil</span>
+	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">HardFail</span><span class="p">:</span>
+		<span class="nx">rr</span><span class="p">.</span><span class="nx">Mx</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">Fqdn</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;invalid.%s&#34;</span><span class="p">,</span> <span class="nx">config</span><span class="p">.</span><span class="nx">Config</span><span class="p">.</span><span class="nx">EmailHostname</span><span class="p">))</span>
+	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">Pass</span><span class="p">:</span>
+		<span class="nx">rr</span><span class="p">.</span><span class="nx">Mx</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">Fqdn</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">Config</span><span class="p">.</span><span class="nx">EmailHostname</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="nx">rrs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">rrs</span><span class="p">,</span> <span class="nx">rr</span><span class="p">)</span>
+	<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="kc">nil</span>
+<span class="p">}</span></code></pre></div>
 <h4 id="compiling-the-binary">Compiling the Binary</h4>
 
 <p>After implementing the other functions, we&rsquo;re ready to compile our instance of the <code>coredns</code> binary. The first step is to edit the <code>plugin.cfg</code> file in the <code>github.com/coredns/coredns</code> directory to include our <code>healthcheck</code> plugin:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">healthcheck<span style="color:#666">:</span>github<span style="color:#888">.</span>com/gophish/healthcheck/dns</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">healthcheck<span class="o">:</span>github<span class="p">.</span>com/gophish/healthcheck/dns</code></pre></div>
 <p>In that same directory, we can build our new binary using <code>make</code>. We can move this binary into our <code>github.com/gophish/healthcheck</code> directory.</p>
 
 <p>Finally, we need to write a <code>Corefile</code>, which is the configuration used by the <code>coredns</code> binary. Our <code>Corefile</code> is simple, and can be found here:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt"><span style="color:#888">.</span> <span style="color:#b83838">{</span>
+<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt"><span class="p">.</span> <span class="ss">{</span>
     healthcheck
-<span style="color:#b83838">}</span></code></pre></div>
+<span class="ss">}</span></code></pre></div>
 <p>And that&rsquo;s it! We can run our <code>coredns</code> binary, and it will automatically find and use our <code>Corefile</code>:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-raw" data-lang="raw">$ ./coredns -dns.port=1053
+<div class="highlight"><pre class="chroma"><code class="language-raw" data-lang="raw">$ ./coredns -dns.port=1053
 goose: no migrations to run. current version: 20180620193535
 .:1053
 2018/09/02 18:27:05 [INFO] CoreDNS-1.1.4
@@ -354,7 +365,7 @@ goose: no migrations to run. current version: 20180620193535
 CoreDNS-1.1.4
 darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
 <p>Making a request, we can see the valid MX record being returned:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-raw" data-lang="raw">$ dig @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
+<div class="highlight"><pre class="chroma"><code class="language-raw" data-lang="raw">$ dig @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
 
 ; &lt;&lt;&gt;&gt; DiG 9.10.6 &lt;&lt;&gt;&gt; @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
 ; (2 servers found)
@@ -401,7 +412,7 @@ darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -432,18 +443,6 @@ darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/post\/2018-09-02-building-email-healthcheck\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -451,12 +450,6 @@ darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

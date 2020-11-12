@@ -21,7 +21,7 @@
 
 
 &lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:
 
 &lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;</description>

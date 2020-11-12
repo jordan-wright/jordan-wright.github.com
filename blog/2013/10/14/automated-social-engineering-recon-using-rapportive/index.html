@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Automated Social Engineering Recon Using Rapportive &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Automated Social Engineering Recon Using Rapportive" />
+  <meta property="twitter:title" content="Automated Social Engineering Recon Using Rapportive" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/">
+
 
   
   <meta property="og:type" content="article" />
@@ -22,10 +27,15 @@
   
   <meta property="og:article:tag" content="OSINT" />
   
+
+  
+
+  
+
   
 
   <title>
-     Automated Social Engineering Recon Using Rapportive &middot;  Jordan Wright
+     Automated Social Engineering Recon Using Rapportive 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -37,6 +47,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -184,44 +195,44 @@
 <p><a href="/blog/images/blog/rapportive/burp.png" target="_blank"><img src="/blog/images/blog/rapportive/burp.png"/></a></p>
 
 <p>There are two interesting requests to note. The first one is a call to /immediate_login. This is used to login to Rapportive using Google&rsquo;s <a href="https://developers.google.com/accounts/docs/OpenID">OpenID</a>. The next request to note is to /contacts/email?[target_email]. This is the call made when we open an email from one of our contacts. Here is an example of the data returned (I&rsquo;ve only removed unneccessary data for brevity):</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#888">{</span>
-   <span style="color:#2838b0">&#34;contact&#34;</span><span style="color:#888">:{</span>
-      <span style="color:#2838b0">&#34;image_url_raw&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&amp;d=404&#34;</span><span style="color:#888">,</span>
-      <span style="color:#2838b0">&#34;raplets&#34;</span><span style="color:#888">:[],</span>
-      <span style="color:#2838b0">&#34;memberships&#34;</span><span style="color:#888">:[</span>
-         <span style="color:#888">{</span>
-            <span style="color:#2838b0">&#34;profile_url&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;http:\/\/www.linkedin.com\/pub\/54\/795\/752&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;view_text&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;site_name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;LinkedIn&#34;</span><span style="color:#888">,</span>
-         <span style="color:#888">},</span>
-         <span style="color:#888">{</span>
-            <span style="color:#2838b0">&#34;display_name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Blogger&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;username&#34;</span><span style="color:#888">:</span><span style="color:#444;font-style:italic">null</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;profile_url&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;http:\/\/raidersec.blogspot.com&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;view_text&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;View Jordan&#39;s profile on Blogger&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;site_name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Blogger&#34;</span><span style="color:#888">,</span>
-         <span style="color:#888">},</span>
-         <span style="color:#888">{</span>
-            <span style="color:#2838b0">&#34;display_name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;GitHub&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;username&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;jordan-wright&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;profile_id&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;jordan-wright&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;profile_url&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;https:\/\/github.com\/jordan-wright&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;view_text&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;View Jordan&#39;s profile on GitHub&#34;</span><span style="color:#888">,</span>
-            <span style="color:#2838b0">&#34;site_name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;GitHub&#34;</span><span style="color:#888">,</span>
-         <span style="color:#888">}</span>
-      <span style="color:#888">],</span>
-      <span style="color:#2838b0">&#34;headline&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Jordan Wright - Security Engineer&#34;</span><span style="color:#888">,</span>
-      <span style="color:#2838b0">&#34;email&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;jmwright798@gmail.com&#34;</span><span style="color:#888">,</span>
-      <span style="color:#2838b0">&#34;location&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Texas Area&#34;</span><span style="color:#888">,</span>
-      <span style="color:#2838b0">&#34;occupations&#34;</span><span style="color:#888">:[</span>
-         <span style="color:#888">{</span>
-            <span style="color:#2838b0">&#34;job_title&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Security Engineer&#34;</span>
-         <span style="color:#888">}</span>
-      <span style="color:#888">],</span>
-      <span style="color:#2838b0">&#34;name&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;Jordan Wright&#34;</span><span style="color:#888">,</span>
-   <span style="color:#888">},</span>
-   <span style="color:#2838b0">&#34;success&#34;</span><span style="color:#888">:</span><span style="color:#b83838">&#34;image_or_occupation_or_useful_membership&#34;</span><span style="color:#888">,</span>
-<span style="color:#888">}</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+   <span class="nt">&#34;contact&#34;</span><span class="p">:{</span>
+      <span class="nt">&#34;image_url_raw&#34;</span><span class="p">:</span><span class="s2">&#34;https:\/\/secure.gravatar.com\/avatar\/97754d23d40bbe7dce50f3424991b697?s=80&amp;d=404&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;raplets&#34;</span><span class="p">:[],</span>
+      <span class="nt">&#34;memberships&#34;</span><span class="p">:[</span>
+         <span class="p">{</span>
+            <span class="nt">&#34;profile_url&#34;</span><span class="p">:</span><span class="s2">&#34;http:\/\/www.linkedin.com\/pub\/54\/795\/752&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;view_text&#34;</span><span class="p">:</span><span class="s2">&#34;&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;site_name&#34;</span><span class="p">:</span><span class="s2">&#34;LinkedIn&#34;</span><span class="p">,</span>
+         <span class="p">},</span>
+         <span class="p">{</span>
+            <span class="nt">&#34;display_name&#34;</span><span class="p">:</span><span class="s2">&#34;Blogger&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;username&#34;</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span>
+            <span class="nt">&#34;profile_url&#34;</span><span class="p">:</span><span class="s2">&#34;http:\/\/raidersec.blogspot.com&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;view_text&#34;</span><span class="p">:</span><span class="s2">&#34;View Jordan&#39;s profile on Blogger&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;site_name&#34;</span><span class="p">:</span><span class="s2">&#34;Blogger&#34;</span><span class="p">,</span>
+         <span class="p">},</span>
+         <span class="p">{</span>
+            <span class="nt">&#34;display_name&#34;</span><span class="p">:</span><span class="s2">&#34;GitHub&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;username&#34;</span><span class="p">:</span><span class="s2">&#34;jordan-wright&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;profile_id&#34;</span><span class="p">:</span><span class="s2">&#34;jordan-wright&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;profile_url&#34;</span><span class="p">:</span><span class="s2">&#34;https:\/\/github.com\/jordan-wright&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;view_text&#34;</span><span class="p">:</span><span class="s2">&#34;View Jordan&#39;s profile on GitHub&#34;</span><span class="p">,</span>
+            <span class="nt">&#34;site_name&#34;</span><span class="p">:</span><span class="s2">&#34;GitHub&#34;</span><span class="p">,</span>
+         <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="nt">&#34;headline&#34;</span><span class="p">:</span><span class="s2">&#34;Jordan Wright - Security Engineer&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;email&#34;</span><span class="p">:</span><span class="s2">&#34;jmwright798@gmail.com&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;location&#34;</span><span class="p">:</span><span class="s2">&#34;Texas Area&#34;</span><span class="p">,</span>
+      <span class="nt">&#34;occupations&#34;</span><span class="p">:[</span>
+         <span class="p">{</span>
+            <span class="nt">&#34;job_title&#34;</span><span class="p">:</span><span class="s2">&#34;Security Engineer&#34;</span>
+         <span class="p">}</span>
+      <span class="p">],</span>
+      <span class="nt">&#34;name&#34;</span><span class="p">:</span><span class="s2">&#34;Jordan Wright&#34;</span><span class="p">,</span>
+   <span class="p">},</span>
+   <span class="nt">&#34;success&#34;</span><span class="p">:</span><span class="s2">&#34;image_or_occupation_or_useful_membership&#34;</span><span class="p">,</span>
+<span class="p">}</span></code></pre></div>
 <p>We can see that quite a bit of data was returned by this query. As social engineers, not only would we know that this is likely a valid email address (and therefore a valid email address format for other potential targets of the same organization), but we could also see the social networking profiles linked to this email address. This could reveal other infrmation which may be useful to us later.</p>
 
 <p>So now we want to see how we can:</p>
@@ -335,7 +346,7 @@ Company: CoNetrix
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -366,18 +377,6 @@ Company: CoNetrix
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2013\/10\/14\/automated-social-engineering-recon-using-rapportive\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -385,12 +384,6 @@ Company: CoNetrix
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

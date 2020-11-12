@@ -6,10 +6,24 @@
     <description>Recent content in Posts on Jordan Wright</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 12 Nov 2020 06:00:00 -0500</lastBuildDate>
     
 	<atom:link href="https://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Hunting for Malicious Packages on PyPI</title>
+      <link>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</link>
+      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/svg/ossmalware.svg&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+
+&lt;br&gt;
+About a year ago, the Python Software Foundation &lt;a href=&#34;https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240&#34;&gt;opened a Request for Information (RFI)&lt;/a&gt; to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&amp;rsquo;s &lt;a href=&#34;https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm&#34;&gt;taking over abandoned packages&lt;/a&gt;, &lt;a href=&#34;https://github.com/dateutil/dateutil/issues/984&#34;&gt;typosquatting on popular libraries&lt;/a&gt;, or &lt;a href=&#34;https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md&#34;&gt;hijacking packages using credential stuffing&lt;/a&gt;, it&amp;rsquo;s clear this is a real issue affecting nearly every package manager.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Building Gophish Healthcheck: Part One</title>
@@ -183,7 +197,7 @@ Let&amp;rsquo;s start by seeing what kind of file we&amp;rsquo;re dealing with:&
 
 
 &lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:
 
 &lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;</description>

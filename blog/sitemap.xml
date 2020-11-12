@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</loc>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</loc>
     <lastmod>2018-09-02T22:01:01-05:00</lastmod>
   </url>
@@ -378,7 +383,7 @@
   
   <url>
     <loc>https://jordan-wright.com/blog/</loc>
-    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -391,6 +396,12 @@
   <url>
     <loc>https://jordan-wright.com/blog/tags/machine-learning/</loc>
     <lastmod>2016-04-10T14:40:18-05:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordan-wright.com/blog/tags/malware/</loc>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -426,13 +437,13 @@
   
   <url>
     <loc>https://jordan-wright.com/blog/post/</loc>
-    <lastmod>2018-09-02T22:01:01-05:00</lastmod>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://jordan-wright.com/blog/tags/python/</loc>
-    <lastmod>2015-02-21T00:00:00+00:00</lastmod>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -481,6 +492,12 @@
   <url>
     <loc>https://jordan-wright.com/blog/tags/static-analysis/</loc>
     <lastmod>2014-08-09T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://jordan-wright.com/blog/tags/supply_chain/</loc>
+    <lastmod>2020-11-12T06:00:00-05:00</lastmod>
     <priority>0</priority>
   </url>
   

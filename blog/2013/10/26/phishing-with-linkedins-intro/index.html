@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Phishing with Linkedin&#39;s Intro &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Phishing with Linkedin&#39;s Intro" />
+  <meta property="twitter:title" content="Phishing with Linkedin&#39;s Intro" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/">
+
 
   
   <meta property="og:type" content="article" />
@@ -20,10 +25,15 @@
   
   <meta property="og:article:tag" content="Social Engineering" />
   
+
+  
+
+  
+
   
 
   <title>
-     Phishing with Linkedin&#39;s Intro &middot;  Jordan Wright
+     Phishing with Linkedin&#39;s Intro 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -35,6 +45,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -185,7 +196,7 @@
 <p>While I am currently performing a much more in-depth analysis of Intro which will give a much better look into its behavior (to be posted soon), for now we will just take a look at the basics of how Intro works, and look specifically into how it manipulates user&rsquo;s email.</p>
 
 <p>Intro works by first obtaining an OAuth access token to manage your email. They can get away with not asking for your Gmail password since <a href="https://developers.google.com/gmail/oauth_overview">Google implemented OAuth support into Gmail&rsquo;s IMAP and SMTP</a>. After Linkedin can access your email, they install a security profile onto your iPhone. The most notable feature of this security profile is that it installs a new email account pointing to Linkedin&rsquo;s IMAP and SMTP servers. I&rsquo;m not sure of a way to recover the email account password from the iPhone itself, but by intercepting the profile sent to the iPhone via a proxy, we can see that this email account looks like this:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">&lt;dict&gt;
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">&lt;dict&gt;
     &lt;key&gt;PayloadDisplayName&lt;/key&gt;&lt;string&gt;Email Settings&lt;/string&gt;
     &lt;key&gt;PayloadType&lt;/key&gt;&lt;string&gt;com.apple.mail.managed&lt;/string&gt;
     &lt;key&gt;PayloadVersion&lt;/key&gt;&lt;integer&gt;1&lt;/integer&gt;
@@ -216,7 +227,7 @@
 <p><a href="/blog/images/blog/intro_phish/diagram.png" target="_blank"><img src="/blog/images/blog/intro_phish/diagram.png"/></a></p>
 
 <p>Now that we have the username and password used for this mail account, let&rsquo;s grab the first email and see what content Linkedin&rsquo;s IMAP proxy injects into it. We can do this with OpenSSL.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text"># openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text"># openssl s_client -connect imap.intro.linkedin.com:143 -starttls imap -crlf -quiet
 depth=2 C = US, O = &#34;thawte, Inc.&#34;, OU = Certification Services Division, OU = &#34;(c) 2006 thawte, Inc. - For authorized use only&#34;, CN = thawte Primary Root CA
 verify error:num=19:self signed certificate in certificate chain
 verify return:0
@@ -237,24 +248,24 @@ c FETCH 4 BODY[]
 * 4 FETCH (FLAGS (\Seen) BODY[] {36510}
 email_content_here</code></pre></div>
 <p>As it turns out, Linkedin injects quite a bit of content into your email. The basic structure looks like this:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#289870">&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD HTML 4.0 Transitional//EN&#34; &#34;http://www.w3.org/TR/REC-html40/loose.dtd&#34;&gt;</span>
-<span style="color:#888">&lt;</span><span style="color:#2838b0">html</span><span style="color:#888">&gt;</span>
-	<span style="color:#888">&lt;</span><span style="color:#2838b0">head</span><span style="color:#888">&gt;</span>
-	    <span style="color:#888">&lt;</span><span style="color:#2838b0">meta</span> <span style="color:#388038">http-equiv</span><span style="color:#666">=</span><span style="color:#b83838">&#34;Content-Type&#34;</span> <span style="color:#388038">content</span><span style="color:#666">=</span><span style="color:#b83838">&#34;text/html; charset=utf-8&#34;</span><span style="color:#888">&gt;</span>
+<div class="highlight"><pre class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html PUBLIC &#34;-//W3C//DTD HTML 4.0 Transitional//EN&#34; &#34;http://www.w3.org/TR/REC-html40/loose.dtd&#34;&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+	    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;Content-Type&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;text/html; charset=utf-8&#34;</span><span class="p">&gt;</span>
 	    User specified CSS (if any)
-	    <span style="color:#888">&lt;</span><span style="color:#2838b0">style</span> <span style="color:#388038">type</span><span style="color:#666">=</span><span style="color:#b83838">&#34;text/css&#34;</span><span style="color:#888">&gt;</span>
-	        <span style="color:#888;font-style:italic">/*BEGIN RAPPORTIVE*/</span>
-	        <span style="color:#2838b0">Injected</span> <span style="color:#2838b0">Linkedin</span> <span style="color:#2838b0">Intro</span> <span style="color:#2838b0">CSS</span>
-	        <span style="color:#888;font-style:italic">/*END RAPPORTIVE*/</span>
-	    <span style="color:#888">&lt;/</span><span style="color:#2838b0">style</span><span style="color:#888">&gt;</span>
-	<span style="color:#888">&lt;/</span><span style="color:#2838b0">head</span><span style="color:#888">&gt;</span>
-	<span style="color:#888">&lt;</span><span style="color:#2838b0">body</span><span style="color:#888">&gt;</span>
-	    <span style="color:#888;font-style:italic">&lt;!--BEGIN RAPPORTIVE--&gt;</span>
+	    <span class="p">&lt;</span><span class="nt">style</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;text/css&#34;</span><span class="p">&gt;</span>
+	        <span class="c">/*BEGIN RAPPORTIVE*/</span>
+	        <span class="nt">Injected</span> <span class="nt">Linkedin</span> <span class="nt">Intro</span> <span class="nt">CSS</span>
+	        <span class="c">/*END RAPPORTIVE*/</span>
+	    <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+	<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+	<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+	    <span class="c">&lt;!--BEGIN RAPPORTIVE--&gt;</span>
 	    Injected Linkedin Intro HTML Content
-	    <span style="color:#888;font-style:italic">&lt;!--END RAPPORTIVE--&gt;</span>
+	    <span class="c">&lt;!--END RAPPORTIVE--&gt;</span>
 	    Original Message
-	<span style="color:#888">&lt;/</span><span style="color:#2838b0">body</span><span style="color:#888">&gt;</span>
-<span style="color:#888">&lt;/</span><span style="color:#2838b0">html</span><span style="color:#888">&gt;</span></code></pre></div>
+	<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span></code></pre></div>
 <p>You can find the full email <a href="https://gist.github.com/jordan-wright/7189765#file-original_email-html">here</a> (some links and what-not have been redacted). Now that we know what Linkedin does to the email, let&rsquo;s see how we can use it to make our phishing emails appear to be legitimate.</p>
 
 <h3 id="setting-up-the-bait">Setting up the Bait</h3>
@@ -262,11 +273,11 @@ email_content_here</code></pre></div>
 <p>Just like setting up a spoofed website, we can simply copy the existing CSS and HTML structure provided by Linkedin, and repurpose it for our needs. The first thing we will want to do is to find a way to get rid of the existing Intro data. We can do this by setting the CSS for the existing Intro block to <code>display:none;</code>. Unfortunately for us, Linkedin obviously considered this, since the CSS is usually injected at the end of our <code>head</code> block, and they were pretty specific in ensuring the <code>!important</code> keyword is set for things such as the display, height, etc.</p>
 
 <p>But they weren&rsquo;t specific enough. If we look at the CSS, we can see that the rules apply to the <code>#rapportive.iphone</code> element. If we look closely, we can see that in fact the HTML element we want to hide has a full spec of <code>#rapportive.rapportive.topbar.iphone</code>. Therefore, we can simply set the following style block to hide the element:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css"><span style="color:#666">&lt;</span><span style="color:#2838b0">style</span> <span style="color:#2838b0">type</span><span style="color:#666">=</span><span style="color:#b83838">&#34;text/css&#34;</span><span style="color:#666">&gt;</span>
-    <span style="color:#888">#</span><span style="color:#289870">rapportive</span><span style="color:#888">.</span><span style="color:#287088">rapportive</span><span style="color:#888">.</span><span style="color:#287088">topbar</span><span style="color:#888">.</span><span style="color:#287088">iphone</span> <span style="color:#888">{</span>
-        <span style="color:#2838b0">display</span><span style="color:#888">:</span><span style="color:#444;font-style:italic">none</span> <span style="color:#289870">!important</span><span style="color:#888">;</span>
-    <span style="color:#888">}</span>
-<span style="color:#666">&lt;/</span><span style="color:#2838b0">style</span><span style="color:#666">&gt;</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-css" data-lang="css"><span class="o">&lt;</span><span class="nt">style</span> <span class="nt">type</span><span class="o">=</span><span class="s2">&#34;text/css&#34;</span><span class="o">&gt;</span>
+    <span class="p">#</span><span class="nn">rapportive</span><span class="p">.</span><span class="nc">rapportive</span><span class="p">.</span><span class="nc">topbar</span><span class="p">.</span><span class="nc">iphone</span> <span class="p">{</span>
+        <span class="k">display</span><span class="p">:</span><span class="kc">none</span> <span class="cp">!important</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="o">&lt;/</span><span class="nt">style</span><span class="o">&gt;</span></code></pre></div>
 <p>Easy as that.</p>
 
 <p>Now that we have removed the existing Intro data, we are free to inject our own. To do this, we can copy the existing HTML provided by Linkedin. To make sure that our data is not hidden by our previous CSS, we can simply remove the <code>topbar</code> class from the root element, since it will have no effect on styling. The last things we will want to do are to clean up the margins Linkedin puts on the original message, as well as changing the actual data itself to be whatever we want. In addition to this, I copied some of the CSS and HTML and changed the IDs which are generated automatically. This will make sure our template is always consistent.</p>
@@ -311,7 +322,7 @@ email_content_here</code></pre></div>
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -342,18 +353,6 @@ email_content_here</code></pre></div>
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2013\/10\/26\/phishing-with-linkedins-intro\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -361,12 +360,6 @@ email_content_here</code></pre></div>
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

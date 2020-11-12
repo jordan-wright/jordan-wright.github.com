@@ -6,16 +6,21 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" Posts &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="Posts" />
+  <meta property="twitter:title" content="Posts" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/post/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/post/">
+
 
   
   <meta property="og:type" content="website" />
   
 
   <title>
-     Posts &middot;  Jordan Wright
+     Posts 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -27,6 +32,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -136,13 +142,52 @@
 	<div class="extra-pagination inner">
     <nav class="pagination" role="navigation">
 	
-	<span class="page-number">Page 1 of 4</span>
+	<span class="page-number">Page 1 of 5</span>
 	
 	<a class="older-posts" href="/blog/post/page/2/">Older Posts &rarr;</a>
 	
 </nav>
 
 	</div>
+
+	
+	   
+<article class="post post">
+    <header class="post-header">
+        <h2 class="post-title"><a href="/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/">Hunting for Malicious Packages on PyPI</a></h2>
+    </header>
+    <section class="post-excerpt">
+	    <p><p><img src="/blog/images/headers/svg/ossmalware.svg" alt="" class="pure-img" >
+
+<br>
+About a year ago, the Python Software Foundation <a href="https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240">opened a Request for Information (RFI)</a> to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&rsquo;s <a href="https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm">taking over abandoned packages</a>, <a href="https://github.com/dateutil/dateutil/issues/984">typosquatting on popular libraries</a>, or <a href="https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md">hijacking packages using credential stuffing</a>, it&rsquo;s clear this is a real issue affecting nearly every package manager.</p>
+
+<p></p> <a class="read-more icon-standard" href="/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/">Read More</a></p>
+    </section>
+    <footer class="post-meta">
+        
+        
+
+        
+            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
+        
+        
+            Jordan Wright
+        
+        on
+            
+                <a href="https://jordan-wright.com/blog/tags/python/">#python</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/malware/">#malware</a>,
+            
+                <a href="https://jordan-wright.com/blog/tags/supply_chain/">#supply_chain</a>,
+            
+        
+        <time class="post-date" datetime="2020-11-12T06:00:00-05:00">
+            12 Nov 2020
+        </time>
+    </footer>
+</article>
 
 	
 	   
@@ -514,51 +559,10 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
 </article>
 
 	
-	   
-<article class="post post">
-    <header class="post-header">
-        <h2 class="post-title"><a href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">CSAW CTF 2015 - Forensics 100 Transfer Writeup</a></h2>
-    </header>
-    <section class="post-excerpt">
-	    <p><img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
-
-
-<p>This challenge starts off with the following hint:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
-<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
-
-<img src="/blog/images/blog/csaw2015/frame_contains.png"></p> <a class="read-more icon-standard" href="/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">Read More</a></p>
-    </section>
-    <footer class="post-meta">
-        
-        
-
-        
-            <img class="author-thumb" src="https://jordan-wright.com/blog/images/jordan-profile.jpg" alt="Author image" nopin="nopin" />
-        
-        
-            Jordan Wright
-        
-        on
-            
-                <a href="https://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/writeup/">#writeup</a>,
-            
-                <a href="https://jordan-wright.com/blog/tags/ctf/">#ctf</a>,
-            
-        
-        <time class="post-date" datetime="2015-09-22T19:05:18Z">
-            22 Sep 2015
-        </time>
-    </footer>
-</article>
-
-	
 
 	<nav class="pagination" role="navigation">
 	
-	<span class="page-number">Page 1 of 4</span>
+	<span class="page-number">Page 1 of 5</span>
 	
 	<a class="older-posts" href="/blog/post/page/2/">Older Posts &rarr;</a>
 	
@@ -566,12 +570,6 @@ Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p> <a c
 
 </main>
 
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

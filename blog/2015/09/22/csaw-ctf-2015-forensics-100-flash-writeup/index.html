@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" CSAW CTF 2015 - Forensics 100 Flash Writeup &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="CSAW CTF 2015 - Forensics 100 Flash Writeup" />
+  <meta property="twitter:title" content="CSAW CTF 2015 - Forensics 100 Flash Writeup" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/">
+
 
   
   <meta property="og:type" content="article" />
@@ -16,10 +21,15 @@
   <meta property="og:article:published_time" content="2015-09-22T20:51:43Z" />
 
   
+
+  
+
+  
+
   
 
   <title>
-     CSAW CTF 2015 - Forensics 100 Flash Writeup &middot;  Jordan Wright
+     CSAW CTF 2015 - Forensics 100 Flash Writeup 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -31,6 +41,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -154,10 +165,10 @@
 <p>For this challenge, we were given an HDD image and asked to find the flag on it.
 
 Let&rsquo;s start by seeing what kind of file we&rsquo;re dealing with:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ file flash_c8429a430278283c0e571baebca3d139.img
 flash_c8429a430278283c0e571baebca3d139.img: x86 boot sector, mkdosfs boot message display, code offset 0x3c, OEM-ID &#34;mkfs.fat&#34;, sectors/cluster 4, root entries 512, Media descriptor 0xf8, sectors/FAT 256, heads 64, sectors 262144 (volumes &gt; 32 MB) , serial number 0xa0f1dff7, unlabeled, FAT (16 bit)</code></pre></div>
 <p>Ok, a standard FAT volume. Let&rsquo;s try to mount it:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">jordan@temp:~/csaw$ mount flash_c8429a430278283c0e571baebca3d139.img -t vfat -o loop,ro,noexec /mnt
 jordan@temp:~$ cd /mnt/
 jordan@temp:/mnt$ ls
 100.txt  29.txt  48.txt  67.txt  86.txt      pg1184.txt  pg2000.txt  pg4300.txt
@@ -182,7 +193,7 @@ jordan@temp:/mnt$ ls
 27.txt   46.txt  65.txt  84.txt  pg10.txt    pg1952.txt  pg36.txt
 28.txt   47.txt  66.txt  85.txt  pg1155.txt  pg1998.txt  pg41.txt</code></pre></div>
 <p>Looks like we have quite a few files to dig through. Looks like it&rsquo;s going to take a while. Ooooorrr, we could just grep for the flag.</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">root@malfirm:/mnt# grep -r &#34;flag{&#34; * .*
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">root@malfirm:/mnt# grep -r &#34;flag{&#34; * .*
 ./.10/.hidden:flag{b3l0w_th3_r4dar}</code></pre></div>
 <p>Sweet. The flag is <code>flag{b3l0w_th3_r4dar}</code></p>
 
@@ -208,7 +219,7 @@ jordan@temp:/mnt$ ls
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -239,18 +250,6 @@ jordan@temp:/mnt$ ls
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2015\/09\/22\/csaw-ctf-2015-forensics-100-flash-writeup\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -258,12 +257,6 @@ jordan@temp:/mnt$ ls
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>

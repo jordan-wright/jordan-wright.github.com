@@ -357,6 +357,10 @@ code, tt {
     border-radius: 2px;
 }
 
+object {
+    width: 100%
+}
+
 pre {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -946,10 +950,10 @@ body.nav-opened .menu-button .word {
     padding-bottom: 4rem;
     border-bottom: #EBF2F6 1px solid;
     word-wrap: break-word;
-    -moz-hyphens: auto;
+    /* -moz-hyphens: auto;
     -ms-hyphens: auto;
     -webkit-hyphens: auto;
-    hyphens: auto;
+    hyphens: auto; */
 }
 
 /* Add a little circle in the middle of the border-bottom on our .post
@@ -1220,6 +1224,10 @@ body:not(.post-template) .post-title {
 
 .post-footer .share a:hover {
     color: #50585D;
+}
+
+.twitter-tweet {
+    margin: auto;
 }
 
 
@@ -1618,6 +1626,13 @@ body:not(.post-template) .post-title {
         padding: 0;
     }
 
+}
+
+@media only screen and (min-width: 900px) {
+    object {
+        width: 150%;
+        margin-left: -25%;
+    }
 }
 
 

@@ -291,6 +291,15 @@
     </item>
     
     <item>
+      <title>Malware</title>
+      <link>https://jordan-wright.com/blog/tags/malware/</link>
+      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/tags/malware/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Osint</title>
       <link>https://jordan-wright.com/blog/tags/osint/</link>
       <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
@@ -338,7 +347,7 @@
     <item>
       <title>Python</title>
       <link>https://jordan-wright.com/blog/tags/python/</link>
-      <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
       
       <guid>https://jordan-wright.com/blog/tags/python/</guid>
       <description></description>
@@ -413,6 +422,15 @@
       <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
       
       <guid>https://jordan-wright.com/blog/tags/static-analysis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Supply_chain</title>
+      <link>https://jordan-wright.com/blog/tags/supply_chain/</link>
+      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
+      
+      <guid>https://jordan-wright.com/blog/tags/supply_chain/</guid>
       <description></description>
     </item>
     

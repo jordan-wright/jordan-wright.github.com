@@ -6,9 +6,14 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-  <meta property="og:title" content=" CSAW CTF 2015 - Forensics 100 Transfer Writeup &middot;  Jordan Wright" />
+  
+  <meta property="og:title" content="CSAW CTF 2015 - Forensics 100 Transfer Writeup" />
+  <meta property="twitter:title" content="CSAW CTF 2015 - Forensics 100 Transfer Writeup" />
+  
   <meta property="og:site_name" content="Jordan Wright" />
   <meta property="og:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
+  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">
+
 
   
   <meta property="og:type" content="article" />
@@ -22,10 +27,15 @@
   
   <meta property="og:article:tag" content="ctf" />
   
+
+  
+
+  
+
   
 
   <title>
-     CSAW CTF 2015 - Forensics 100 Transfer Writeup &middot;  Jordan Wright
+     CSAW CTF 2015 - Forensics 100 Transfer Writeup 
   </title>
 
   <meta name="description" content="Security and Programming Blog" />
@@ -37,6 +47,7 @@
   <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
 
   <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
   <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
   <link rel="stylesheet" type="text/css"
     href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
@@ -164,50 +175,50 @@
 
 
 <p>This challenge starts off with the following hint:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
 <p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
 
 <img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
 
 <p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">import</span> <span style="color:#289870">string</span>
-<span style="color:#2838b0">import</span> <span style="color:#289870">random</span>
-<span style="color:#2838b0">from</span> <span style="color:#289870">base64</span> <span style="color:#2838b0">import</span> b64encode<span style="color:#888">,</span> b64decode
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
 
-FLAG <span style="color:#666">=</span> <span style="color:#b83838">&#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;</span>
+<span class="n">FLAG</span> <span class="o">=</span> <span class="s1">&#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;</span>
 
-enc_ciphers <span style="color:#666">=</span> <span style="color:#888">[</span><span style="color:#b83838">&#39;rot13&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;b64e&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;caesar&#39;</span><span style="color:#888">]</span>
-<span style="color:#888;font-style:italic"># dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]</span>
+<span class="n">enc_ciphers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rot13&#39;</span><span class="p">,</span> <span class="s1">&#39;b64e&#39;</span><span class="p">,</span> <span class="s1">&#39;caesar&#39;</span><span class="p">]</span>
+<span class="c1"># dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]</span>
 
-<span style="color:#2838b0">def</span> <span style="color:#785840">rot13</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
-    _rot13 <span style="color:#666">=</span> string<span style="color:#666">.</span>maketrans<span style="color:#888">(</span> 
-    <span style="color:#b83838">&#34;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&#34;</span><span style="color:#888">,</span> 
-    <span style="color:#b83838">&#34;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&#34;</span><span style="color:#888">)</span>
-    <span style="color:#2838b0">return</span> string<span style="color:#666">.</span>translate<span style="color:#888">(</span>s<span style="color:#888">,</span> _rot13<span style="color:#888">)</span>
+<span class="k">def</span> <span class="nf">rot13</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="n">_rot13</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span> 
+    <span class="s2">&#34;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&#34;</span><span class="p">,</span> 
+    <span class="s2">&#34;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&#34;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">_rot13</span><span class="p">)</span>
 
-<span style="color:#2838b0">def</span> <span style="color:#785840">b64e</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
-    <span style="color:#2838b0">return</span> b64encode<span style="color:#888">(</span>s<span style="color:#888">)</span>
+<span class="k">def</span> <span class="nf">b64e</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
 
-<span style="color:#2838b0">def</span> <span style="color:#785840">caesar</span><span style="color:#888">(</span>plaintext<span style="color:#888">,</span> shift<span style="color:#666">=</span><span style="color:#444">3</span><span style="color:#888">):</span>
-    alphabet <span style="color:#666">=</span> string<span style="color:#666">.</span>ascii_lowercase
-    shifted_alphabet <span style="color:#666">=</span> alphabet<span style="color:#888">[</span>shift<span style="color:#888">:]</span> <span style="color:#666">+</span> alphabet<span style="color:#888">[:</span>shift<span style="color:#888">]</span>
-    table <span style="color:#666">=</span> string<span style="color:#666">.</span>maketrans<span style="color:#888">(</span>alphabet<span style="color:#888">,</span> shifted_alphabet<span style="color:#888">)</span>
-    <span style="color:#2838b0">return</span> plaintext<span style="color:#666">.</span>translate<span style="color:#888">(</span>table<span style="color:#888">)</span>
+<span class="k">def</span> <span class="nf">caesar</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">alphabet</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span>
+    <span class="n">shifted_alphabet</span> <span class="o">=</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">shift</span><span class="p">:]</span> <span class="o">+</span> <span class="n">alphabet</span><span class="p">[:</span><span class="n">shift</span><span class="p">]</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="n">alphabet</span><span class="p">,</span> <span class="n">shifted_alphabet</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">plaintext</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
 
-<span style="color:#2838b0">def</span> <span style="color:#785840">encode</span><span style="color:#888">(</span>pt<span style="color:#888">,</span> cnt<span style="color:#666">=</span><span style="color:#444">50</span><span style="color:#888">):</span>
-    tmp <span style="color:#666">=</span> <span style="color:#b83838">&#39;2{}&#39;</span><span style="color:#666">.</span>format<span style="color:#888">(</span>b64encode<span style="color:#888">(</span>pt<span style="color:#888">))</span>
-    <span style="color:#2838b0">for</span> cnt <span style="color:#a848a8">in</span> <span style="color:#388038">xrange</span><span style="color:#888">(</span>cnt<span style="color:#888">):</span>
-        c <span style="color:#666">=</span> random<span style="color:#666">.</span>choice<span style="color:#888">(</span>enc_ciphers<span style="color:#888">)</span>
-        i <span style="color:#666">=</span> enc_ciphers<span style="color:#666">.</span>index<span style="color:#888">(</span>c<span style="color:#888">)</span> <span style="color:#666">+</span> <span style="color:#444">1</span>
-        _tmp <span style="color:#666">=</span> <span style="color:#388038">globals</span><span style="color:#888">()[</span>c<span style="color:#888">](</span>tmp<span style="color:#888">)</span>
-        tmp <span style="color:#666">=</span> <span style="color:#b83838">&#39;{}{}&#39;</span><span style="color:#666">.</span>format<span style="color:#888">(</span>i<span style="color:#888">,</span> _tmp<span style="color:#888">)</span>
+<span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">cnt</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="s1">&#39;2{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">cnt</span><span class="p">):</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">enc_ciphers</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">enc_ciphers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">_tmp</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">c</span><span class="p">](</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s1">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_tmp</span><span class="p">)</span>
 
-    <span style="color:#2838b0">return</span> tmp
+    <span class="k">return</span> <span class="n">tmp</span>
 
-<span style="color:#2838b0">if</span> <span style="color:#b85820">__name__</span> <span style="color:#666">==</span> <span style="color:#b83838">&#39;__main__&#39;</span><span style="color:#888">:</span>
-    <span style="color:#2838b0">print</span> encode<span style="color:#888">(</span>FLAG<span style="color:#888">,</span> cnt<span style="color:#666">=</span><span style="background-color:#a848a8">?</span><span style="color:#888">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">encode</span><span class="p">(</span><span class="n">FLAG</span><span class="p">,</span> <span class="n">cnt</span><span class="o">=</span><span class="err">?</span><span class="p">)</span>
 
-<span style="color:#444">2</span>Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm<span style="color:#666">&lt;</span>snip<span style="color:#666">&gt;</span></code></pre></div>
+<span class="mi">2</span><span class="n">Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm</span><span class="o">&lt;</span><span class="n">snip</span><span class="o">&gt;</span></code></pre></div>
 <p>We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&rsquo;s dissect the <code>encode</code> function to see if we can figure out what&rsquo;s going on with the input.</p>
 
 <p>It looks like we start off by base64 encoding the input and prepending &ldquo;2&rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.</p>
@@ -223,23 +234,23 @@ enc_ciphers <span style="color:#666">=</span> <span style="color:#888">[</span><
 </ul>
 
 <p>All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change <code>shift=3</code> to <code>shift=-3</code>. Then, we only have to add the following base64 decode function:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">def</span> <span style="color:#785840">b64d</span><span style="color:#888">(</span>s<span style="color:#888">):</span>
-    <span style="color:#2838b0">return</span> b64decode<span style="color:#888">(</span>s<span style="color:#888">)</span></code></pre></div>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">b64d</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code></pre></div>
 <p>Finally, we just need to put the pieces together to do the reversing. I used the following <code>decode</code> and <code>main</code> functions:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#2838b0">def</span> <span style="color:#785840">decode</span><span style="color:#888">(</span>pt<span style="color:#888">):</span>
-	<span style="color:#2838b0">while</span> <span style="color:#b83838">&#34;flag&#34;</span> <span style="color:#a848a8">not</span> <span style="color:#a848a8">in</span> pt<span style="color:#888">:</span>
-		i <span style="color:#666">=</span> <span style="color:#388038">int</span><span style="color:#888">(</span>pt<span style="color:#888">[</span><span style="color:#444">0</span><span style="color:#888">])</span>
-		raw <span style="color:#666">=</span> pt<span style="color:#888">[</span><span style="color:#444">1</span><span style="color:#888">:]</span>
-		<span style="color:#2838b0">print</span> <span style="color:#b83838">&#34;Running function &#34;</span> <span style="color:#666">+</span> dec_ciphers<span style="color:#888">[</span>i<span style="color:#666">-</span><span style="color:#444">1</span><span style="color:#888">]</span>
-		_pt <span style="color:#666">=</span> <span style="color:#388038">globals</span><span style="color:#888">()[</span>dec_ciphers<span style="color:#888">[</span>i<span style="color:#666">-</span><span style="color:#444">1</span><span style="color:#888">]](</span>raw<span style="color:#888">)</span>
-		pt <span style="color:#666">=</span> _pt
-	<span style="color:#2838b0">print</span> pt
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">pt</span><span class="p">):</span>
+	<span class="k">while</span> <span class="s2">&#34;flag&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">:</span>
+		<span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="n">raw</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+		<span class="k">print</span> <span class="s2">&#34;Running function &#34;</span> <span class="o">+</span> <span class="n">dec_ciphers</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">_pt</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">dec_ciphers</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]](</span><span class="n">raw</span><span class="p">)</span>
+		<span class="n">pt</span> <span class="o">=</span> <span class="n">_pt</span>
+	<span class="k">print</span> <span class="n">pt</span>
 
-<span style="color:#2838b0">if</span> <span style="color:#b85820">__name__</span> <span style="color:#666">==</span> <span style="color:#b83838">&#39;__main__&#39;</span><span style="color:#888">:</span>
-	<span style="color:#2838b0">with</span> <span style="color:#388038">open</span><span style="color:#888">(</span><span style="color:#b83838">&#39;csaw_data.txt&#39;</span><span style="color:#888">,</span> <span style="color:#b83838">&#39;r&#39;</span><span style="color:#888">)</span> <span style="color:#2838b0">as</span> raw<span style="color:#888">:</span>
-		<span style="color:#2838b0">print</span> decode<span style="color:#888">(</span>raw<span style="color:#666">.</span>read<span style="color:#888">()</span><span style="color:#666">.</span>strip<span style="color:#888">())</span></code></pre></div>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;csaw_data.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">raw</span><span class="p">:</span>
+		<span class="k">print</span> <span class="n">decode</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></div>
 <p>This gives us the following output:</p>
-<div class="highlight"><pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Running function b64d
+<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">Running function b64d
 Running function b64d
 Running function caesard
 Running function b64d
@@ -325,7 +336,7 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></pre></div>
 <section class="author">
   <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
   
-  <p>Security Researcher, Programmer.</p>
+  <p>Security Researcher, Open-Source Developer.</p>
   
   <div class="author-meta">
     <span class="author-location icon-location">San Antonio, Texas</span>
@@ -356,18 +367,6 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></pre></div>
 
     
 
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-  var disqus_shortname = 'jordan-wright';
-  var disqus_url = 'https:\/\/jordan-wright.com\/blog\/2015\/09\/22\/csaw-ctf-2015-forensics-100-transfer-writeup\/';
-  (function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-  })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
 
 
 
@@ -375,12 +374,6 @@ flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></pre></div>
 </article>
 
 </main>
-    <footer class="site-footer clearfix">
-        <section class="copyright"><a href="">Jordan Wright</a> </section>
-        
-        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
-        
-    </footer>
     </div>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
     <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
