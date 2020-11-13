@@ -218,7 +218,7 @@ About a year ago, the Python Software Foundation <a href="https://discuss.python
 
 <p>This means that if we can watch syscalls during the installation of a Python package, we can see if anything suspicious occurs. The benefit is that it doesn&rsquo;t matter how obfuscated the code is- we&rsquo;ll see what actually happens.</p>
 
-<p>It&rsquo;s important to note that the idea of watching syscalls isn&rsquo;t something I came up with. Folks like <a href="https://twitter.com/adam_baldwin">Adam Baldwin</a> have been talking about this <a href="https://www.slideshare.net/evilpacket/hunting-for-malicious-modules-in-npm-nodesummit">since 2017</a>. And there was an <a href="https://arxiv.org/pdf/2002.01139.pdf">excellent paper</a> published by researchers from the Georgia Institue of Technology that took this same approach, among others. Honestly, most of this blog post is just trying to reproduce their work.</p>
+<p>It&rsquo;s important to note that the idea of watching syscalls isn&rsquo;t something I came up with. Folks like <a href="https://twitter.com/adam_baldwin">Adam Baldwin</a> have been talking about this <a href="https://www.slideshare.net/evilpacket/hunting-for-malicious-modules-in-npm-nodesummit">since 2017</a>. And there was an <a href="https://arxiv.org/pdf/2002.01139.pdf">excellent paper</a> published by researchers from the Georgia Institute of Technology that took this same approach, among others. Honestly, most of this blog post is just trying to reproduce their work.</p>
 
 <p>So we know we want to monitor syscalls - how exactly do we do that?</p>
 
