@@ -391,7 +391,7 @@ About a year ago, the Python Software Foundation <a href="https://discuss.python
   <span class="c1">-- Only query the last 30 days of history
 </span><span class="c1"></span>  <span class="k">AND</span> <span class="nb">DATE</span><span class="p">(</span><span class="k">timestamp</span><span class="p">)</span>
     <span class="k">BETWEEN</span> <span class="n">DATE_SUB</span><span class="p">(</span><span class="k">CURRENT_DATE</span><span class="p">(),</span> <span class="nb">INTERVAL</span> <span class="mi">30</span> <span class="k">DAY</span><span class="p">)</span>
-    <span class="k">AND</span> <span class="k">CURRENT_DATE</span><span class="p">())</span></code></pre></div>
+    <span class="k">AND</span> <span class="k">CURRENT_DATE</span><span class="p">()</span></code></pre></div>
 <p>Running this query shows that it&rsquo;s been downloaded over 400 times:</p>
 
 <p><img src="/blog/images/blog/ossmalware/maliciouspackage_downloads.png" alt="maliciouspackage downloads" /></p>
@@ -400,7 +400,7 @@ About a year ago, the Python Software Foundation <a href="https://discuss.python
 
 <p>This first pass was just taking an initial look at PyPI as a whole. Looking through the data, I didn&rsquo;t find any packages doing significantly harmful activity that didn&rsquo;t also have &ldquo;malicious&rdquo; somewhere in the name, which was good! But it&rsquo;s always possible I missed something, or that it would happen in the future. If you&rsquo;re interested in digging into the data, you can find it <a href="https://drive.google.com/file/d/1ukZK5-JEQrmo_t15aq_4z-jlkjNqbec8/view?usp=sharing">here</a>.</p>
 
-<p>Moving forward, I&rsquo;m setting up a Lambda function to fetch the latest package changes using PyPI&rsquo;s <a href="https://pypi.org/rss/updates.xml">RSS feed.</a>. Every updated package will go through the same processing and send an alert if suspicious activity is detected.</p>
+<p>Moving forward, I&rsquo;m setting up a Lambda function to fetch the latest package changes using PyPI&rsquo;s <a href="https://pypi.org/rss/updates.xml">RSS feed</a>. Every updated package will go through the same processing and send an alert if suspicious activity is detected.</p>
 
 <p>I still don&rsquo;t like that it&rsquo;s possible to run arbitary commands on a user&rsquo;s system just by them <code>pip install</code>ing a package. I get that the majority of use cases are benign, but it opens up risk that must be considered. Hopefully by increasingly monitoring various package managers we can identify signs of malicious activity before it has a significant impact.</p>
 
