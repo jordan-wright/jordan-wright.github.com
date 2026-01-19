@@ -1,716 +1,190 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Posts on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/post/</link>
-    <description>Recent content in Posts on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 12 Nov 2020 06:00:00 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Hunting for Malicious Packages on PyPI</title>
-      <link>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</link>
-      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/svg/ossmalware.svg&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Jordan Wright</title><link>https://jordan-wright.com/blog/post/</link><description>Recent content in Posts on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 12 Nov 2020 06:00:00 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Hunting for Malicious Packages on PyPI</title><link>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</link><pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/svg/ossmalware.svg" alt="" class="pure-img" &gt;
 
 &lt;br&gt;
-About a year ago, the Python Software Foundation &lt;a href=&#34;https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240&#34;&gt;opened a Request for Information (RFI)&lt;/a&gt; to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&amp;rsquo;s &lt;a href=&#34;https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm&#34;&gt;taking over abandoned packages&lt;/a&gt;, &lt;a href=&#34;https://github.com/dateutil/dateutil/issues/984&#34;&gt;typosquatting on popular libraries&lt;/a&gt;, or &lt;a href=&#34;https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md&#34;&gt;hijacking packages using credential stuffing&lt;/a&gt;, it&amp;rsquo;s clear this is a real issue affecting nearly every package manager.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building Gophish Healthcheck: Part One</title>
-      <link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link>
-      <pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_healthcheck.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+About a year ago, the Python Software Foundation &lt;a href="https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240"&gt;opened a Request for Information (RFI)&lt;/a&gt; to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&amp;rsquo;s &lt;a href="https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm"&gt;taking over abandoned packages&lt;/a&gt;, &lt;a href="https://github.com/dateutil/dateutil/issues/984"&gt;typosquatting on popular libraries&lt;/a&gt;, or &lt;a href="https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md"&gt;hijacking packages using credential stuffing&lt;/a&gt;, it&amp;rsquo;s clear this is a real issue affecting nearly every package manager.&lt;/p&gt;</description></item><item><title>Building Gophish Healthcheck: Part One</title><link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link><pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_healthcheck.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;One of the questions I see most often from Gophish users is &amp;ldquo;how do I get past my spam filter?&amp;rdquo; Generally, my answer to this is something along the lines of &amp;ldquo;just whitelist the IP address,&amp;rdquo; since it&amp;rsquo;s my opinion that phishing simulations should be a test of the &lt;em&gt;people&lt;/em&gt; and &lt;em&gt;processes&lt;/em&gt;, not the email infrastructure.&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;But what if we do want to test the email infrastructure?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href=&#34;https://github.com/gophish/healthcheck&#34;&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Automating Gophish Releases With Ansible and Docker</title>
-      <link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link>
-      <pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_releases.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href="https://github.com/gophish/healthcheck"&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;</description></item><item><title>Automating Gophish Releases With Ansible and Docker</title><link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link><pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate><guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_releases.png" alt="" class="pure-img" &gt;
 
 &lt;br&gt;
-It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href=&#34;https://duo.com/blog/post_author/jwright&#34;&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
-
-&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href=&#34;https://getgophish.com&#34;&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
-
-&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href=&#34;#footnote-1&#34;&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
-
+It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href="https://duo.com/blog/post_author/jwright"&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
+&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href="https://getgophish.com"&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
+&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href="#footnote-1"&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
 &lt;p&gt;The previous release process was manual, making it a &lt;strong&gt;huge pain&lt;/strong&gt;. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.&lt;/p&gt;
+&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;</description></item><item><title>Mapping the Clinton Emails</title><link>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</link><pubDate>Wed, 12 Oct 2016 18:57:33 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/clinton-emails.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;
+&lt;p&gt;Back in March, &lt;a href="https://wikileaks.org/clinton-emails/"&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;
+&lt;p&gt;I decided to make a quick map showing how emails were sent through the server, mapping the senders and recipients. This post is a quick explanation of how I did it.&lt;/p&gt;</description></item><item><title>Analyzing 5 Years of Police Call Data</title><link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link><pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/sapd.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Mapping the Clinton Emails</title>
-      <link>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</link>
-      <pubDate>Wed, 12 Oct 2016 18:57:33 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-10-12-mapping-the-clinton-emails/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/clinton-emails.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;Back in March, &lt;a href=&#34;https://wikileaks.org/clinton-emails/&#34;&gt;Wikileaks released&lt;/a&gt; over 30,000 emails &amp;ldquo;sent to and from Hillary Clinton&amp;rsquo;s private email server while she was Secretary of State&amp;rdquo;.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Analyzing 5 Years of Police Call Data</title>
-      <link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
-      <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy &lt;sup&gt;24&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt;, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
-
-&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
-
-&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>I Automated Infosec &#34;Thought Leadership&#34;, and it&#39;s Hilarious</title>
-      <link>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link>
-      <pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;San Antonio is a great city. &lt;a href="http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA"&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
+&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy 24/7, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
+&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data"&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;</description></item><item><title>I Automated Infosec "Thought Leadership", and it's Hilarious</title><link>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link><pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/thought-leader.png" alt="" class="pure-img" &gt;
 
 &lt;br/&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;being-a-thought-leader-is-hard&#34;&gt;Being a Thought Leader is Hard&lt;/h4&gt;
-
+&lt;h4 id="being-a-thought-leader-is-hard"&gt;Being a Thought Leader is Hard&lt;/h4&gt;
 &lt;blockquote&gt;
 &lt;p&gt;@thought__leader - Thinking thoughts for you, so you don&amp;rsquo;t have to.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;The infosec industry is full of &amp;ldquo;thought leaders&amp;rdquo;. These are people who are on the forefront of the industry, keeping up with latest trends, technologies, and philosophies.&lt;/p&gt;
-
-&lt;p&gt;Or they are heavy on the buzzwords and prolific on Linkedin/Twitter. &lt;a href=&#34;https://www.youtube.com/watch?v=Pc64xWxRsag&#34;&gt;That works, too&lt;/a&gt;.&lt;/p&gt;
-
+&lt;p&gt;Or they are heavy on the buzzwords and prolific on Linkedin/Twitter. &lt;a href="https://www.youtube.com/watch?v=Pc64xWxRsag"&gt;That works, too&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Unfortunately, both of these take way too much time for me. In fact, I&amp;rsquo;d argue that they take too long for our industry. So this weekend, I set out to &lt;strong&gt;automate thought leadership&lt;/strong&gt;, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect &lt;em&gt;literally no one&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;This resulted in &lt;a href="https://twitter.com/thought__leader"&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.&lt;/p&gt;</description></item><item><title>What Happens When Tor Exit Nodes Break Bad?</title><link>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link><pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/heisenberg.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;This resulted in &lt;a href=&#34;https://twitter.com/thought__leader&#34;&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>What Happens When Tor Exit Nodes Break Bad?</title>
-      <link>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</link>
-      <pubDate>Tue, 05 Apr 2016 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2016/04/05/what-happens-when-tor-exit-nodes-break-bad/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/heisenberg.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;When &lt;a href="https://jordan-wright.com/blog/categories/tor/"&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
+&lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href="https://i.imgur.com/L8L7k1Z.jpg"&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href="#end-1"&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>How to Download a List of All Registered Domain Names</title><link>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link><pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/download_domains.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;When &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;looking at how Tor works&lt;/a&gt;, we&amp;rsquo;ve looked at the various types of nodes that make up the Tor network. However, you&amp;rsquo;ll notice that we haven&amp;rsquo;t dealt too much with &lt;em&gt;exit nodes&lt;/em&gt;. Exit nodes are the final link in a Tor &amp;ldquo;circuit&amp;rdquo;, or path from the client to the server. Since exit nodes send data to the final destination, they can see the data as if it had just left the device.&lt;/p&gt;
-
-&lt;p&gt;This visibility puts quite a bit of trust in exit nodes and, for the most part, they tend to act responsibly. However, this isn&amp;rsquo;t always the case. This post will take a look at what happens when a Tor &lt;a href=&#34;https://i.imgur.com/L8L7k1Z.jpg&#34;&gt;exit node operator&lt;/a&gt; decides to &amp;ldquo;break bad&amp;rdquo; and wreak havoc on Tor users&lt;a href=&#34;#end-1&#34;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/a&gt;.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How to Download a List of All Registered Domain Names</title>
-      <link>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</link>
-      <pubDate>Wed, 30 Sep 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/30/how-to-download-a-list-of-all-registered-domain-names/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/download_domains.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;Every morning, the infosec field is greeted with an onslaught of freshly registered malicious domains. These domains are used to host phishing sites, maintain botnet command and control, harvest stolen information, and more.&lt;/p&gt;
+&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.&lt;/p&gt;</description></item><item><title>Gophish Update - Importing Sites and Emails</title><link>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link><pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_purple.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Having the complete list of registered domains day-by-day offers substantial visibility that can be used for intel and repsonse. Fortunately, such lists not only exist, but are available (usually for free!) with little effort involved. This post will introduce TLD zone files, how to access them, and how they can be used to your benefit.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Gophish Update - Importing Sites and Emails</title>
-      <link>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link>
-      <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
+&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.&lt;/p&gt;</description></item><item><title>CSAW CTF 2015 - Forensics 100 Flash Writeup</title><link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</link><pubDate>Tue, 22 Sep 2015 20:51:43 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/csaw_100.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
-
-&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>CSAW CTF 2015 - Forensics 100 Flash Writeup</title>
-      <link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</link>
-      <pubDate>Tue, 22 Sep 2015 20:51:43 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-flash-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.
-
-Let&amp;rsquo;s start by seeing what kind of file we&amp;rsquo;re dealing with:&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title>
-      <link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link>
-      <pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_100.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+&lt;p&gt;For this challenge, we were given an HDD image and asked to find the flag on it.&lt;/p&gt;</description></item><item><title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</title><link>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</link><pubDate>Tue, 22 Sep 2015 19:05:18 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/csaw_100.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;This challenge starts off with the following hint:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This challenge started off with a pcap. Let&amp;rsquo;s take the cheap way out and do a basic Wireshark filter for &lt;code&gt;frame contains flag&lt;/code&gt;:&lt;/p&gt;</description></item><item><title>CSAW CTF 2015 - Web 200 Writeup</title><link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link><pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/csaw_200.png" alt="" class="pure-img" &gt;
 
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/frame_contains.png&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>CSAW CTF 2015 - Web 200 Writeup</title>
-      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</link>
-      <pubDate>Mon, 21 Sep 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_200.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.&lt;/p&gt;</description></item><item><title>CSAW CTF 2015 - Web 600 Writeup</title><link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link><pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/csaw_600.png" alt="" class="pure-img" &gt;
 
+&lt;p&gt;This one was surprisingly easy if you knew where to look.&lt;/p&gt;</description></item><item><title>2 Years of @dumpmon</title><link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link><pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/dumpmon_header.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &amp;ldquo;Lawn Care Simulator 2015&amp;rdquo;.
-
-&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/blog/csaw2015/lawn_care.png&#34;&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>CSAW CTF 2015 - Web 600 Writeup</title>
-      <link>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</link>
-      <pubDate>Sun, 20 Sep 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-600-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/csaw_600.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;</description>
-    </item>
-    
-    <item>
-      <title>2 Years of @dumpmon</title>
-      <link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
-      <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;This post is long overdue.&lt;/p&gt;
-
-&lt;p&gt;Back in May 2013, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html&#34;&gt;released&lt;/a&gt; a Twitter bot called &lt;a href=&#34;http://twitter.com/dumpmon&#34;&gt;@dumpmon&lt;/a&gt; whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in &lt;a href=&#34;http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/&#34;&gt;news articles&lt;/a&gt;, Defcon slides, and &lt;a href=&#34;http://haveibeenpwned.com&#34;&gt;HIBP&lt;/a&gt;!&lt;/p&gt;
-
+&lt;p&gt;Back in May 2013, I &lt;a href="http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html"&gt;released&lt;/a&gt; a Twitter bot called &lt;a href="http://twitter.com/dumpmon"&gt;@dumpmon&lt;/a&gt; whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in &lt;a href="http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/"&gt;news articles&lt;/a&gt;, Defcon slides, and &lt;a href="http://haveibeenpwned.com"&gt;HIBP&lt;/a&gt;!&lt;/p&gt;
 &lt;p&gt;After two years, it&amp;rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href="#data"&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;</description></item><item><title>How Tor Works Part Three - The Consensus</title><link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link><pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How Tor Works Part Three - The Consensus</title>
-      <link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
-      <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href="https://jordan-wright.com/blog/categories/tor/"&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;</description></item><item><title>How Tor Works: Part Two - Relays vs. Bridges</title><link>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link><pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" &gt;
 
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href="https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/"&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.&lt;/p&gt;</description></item><item><title>60 Days of Watching Hackers Attack Elasticsearch</title><link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link><pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/elk_results.png" alt="" class="pure-img" &gt;
 
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href="https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/"&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
+&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href="https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/"&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
+&lt;p&gt;Here are the results.&lt;/p&gt;</description></item><item><title>Introducing elastichoney - an Elasticsearch Honeypot</title><link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link><pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/elastichoney.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
-
-&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How Tor Works: Part Two - Relays vs. Bridges</title>
-      <link>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</link>
-      <pubDate>Sat, 09 May 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/09/how-tor-works-part-two-relays-vs-bridges/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Welcome back to my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/02/28/how-tor-works-part-one/&#34;&gt;last post&lt;/a&gt;, we took a look at how Tor operates from a very high level. In this post, we&amp;rsquo;ll dive a bit deeper, taking a look at a potential issue with relays in order to introduce a new concept: &lt;strong&gt;bridges&lt;/strong&gt;.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>60 Days of Watching Hackers Attack Elasticsearch</title>
-      <link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
-      <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
-
-&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
-
-&lt;p&gt;Here are the results.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
-      <link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
-      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Remote Code Execution in Elasticsearch - CVE-2015-1427</title>
-      <link>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link>
-      <pubDate>Sun, 08 Mar 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_rce.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I recently &lt;a href="https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/"&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href="http://github.com/jordan-wright/elastichoney"&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;</description></item><item><title>Remote Code Execution in Elasticsearch - CVE-2015-1427</title><link>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</link><pubDate>Sun, 08 Mar 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/elk_rce.png" alt="" class="pure-img" &gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;TL;DR If you have an elasticsearch instance that is publicly available, upgrade to 1.4.3 or later &lt;strong&gt;now&lt;/strong&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;Elasticsearch (the &amp;ldquo;E&amp;rdquo; in ELK) is a full-text search engine that makes data aggregation and querying easy. It has an extensive JSON API that allows everything from searching to system management. This post will show how a new vulnerability, CVE-2015-1427, allows attackers to leverage features of this API to gain unauthenticated remote code execution (RCE).&lt;/p&gt;
-
 &lt;blockquote&gt;
-&lt;p&gt;Much of the analysis discovering this vulnerability was originally found on a blog post &lt;a href=&#34;http://drops.wooyun.org/papers/5107&#34;&gt;here&lt;/a&gt; (&lt;a href=&#34;https://translate.google.com/translate?hl=en&amp;amp;sl=zh-CN&amp;amp;tl=en&amp;amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107&#34;&gt;translated&lt;/a&gt;). This post aims to translate and provide more detail on the vulnerability.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How Tor Works: Part One</title>
-      <link>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link>
-      <pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_1.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;Much of the analysis discovering this vulnerability was originally found on a blog post &lt;a href="http://drops.wooyun.org/papers/5107"&gt;here&lt;/a&gt; (&lt;a href="https://translate.google.com/translate?hl=en&amp;amp;sl=zh-CN&amp;amp;tl=en&amp;amp;u=http%3A%2F%2Fdrops.wooyun.org%2Fpapers%2F5107"&gt;translated&lt;/a&gt;). This post aims to translate and provide more detail on the vulnerability.&lt;/p&gt;
+&lt;/blockquote&gt;</description></item><item><title>How Tor Works: Part One</title><link>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</link><pubDate>Sat, 28 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/28/how-tor-works-part-one/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/how_tor_works_1.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;Tor is an anonymity tool used by those who want to stay private and uncensored when browsing the Internet. Over time, it&amp;rsquo;s grown to be pretty darn good at this. This makes the security, stability, and speed of the underlying network critical to those depending on it.&lt;/p&gt;
+&lt;p&gt;But how does Tor work under the hood? In this series of posts, we&amp;rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.&lt;/p&gt;</description></item><item><title>Gophish Update: Getting Closer to Alpha!</title><link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link><pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_purple.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;But how does Tor work under the hood? In this series of posts, we&amp;rsquo;ll take a deep dive into the structure and protocols used by the Tor network in order to see first-hand how Tor operates.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Gophish Update: Getting Closer to Alpha!</title>
-      <link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
-      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;It&amp;rsquo;s been a busy couple of months!&lt;/p&gt;
+&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href="http://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href="https://github.com/jordan-wright/gophish/milestones"&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
+&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.&lt;/p&gt;</description></item><item><title>Web Scraping Hotel Prices for Fun and Savings</title><link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link><pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/web_scraping.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href=&#34;https://github.com/jordan-wright/gophish/milestones&#34;&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
-
-&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Web Scraping Hotel Prices for Fun and Savings</title>
-      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
-      <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
+&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.&lt;/p&gt;</description></item><item><title>SANS Holiday Challenge 2014 - Writeup</title><link>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</link><pubDate>Mon, 05 Jan 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>SANS Holiday Challenge 2014 - Writeup</title>
-      <link>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</link>
-      <pubDate>Mon, 05 Jan 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sans_holiday_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Back in December, SANS &lt;a href="pen-testing.sans.org/holiday-challenge/2014"&gt;released&lt;/a&gt; another installment of their annual holiday challenge. I enjoyed &lt;a href="http://raidersec.blogspot.com/search/label/SANS"&gt;taking on the 2012 challenge&lt;/a&gt;, so I was excited to see what SANS had in store this year. This year&amp;rsquo;s challenge didn&amp;rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &amp;ldquo;secret&amp;rdquo; to solve the challenge.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I&amp;rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.&lt;/em&gt;&lt;/p&gt;</description></item><item><title>Why Deleting Sensitive Information from Github Doesn't Save You</title><link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link><pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/harvest_github.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Back in December, SANS &lt;a href=&#34;pen-testing.sans.org/holiday-challenge/2014&#34;&gt;released&lt;/a&gt; another installment of their annual holiday challenge. I enjoyed &lt;a href=&#34;http://raidersec.blogspot.com/search/label/SANS&#34;&gt;taking on the 2012 challenge&lt;/a&gt;, so I was excited to see what SANS had in store this year. This year&amp;rsquo;s challenge didn&amp;rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &amp;ldquo;secret&amp;rdquo; to solve the challenge.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;I&amp;rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.&lt;/em&gt;
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Why Deleting Sensitive Information from Github Doesn&#39;t Save You</title>
-      <link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link>
-      <pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;So you accidentally committed a password or API key to Github. &lt;strong&gt;&lt;em&gt;Ouch.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href=&#34;https://help.github.com/articles/remove-sensitive-data/&#34;&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>What InfoSec Learned in 2014</title>
-      <link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link>
-      <pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+&lt;p&gt;So you accidentally committed a password or API key to Github. &lt;em&gt;&lt;strong&gt;Ouch.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href="https://help.github.com/articles/remove-sensitive-data/"&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Just today, I saw a &lt;a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/"&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.&lt;/p&gt;</description></item><item><title>What InfoSec Learned in 2014</title><link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link><pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/what_infosec_2014.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;&lt;em&gt;Busy year.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:&lt;/p&gt;</description></item><item><title>What Happens if Tor Directory Authorities are Seized?</title><link>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</link><pubDate>Fri, 19 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/tor_seized.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:
-
-&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>What Happens if Tor Directory Authorities are Seized?</title>
-      <link>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</link>
-      <pubDate>Fri, 19 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/19/what-happens-if-tor-directory-authorities-are-seized/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/tor_seized.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;The Tor Project &lt;a href=&#34;https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network&#34;&gt;has announced&lt;/a&gt; that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&amp;rsquo;t know the legitimacy behind these threats, it&amp;rsquo;s worth looking at the role DA&amp;rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Chrome Tracks Every Key Typed into the Omnibox</title>
-      <link>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</link>
-      <pubDate>Tue, 16 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/browser_tracking.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-&amp;gt; Friendly Reminder: Browser makers may track every key you type in the URL bar&lt;/p&gt;
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Technologies like Google Chrome&amp;rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>My (Probably Boring) Research Papers on Security</title>
-      <link>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</link>
-      <pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/papers.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible - progress happens this way.&lt;/p&gt;
-
-&lt;p&gt;As such, I&amp;rsquo;ve decided to &amp;ldquo;open-source&amp;rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&amp;rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.&lt;/p&gt;
-
-&lt;p&gt;Please bear in mind some of these papers were written &lt;del&gt;the night before&lt;/del&gt; in a short time-span.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Creating Tor Hidden Services with Python</title>
-      <link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
-      <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href=&#34;https://www.torproject.org/docs/hidden-services.html.en&#34;&gt;&lt;strong&gt;&lt;em&gt;hidden services&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
-
-&lt;p&gt;The Tor project has &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en&#34;&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Decompiling Android Apps the Easy Way</title>
-      <link>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link>
-      <pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/android_apps.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.&lt;/p&gt;
-
-&lt;p&gt;In a &lt;a href=&#34;http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/&#34;&gt;previous post&lt;/a&gt;, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&amp;rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Reverse Engineering the We Heart It API</title>
-      <link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link>
-      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href=&#34;http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/&#34;&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href=&#34;http://weheartit.com&#34;&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
-
-&lt;p&gt;Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was &lt;a href=&#34;https://weheartit.com/partners&#34;&gt;closed to &amp;ldquo;partners&amp;rdquo;&lt;/a&gt;, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.&lt;/p&gt;
-
-&lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How to Hunt Down Phishing Kits</title>
-      <link>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</link>
-      <pubDate>Tue, 29 Jul 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/phishing_kit.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Sites like &lt;a href=&#34;http://www.phishtank.com/phish_archive.php&#34;&gt;phishtank&lt;/a&gt; and &lt;a href=&#34;http://support.clean-mx.com/clean-mx/phishing.php&#34;&gt;clean-mx&lt;/a&gt; act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find &lt;a href=&#34;http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/&#34;&gt;interesting information&lt;/a&gt; about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how &lt;em&gt;phishing kits&lt;/em&gt; are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>A Look at Comment Spam Generator Scripts</title>
-      <link>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</link>
-      <pubDate>Fri, 04 Apr 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</guid>
-      <description>Introduction It&amp;rsquo;s been a while! I&amp;rsquo;ve been busy getting gophish closer and closer to beta. Should be ready soon!
-Until then, here&amp;rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at phishtank.com.
-As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&amp;rsquo;t seem to relate to the content of the spam scripts at all.
-The Spam Scripts Here are the scripts - the format looks very similar to those found by Alex King.</description>
-    </item>
-    
-    <item>
-      <title>Building GoPhish - How to Send Email with Go</title>
-      <link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link>
-      <pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href=&#34;http://www.matasano.com/articles/crypto-challenges/&#34;&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
-
-&lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href=&#34;http://golang.org/pkg/net/smtp/&#34;&gt;SMTP&lt;/a&gt; package, &lt;a href=&#34;http://golang.org/pkg/mime/&#34;&gt;MIME&lt;/a&gt; package, and even a &lt;a href=&#34;http://golang.org/pkg/net/mail/&#34;&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see how to use it.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building Gophish - Day 1</title>
-      <link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link>
-      <pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Since the &lt;a href=&#34;http://sptoolkit.com/the_end.php&#34;&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href=&#34;http://golang.org/&#34;&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
-
-&lt;p&gt;With that being said - let&amp;rsquo;s get started!
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
-      <link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
-      <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;A while back, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html&#34;&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href=&#34;http://www.aircrack-ng.org/&#34;&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>How to Pentest iPhone Apps with Burp</title>
-      <link>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</link>
-      <pubDate>Tue, 05 Nov 2013 21:50:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/iphone_burp.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;When looking at the functionality of mobile apps, it&amp;rsquo;s clear that they aren&amp;rsquo;t &lt;em&gt;that&lt;/em&gt; different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&amp;rsquo;t careful to protect these apps, many of the &lt;a href=&#34;https://www.owasp.org/index.php/Top_10_2013&#34;&gt;same vulnerabilities&lt;/a&gt; we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.&lt;/p&gt;
-
-&lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href=&#34;http://portswigger.net/burp/download.html&#34;&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Linkedin&#39;s Response to My &#34;Phishing with Intro&#34; Post</title>
-      <link>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</link>
-      <pubDate>Fri, 01 Nov 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_gift.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;the-initial-post&#34;&gt;The Initial Post&lt;/h3&gt;
-
-&lt;p&gt;I recently published a &lt;a href=&#34;https://jordan-wright.com/blog/blog/2013/10/26/phishing-with-linkedins-intro/&#34;&gt;blog post&lt;/a&gt; which showed a practical attack against Linkedin&amp;rsquo;s Intro. The post reached the front page of &lt;a href=&#34;http://news.ycombinator.com&#34;&gt;Hacker News&lt;/a&gt; (a full writeup of my experience with the &amp;ldquo;Hacker News Effect&amp;rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&amp;rsquo;s security team. This was their response.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Phishing with Linkedin&#39;s Intro</title>
-      <link>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link>
-      <pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/linkedin_phish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href=&#34;https://jordan-wright.com/blog/contact&#34;&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;I would also like to thank Linkedin&amp;rsquo;s security team for their quick and effective response to these findings.&lt;/em&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;intro-duction&#34;&gt;&amp;ldquo;Intro&amp;rdquo;duction&lt;/h3&gt;
-
-&lt;p&gt;On October 23, Linkedin introduced an application called &lt;a href=&#34;http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/&#34;&gt;&amp;ldquo;Intro&amp;rdquo;&lt;/a&gt;. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think &lt;a href=&#34;http://rapportive.com/&#34;&gt;Rapportive&lt;/a&gt; for the iPhone Mail App, because that&amp;rsquo;s &lt;em&gt;essentially&lt;/em&gt; what this is (and made by the same people).&lt;/p&gt;
-
-&lt;p&gt;However, when reading the initial description of Intro, there was one part that caught my eye:&lt;/p&gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;The Tor Project &lt;a href="https://blog.torproject.org/blog/possible-upcoming-attempts-disable-tor-network"&gt;has announced&lt;/a&gt; that they have received threats about possible upcoming attempts to disable the Tor network through the seizure of Directory Authority (DA) servers. While we don&amp;rsquo;t know the legitimacy behind these threats, it&amp;rsquo;s worth looking at the role DA&amp;rsquo;s play in the Tor network, showing what effects their seizure could have on the Tor network.*&lt;/p&gt;</description></item><item><title>Chrome Tracks Every Key Typed into the Omnibox</title><link>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</link><pubDate>Tue, 16 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/18/chrome-tracks-every-key-typed-into-omnibox/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/browser_tracking.png" alt="" class="pure-img" &gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;David says Crosswise would love to work with you. Is this spam, or the real deal?&lt;/p&gt;
+&lt;p&gt;Friendly Reminder: Browser makers may track every key you type in the URL bar&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Technologies like Google Chrome&amp;rsquo;s Omnibox makes searching easier. However, these quick search suggestions come at a price. This post is a friendly reminder that you may want to consider turning off predictive search to protect your privacy.&lt;/p&gt;</description></item><item><title>My (Probably Boring) Research Papers on Security</title><link>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</link><pubDate>Mon, 01 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/02/my-probably-boring-research-papers-on-security/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/papers.png" alt="" class="pure-img" &gt;
 
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;ve always been a proponent and contributor of open-source projects and information. I strongly believe that information and knowledge should be shared as much and as freely as possible - progress happens this way.&lt;/p&gt;
+&lt;p&gt;As such, I&amp;rsquo;ve decided to &amp;ldquo;open-source&amp;rdquo;, if you will, the academic essays I wrote regarding information security and software development my last couple of semesters at Texas Tech. It&amp;rsquo;s my hope that people find these useful, either by provoking thought and discussion or simply by serving as material to help people fall asleep a little easier.&lt;/p&gt;
+&lt;p&gt;Please bear in mind some of these papers were written &lt;del&gt;the night before&lt;/del&gt; in a short time-span.&lt;/p&gt;</description></item><item><title>Creating Tor Hidden Services with Python</title><link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link><pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/hidden_services.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href="https://www.torproject.org/docs/hidden-services.html.en"&gt;&lt;em&gt;&lt;strong&gt;hidden services&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
+&lt;p&gt;The Tor project has &lt;a href="https://www.torproject.org/docs/tor-hidden-service.html.en"&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.&lt;/p&gt;</description></item><item><title>Decompiling Android Apps the Easy Way</title><link>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</link><pubDate>Sun, 10 Aug 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/08/10/decompiling-android-apps-the-easy-way/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/android_apps.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Mobile applications are often viewed as black-box applications. However, these applications often suffer from the same (or similar) vulnerabilities as their web application counterparts.&lt;/p&gt;
+&lt;p&gt;In a &lt;a href="http://jordan-wright.github.io/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/"&gt;previous post&lt;/a&gt;, I showed how we can perform dynamic analysis on iPhone applications by intercepting the inbound/outbound traffic with the Burp proxy. In this post, we&amp;rsquo;ll explore static analysis of Android apps by looing at a couple of online tools that make decompiling apps into equivalent Java and Smali code trivial.&lt;/p&gt;</description></item><item><title>Reverse Engineering the We Heart It API</title><link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link><pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/weheartit_api.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/"&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href="http://weheartit.com"&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
+&lt;p&gt;Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was &lt;a href="https://weheartit.com/partners"&gt;closed to &amp;ldquo;partners&amp;rdquo;&lt;/a&gt;, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.&lt;/p&gt;
+&lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.&lt;/p&gt;</description></item><item><title>How to Hunt Down Phishing Kits</title><link>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</link><pubDate>Tue, 29 Jul 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/07/30/how-to-hunt-down-phishing-kits/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/phishing_kit.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Sites like &lt;a href="http://www.phishtank.com/phish_archive.php"&gt;phishtank&lt;/a&gt; and &lt;a href="http://support.clean-mx.com/clean-mx/phishing.php"&gt;clean-mx&lt;/a&gt; act as crowdsourced phishing detection and validation. By knowing how to look, you can consistently find &lt;a href="http://jordan-wright.github.io/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/"&gt;interesting information&lt;/a&gt; about how attackers work, and the tools they use to conduct phishing campaigns. This post will give an example of how &lt;em&gt;phishing kits&lt;/em&gt; are used, how to find them, as well as show a case study into other tools attackers use to maintain access to compromised servers.&lt;/p&gt;</description></item><item><title>A Look at Comment Spam Generator Scripts</title><link>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</link><pubDate>Fri, 04 Apr 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/04/04/a-look-at-comment-spam-generator-scripts/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/spam_gen.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;It&amp;rsquo;s been a while! I&amp;rsquo;ve been busy getting &lt;a href="http://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt; closer and closer to beta. Should be ready soon!&lt;/p&gt;
+&lt;p&gt;Until then, here&amp;rsquo;s a quick look at some comment spam scripts I discovered when perusing through the content over at &lt;a href="http://phishtank.com"&gt;phishtank.com&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;As a side note, the scripts were bundled as some Louis Vuitton spam, though that doesn&amp;rsquo;t seem to relate to the content of the spam scripts at all.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="the-spam-scripts"&gt;The Spam Scripts&lt;/h3&gt;
+&lt;p&gt;Here are the scripts - the format looks very similar to &lt;a href="http://alexking.org/blog/2013/12/22/spam-comment-generator-script"&gt;those found by Alex King&lt;/a&gt;. I&amp;rsquo;m guessing that one choice from each &lt;code&gt;{block}&lt;/code&gt; is used at random to make every comment unique.&lt;/p&gt;</description></item><item><title>Building GoPhish - How to Send Email with Go</title><link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link><pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/go_email.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href="http://www.matasano.com/articles/crypto-challenges/"&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href="http://golang.org/pkg/net/smtp/"&gt;SMTP&lt;/a&gt; package, &lt;a href="http://golang.org/pkg/mime/"&gt;MIME&lt;/a&gt; package, and even a &lt;a href="http://golang.org/pkg/net/mail/"&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href="https://github.com/jordan-wright/gophish"&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href="https://github.com/jordan-wright/email"&gt;email&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s see how to use it.&lt;/p&gt;</description></item><item><title>Building Gophish - Day 1</title><link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link><pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Since the &lt;a href="http://sptoolkit.com/the_end.php"&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href="http://golang.org/"&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
+&lt;p&gt;With that being said - let&amp;rsquo;s get started!&lt;/p&gt;</description></item><item><title>Wireless Attacks with Python: Part One - The "Dnspwn Attack"</title><link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link><pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/wireless_python.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;A while back, I &lt;a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html"&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href="http://www.aircrack-ng.org/"&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.&lt;/p&gt;</description></item><item><title>How to Pentest iPhone Apps with Burp</title><link>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</link><pubDate>Tue, 05 Nov 2013 21:50:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/iphone_burp.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;When looking at the functionality of mobile apps, it&amp;rsquo;s clear that they aren&amp;rsquo;t &lt;em&gt;that&lt;/em&gt; different than web applications. They often just serve as a frontend for the data stored on a central backend server or database. As such, if developers aren&amp;rsquo;t careful to protect these apps, many of the &lt;a href="https://www.owasp.org/index.php/Top_10_2013"&gt;same vulnerabilities&lt;/a&gt; we find in standard web applications (such as injection attacks on unvalidated input) can be exploited by attackers.&lt;/p&gt;
+&lt;p&gt;This post will show how to setup the iPhone to work with the popular &lt;a href="http://portswigger.net/burp/download.html"&gt;Burp Suite&lt;/a&gt; so that traffic from apps can be intercepted and tested for vulnerabilities.&lt;/p&gt;</description></item><item><title>Linkedin's Response to My "Phishing with Intro" Post</title><link>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</link><pubDate>Fri, 01 Nov 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/01/linkedins-response-to-my-phishing-with-intro-post/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/linkedin_gift.png" alt="" class="pure-img" &gt;
+
+&lt;h3 id="the-initial-post"&gt;The Initial Post&lt;/h3&gt;
+&lt;p&gt;I recently published a &lt;a href="https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/"&gt;blog post&lt;/a&gt; which showed a practical attack against Linkedin&amp;rsquo;s Intro. The post reached the front page of &lt;a href="http://news.ycombinator.com"&gt;Hacker News&lt;/a&gt; (a full writeup of my experience with the &amp;ldquo;Hacker News Effect&amp;rdquo; will be posted soon for those interested), which caused the post to gain quite a bit of publicity and traction. Soon after, I was contacted by Linkedin&amp;rsquo;s security team. This was their response.&lt;/p&gt;</description></item><item><title>Phishing with Linkedin's Intro</title><link>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</link><pubDate>Sat, 26 Oct 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/10/26/phishing-with-linkedins-intro/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/linkedin_phish.png" alt="" class="pure-img" &gt;
+
+&lt;p&gt;&lt;em&gt;Update 10/28/2013 6:30PM CDT - I have been in contact with Linkedin&amp;rsquo;s security team and a hotfix has recently been released to address the findings below. This fix applies the styling rules to a randomly generated ID, as opposed to the class based styling seen below. This provides more specificity in applying the rules, making it more difficult to override.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I am no CSS expert so there could very well be tricks to still get around this and remove the content (or even just hide it and overlap it) - &lt;a href="https://jordan-wright.com/blog/contact"&gt;email me&lt;/a&gt; if you know of one! I will be continuing my work with Linkedin&amp;rsquo;s security team to iron out any bugs we can find. Users are reminded that no solution is perfect, and that seeing this data in an email in no way definitively proves the senders legitimacy.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I would also like to thank Linkedin&amp;rsquo;s security team for their quick and effective response to these findings.&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id="introduction"&gt;&amp;ldquo;Intro&amp;quot;duction&lt;/h3&gt;
+&lt;p&gt;On October 23, Linkedin introduced an application called &lt;a href="http://blog.linkedin.com/2013/10/23/announcing-linkedin-intro/"&gt;&amp;ldquo;Intro&amp;rdquo;&lt;/a&gt;. The premise is simple: allow iPhone users to see details about the people they are emailing within the native iPhone Mail App. Think &lt;a href="http://rapportive.com/"&gt;Rapportive&lt;/a&gt; for the iPhone Mail App, because that&amp;rsquo;s &lt;em&gt;essentially&lt;/em&gt; what this is (and made by the same people).&lt;/p&gt;
+&lt;p&gt;However, when reading the initial description of Intro, there was one part that caught my eye:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;David says Crosswise would love to work with you. Is this spam, or the real deal?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
 &lt;p&gt;With Intro, you can immediately see what David looks like, where he’s based, and what he does. You can see that he’s the CEO of Crosswise. This is the real deal.&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.&lt;/p&gt;</description></item><item><title>Automated Social Engineering Recon Using Rapportive</title><link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link><pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/rapportive_small.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;This is not much different than Linkedin saying &amp;ldquo;we&amp;rsquo;ve put a picture of a lock in your email, so you know for sure it&amp;rsquo;s secure&amp;rdquo;. Linkedin is simply giving its users a false sense of security. In this post, we&amp;rsquo;ll take a look and see what &lt;em&gt;exactly&lt;/em&gt; Linkedin is doing to its users&amp;rsquo; email, as well as how we can spoof this information, gaining full control of the information shown to the user.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Automated Social Engineering Recon Using Rapportive</title>
-      <link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
-      <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href=&#34;http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html&#34;&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
-
-&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Hello World!</title>
-      <link>https://jordan-wright.com/blog/2013/10/11/hello-world/</link>
-      <pubDate>Fri, 11 Oct 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/10/11/hello-world/</guid>
-      <description>#!/usr/bin/env python print &#39;Hello, World!&#39;  Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.
-For the past few years, I created and maintained a blog for an organization I started called Raidersec. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html"&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
+&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;</description></item><item><title>Hello World!</title><link>https://jordan-wright.com/blog/2013/10/11/hello-world/</link><pubDate>Fri, 11 Oct 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/10/11/hello-world/</guid><description>&lt;br/&gt; 
+```
+#!/usr/bin/env python
+print 'Hello, World!'
+```
+&lt;p&gt;Hi there! My name is Jordan, and I am a security researcher, developer, and hobbyist.&lt;/p&gt;
+&lt;p&gt;For the past few years, I created and maintained a blog for an organization I started called &lt;a href="http://raidersec.blogspot.com"&gt;Raidersec&lt;/a&gt;. While I fully intend to leave the existing content on the Raidersec blog, I thought it would be ideal to create a personal blog on which I can continue writing about my research and projects dealing with not just security, but programming in general.&lt;/p&gt;</description></item></channel></rss>

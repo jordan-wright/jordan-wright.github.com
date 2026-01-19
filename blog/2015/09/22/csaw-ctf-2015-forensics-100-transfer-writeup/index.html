@@ -1,385 +1,124 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  
-  <meta property="og:title" content="CSAW CTF 2015 - Forensics 100 Transfer Writeup" />
-  <meta property="twitter:title" content="CSAW CTF 2015 - Forensics 100 Transfer Writeup" />
-  
-  <meta property="og:site_name" content="Jordan Wright" />
-  <meta property="og:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
-  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/">
-
-
-  
-  <meta property="og:type" content="article" />
-
-  <meta property="og:article:published_time" content="2015-09-22T19:05:18Z" />
-
-  
-  <meta property="og:article:tag" content="csaw2015" />
-  
-  <meta property="og:article:tag" content="writeup" />
-  
-  <meta property="og:article:tag" content="ctf" />
-  
-
-  
-  <meta name="description" content="Security and Programming Blog" />
-  
-
-  
-
-  
-
-  <title>
-     CSAW CTF 2015 - Forensics 100 Transfer Writeup 
-  </title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
-  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
-
-  <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
-  <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
-  <link rel="stylesheet" type="text/css"
-    href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
-
-
-  
-  
-  <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
-  
-  
-  
-  <meta name="generator" content="Hugo 0.40.3" />
-
-  <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/" />
-
-  
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-44718701-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  
-
-  
-</head>
-
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/">Home</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/contact/">Contact</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/projects/">Projects</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/blog/">Blog</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://raidersec.blogspot.com">Raidersec</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
-  <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
-
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
-
-
-
-<main class="content" role="main">
-
-
-
-
-  <article class="post post">
-
-    <header class="post-header">
-        <h1 class="post-title">CSAW CTF 2015 - Forensics 100 Transfer Writeup</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2015-09-22T19:05:18Z">
-            Sep 22, 2015
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/writeup/">#writeup</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/ctf/">#ctf</a></span>
-         
-        </section>
-    </header>
-
-    <section class="post-content">
-      <img src="/blog/images/headers/csaw_100.png" alt="" class="pure-img" >
-
-
-<p>This challenge starts off with the following hint:</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.</code></pre></div>
-<p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:
-
-<img src="/blog/images/blog/csaw2015/frame_contains.png"></p>
-
-<p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span><span class="p">,</span> <span class="n">b64decode</span>
-
-<span class="n">FLAG</span> <span class="o">=</span> <span class="s1">&#39;flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}&#39;</span>
-
-<span class="n">enc_ciphers</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;rot13&#39;</span><span class="p">,</span> <span class="s1">&#39;b64e&#39;</span><span class="p">,</span> <span class="s1">&#39;caesar&#39;</span><span class="p">]</span>
-<span class="c1"># dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]</span>
-
-<span class="k">def</span> <span class="nf">rot13</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="n">_rot13</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span> 
-    <span class="s2">&#34;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&#34;</span><span class="p">,</span> 
-    <span class="s2">&#34;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&#34;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">string</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">_rot13</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">b64e</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">caesar</span><span class="p">(</span><span class="n">plaintext</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">alphabet</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_lowercase</span>
-    <span class="n">shifted_alphabet</span> <span class="o">=</span> <span class="n">alphabet</span><span class="p">[</span><span class="n">shift</span><span class="p">:]</span> <span class="o">+</span> <span class="n">alphabet</span><span class="p">[:</span><span class="n">shift</span><span class="p">]</span>
-    <span class="n">table</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">maketrans</span><span class="p">(</span><span class="n">alphabet</span><span class="p">,</span> <span class="n">shifted_alphabet</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">plaintext</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">cnt</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="s1">&#39;2{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">pt</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">cnt</span><span class="p">):</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">enc_ciphers</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">enc_ciphers</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">_tmp</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">c</span><span class="p">](</span><span class="n">tmp</span><span class="p">)</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="s1">&#39;{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_tmp</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">tmp</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="k">print</span> <span class="n">encode</span><span class="p">(</span><span class="n">FLAG</span><span class="p">,</span> <span class="n">cnt</span><span class="o">=</span><span class="err">?</span><span class="p">)</span>
-
-<span class="mi">2</span><span class="n">Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm</span><span class="o">&lt;</span><span class="n">snip</span><span class="o">&gt;</span></code></pre></div>
-<p>We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&rsquo;s dissect the <code>encode</code> function to see if we can figure out what&rsquo;s going on with the input.</p>
-
-<p>It looks like we start off by base64 encoding the input and prepending &ldquo;2&rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.</p>
-
-<p>The important line in our reversal is <code>tmp = '{}{}'.format(i, _tmp)</code>. This line prepends the <em>output</em> of the function chosen with the function&rsquo;s <em>index in enc_ciphers + 1</em>. This makes sense, as the index + 1 of the base64 encode function is 2, and that&rsquo;s exactly what we prepend to the initial input before base64 encoding it.</p>
-
-<p>So, in a nutshell here are the corresponding keys:</p>
-
-<ul>
-<li>1 - rot13</li>
-<li>2 - base64 encode</li>
-<li>3 - caesar cipher</li>
-</ul>
-
-<p>All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change <code>shift=3</code> to <code>shift=-3</code>. Then, we only have to add the following base64 decode function:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">b64d</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">b64decode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></code></pre></div>
-<p>Finally, we just need to put the pieces together to do the reversing. I used the following <code>decode</code> and <code>main</code> functions:</p>
-<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">pt</span><span class="p">):</span>
-	<span class="k">while</span> <span class="s2">&#34;flag&#34;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">pt</span><span class="p">:</span>
-		<span class="n">i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-		<span class="n">raw</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-		<span class="k">print</span> <span class="s2">&#34;Running function &#34;</span> <span class="o">+</span> <span class="n">dec_ciphers</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-		<span class="n">_pt</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">dec_ciphers</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]](</span><span class="n">raw</span><span class="p">)</span>
-		<span class="n">pt</span> <span class="o">=</span> <span class="n">_pt</span>
-	<span class="k">print</span> <span class="n">pt</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;csaw_data.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">raw</span><span class="p">:</span>
-		<span class="k">print</span> <span class="n">decode</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></code></pre></div>
-<p>This gives us the following output:</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">Running function b64d
-Running function b64d
-Running function caesard
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function rot13
-Running function rot13
-Running function rot13
-Running function b64d
-Running function rot13
-Running function rot13
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function rot13
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function b64d
-Running function caesard
-Running function b64d
-Running function rot13
-Running function rot13
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function b64d
-Running function caesard
-Running function caesard
-Running function caesard
-Running function b64d
-Running function rot13
-Running function caesard
-Running function b64d
-Running function caesard
-Running function b64d
-Running function rot13
-Running function caesard
-Running function rot13
-Running function caesard
-Running function caesard
-Running function b64d
-flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></pre></div>
-<p>There&rsquo;s the flag! <code>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></p>
-
-<p>Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-    <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
-    </figure>
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
-  
-  <p>Security Researcher, Open-Source Developer.</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">San Antonio, Texas</span>
-    
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=CSAW%20CTF%202015%20-%20Forensics%20100%20Transfer%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    </div>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
-    
-</body>
-</html>
-
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta property="og:title" content="CSAW CTF 2015 - Forensics 100 Transfer Writeup &#183; Jordan Wright"><meta property="og:site_name" content="Jordan Wright"><meta property="og:url" content="https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/"><meta property="og:type" content="article"><meta property="og:article:published_time" content="2015-09-22T19:05:18Z"><meta property="og:article:tag" content="csaw2015"><meta property="og:article:tag" content="writeup"><meta property="og:article:tag" content="ctf"><title>CSAW CTF 2015 - Forensics 100 Transfer Writeup &#183; Jordan Wright</title><meta name=description content="Security and Programming Blog"><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://jordan-wright.com/blog/images/favicon.ico><link rel=apple-touch-icon href=https://jordan-wright.com/blog/images/apple-touch-icon.png><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/screen.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/highlight.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/nav.css><link rel=stylesheet type=text/css href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata"><link href=https://jordan-wright.com/blog/index.xml rel=alternate type=application/rss+xml title="Jordan Wright"><meta name=generator content="Hugo 0.154.5"><link rel=canonical href=https://jordan-wright.com/blog/2015/09/22/csaw-ctf-2015-forensics-100-transfer-writeup/><script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-44718701-1","auto"),ga("send","pageview")</script></head><body class=nav-closed><div class=nav><h3 class=nav-title>Menu</h3><a href=# class=nav-close><span class=hidden>Close</span></a><ul><li class=nav-opened role=presentation><a href=https://jordan-wright.com/>Home</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/contact/>Contact</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/projects/>Projects</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/blog/>Blog</a></li><li class=nav-opened role=presentation><a href=https://raidersec.blogspot.com>Raidersec</a></li></ul><a class="subscribe-button icon-feed" href=https://jordan-wright.com/blog/index.xml>Subscribe</a></div><span class=nav-cover></span><div class=site-wrapper><header class="main-header post-head no-cover"><nav class="main-nav clearfix"><a class=menu-button href=#><span class=burger>&#9776;</span><span class=word>Menu</span></a></nav></header><main class=content role=main><article class="post post"><header class=post-header><h1 class=post-title>CSAW CTF 2015 - Forensics 100 Transfer Writeup</h1><small></small><section class=post-meta><time class=post-date datetime=2015-09-22T19:05:18Z>Sep 22, 2015
+</time><span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/csaw2015/>#csaw2015</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/writeup/>#writeup</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/ctf/>#ctf</a></span></section></header><section class=post-content><img src=/blog/images/headers/csaw_100.png alt class=pure-img><p>This challenge starts off with the following hint:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>I was sniffing some web traffic for a while, I think i finally got something interesting. Help me find flag through all these packets.
+</span></span></code></pre></div><p>This challenge started off with a pcap. Let&rsquo;s take the cheap way out and do a basic Wireshark filter for <code>frame contains flag</code>:</p><img src=/blog/images/blog/csaw2015/frame_contains.png><p>Awesome - looks like we found a packet. Following the TCP stream reveals a Python script (formatted - you&rsquo;re welcome) and what appears to be the output of the script:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>string</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>random</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>base64</span> <span class=kn>import</span> <span class=n>b64encode</span><span class=p>,</span> <span class=n>b64decode</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>FLAG</span> <span class=o>=</span> <span class=s1>&#39;flag</span><span class=si>{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx}</span><span class=s1>&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>enc_ciphers</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;rot13&#39;</span><span class=p>,</span> <span class=s1>&#39;b64e&#39;</span><span class=p>,</span> <span class=s1>&#39;caesar&#39;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=c1># dec_ciphers = [&#39;rot13&#39;, &#39;b64d&#39;, &#39;caesard&#39;]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>rot13</span><span class=p>(</span><span class=n>s</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>_rot13</span> <span class=o>=</span> <span class=n>string</span><span class=o>.</span><span class=n>maketrans</span><span class=p>(</span> 
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz&#34;</span><span class=p>,</span> 
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>string</span><span class=o>.</span><span class=n>translate</span><span class=p>(</span><span class=n>s</span><span class=p>,</span> <span class=n>_rot13</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>b64e</span><span class=p>(</span><span class=n>s</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>b64encode</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>caesar</span><span class=p>(</span><span class=n>plaintext</span><span class=p>,</span> <span class=n>shift</span><span class=o>=</span><span class=mi>3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>alphabet</span> <span class=o>=</span> <span class=n>string</span><span class=o>.</span><span class=n>ascii_lowercase</span>
+</span></span><span class=line><span class=cl>    <span class=n>shifted_alphabet</span> <span class=o>=</span> <span class=n>alphabet</span><span class=p>[</span><span class=n>shift</span><span class=p>:]</span> <span class=o>+</span> <span class=n>alphabet</span><span class=p>[:</span><span class=n>shift</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>table</span> <span class=o>=</span> <span class=n>string</span><span class=o>.</span><span class=n>maketrans</span><span class=p>(</span><span class=n>alphabet</span><span class=p>,</span> <span class=n>shifted_alphabet</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>plaintext</span><span class=o>.</span><span class=n>translate</span><span class=p>(</span><span class=n>table</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>encode</span><span class=p>(</span><span class=n>pt</span><span class=p>,</span> <span class=n>cnt</span><span class=o>=</span><span class=mi>50</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>tmp</span> <span class=o>=</span> <span class=s1>&#39;2</span><span class=si>{}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>b64encode</span><span class=p>(</span><span class=n>pt</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>cnt</span> <span class=ow>in</span> <span class=n>xrange</span><span class=p>(</span><span class=n>cnt</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>c</span> <span class=o>=</span> <span class=n>random</span><span class=o>.</span><span class=n>choice</span><span class=p>(</span><span class=n>enc_ciphers</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>i</span> <span class=o>=</span> <span class=n>enc_ciphers</span><span class=o>.</span><span class=n>index</span><span class=p>(</span><span class=n>c</span><span class=p>)</span> <span class=o>+</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>        <span class=n>_tmp</span> <span class=o>=</span> <span class=nb>globals</span><span class=p>()[</span><span class=n>c</span><span class=p>](</span><span class=n>tmp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>tmp</span> <span class=o>=</span> <span class=s1>&#39;</span><span class=si>{}{}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>i</span><span class=p>,</span> <span class=n>_tmp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>tmp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span> <span class=n>encode</span><span class=p>(</span><span class=n>FLAG</span><span class=p>,</span> <span class=n>cnt</span><span class=o>=</span><span class=err>?</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=mi>2</span><span class=n>Mk16Sk5iakYxVFZoS1RsWnZXbFZaYjFaa1prWm</span><span class=o>&lt;</span><span class=n>snip</span><span class=o>&gt;</span>
+</span></span></code></pre></div><p>We see that there are three different encryption/encoding routines available - base64 encoding, a caesar cipher, and a rot13 function. Let&rsquo;s dissect the <code>encode</code> function to see if we can figure out what&rsquo;s going on with the input.</p><p>It looks like we start off by base64 encoding the input and prepending &ldquo;2&rdquo; to it. Then, as many times as specified (the default is 50), we choose a random function and run it on the current input.</p><p>The important line in our reversal is <code>tmp = '{}{}'.format(i, _tmp)</code>. This line prepends the <em>output</em> of the function chosen with the function&rsquo;s <em>index in enc_ciphers + 1</em>. This makes sense, as the index + 1 of the base64 encode function is 2, and that&rsquo;s exactly what we prepend to the initial input before base64 encoding it.</p><p>So, in a nutshell here are the corresponding keys:</p><ul><li>1 - rot13</li><li>2 - base64 encode</li><li>3 - caesar cipher</li></ul><p>All we have to do to get the original flag is to reverse this process. We have to start by creating the inverse of our functions. Rot13 is its own inverse, and for Caesar cipher we can just change <code>shift=3</code> to <code>shift=-3</code>. Then, we only have to add the following base64 decode function:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>b64d</span><span class=p>(</span><span class=n>s</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>b64decode</span><span class=p>(</span><span class=n>s</span><span class=p>)</span>
+</span></span></code></pre></div><p>Finally, we just need to put the pieces together to do the reversing. I used the following <code>decode</code> and <code>main</code> functions:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>decode</span><span class=p>(</span><span class=n>pt</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>	<span class=k>while</span> <span class=s2>&#34;flag&#34;</span> <span class=ow>not</span> <span class=ow>in</span> <span class=n>pt</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=n>i</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>pt</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>		<span class=n>raw</span> <span class=o>=</span> <span class=n>pt</span><span class=p>[</span><span class=mi>1</span><span class=p>:]</span>
+</span></span><span class=line><span class=cl>		<span class=nb>print</span> <span class=s2>&#34;Running function &#34;</span> <span class=o>+</span> <span class=n>dec_ciphers</span><span class=p>[</span><span class=n>i</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>		<span class=n>_pt</span> <span class=o>=</span> <span class=nb>globals</span><span class=p>()[</span><span class=n>dec_ciphers</span><span class=p>[</span><span class=n>i</span><span class=o>-</span><span class=mi>1</span><span class=p>]](</span><span class=n>raw</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>		<span class=n>pt</span> <span class=o>=</span> <span class=n>_pt</span>
+</span></span><span class=line><span class=cl>	<span class=nb>print</span> <span class=n>pt</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>	<span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=s1>&#39;csaw_data.txt&#39;</span><span class=p>,</span> <span class=s1>&#39;r&#39;</span><span class=p>)</span> <span class=k>as</span> <span class=n>raw</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>		<span class=nb>print</span> <span class=n>decode</span><span class=p>(</span><span class=n>raw</span><span class=o>.</span><span class=n>read</span><span class=p>()</span><span class=o>.</span><span class=n>strip</span><span class=p>())</span>
+</span></span></code></pre></div><p>This gives us the following output:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function rot13
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function caesard
+</span></span><span class=line><span class=cl>Running function b64d
+</span></span><span class=line><span class=cl>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}
+</span></span></code></pre></div><p>There&rsquo;s the flag! <code>flag{li0ns_and_tig3rs_4nd_b34rs_0h_mi}</code></p><p>Jordan (<a href=https://twitter.com/jw_sec>@jw_sec</a>)</p></section><footer class=post-footer><figure class=author-image><a class=img href=https://jordan-wright.com/blog/ style=background-image:url(https://jordan-wright.com/blog/images/jordan-profile.jpg)><span class=hidden>Jordan Wright's Picture</span></a></figure><section class=author><h4><a href=https://jordan-wright.com/blog/>Jordan Wright</a></h4><p>Security Researcher, Open-Source Developer.</p><div class=author-meta><span class="author-location icon-location">Texas</span></div></section><section class=share><h4>Share this post</h4><a class=share-link href="https://twitter.com/intent/tweet?text=CSAW%20CTF%202015%20-%20Forensics%20100%20Transfer%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f" onclick='return window.open(this.href,"x-share","width=550,height=235"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.503 11.24h-6.68l-5.23-6.84-6.02 6.84H1.59l7.73-8.812L1.16 2.25h6.85l4.73 6.25 5.504-6.25zm-1.16 17.52h1.833L6.71 4.126H4.745L17.084 19.77z"/></svg>
+<span class=hidden>X</span>
+</a><a class=share-link href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f&amp;t=CSAW%20CTF%202015%20-%20Forensics%20100%20Transfer%20Writeup" onclick='return window.open(this.href,"hn-share","width=600,height=400"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+<span class=hidden>Hacker News</span>
+</a><a class=share-link href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f22%2fcsaw-ctf-2015-forensics-100-transfer-writeup%2f" onclick='return window.open(this.href,"linkedin-share","width=600,height=500"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.6.0 4.264 2.37 4.264 5.455v6.286zM5.337 7.433a2.062 2.062.0 110-4.123 2.062 2.062.0 010 4.123zM6.814 20.452H3.861V9h2.953v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0z"/></svg>
+<span class=hidden>LinkedIn</span></a></section></footer></article></main></div><script type=text/javascript src=https://jordan-wright.com/blog/js/jquery.js></script><script type=text/javascript src=https://jordan-wright.com/blog/js/index.js></script></body></html>

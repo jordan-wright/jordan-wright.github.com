@@ -1,32 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Consensus on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/consensus/</link>
-    <description>Recent content in Consensus on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 14 May 2015 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/consensus/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>How Tor Works Part Three - The Consensus</title>
-      <link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link>
-      <pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/how_tor_works_2.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Consensus on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/consensus/</link><description>Recent content in Consensus on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 14 May 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/consensus/index.xml" rel="self" type="application/rss+xml"/><item><title>How Tor Works Part Three - The Consensus</title><link>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</link><pubDate>Thu, 14 May 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/14/how-tor-works-part-three-the-consensus/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/how_tor_works_2.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href=&#34;https://jordan-wright.com/blog/blog/categories/tor/&#34;&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
-
-&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Welcome to the third post in my series on how Tor works! In the &lt;a href="https://jordan-wright.com/blog/categories/tor/"&gt;past two posts&lt;/a&gt;, we talked about how clients tunnel traffic through relays, as well as introduced the idea of unpublished relays called bridges.&lt;/p&gt;
+&lt;p&gt;But how do clients know what relays are active? How is the Tor network actually organized and maintained? This post will answer this question by talking about a living document called the &lt;strong&gt;consensus&lt;/strong&gt; as well as introducing a few very important Tor nodes that run the show behind the scenes.&lt;/p&gt;</description></item></channel></rss>

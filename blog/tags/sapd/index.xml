@@ -1,34 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Sapd on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/sapd/</link>
-    <description>Recent content in Sapd on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/sapd/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Analyzing 5 Years of Police Call Data</title>
-      <link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
-      <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Sapd on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/sapd/</link><description>Recent content in Sapd on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/sapd/index.xml" rel="self" type="application/rss+xml"/><item><title>Analyzing 5 Years of Police Call Data</title><link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link><pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/sapd.png" alt="" class="pure-img" &gt;
 
-
-&lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy &lt;sup&gt;24&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt;, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
-
-&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
-
-&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;San Antonio is a great city. &lt;a href="http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA"&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
+&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy 24/7, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
+&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data"&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;</description></item></channel></rss>

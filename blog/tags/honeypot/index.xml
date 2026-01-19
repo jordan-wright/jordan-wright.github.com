@@ -1,49 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Honeypot on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/honeypot/</link>
-    <description>Recent content in Honeypot on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 30 Apr 2015 20:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/honeypot/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>60 Days of Watching Hackers Attack Elasticsearch</title>
-      <link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link>
-      <pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elk_results.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Honeypot on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/honeypot/</link><description>Recent content in Honeypot on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 Apr 2015 20:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/honeypot/index.xml" rel="self" type="application/rss+xml"/><item><title>60 Days of Watching Hackers Attack Elasticsearch</title><link>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</link><pubDate>Thu, 30 Apr 2015 20:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/11/60-days-of-watching-hackers-attack-elasticsearch/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/elk_results.png" alt="" class="pure-img" &gt;
 
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href="https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/"&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
+&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href="https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/"&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
+&lt;p&gt;Here are the results.&lt;/p&gt;</description></item><item><title>Introducing elastichoney - an Elasticsearch Honeypot</title><link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link><pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/elastichoney.png" alt="" class="pure-img" &gt;
 
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Two months ago, one of my DigitalOcean instances started attacking another host with massive amounts of bogus traffic. I was notified by the abuse team at DO that my VPS was participating in a DDoS attack. I managed to track down that the attackers leveraged an &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;RCE vulnerability in Elasticsearch&lt;/a&gt; to automatically download and run malware.&lt;/p&gt;
-
-&lt;p&gt;After re-building the box from scratch (with many improvements!), I &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/&#34;&gt;created a honeypot&lt;/a&gt; called Elastichoney to measure how much this vulnerability is being exploited in the wild. Since then, I&amp;rsquo;ve had multiple sensors silently logging all attempts to exploit this vulnerability.&lt;/p&gt;
-
-&lt;p&gt;Here are the results.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Introducing elastichoney - an Elasticsearch Honeypot</title>
-      <link>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</link>
-      <pubDate>Mon, 23 Mar 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/03/23/introducing-elastichoney-an-elasticsearch-honeypot/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/elastichoney.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I recently &lt;a href=&#34;https://jordan-wright.com/blog/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/&#34;&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href=&#34;http://github.com/jordan-wright/elastichoney&#34;&gt;elastichoney&lt;/a&gt;!
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I recently &lt;a href="https://jordan-wright.com/blog/2015/03/08/elasticsearch-rce-vulnerability-cve-2015-1427/"&gt;wrote&lt;/a&gt; about an Elasticsearch RCE vulnerability that is being heavily exploited in the wild. To see what kind of attacks are taking place, I decided to write a simple honeypot designed to mimic a vulnerable Elasticsearch (ES) instance. Say hello to &lt;a href="http://github.com/jordan-wright/elastichoney"&gt;elastichoney&lt;/a&gt;!&lt;/p&gt;</description></item></channel></rss>

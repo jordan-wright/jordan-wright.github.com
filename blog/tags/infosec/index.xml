@@ -1,31 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Infosec on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/infosec/</link>
-    <description>Recent content in Infosec on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 28 Dec 2014 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>What InfoSec Learned in 2014</title>
-      <link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link>
-      <pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/what_infosec_2014.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Infosec on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/infosec/</link><description>Recent content in Infosec on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 28 Dec 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/infosec/index.xml" rel="self" type="application/rss+xml"/><item><title>What InfoSec Learned in 2014</title><link>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</link><pubDate>Sun, 28 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/28/what-infosec-learned-in-2014/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/what_infosec_2014.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;&lt;em&gt;Busy year.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:
-
-&lt;img class=&#34;section_header&#34; src=&#34;https://jordan-wright.com/blog/blog/images/blog/infosec_2014/heartbleed.png&#34;/&gt;&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;It seems as though each year brings more and more events that throw our industry into the forefront of attention - and they&amp;rsquo;re never good. At the same time, it&amp;rsquo;s key to remember that these events allow us to learn and evolve as an industry. Let&amp;rsquo;s take a look at some of the key things we as an infosec industry can learn from 2014:&lt;/p&gt;</description></item></channel></rss>

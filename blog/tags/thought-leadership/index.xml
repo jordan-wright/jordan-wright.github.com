@@ -1,41 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Thought Leadership on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/thought-leadership/</link>
-    <description>Recent content in Thought Leadership on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2016 14:40:18 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/thought-leadership/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>I Automated Infosec &#34;Thought Leadership&#34;, and it&#39;s Hilarious</title>
-      <link>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link>
-      <pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/thought-leader.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Thought-Leadership on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/thought-leadership/</link><description>Recent content in Thought-Leadership on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 10 Apr 2016 14:40:18 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/thought-leadership/index.xml" rel="self" type="application/rss+xml"/><item><title>I Automated Infosec "Thought Leadership", and it's Hilarious</title><link>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</link><pubDate>Sun, 10 Apr 2016 14:40:18 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-04-08-i-automated-infosec-thought-leadership/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/thought-leader.png" alt="" class="pure-img" &gt;
 
 &lt;br/&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;being-a-thought-leader-is-hard&#34;&gt;Being a Thought Leader is Hard&lt;/h4&gt;
-
+&lt;h4 id="being-a-thought-leader-is-hard"&gt;Being a Thought Leader is Hard&lt;/h4&gt;
 &lt;blockquote&gt;
 &lt;p&gt;@thought__leader - Thinking thoughts for you, so you don&amp;rsquo;t have to.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;The infosec industry is full of &amp;ldquo;thought leaders&amp;rdquo;. These are people who are on the forefront of the industry, keeping up with latest trends, technologies, and philosophies.&lt;/p&gt;
-
-&lt;p&gt;Or they are heavy on the buzzwords and prolific on Linkedin/Twitter. &lt;a href=&#34;https://www.youtube.com/watch?v=Pc64xWxRsag&#34;&gt;That works, too&lt;/a&gt;.&lt;/p&gt;
-
+&lt;p&gt;Or they are heavy on the buzzwords and prolific on Linkedin/Twitter. &lt;a href="https://www.youtube.com/watch?v=Pc64xWxRsag"&gt;That works, too&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Unfortunately, both of these take way too much time for me. In fact, I&amp;rsquo;d argue that they take too long for our industry. So this weekend, I set out to &lt;strong&gt;automate thought leadership&lt;/strong&gt;, so that we can spend more time doing things that matter - things like coming up with marketing for the next CVE or finding obscure reflective XSS bugs that affect &lt;em&gt;literally no one&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;This resulted in &lt;a href=&#34;https://twitter.com/thought__leader&#34;&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;This resulted in &lt;a href="https://twitter.com/thought__leader"&gt;@thought__leader&lt;/a&gt;. And it&amp;rsquo;s hilarious.&lt;/p&gt;</description></item></channel></rss>

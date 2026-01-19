@@ -1,202 +1,8 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  
-  <meta property="og:title" content="Reverse Engineering the We Heart It API" />
-  <meta property="twitter:title" content="Reverse Engineering the We Heart It API" />
-  
-  <meta property="og:site_name" content="Jordan Wright" />
-  <meta property="og:url" content="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/" />
-  <meta property="twitter:url" content="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/">
-
-
-  
-  <meta property="og:type" content="article" />
-
-  <meta property="og:article:published_time" content="2014-08-09T00:00:00Z" />
-
-  
-  <meta property="og:article:tag" content="weheartit" />
-  
-  <meta property="og:article:tag" content="reverse engineering" />
-  
-  <meta property="og:article:tag" content="dynamic analysis" />
-  
-  <meta property="og:article:tag" content="static analysis" />
-  
-
-  
-  <meta name="description" content="Security and Programming Blog" />
-  
-
-  
-
-  
-
-  <title>
-     Reverse Engineering the We Heart It API 
-  </title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
-  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
-
-  <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
-  <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
-  <link rel="stylesheet" type="text/css"
-    href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
-
-
-  
-  
-  <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
-  
-  
-  
-  <meta name="generator" content="Hugo 0.40.3" />
-
-  <link rel="canonical" href="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/" />
-
-  
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-44718701-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  
-
-  
-</head>
-
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/">Home</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/contact/">Contact</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/projects/">Projects</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/blog/">Blog</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://raidersec.blogspot.com">Raidersec</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
-  <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
-
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
-
-
-
-<main class="content" role="main">
-
-
-
-
-  <article class="post post">
-
-    <header class="post-header">
-        <h1 class="post-title">Reverse Engineering the We Heart It API</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2014-08-09T00:00:00Z">
-            Aug 9, 2014
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/weheartit/">#weheartit</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/reverse-engineering/">#reverse engineering</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/dynamic-analysis/">#dynamic analysis</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/static-analysis/">#static analysis</a></span>
-         
-        </section>
-    </header>
-
-    <section class="post-content">
-      <img src="/blog/images/headers/weheartit_api.png" alt="" class="pure-img" >
-
-
-<h3 id="introduction">Introduction</h3>
-
-<p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/">over 30 million users</a>. If you haven&rsquo;t seen it, <a href="http://weheartit.com">We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p>
-
-<p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href="https://weheartit.com/partners">closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p>
-
-<p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.
-</p>
-
-<h3 id="dynamic-analysis">Dynamic Analysis</h3>
-
-<p>Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By <a href="/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/">intercepting traffic using a proxy</a>, we can easily analyze the structure of requests/responses in use by the application.</p>
-
-<h4 id="registration-authentication">Registration &amp; Authentication</h4>
-
-<p>Loading up the WHI iPhone app and attempting to register an account shows the following request/response:</p>
-
-<pre><code>POST /api/users HTTP/1.1
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta property="og:title" content="Reverse Engineering the We Heart It API &#183; Jordan Wright"><meta property="og:site_name" content="Jordan Wright"><meta property="og:url" content="https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/"><meta property="og:type" content="article"><meta property="og:article:published_time" content="2014-08-09T00:00:00Z"><meta property="og:article:tag" content="weheartit"><meta property="og:article:tag" content="reverse engineering"><meta property="og:article:tag" content="dynamic analysis"><meta property="og:article:tag" content="static analysis"><title>Reverse Engineering the We Heart It API &#183; Jordan Wright</title><meta name=description content="Security and Programming Blog"><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://jordan-wright.com/blog/images/favicon.ico><link rel=apple-touch-icon href=https://jordan-wright.com/blog/images/apple-touch-icon.png><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/screen.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/highlight.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/nav.css><link rel=stylesheet type=text/css href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata"><link href=https://jordan-wright.com/blog/index.xml rel=alternate type=application/rss+xml title="Jordan Wright"><meta name=generator content="Hugo 0.154.5"><link rel=canonical href=https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/><script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-44718701-1","auto"),ga("send","pageview")</script></head><body class=nav-closed><div class=nav><h3 class=nav-title>Menu</h3><a href=# class=nav-close><span class=hidden>Close</span></a><ul><li class=nav-opened role=presentation><a href=https://jordan-wright.com/>Home</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/contact/>Contact</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/projects/>Projects</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/blog/>Blog</a></li><li class=nav-opened role=presentation><a href=https://raidersec.blogspot.com>Raidersec</a></li></ul><a class="subscribe-button icon-feed" href=https://jordan-wright.com/blog/index.xml>Subscribe</a></div><span class=nav-cover></span><div class=site-wrapper><header class="main-header post-head no-cover"><nav class="main-nav clearfix"><a class=menu-button href=#><span class=burger>&#9776;</span><span class=word>Menu</span></a></nav></header><main class=content role=main><article class="post post"><header class=post-header><h1 class=post-title>Reverse Engineering the We Heart It API</h1><small></small><section class=post-meta><time class=post-date datetime=2014-08-09T00:00:00Z>Aug 9, 2014
+</time><span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/weheartit/>#weheartit</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/reverse-engineering/>#reverse engineering</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/dynamic-analysis/>#dynamic analysis</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/static-analysis/>#static analysis</a></span></section></header><section class=post-content><img src=/blog/images/headers/weheartit_api.png alt class=pure-img><h3 id=introduction>Introduction</h3><p>A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming <a href=http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/>over 30 million users</a>. If you haven&rsquo;t seen it, <a href=http://weheartit.com>We Heart It</a> (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.</p><p>Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was <a href=https://weheartit.com/partners>closed to &ldquo;partners&rdquo;</a>, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.</p><p>With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.</p><h3 id=dynamic-analysis>Dynamic Analysis</h3><p>Dynamic analysis is generally a bit quicker and can help give a good overview into how the application functions. By <a href=/blog/2013/11/07/how-to-pentest-iphone-apps-with-burp/>intercepting traffic using a proxy</a>, we can easily analyze the structure of requests/responses in use by the application.</p><h4 id=registration--authentication>Registration & Authentication</h4><p>Loading up the WHI iPhone app and attempting to register an account shows the following request/response:</p><pre tabindex=0><code>POST /api/users HTTP/1.1
 Host: api.weheartit.com
 
 &lt;snip&gt;
@@ -208,28 +14,22 @@ client_id=redacted
 &amp;user[username]=redacted
 
 {
-    &quot;result&quot;:&quot;success&quot;,
-    &quot;object&quot;:
-    {   &quot;id&quot;:27215547,
-            &quot;username&quot;:&quot;jordan_test2&quot;,
-            &quot;name&quot;:&quot;Jordan Test&quot;,
-            &quot;location&quot;:&quot;&quot;,
-            &quot;bio&quot;:&quot;&quot;,
+    &#34;result&#34;:&#34;success&#34;,
+    &#34;object&#34;:
+    {   &#34;id&#34;:27215547,
+            &#34;username&#34;:&#34;jordan_test2&#34;,
+            &#34;name&#34;:&#34;Jordan Test&#34;,
+            &#34;location&#34;:&#34;&#34;,
+            &#34;bio&#34;:&#34;&#34;,
             &lt;snip&gt;
-            &quot;public_account&quot;:true,
-            &quot;verified&quot;:false,
-            &quot;created_at&quot;:&quot;2014-10-12T18:38:35Z&quot;,
-            &quot;email&quot;:&quot;redacted&quot;,
-            &quot;cover_image&quot;: { &lt;snip&gt; }
+            &#34;public_account&#34;:true,
+            &#34;verified&#34;:false,
+            &#34;created_at&#34;:&#34;2014-10-12T18:38:35Z&#34;,
+            &#34;email&#34;:&#34;redacted&#34;,
+            &#34;cover_image&#34;: { &lt;snip&gt; }
     }
 }
-</code></pre>
-
-<p><em>Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.</em></p>
-
-<p>Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an <code>Authorization: Bearer</code> header for all API calls:</p>
-
-<pre><code>POST /oauth/token HTTP/1.1
+</code></pre><p><em>Note: I originally contacted the WHI security team since the login page (and every other page) was served via HTTP. This has since been fixed.</em></p><p>Registering an account automatically logs the user in. This launches the OAuth2 authentication flow to generate an access token which is used in an <code>Authorization: Bearer</code> header for all API calls:</p><pre tabindex=0><code>POST /oauth/token HTTP/1.1
 Host: api.weheartit.com
 
 &lt;snip&gt;
@@ -240,235 +40,124 @@ client_id=redacted
 &amp;username=redacted
 
 {
-    &quot;access_token&quot;:&quot;redacted&quot;,
-    &quot;token_type&quot;:&quot;bearer&quot;,
-    &quot;expires_in&quot;:31104000,
-    &quot;refresh_token&quot;:&quot;redacted&quot;,
-    &quot;scope&quot;:&quot;public&quot;
+    &#34;access_token&#34;:&#34;redacted&#34;,
+    &#34;token_type&#34;:&#34;bearer&#34;,
+    &#34;expires_in&#34;:31104000,
+    &#34;refresh_token&#34;:&#34;redacted&#34;,
+    &#34;scope&#34;:&#34;public&#34;
 }
-</code></pre>
-
-<p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p>
-<div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">GET /api/v2/entries/85847648 HTTP/1.1
-Host: api.weheartit.com
-Authorization: Bearer [redacted]
-
-{
-    &#34;id&#34;: 85847648,
-    &#34;title&#34;: &#34;Colors&#34;,
-    &lt;snip&gt;
-    &#34;hearts_count&#34;: 11285,
-    &#34;created_at&#34;: &#34;2013-11-10T17:09:49Z&#34;,
-    &#34;hearted&#34;: false,
-    &#34;via_hearts_count&#34;: 9919,
-    &#34;tags&#34;: [&lt;snip&gt;],
-    &#34;creator&#34;: {
-        &#34;id&#34;: 6043210,
-        &#34;username&#34;: &#34;Natasja4205&#34;,
-        &lt;snip&gt;
-    },
-    &#34;user&#34;: {
-        &#34;id&#34;: 6043210,
-        &#34;username&#34;: &#34;Natasja4205&#34;,
-        &lt;snip&gt;
-    }
-}</code></pre></div><div class="highlight"><pre class="chroma"><code class="language-text" data-lang="text">GET /api/v2/users/27215547 HTTP/1.1
-Host: api.weheartit.com
-Authorization: Bearer [redacted]
-
-{
-    &#34;id&#34;: 27215547,
-    &#34;username&#34;: &#34;jordan_test2&#34;,
-    &#34;name&#34;: &#34;Jordan Test&#34;,
-    &#34;avatar&#34;: [&lt;snip&gt;],
-    &#34;public_account&#34;: true,
-    &#34;verified&#34;: false,
-    &#34;location&#34;: null,
-    &#34;bio&#34;: null,
-    &#34;link&#34;: null,
-    &#34;hearts_count&#34;: 0,
-    &#34;following_count&#34;: 1,
-    &#34;followers_count&#34;: 2,
-    &#34;sets_count&#34;: 0,
-    &#34;created_at&#34;: &#34;2014-10-12T18:38:35Z&#34;,
-    &#34;cover&#34;: {&lt;snip&gt;}
-}</code></pre></div>
-<p>Great - we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p>
-
-<h3 id="static-analysis">Static Analysis</h3>
-
-<p>Now that we have a feel of how the application operates, let&rsquo;s verify our findings by <a href="/blog/2014/08/10/decompiling-android-apps-the-easy-way/">decompiling the Android app</a> and doing some static analysis.</p>
-
-<h4 id="app-structure">App Structure</h4>
-
-<p>The app has quite a few dependencies, but the core package (<code>com.weheartit</code>) is fairly straight-forward. The API we are concerned with is located at <code>com.weheartit.api</code>. Searching for the string &ldquo;/api&rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java</p>
-
-<h4 id="apirequest-java">APIRequest.java</h4>
-
-<p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">Map</span> <span class="n">map</span><span class="o">,</span> <span class="n">LoginServices</span> <span class="n">loginservices</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;client_id&#34;</span><span class="o">,</span> <span class="s">&#34;25ieooqr&#34;</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;client_secret&#34;</span><span class="o">,</span> <span class="s">&#34;zlype4airg41b33uwafbe8a6p8bwcgiw&#34;</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;grant_type&#34;</span><span class="o">,</span> <span class="s">&#34;password&#34;</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">putAll</span><span class="o">(</span><span class="n">map</span><span class="o">);</span>
-        <span class="n">a</span><span class="o">.</span><span class="na">b</span><span class="o">(</span><span class="s">&#34;oauth/token&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">OAuthDataResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">LoginServices</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="n">loginservices</span><span class="o">)));</span>
-    <span class="o">}</span></code></pre></div>
-<p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">UserSettings</span> <span class="n">usersettings</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="n">User</span> <span class="n">user</span> <span class="o">=</span> <span class="n">WhiSession</span><span class="o">.</span><span class="na">b</span><span class="o">();</span>
-        <span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="na">getAccessToken</span><span class="o">();</span>
-        <span class="n">WhiLog</span><span class="o">.</span><span class="na">d</span><span class="o">(</span><span class="s">&#34;ApiRequest&#34;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;updateUserSettings() for user (&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">user</span><span class="o">.</span><span class="na">getId</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;)&#34;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
-        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">(</span><span class="n">12</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[name]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getFullName</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[username]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getUsername</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[email]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getEmail</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[bio]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getBio</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[location]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLocation</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[link]&#34;</span><span class="o">,</span> <span class="n">usersettings</span><span class="o">.</span><span class="na">getLink</span><span class="o">());</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;user[show_unsafe_content]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUnsafeContentEnabled</span><span class="o">()));</span>
-        <span class="o">&lt;</span><span class="nl">snip:</span> <span class="n">other</span> <span class="n">settings</span><span class="o">&gt;</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;privacy_options[public]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserPublic</span><span class="o">()));</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;privacy_options[findable]&#34;</span><span class="o">,</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">usersettings</span><span class="o">.</span><span class="na">isUserFindable</span><span class="o">()));</span>
-        <span class="n">a</span><span class="o">.</span><span class="na">c</span><span class="o">(</span><span class="s">&#34;api/settings&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">ApiOperationResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="s">&#34;Failed to update user settings&#34;</span><span class="o">));</span>
-    <span class="o">}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="n">Object</span> <span class="n">aobj</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="n">3</span><span class="o">];</span>
-        <span class="n">aobj</span><span class="o">[</span><span class="n">0</span><span class="o">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">;</span>
-        <span class="n">aobj</span><span class="o">[</span><span class="n">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">l</span><span class="o">);</span>
-        <span class="n">aobj</span><span class="o">[</span><span class="n">2</span><span class="o">]</span> <span class="o">=</span> <span class="n">long1</span><span class="o">;</span>
-        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequest&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;getEntryCollectionDetails() with %s, %s, %s&#34;</span><span class="o">,</span> <span class="n">aobj</span><span class="o">));</span>
-        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="o">{</span>
-            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;heart_id&#34;</span><span class="o">,</span> <span class="n">long1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-        <span class="o">}</span>
-        <span class="n">a</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;api/entry_sets/&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryListResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">c</span><span class="o">));</span>
-    <span class="o">}</span></code></pre></div>
-<h4 id="apirequestv2-java">APIRequestv2.java</h4>
-
-<p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p>
-<div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">l</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">,</span> <span class="n">ApiResponseCallback</span> <span class="n">apiresponsecallback</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequestV2&#34;</span><span class="o">,</span> <span class="o">(</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;getUserEntryCollections() with accessToken &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;, &#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
-        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;page&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
-        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">((</span><span class="k">new</span> <span class="n">StringBuilder</span><span class="o">()).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;api/v2/users/&#34;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">l</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;/collections&#34;</span><span class="o">).</span><span class="na">toString</span><span class="o">(),</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">EntryCollectionListV2ResponseHandler</span><span class="o">(</span><span class="n">apiresponsecallback</span><span class="o">,</span> <span class="n">a</span><span class="o">));</span>
-    <span class="o">}</span></code></pre></div><div class="highlight"><pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">a</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">,</span> <span class="n">Long</span> <span class="n">long1</span><span class="o">,</span> <span class="n">ApiPagedResponseCallback</span> <span class="n">apipagedresponsecallback</span><span class="o">)</span>
-    <span class="o">{</span>
-        <span class="n">WhiLog</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;ApiRequestV2&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;getUserDashboard() with %s, %d&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span>
-            <span class="n">s</span><span class="o">,</span> <span class="n">long1</span>
-        <span class="o">}));</span>
-        <span class="n">HashMap</span> <span class="n">hashmap</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
-        <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;access_token&#34;</span><span class="o">,</span> <span class="n">s</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">long1</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
-        <span class="o">{</span>
-            <span class="n">hashmap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&#34;before&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="n">long1</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="n">e</span><span class="o">.</span><span class="na">a</span><span class="o">(</span><span class="s">&#34;api/v2/user/dashboard&#34;</span><span class="o">,</span> <span class="n">hashmap</span><span class="o">,</span> <span class="k">new</span> <span class="n">UserDashboardResponseHandler</span><span class="o">(</span><span class="n">apipagedresponsecallback</span><span class="o">,</span> <span class="n">b</span><span class="o">));</span>
-    <span class="o">}</span></code></pre></div>
-<h3 id="api-documentation">API Documentation</h3>
-
-<p>I have created a repository, <a href="http://github.com/jordan-wright/weheartit-api">weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p>
-
-<h3 id="whi-sitemaps">WHI Sitemaps</h3>
-
-<p>While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its <code>sitemaps</code> files:</p>
-
-<ul>
-<li>Username</li>
-<li>Link to Profile</li>
-<li>Date Modified</li>
-<li>List of Collections</li>
-</ul>
-
-<p>You can find these files here:</p>
-
-<ul>
-<li><a href="http://sitemaps.weheartit.com/collections.xml">http://sitemaps.weheartit.com/collections.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/entry_groups.xml">http://sitemaps.weheartit.com/entry_groups.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/entries.xml">http://sitemaps.weheartit.com/entries.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/popular_images.xml">http://sitemaps.weheartit.com/popular_images.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/users.xml">http://sitemaps.weheartit.com/users.xml</a></li>
-<li><a href="http://sitemaps.weheartit.com/tags.xml">http://sitemaps.weheartit.com/tags.xml</a></li>
-</ul>
-
-<h3 id="conclusion">Conclusion</h3>
-
-<p>For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.</p>
-
-<p>As always, let me know if you have any questions or comments!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-    <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
-    </figure>
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
-  
-  <p>Security Researcher, Open-Source Developer.</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">San Antonio, Texas</span>
-    
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Reverse%20Engineering%20the%20We%20Heart%20It%20API&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    </div>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
-    
-</body>
-</html>
-
+</code></pre><p>This token is then used to make API calls to the WeHeartIt backend using a RESTful JSON API. Here are a couple of examples of this (some response details have been removed for brevity):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>GET /api/v2/entries/85847648 HTTP/1.1
+</span></span><span class=line><span class=cl>Host: api.weheartit.com
+</span></span><span class=line><span class=cl>Authorization: Bearer [redacted]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>    &#34;id&#34;: 85847648,
+</span></span><span class=line><span class=cl>    &#34;title&#34;: &#34;Colors&#34;,
+</span></span><span class=line><span class=cl>    &lt;snip&gt;
+</span></span><span class=line><span class=cl>    &#34;hearts_count&#34;: 11285,
+</span></span><span class=line><span class=cl>    &#34;created_at&#34;: &#34;2013-11-10T17:09:49Z&#34;,
+</span></span><span class=line><span class=cl>    &#34;hearted&#34;: false,
+</span></span><span class=line><span class=cl>    &#34;via_hearts_count&#34;: 9919,
+</span></span><span class=line><span class=cl>    &#34;tags&#34;: [&lt;snip&gt;],
+</span></span><span class=line><span class=cl>    &#34;creator&#34;: {
+</span></span><span class=line><span class=cl>        &#34;id&#34;: 6043210,
+</span></span><span class=line><span class=cl>        &#34;username&#34;: &#34;Natasja4205&#34;,
+</span></span><span class=line><span class=cl>        &lt;snip&gt;
+</span></span><span class=line><span class=cl>    },
+</span></span><span class=line><span class=cl>    &#34;user&#34;: {
+</span></span><span class=line><span class=cl>        &#34;id&#34;: 6043210,
+</span></span><span class=line><span class=cl>        &#34;username&#34;: &#34;Natasja4205&#34;,
+</span></span><span class=line><span class=cl>        &lt;snip&gt;
+</span></span><span class=line><span class=cl>    }
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>GET /api/v2/users/27215547 HTTP/1.1
+</span></span><span class=line><span class=cl>Host: api.weheartit.com
+</span></span><span class=line><span class=cl>Authorization: Bearer [redacted]
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>{
+</span></span><span class=line><span class=cl>    &#34;id&#34;: 27215547,
+</span></span><span class=line><span class=cl>    &#34;username&#34;: &#34;jordan_test2&#34;,
+</span></span><span class=line><span class=cl>    &#34;name&#34;: &#34;Jordan Test&#34;,
+</span></span><span class=line><span class=cl>    &#34;avatar&#34;: [&lt;snip&gt;],
+</span></span><span class=line><span class=cl>    &#34;public_account&#34;: true,
+</span></span><span class=line><span class=cl>    &#34;verified&#34;: false,
+</span></span><span class=line><span class=cl>    &#34;location&#34;: null,
+</span></span><span class=line><span class=cl>    &#34;bio&#34;: null,
+</span></span><span class=line><span class=cl>    &#34;link&#34;: null,
+</span></span><span class=line><span class=cl>    &#34;hearts_count&#34;: 0,
+</span></span><span class=line><span class=cl>    &#34;following_count&#34;: 1,
+</span></span><span class=line><span class=cl>    &#34;followers_count&#34;: 2,
+</span></span><span class=line><span class=cl>    &#34;sets_count&#34;: 0,
+</span></span><span class=line><span class=cl>    &#34;created_at&#34;: &#34;2014-10-12T18:38:35Z&#34;,
+</span></span><span class=line><span class=cl>    &#34;cover&#34;: {&lt;snip&gt;}
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><p>Great - we have an API! We could likely automate this app crawling to enumerate the available API calls and parameters. However, to get a more comprehensive idea as to what exact API endpoints are available, let&rsquo;s go straight to the source.</p><h3 id=static-analysis>Static Analysis</h3><p>Now that we have a feel of how the application operates, let&rsquo;s verify our findings by <a href=/blog/2014/08/10/decompiling-android-apps-the-easy-way/>decompiling the Android app</a> and doing some static analysis.</p><h4 id=app-structure>App Structure</h4><p>The app has quite a few dependencies, but the core package (<code>com.weheartit</code>) is fairly straight-forward. The API we are concerned with is located at <code>com.weheartit.api</code>. Searching for the string &ldquo;/api&rdquo;, we can find that the bulk of the API functionality is found in APIRequest.java and APIRequestv2.java</p><h4 id=apirequestjava>APIRequest.java</h4><p>APIRequest.java essentially contains the schema for version 1 of the OAuth enabled RESTful API. For example, we can find the OAuth <code>client_id</code> and <code>client_secret</code> parameters used by the Android app to get an access token:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>a</span><span class=p>(</span><span class=n>Map</span><span class=w> </span><span class=n>map</span><span class=p>,</span><span class=w> </span><span class=n>LoginServices</span><span class=w> </span><span class=n>loginservices</span><span class=p>,</span><span class=w> </span><span class=n>ApiResponseCallback</span><span class=w> </span><span class=n>apiresponsecallback</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>HashMap</span><span class=w> </span><span class=n>hashmap</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HashMap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;client_id&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;25ieooqr&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;client_secret&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;zlype4airg41b33uwafbe8a6p8bwcgiw&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;grant_type&#34;</span><span class=p>,</span><span class=w> </span><span class=s>&#34;password&#34;</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>putAll</span><span class=p>(</span><span class=n>map</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>a</span><span class=p>.</span><span class=na>b</span><span class=p>(</span><span class=s>&#34;oauth/token&#34;</span><span class=p>,</span><span class=w> </span><span class=n>hashmap</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>OAuthDataResponseHandler</span><span class=p>(</span><span class=n>apiresponsecallback</span><span class=p>,</span><span class=w> </span><span class=n>LoginServices</span><span class=p>.</span><span class=na>a</span><span class=p>(</span><span class=n>loginservices</span><span class=p>)));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>This function is used to obtain an access token using the appropriate LoginServices call. After we have an access token associated with a <code>User</code> object, this access token is used in subsequent API requests. We can enumerate through the functions in APIRequest.java to find each of the valid API calls, as well as the arguments to each call. Here are a couple of examples (more comprehensive documentation below):</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>a</span><span class=p>(</span><span class=n>UserSettings</span><span class=w> </span><span class=n>usersettings</span><span class=p>,</span><span class=w> </span><span class=n>ApiResponseCallback</span><span class=w> </span><span class=n>apiresponsecallback</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>User</span><span class=w> </span><span class=n>user</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>WhiSession</span><span class=p>.</span><span class=na>b</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>String</span><span class=w> </span><span class=n>s</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>user</span><span class=p>.</span><span class=na>getAccessToken</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>WhiLog</span><span class=p>.</span><span class=na>d</span><span class=p>(</span><span class=s>&#34;ApiRequest&#34;</span><span class=p>,</span><span class=w> </span><span class=p>(</span><span class=k>new</span><span class=w> </span><span class=n>StringBuilder</span><span class=p>()).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;updateUserSettings() for user (&#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>user</span><span class=p>.</span><span class=na>getId</span><span class=p>()).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;)&#34;</span><span class=p>).</span><span class=na>toString</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>HashMap</span><span class=w> </span><span class=n>hashmap</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HashMap</span><span class=p>(</span><span class=n>12</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;access_token&#34;</span><span class=p>,</span><span class=w> </span><span class=n>s</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[name]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getFullName</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[username]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getUsername</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[email]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getEmail</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[bio]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getBio</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[location]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getLocation</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[link]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>usersettings</span><span class=p>.</span><span class=na>getLink</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;user[show_unsafe_content]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=p>.</span><span class=na>toString</span><span class=p>(</span><span class=n>usersettings</span><span class=p>.</span><span class=na>isUnsafeContentEnabled</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>&lt;</span><span class=n>snip</span><span class=p>:</span><span class=w> </span><span class=n>other</span><span class=w> </span><span class=n>settings</span><span class=o>&gt;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;privacy_options[public]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=p>.</span><span class=na>toString</span><span class=p>(</span><span class=n>usersettings</span><span class=p>.</span><span class=na>isUserPublic</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;privacy_options[findable]&#34;</span><span class=p>,</span><span class=w> </span><span class=n>Boolean</span><span class=p>.</span><span class=na>toString</span><span class=p>(</span><span class=n>usersettings</span><span class=p>.</span><span class=na>isUserFindable</span><span class=p>()));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>a</span><span class=p>.</span><span class=na>c</span><span class=p>(</span><span class=s>&#34;api/settings&#34;</span><span class=p>,</span><span class=w> </span><span class=n>hashmap</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>ApiOperationResponseHandler</span><span class=p>(</span><span class=n>apiresponsecallback</span><span class=p>,</span><span class=w> </span><span class=s>&#34;Failed to update user settings&#34;</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>a</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>s</span><span class=p>,</span><span class=w> </span><span class=kt>long</span><span class=w> </span><span class=n>l</span><span class=p>,</span><span class=w> </span><span class=n>Long</span><span class=w> </span><span class=n>long1</span><span class=p>,</span><span class=w> </span><span class=n>ApiResponseCallback</span><span class=w> </span><span class=n>apiresponsecallback</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Object</span><span class=w> </span><span class=n>aobj</span><span class=o>[]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>Object</span><span class=o>[</span><span class=n>3</span><span class=o>]</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>aobj</span><span class=o>[</span><span class=n>0</span><span class=o>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>s</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>aobj</span><span class=o>[</span><span class=n>1</span><span class=o>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>Long</span><span class=p>.</span><span class=na>valueOf</span><span class=p>(</span><span class=n>l</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>aobj</span><span class=o>[</span><span class=n>2</span><span class=o>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>long1</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>WhiLog</span><span class=p>.</span><span class=na>a</span><span class=p>(</span><span class=s>&#34;ApiRequest&#34;</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;getEntryCollectionDetails() with %s, %s, %s&#34;</span><span class=p>,</span><span class=w> </span><span class=n>aobj</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>HashMap</span><span class=w> </span><span class=n>hashmap</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HashMap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;access_token&#34;</span><span class=p>,</span><span class=w> </span><span class=n>s</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>long1</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;heart_id&#34;</span><span class=p>,</span><span class=w> </span><span class=n>long1</span><span class=p>.</span><span class=na>toString</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>a</span><span class=p>.</span><span class=na>a</span><span class=p>((</span><span class=k>new</span><span class=w> </span><span class=n>StringBuilder</span><span class=p>()).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;api/entry_sets/&#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>l</span><span class=p>).</span><span class=na>toString</span><span class=p>(),</span><span class=w> </span><span class=n>hashmap</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>EntryListResponseHandler</span><span class=p>(</span><span class=n>apiresponsecallback</span><span class=p>,</span><span class=w> </span><span class=n>c</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=apirequestv2java>APIRequestv2.java</h4><p>It appears as though the backend API is being upgraded to a new version, as evidenced by the existence of APIRequestv2.java. Additionally, there are some endpoints that are located at <code>/api/v2/*</code>. Here are a couple of examples:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>a</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>s</span><span class=p>,</span><span class=w> </span><span class=kt>long</span><span class=w> </span><span class=n>l</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>ApiResponseCallback</span><span class=w> </span><span class=n>apiresponsecallback</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>WhiLog</span><span class=p>.</span><span class=na>a</span><span class=p>(</span><span class=s>&#34;ApiRequestV2&#34;</span><span class=p>,</span><span class=w> </span><span class=p>(</span><span class=k>new</span><span class=w> </span><span class=n>StringBuilder</span><span class=p>()).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;getUserEntryCollections() with accessToken &#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>s</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;, &#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>l</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;, &#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>i</span><span class=p>).</span><span class=na>toString</span><span class=p>());</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>HashMap</span><span class=w> </span><span class=n>hashmap</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HashMap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;access_token&#34;</span><span class=p>,</span><span class=w> </span><span class=n>s</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;page&#34;</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=p>.</span><span class=na>valueOf</span><span class=p>(</span><span class=n>i</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>e</span><span class=p>.</span><span class=na>a</span><span class=p>((</span><span class=k>new</span><span class=w> </span><span class=n>StringBuilder</span><span class=p>()).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;api/v2/users/&#34;</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=n>l</span><span class=p>).</span><span class=na>append</span><span class=p>(</span><span class=s>&#34;/collections&#34;</span><span class=p>).</span><span class=na>toString</span><span class=p>(),</span><span class=w> </span><span class=n>hashmap</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>EntryCollectionListV2ResponseHandler</span><span class=p>(</span><span class=n>apiresponsecallback</span><span class=p>,</span><span class=w> </span><span class=n>a</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>a</span><span class=p>(</span><span class=n>String</span><span class=w> </span><span class=n>s</span><span class=p>,</span><span class=w> </span><span class=n>Long</span><span class=w> </span><span class=n>long1</span><span class=p>,</span><span class=w> </span><span class=n>ApiPagedResponseCallback</span><span class=w> </span><span class=n>apipagedresponsecallback</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>WhiLog</span><span class=p>.</span><span class=na>a</span><span class=p>(</span><span class=s>&#34;ApiRequestV2&#34;</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=p>.</span><span class=na>format</span><span class=p>(</span><span class=s>&#34;getUserDashboard() with %s, %d&#34;</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>Object</span><span class=o>[]</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>s</span><span class=p>,</span><span class=w> </span><span class=n>long1</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>HashMap</span><span class=w> </span><span class=n>hashmap</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>HashMap</span><span class=p>();</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;access_token&#34;</span><span class=p>,</span><span class=w> </span><span class=n>s</span><span class=p>);</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>long1</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>null</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>hashmap</span><span class=p>.</span><span class=na>put</span><span class=p>(</span><span class=s>&#34;before&#34;</span><span class=p>,</span><span class=w> </span><span class=n>String</span><span class=p>.</span><span class=na>valueOf</span><span class=p>(</span><span class=n>long1</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>e</span><span class=p>.</span><span class=na>a</span><span class=p>(</span><span class=s>&#34;api/v2/user/dashboard&#34;</span><span class=p>,</span><span class=w> </span><span class=n>hashmap</span><span class=p>,</span><span class=w> </span><span class=k>new</span><span class=w> </span><span class=n>UserDashboardResponseHandler</span><span class=p>(</span><span class=n>apipagedresponsecallback</span><span class=p>,</span><span class=w> </span><span class=n>b</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h3 id=api-documentation>API Documentation</h3><p>I have created a repository, <a href=http://github.com/jordan-wright/weheartit-api>weheartit-api</a>, containing the full details found from this short study. The information in the repo is by no means comprehensive (consider it a work in progress), but it will hopefully shed some light into the available API functionality.</p><h3 id=whi-sitemaps>WHI Sitemaps</h3><p>While on the subject of WHI, there are a couple of other interesting facts worth mentioning. For example, if your goal is to get general information about users on the network, there is no need to use the API! In fact, to help Google crawl the network, WHI publishes the following information in its <code>sitemaps</code> files:</p><ul><li>Username</li><li>Link to Profile</li><li>Date Modified</li><li>List of Collections</li></ul><p>You can find these files here:</p><ul><li><a href=http://sitemaps.weheartit.com/collections.xml>http://sitemaps.weheartit.com/collections.xml</a></li><li><a href=http://sitemaps.weheartit.com/entry_groups.xml>http://sitemaps.weheartit.com/entry_groups.xml</a></li><li><a href=http://sitemaps.weheartit.com/entries.xml>http://sitemaps.weheartit.com/entries.xml</a></li><li><a href=http://sitemaps.weheartit.com/popular_images.xml>http://sitemaps.weheartit.com/popular_images.xml</a></li><li><a href=http://sitemaps.weheartit.com/users.xml>http://sitemaps.weheartit.com/users.xml</a></li><li><a href=http://sitemaps.weheartit.com/tags.xml>http://sitemaps.weheartit.com/tags.xml</a></li></ul><h3 id=conclusion>Conclusion</h3><p>For not being exposed to developers, the API supported by WHI is surprisingly robust and complete. While this effort was simply a reverse engineering project out of curiosity, I hope that showing what the API is capable of will encourage WHI devs to open the official API to everyone.</p><p>As always, let me know if you have any questions or comments!</p><p>-Jordan (<a href=http://twitter.com/jw_sec>@jw_sec</a>)</p></section><footer class=post-footer><figure class=author-image><a class=img href=https://jordan-wright.com/blog/ style=background-image:url(https://jordan-wright.com/blog/images/jordan-profile.jpg)><span class=hidden>Jordan Wright's Picture</span></a></figure><section class=author><h4><a href=https://jordan-wright.com/blog/>Jordan Wright</a></h4><p>Security Researcher, Open-Source Developer.</p><div class=author-meta><span class="author-location icon-location">Texas</span></div></section><section class=share><h4>Share this post</h4><a class=share-link href="https://twitter.com/intent/tweet?text=Reverse%20Engineering%20the%20We%20Heart%20It%20API&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f" onclick='return window.open(this.href,"x-share","width=550,height=235"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.503 11.24h-6.68l-5.23-6.84-6.02 6.84H1.59l7.73-8.812L1.16 2.25h6.85l4.73 6.25 5.504-6.25zm-1.16 17.52h1.833L6.71 4.126H4.745L17.084 19.77z"/></svg>
+<span class=hidden>X</span>
+</a><a class=share-link href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f&amp;t=Reverse%20Engineering%20the%20We%20Heart%20It%20API" onclick='return window.open(this.href,"hn-share","width=600,height=400"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+<span class=hidden>Hacker News</span>
+</a><a class=share-link href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2014%2f10%2f12%2freverse-engineering-the-we-heart-it-api%2f" onclick='return window.open(this.href,"linkedin-share","width=600,height=500"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.6.0 4.264 2.37 4.264 5.455v6.286zM5.337 7.433a2.062 2.062.0 110-4.123 2.062 2.062.0 010 4.123zM6.814 20.452H3.861V9h2.953v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0z"/></svg>
+<span class=hidden>LinkedIn</span></a></section></footer></article></main></div><script type=text/javascript src=https://jordan-wright.com/blog/js/jquery.js></script><script type=text/javascript src=https://jordan-wright.com/blog/js/index.js></script></body></html>

@@ -1,33 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Healthcheck on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/healthcheck/</link>
-    <description>Recent content in Healthcheck on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/healthcheck/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Building Gophish Healthcheck: Part One</title>
-      <link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link>
-      <pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_healthcheck.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Healthcheck on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/healthcheck/</link><description>Recent content in Healthcheck on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/healthcheck/index.xml" rel="self" type="application/rss+xml"/><item><title>Building Gophish Healthcheck: Part One</title><link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link><pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_healthcheck.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;One of the questions I see most often from Gophish users is &amp;ldquo;how do I get past my spam filter?&amp;rdquo; Generally, my answer to this is something along the lines of &amp;ldquo;just whitelist the IP address,&amp;rdquo; since it&amp;rsquo;s my opinion that phishing simulations should be a test of the &lt;em&gt;people&lt;/em&gt; and &lt;em&gt;processes&lt;/em&gt;, not the email infrastructure.&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;But what if we do want to test the email infrastructure?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href=&#34;https://github.com/gophish/healthcheck&#34;&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href="https://github.com/gophish/healthcheck"&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;</description></item></channel></rss>

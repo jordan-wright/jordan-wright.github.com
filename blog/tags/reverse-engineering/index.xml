@@ -1,34 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Reverse Engineering on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/reverse-engineering/</link>
-    <description>Recent content in Reverse Engineering on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 09 Aug 2014 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Reverse Engineering the We Heart It API</title>
-      <link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link>
-      <pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/weheartit_api.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Reverse Engineering on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/reverse-engineering/</link><description>Recent content in Reverse Engineering on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 09 Aug 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/reverse-engineering/index.xml" rel="self" type="application/rss+xml"/><item><title>Reverse Engineering the We Heart It API</title><link>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</link><pubDate>Sat, 09 Aug 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/10/12/reverse-engineering-the-we-heart-it-api/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/weheartit_api.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href=&#34;http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/&#34;&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href=&#34;http://weheartit.com&#34;&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
-
-&lt;p&gt;Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was &lt;a href=&#34;https://weheartit.com/partners&#34;&gt;closed to &amp;ldquo;partners&amp;rdquo;&lt;/a&gt;, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.&lt;/p&gt;
-
-&lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;A while back, I came across the article from the The Washington Post describing We Heart It, a social network claiming &lt;a href="http://www.washingtonpost.com/news/the-intersect/wp/2014/05/07/30-million-people-use-this-social-network-and-youve-probably-never-heard-of-it/"&gt;over 30 million users&lt;/a&gt;. If you haven&amp;rsquo;t seen it, &lt;a href="http://weheartit.com"&gt;We Heart It&lt;/a&gt; (from here on out abbreviated as WHI) is a social network which encourages people to post and share photos and images of things that inspire them.&lt;/p&gt;
+&lt;p&gt;Having such a large user-base, I was interested in seeing what kind of API the site offered developers. However, I was disappointed when I found out that the API was &lt;a href="https://weheartit.com/partners"&gt;closed to &amp;ldquo;partners&amp;rdquo;&lt;/a&gt;, and even this is not a full REST API, but rather a simple button developers can place on their website to allow users to interact with WHI.&lt;/p&gt;
+&lt;p&gt;With this being the case, I decided to take a look at the Android and iPhone apps using both static and dynamic analysis in an experiment to see if I could reverse engineer the API used on the backend. Here are the results.&lt;/p&gt;</description></item></channel></rss>

@@ -1,129 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Gophish on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/gophish/</link>
-    <description>Recent content in Gophish on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Building Gophish Healthcheck: Part One</title>
-      <link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link>
-      <pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_healthcheck.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gophish on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/gophish/</link><description>Recent content in Gophish on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 02 Sep 2018 22:01:01 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/gophish/index.xml" rel="self" type="application/rss+xml"/><item><title>Building Gophish Healthcheck: Part One</title><link>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</link><pubDate>Sun, 02 Sep 2018 22:01:01 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_healthcheck.png" alt="" class="pure-img" &gt;
 
 &lt;p&gt;One of the questions I see most often from Gophish users is &amp;ldquo;how do I get past my spam filter?&amp;rdquo; Generally, my answer to this is something along the lines of &amp;ldquo;just whitelist the IP address,&amp;rdquo; since it&amp;rsquo;s my opinion that phishing simulations should be a test of the &lt;em&gt;people&lt;/em&gt; and &lt;em&gt;processes&lt;/em&gt;, not the email infrastructure.&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;But what if we do want to test the email infrastructure?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href=&#34;https://github.com/gophish/healthcheck&#34;&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Automating Gophish Releases With Ansible and Docker</title>
-      <link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link>
-      <pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_releases.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;p&gt;This post is the first in a two-part series about how I&amp;rsquo;m creating the &lt;a href="https://github.com/gophish/healthcheck"&gt;email healthcheck&lt;/a&gt; service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.&lt;/p&gt;</description></item><item><title>Automating Gophish Releases With Ansible and Docker</title><link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link><pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate><guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_releases.png" alt="" class="pure-img" &gt;
 
 &lt;br&gt;
-It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href=&#34;https://duo.com/blog/post_author/jwright&#34;&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
-
-&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href=&#34;https://getgophish.com&#34;&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
-
-&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href=&#34;#footnote-1&#34;&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
-
+It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href="https://duo.com/blog/post_author/jwright"&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
+&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href="https://getgophish.com"&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
+&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href="#footnote-1"&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
 &lt;p&gt;The previous release process was manual, making it a &lt;strong&gt;huge pain&lt;/strong&gt;. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.&lt;/p&gt;
+&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;</description></item><item><title>Gophish Update - Importing Sites and Emails</title><link>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link><pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_purple.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
+&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.&lt;/p&gt;</description></item><item><title>Gophish Update: Getting Closer to Alpha!</title><link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link><pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_purple.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Gophish Update - Importing Sites and Emails</title>
-      <link>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</link>
-      <pubDate>Tue, 29 Sep 2015 06:45:33 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/09/29/gophish-update-importing-sites-and-emails/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;m excited to announce that the &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; &amp;ldquo;alpha&amp;rdquo; release is almost complete! I&amp;rsquo;m just cleaning up a few bugs, touching some things up, etc. In the meantime, I wanted to write a quick post to show off some really slick features that I was able to add earlier than planned.&lt;/p&gt;
-
-&lt;p&gt;Creating pixel-perfect email templates and landing pages are crucial to delivering the best possible phishing training. Gophish has always had the ability to create these, but it was quite frankly a &lt;em&gt;pain&lt;/em&gt; to use as you needed the raw HTML or text for both the email and site content. In this post, let&amp;rsquo;s take a look at how we can now &lt;strong&gt;import sites and emails directly into gophish&lt;/strong&gt;.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Gophish Update: Getting Closer to Alpha!</title>
-      <link>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</link>
-      <pubDate>Thu, 26 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/26/gophish-update-getting-closer-to-alpha/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_purple.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;It&amp;rsquo;s been a busy couple of months!&lt;/p&gt;
+&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href="http://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href="https://github.com/jordan-wright/gophish/milestones"&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
+&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.&lt;/p&gt;</description></item><item><title>Building GoPhish - How to Send Email with Go</title><link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link><pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/go_email.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;I thought it would be worth providing a long-overdue update into the development status of &lt;a href=&#34;http://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;. Overall, the project is getting closer to beta status every day, and I&amp;rsquo;m hoping to see a &lt;a href=&#34;https://github.com/jordan-wright/gophish/milestones&#34;&gt;0.1 release&lt;/a&gt; at the end of March.&lt;/p&gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href="http://www.matasano.com/articles/crypto-challenges/"&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
+&lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href="http://golang.org/pkg/net/smtp/"&gt;SMTP&lt;/a&gt; package, &lt;a href="http://golang.org/pkg/mime/"&gt;MIME&lt;/a&gt; package, and even a &lt;a href="http://golang.org/pkg/net/mail/"&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href="https://github.com/jordan-wright/gophish"&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href="https://github.com/jordan-wright/email"&gt;email&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s see how to use it.&lt;/p&gt;</description></item><item><title>Building Gophish - Day 1</title><link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link><pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/gophish.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Without further ado, let&amp;rsquo;s dive in and see where we&amp;rsquo;re at.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building GoPhish - How to Send Email with Go</title>
-      <link>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</link>
-      <pubDate>Fri, 03 Jan 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/01/03/building-gophish-how-to-send-email-with-go/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/go_email.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;I&amp;rsquo;ve been playing around with Go for about a month now, and I&amp;rsquo;ve &lt;em&gt;really&lt;/em&gt; grown to like it. After getting used to the syntax and remembering what a pointer is for (thanks, Python), Go has become a favorite language to develop with. I&amp;rsquo;m even using it for the &lt;a href=&#34;http://www.matasano.com/articles/crypto-challenges/&#34;&gt;Matasano Crypto Challenges&lt;/a&gt; (which are &lt;em&gt;awesome&lt;/em&gt;).&lt;/p&gt;
-
-&lt;p&gt;While the standard library in Go is definitely robust, being a young language, there are a few niceties that aren&amp;rsquo;t yet included. Sending email is one of them. Don&amp;rsquo;t get me wrong, Go has a wonderful &lt;a href=&#34;http://golang.org/pkg/net/smtp/&#34;&gt;SMTP&lt;/a&gt; package, &lt;a href=&#34;http://golang.org/pkg/mime/&#34;&gt;MIME&lt;/a&gt; package, and even a &lt;a href=&#34;http://golang.org/pkg/net/mail/&#34;&gt;Mail&lt;/a&gt; package (which &lt;em&gt;only&lt;/em&gt; parses existing email messages). However, there is no library to actually &lt;strong&gt;create&lt;/strong&gt; emails in a meaningful way. Since &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;Gophish&lt;/a&gt; relies heavily on sending emails, I&amp;rsquo;ve sought to change this. And, after reading more RFC&amp;rsquo;s than I normally prefer, I believe I&amp;rsquo;ve created a package that provides intuitive, robust, and flexible email creation and sending called &lt;a href=&#34;https://github.com/jordan-wright/email&#34;&gt;email&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s see how to use it.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Building Gophish - Day 1</title>
-      <link>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</link>
-      <pubDate>Fri, 29 Nov 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/29/building-gophish-day-1/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Since the &lt;a href=&#34;http://sptoolkit.com/the_end.php&#34;&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href=&#34;http://golang.org/&#34;&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href=&#34;https://github.com/jordan-wright/gophish&#34;&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
-
-&lt;p&gt;With that being said - let&amp;rsquo;s get started!
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Since the &lt;a href="http://sptoolkit.com/the_end.php"&gt;Simple Phishing Toolkit (SPT)&lt;/a&gt; was discontinued, I&amp;rsquo;ve wanted to create a simple, effective, and open-source phishing toolkit. In recent years, we&amp;rsquo;ve seen a rise in spear-phishing attacks targeting large organizations, most of which are largely successful. The goal of this toolkit will be to provide businesses and penetration testers with the ability to quickly and easily perform in-house or contracted phishing engagements, and track the responses to see where improvements can be made. This toolkit will be called &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;In addition to this, I&amp;rsquo;ve been casually poking around at &lt;a href="http://golang.org/"&gt;&lt;code&gt;go&lt;/code&gt;&lt;/a&gt; for a while now, and have decided it would be good to finally put it to use in a larger project. I&amp;rsquo;m a fan of seeing the steady development and updates of projects as they are created. I believe it can help keep the developer motivated and the users informed and involved, so this is what I&amp;rsquo;m going to do. Hopefully, these posts will allow others to learn alongside me, as well as spur improvements from experienced &lt;code&gt;go&lt;/code&gt; developers so that &lt;a href="https://github.com/jordan-wright/gophish"&gt;gophish&lt;/a&gt; can be the best product possible.&lt;/p&gt;
+&lt;p&gt;With that being said - let&amp;rsquo;s get started!&lt;/p&gt;</description></item></channel></rss>

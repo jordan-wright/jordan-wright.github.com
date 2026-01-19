@@ -1,32 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Web_scraping on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/web_scraping/</link>
-    <description>Recent content in Web_scraping on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sat, 21 Feb 2015 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/web_scraping/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Web Scraping Hotel Prices for Fun and Savings</title>
-      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
-      <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Web_scraping on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/web_scraping/</link><description>Recent content in Web_scraping on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 21 Feb 2015 00:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/web_scraping/index.xml" rel="self" type="application/rss+xml"/><item><title>Web Scraping Hotel Prices for Fun and Savings</title><link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link><pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/web_scraping.png" alt="" class="pure-img" &gt;
 
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
-
-&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.&lt;/p&gt;</description></item></channel></rss>

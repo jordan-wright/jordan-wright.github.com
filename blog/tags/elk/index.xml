@@ -1,55 +1,12 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Elk on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/elk/</link>
-    <description>Recent content in Elk on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/elk/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Analyzing 5 Years of Police Call Data</title>
-      <link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link>
-      <pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/sapd.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Elk on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/elk/</link><description>Recent content in Elk on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 22 Jun 2016 06:30:00 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/elk/index.xml" rel="self" type="application/rss+xml"/><item><title>Analyzing 5 Years of Police Call Data</title><link>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</link><pubDate>Wed, 22 Jun 2016 06:30:00 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2016-05-06-exploring-sapd-call-data-with-elk/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/sapd.png" alt="" class="pure-img" &gt;
 
+&lt;p&gt;San Antonio is a great city. &lt;a href="http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA"&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
+&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy 24/7, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
+&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href="http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data"&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
+&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.&lt;/p&gt;</description></item><item><title>2 Years of @dumpmon</title><link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link><pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/dumpmon_header.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;San Antonio is a great city. &lt;a href=&#34;http://www.yelp.com/search?cflt=mexican&amp;amp;find_loc=San+Antonio%2C+TX%2C+USA&#34;&gt;According to Yelp&lt;/a&gt;, there are over 1200 places to get a taco - how could it &lt;em&gt;not&lt;/em&gt; be great?&lt;/p&gt;
-
-&lt;p&gt;Unfortunately, any time you get a huge group of people together there will be crime, and SA is no exception. Our SAPD stay busy &lt;sup&gt;24&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt;, constantly putting their lives on the line to keep the city safe, and I&amp;rsquo;m thankful for all the work they do.&lt;/p&gt;
-
-&lt;p&gt;Being an amateur API aficionado, I was excited to find the &lt;a href=&#34;http://www.sanantonio.gov/SAPD/SAPDOpenDataInitiative.aspx#182281929-open-data&#34;&gt;SAPD Open Data Initiative&lt;/a&gt; that contains a wealth of information on the activities the SAPD perform. Specifically, I wanted to see what kinds of analytics I could gather from exploring the historic SAPD call data.&lt;/p&gt;
-
-&lt;p&gt;In this post, I&amp;rsquo;ll explain how I was able to gather and analyze &lt;strong&gt;4.3 million call data records&lt;/strong&gt;, or how I basically became the extremely boring part of Batman.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>2 Years of @dumpmon</title>
-      <link>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</link>
-      <pubDate>Tue, 26 May 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/05/26/two-years-of-at-dumpmon/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/dumpmon_header.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;This post is long overdue.&lt;/p&gt;
-
-&lt;p&gt;Back in May 2013, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html&#34;&gt;released&lt;/a&gt; a Twitter bot called &lt;a href=&#34;http://twitter.com/dumpmon&#34;&gt;@dumpmon&lt;/a&gt; whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in &lt;a href=&#34;http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/&#34;&gt;news articles&lt;/a&gt;, Defcon slides, and &lt;a href=&#34;http://haveibeenpwned.com&#34;&gt;HIBP&lt;/a&gt;!&lt;/p&gt;
-
+&lt;p&gt;Back in May 2013, I &lt;a href="http://raidersec.blogspot.com/2013/03/introducing-dumpmon-twitter-bot-that.html"&gt;released&lt;/a&gt; a Twitter bot called &lt;a href="http://twitter.com/dumpmon"&gt;@dumpmon&lt;/a&gt; whose sole purpose was to track and report password dumps and other sensitive information shared on paste sites such as Pastebin. Since that time, dumpmon has proven - to my excitement - to be valuable to researchers, being featured in &lt;a href="http://arstechnica.com/security/2013/06/raspberry-pi-bot-tracks-hacker-posts-to-vacuum-up-passwords-and-more/"&gt;news articles&lt;/a&gt;, Defcon slides, and &lt;a href="http://haveibeenpwned.com"&gt;HIBP&lt;/a&gt;!&lt;/p&gt;
 &lt;p&gt;After two years, it&amp;rsquo;s time to post an overdue status update providing some insight into the data dumpmon has collected over this time.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href=&#34;#data&#34;&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;&lt;em&gt;Note: This is a pretty long post, so feel free to skip &lt;a href="#data"&gt;here&lt;/a&gt; if you just want the data.&lt;/em&gt;&lt;/p&gt;</description></item></channel></rss>

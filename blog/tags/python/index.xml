@@ -1,98 +1,20 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Python on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/python/</link>
-    <description>Recent content in Python on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Thu, 12 Nov 2020 06:00:00 -0500</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Hunting for Malicious Packages on PyPI</title>
-      <link>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</link>
-      <pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/svg/ossmalware.svg&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Python on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/Python/</link><description>Recent content in Python on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 12 Nov 2020 06:00:00 -0500</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/Python/index.xml" rel="self" type="application/rss+xml"/><item><title>Hunting for Malicious Packages on PyPI</title><link>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</link><pubDate>Thu, 12 Nov 2020 06:00:00 -0500</pubDate><guid>https://jordan-wright.com/blog/post/2020-11-12-hunting-for-malicious-packages-on-pypi/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/svg/ossmalware.svg" alt="" class="pure-img" &gt;
 
 &lt;br&gt;
-About a year ago, the Python Software Foundation &lt;a href=&#34;https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240&#34;&gt;opened a Request for Information (RFI)&lt;/a&gt; to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&amp;rsquo;s &lt;a href=&#34;https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm&#34;&gt;taking over abandoned packages&lt;/a&gt;, &lt;a href=&#34;https://github.com/dateutil/dateutil/issues/984&#34;&gt;typosquatting on popular libraries&lt;/a&gt;, or &lt;a href=&#34;https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md&#34;&gt;hijacking packages using credential stuffing&lt;/a&gt;, it&amp;rsquo;s clear this is a real issue affecting nearly every package manager.&lt;/p&gt;
+About a year ago, the Python Software Foundation &lt;a href="https://discuss.python.org/t/what-methods-should-we-implement-to-detect-malicious-content/2240"&gt;opened a Request for Information (RFI)&lt;/a&gt; to discuss how we could detect malicious packages being uploaded to PyPI. Whether it&amp;rsquo;s &lt;a href="https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm"&gt;taking over abandoned packages&lt;/a&gt;, &lt;a href="https://github.com/dateutil/dateutil/issues/984"&gt;typosquatting on popular libraries&lt;/a&gt;, or &lt;a href="https://github.com/ChALkeR/notes/blob/master/Gathering-weak-npm-credentials.md"&gt;hijacking packages using credential stuffing&lt;/a&gt;, it&amp;rsquo;s clear this is a real issue affecting nearly every package manager.&lt;/p&gt;</description></item><item><title>Web Scraping Hotel Prices for Fun and Savings</title><link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link><pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/web_scraping.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Web Scraping Hotel Prices for Fun and Savings</title>
-      <link>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</link>
-      <pubDate>Sat, 21 Feb 2015 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2015/02/21/web-scraping-hotel-prices-for-fun-and-savings/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/web_scraping.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
 &lt;p&gt;During the process of planning a vacation, I came across a nice hotel I wanted to stay at. When looking at some possible dates, I noticed the nightly rate would fluctuate &lt;em&gt;dramatically&lt;/em&gt;. This made me question if I was going to wind up paying way more just because I wanted to stay at the hotel on a certain day.&lt;/p&gt;
+&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.&lt;/p&gt;</description></item><item><title>Creating Tor Hidden Services with Python</title><link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link><pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/hidden_services.png" alt="" class="pure-img" &gt;
 
-&lt;p&gt;Then I considered the alternative - maybe I could scrape the prices every day to find the cheapest nightly rate. Sounded like a job for Python, BeautifulSoup, and some whiskey.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Creating Tor Hidden Services with Python</title>
-      <link>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</link>
-      <pubDate>Mon, 06 Oct 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/10/06/creating-tor-hidden-services-with-python/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/hidden_services.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href="https://www.torproject.org/docs/hidden-services.html.en"&gt;&lt;em&gt;&lt;strong&gt;hidden services&lt;/strong&gt;&lt;/em&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
+&lt;p&gt;The Tor project has &lt;a href="https://www.torproject.org/docs/tor-hidden-service.html.en"&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.&lt;/p&gt;</description></item><item><title>Wireless Attacks with Python: Part One - The "Dnspwn Attack"</title><link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link><pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/wireless_python.png" alt="" class="pure-img" &gt;
 
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;A while back, I &lt;a href="http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html"&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href="http://www.aircrack-ng.org/"&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.&lt;/p&gt;</description></item><item><title>Automated Social Engineering Recon Using Rapportive</title><link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link><pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/rapportive_small.png" alt="" class="pure-img" &gt;
 
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;Tor is often used to protect the anonymity of someone who is trying to connect to a service. However, it is also possible to use Tor to protect the anonymity of a service provider via &lt;a href=&#34;https://www.torproject.org/docs/hidden-services.html.en&#34;&gt;&lt;strong&gt;&lt;em&gt;hidden services&lt;/em&gt;&lt;/strong&gt;&lt;/a&gt;. These services, operating under the &lt;code&gt;.onion&lt;/code&gt; TLD, allow publishers to anonymously create and host content viewable only by other Tor users.&lt;/p&gt;
-
-&lt;p&gt;The Tor project has &lt;a href=&#34;https://www.torproject.org/docs/tor-hidden-service.html.en&#34;&gt;instructions&lt;/a&gt; on how to create hidden services, but this can be a manual and arduous process if you want to setup multiple services. This post will show how we can use the fantastic &lt;code&gt;stem&lt;/code&gt; Python library to automatically create and host a Tor hidden service.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Wireless Attacks with Python: Part One - The &#34;Dnspwn Attack&#34;</title>
-      <link>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</link>
-      <pubDate>Fri, 15 Nov 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/11/15/wireless-attacks-with-python-part-one-the-airpwn-attack/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/wireless_python.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;A while back, I &lt;a href=&#34;http://raidersec.blogspot.com/2013/01/wireless-deauth-attack-using-aireplay.html&#34;&gt;published a post&lt;/a&gt; on the Raidersec blog demonstrating how to perform a deauthentication attack using Python and Scapy. I enjoyed writing the post, since I got the opportunity to learn in-depth about how different wireless attacks work, beyond just learning how to exclusively use the &lt;a href=&#34;http://www.aircrack-ng.org/&#34;&gt;aircrack suite&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;So, with that being said, this post will kick off a short series of posts discussing how to perform common wireless attacks using Python. I hope you enjoy the posts and, as always, never hesitate to let me know if you have any comments or questions below.
-&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Automated Social Engineering Recon Using Rapportive</title>
-      <link>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</link>
-      <pubDate>Mon, 14 Oct 2013 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2013/10/14/automated-social-engineering-recon-using-rapportive/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/rapportive_small.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
-
-
-&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
-
-&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href=&#34;http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html&#34;&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
-
-&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;h3 id="introduction"&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;When performing a social engineering engagement, recon is key. In a &lt;a href="http://raidersec.blogspot.com/2012/12/automated-open-source-intelligence.html"&gt;previous post&lt;/a&gt;, I demonstrated a few ways in which we could automate the recon process. However, the methods I showed were simply ways to find the profiles of people that might belong to a particular organization.&lt;/p&gt;
+&lt;p&gt;During SE engagements, we often either run across email addresses (by, say, simply scraping the main website) or want to enumerate the email address structure in use by an organization (generating possible alternatives using tools like jigsaw.rb). It would be helpful if it were possible to automate the process of validating those email addresses by associating them to additional information or social networking profiles. This is where Rapportive comes in handy.&lt;/p&gt;</description></item></channel></rss>

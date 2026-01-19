@@ -1,37 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Ansible on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/ansible/</link>
-    <description>Recent content in Ansible on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 04 Feb 2018 11:00:59 -0600</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/ansible/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Automating Gophish Releases With Ansible and Docker</title>
-      <link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link>
-      <pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid>
-      <description>&lt;p&gt;&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/gophish_releases.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ansible on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/ansible/</link><description>Recent content in Ansible on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 04 Feb 2018 11:00:59 -0600</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/ansible/index.xml" rel="self" type="application/rss+xml"/><item><title>Automating Gophish Releases With Ansible and Docker</title><link>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</link><pubDate>Sun, 04 Feb 2018 11:00:59 -0600</pubDate><guid>https://jordan-wright.com/blog/post/2018-02-04-automating-gophish-releases/</guid><description>&lt;p&gt;&lt;img src="https://jordan-wright.com/blog/images/headers/gophish_releases.png" alt="" class="pure-img" &gt;
 
 &lt;br&gt;
-It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href=&#34;https://duo.com/blog/post_author/jwright&#34;&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
-
-&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href=&#34;https://getgophish.com&#34;&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
-
-&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href=&#34;#footnote-1&#34;&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
-
+It&amp;rsquo;s been a while! While I haven&amp;rsquo;t posted as much here, I have been writing quite a bit &lt;a href="https://duo.com/blog/post_author/jwright"&gt;over on Duo&amp;rsquo;s blog&lt;/a&gt; about the really cool research I&amp;rsquo;ve gotten to do this past year with the incredible Duo Labs team.&lt;/p&gt;
+&lt;p&gt;Any spare time I&amp;rsquo;ve had has been spent working on Gophish. This past year I&amp;rsquo;ve released a &lt;a href="https://getgophish.com"&gt;new hand-crafted, artisinal website&lt;/a&gt;, responded to nearly 400 support requests, and made too many improvements to count!&lt;/p&gt;
+&lt;p&gt;Now, most people who use Gophish use a pre-built binary&lt;a href="#footnote-1"&gt;*&lt;/a&gt;, which means that it&amp;rsquo;s important to make new releases as soon as possible after improvements are made. Otherwise, I&amp;rsquo;m left answering support requests with the advice of &amp;ldquo;build from source&amp;rdquo;, which is not ideal.&lt;/p&gt;
 &lt;p&gt;The previous release process was manual, making it a &lt;strong&gt;huge pain&lt;/strong&gt;. This led to inconsistency and large amounts of time spent packaging every release, which results in very infrequent releases.&lt;/p&gt;
-
-&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;
-
-&lt;p&gt;&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;This post documents the previous process as well as how I recently improved it using Ansible, Docker, DigitalOcean API&amp;rsquo;s, and more.&lt;/p&gt;</description></item></channel></rss>

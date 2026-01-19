@@ -1,32 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Github on Jordan Wright</title>
-    <link>https://jordan-wright.com/blog/tags/github/</link>
-    <description>Recent content in Github on Jordan Wright</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Tue, 30 Dec 2014 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
-    
-    
-    <item>
-      <title>Why Deleting Sensitive Information from Github Doesn&#39;t Save You</title>
-      <link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link>
-      <pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate>
-      
-      <guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid>
-      <description>&lt;img src=&#34;https://jordan-wright.com/blog/blog/images/headers/harvest_github.png&#34; alt=&#34;&#34; class=&#34;pure-img&#34; &gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Github on Jordan Wright</title><link>https://jordan-wright.com/blog/tags/github/</link><description>Recent content in Github on Jordan Wright</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 30 Dec 2014 00:00:00 +0000</lastBuildDate><atom:link href="https://jordan-wright.com/blog/tags/github/index.xml" rel="self" type="application/rss+xml"/><item><title>Why Deleting Sensitive Information from Github Doesn't Save You</title><link>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</link><pubDate>Tue, 30 Dec 2014 00:00:00 +0000</pubDate><guid>https://jordan-wright.com/blog/2014/12/30/why-deleting-sensitive-information-from-github-doesnt-save-you/</guid><description>&lt;img src="https://jordan-wright.com/blog/images/headers/harvest_github.png" alt="" class="pure-img" &gt;
 
-
-&lt;p&gt;So you accidentally committed a password or API key to Github. &lt;strong&gt;&lt;em&gt;Ouch.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href=&#34;https://help.github.com/articles/remove-sensitive-data/&#34;&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;Just today, I saw a &lt;a href=&#34;http://www.devfactor.net/2014/12/30/2375-amazon-mistake/&#34;&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.
-&lt;/p&gt;</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;So you accidentally committed a password or API key to Github. &lt;em&gt;&lt;strong&gt;Ouch.&lt;/strong&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;No problem!&amp;rdquo;, you think, &amp;ldquo;I&amp;rsquo;ll just follow Github&amp;rsquo;s helpful information on &lt;a href="https://help.github.com/articles/remove-sensitive-data/"&gt;how to delete sensitive information&lt;/a&gt; and I&amp;rsquo;ll be fine!&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;Just today, I saw a &lt;a href="http://www.devfactor.net/2014/12/30/2375-amazon-mistake/"&gt;great article&lt;/a&gt; detailing one developer&amp;rsquo;s experience with committing sensitive information to Github. Unfortunately, this article missed the main point. In this post, I&amp;rsquo;m going to show exactly how hackers &lt;em&gt;instantly&lt;/em&gt; harvest information committed to public Github repositories, and why deleting this information doesn&amp;rsquo;t solve the problem.&lt;/p&gt;</description></item></channel></rss>

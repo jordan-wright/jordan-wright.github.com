@@ -1,372 +1,106 @@
-<!DOCTYPE html>
-<html lang="en-us">
-
-<head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
-  
-  <meta property="og:title" content="Building Gophish Healthcheck: Part One" />
-  <meta property="twitter:title" content="Building Gophish Healthcheck: Part One" />
-  
-  <meta property="og:site_name" content="Jordan Wright" />
-  <meta property="og:url" content="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/" />
-  <meta property="twitter:url" content="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/">
-
-
-  
-  <meta property="og:type" content="article" />
-
-  <meta property="og:article:published_time" content="2018-09-02T22:01:01-05:00" />
-
-  
-  <meta property="og:article:tag" content="gophish" />
-  
-  <meta property="og:article:tag" content="healthcheck" />
-  
-  <meta property="og:article:tag" content="go" />
-  
-
-  
-  <meta name="description" content="Security and Programming Blog" />
-  
-
-  
-
-  
-
-  <title>
-     Building Gophish Healthcheck: Part One 
-  </title>
-
-
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="shortcut icon" href="https://jordan-wright.com/blog/images/favicon.ico">
-  <link rel="apple-touch-icon" href="https://jordan-wright.com/blog/images/apple-touch-icon.png" />
-
-  <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="/blog/css/highlight.css" />
-  <link rel="stylesheet" type="text/css" href="https://jordan-wright.com/blog/css/nav.css" />
-  <link rel="stylesheet" type="text/css"
-    href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata" />
-
-
-  
-  
-  <link href="https://jordan-wright.com/blog/index.xml" rel="alternate" type="application/rss+xml" title="Jordan Wright" />
-  
-  
-  
-  <meta name="generator" content="Hugo 0.40.3" />
-
-  <link rel="canonical" href="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/" />
-
-  
-  <script>
-    (function (i, s, o, g, r, a, m) {
-      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date(); a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-44718701-1', 'auto');
-    ga('send', 'pageview');
-
-  </script>
-  
-
-  
-</head>
-
-<body class="nav-closed">
-
-  <div class="nav">
-    <h3 class="nav-title">Menu</h3>
-    <a href="#" class="nav-close">
-        <span class="hidden">Close</span>
-    </a>
-    <ul>
-        
-        
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/">Home</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/contact/">Contact</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/projects/">Projects</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://jordan-wright.com/blog/">Blog</a>
-            </li>
-        
-            
-            <li class="nav-opened" role="presentation">
-            	<a href="https://raidersec.blogspot.com">Raidersec</a>
-            </li>
-        
-    </ul>
-    
-    
-    <a class="subscribe-button icon-feed" href="https://jordan-wright.com/blog/index.xml">Subscribe</a>
-    
-</div>
-<span class="nav-cover"></span>
-
-
-  <div class="site-wrapper">
-
-
-
-
-<header class="main-header post-head no-cover">
-  <nav class="main-nav clearfix">
-
-
-  
-      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
-  
-  </nav>
-</header>
-
-
-
-<main class="content" role="main">
-
-
-
-
-  <article class="post post">
-
-    <header class="post-header">
-        <h1 class="post-title">Building Gophish Healthcheck: Part One</h1>
-        <small></small>
-
-        <section class="post-meta">
-        
-          <time class="post-date" datetime="2018-09-02T22:01:01-05:00">
-            Sep 2, 2018
-          </time>
-        
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/gophish/">#gophish</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/healthcheck/">#healthcheck</a></span>
-         
-          <span class="post-tag small"><a href="https://jordan-wright.com/blog/tags/go/">#go</a></span>
-         
-        </section>
-    </header>
-
-    <section class="post-content">
-      <img src="/blog/images/headers/gophish_healthcheck.png" alt="" class="pure-img" >
-
-
-<p>One of the questions I see most often from Gophish users is &ldquo;how do I get past my spam filter?&rdquo; Generally, my answer to this is something along the lines of &ldquo;just whitelist the IP address,&rdquo; since it&rsquo;s my opinion that phishing simulations should be a test of the <em>people</em> and <em>processes</em>, not the email infrastructure.</p>
-
-<p><strong>But what if we do want to test the email infrastructure?</strong></p>
-
-<p>This post is the first in a two-part series about how I&rsquo;m creating the <a href="https://github.com/gophish/healthcheck">email healthcheck</a> service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.</p>
-
-<p></p>
-
-<h3 id="it-s-all-just-dns">It&rsquo;s All Just DNS</h3>
-
-<p>The first version of the project is simple. I want users to be able to send themselves emails that have either invalid or valid settings for:</p>
-
-<ul>
-<li>SPF Records</li>
-<li>DKIM Records</li>
-<li>DMARC Policies</li>
-<li>MX Records</li>
-</ul>
-
-<p>All of these are handled through DNS. When a mail server receives an email, it will perform DNS queries to fetch things like the SPF record for the sending domain and use that record to see if the email is properly authenticated.</p>
-
-<p>The big question I had to answer is: <em>how do I set up DNS to support all the possible options?</em></p>
-
-<p>The initial answer might be to try and set up subdomains for all the possible combinations. Then, I could use the right subdomain when sending the email. The problem is that this gets overwhelming <em>fast</em>, and I plan to support <a href="https://github.com/gophish/healthcheck/issues">many more types of healthchecks</a> in the future.</p>
-
-<p>We need a different plan.</p>
-
-<h3 id="say-hello-to-coredns">Say Hello to CoreDNS</h3>
-
-<p>Right now, each message we send out will get a unique 16-byte hex-encoded ID that looks like this: <code>0d5750699dc7544052930c0a90fdd273</code>.</p>
-
-<p>This sparked an idea: <strong>What if we could use this message ID to somehow dynamically return DNS responses based on the settings the user chose?</strong></p>
-
-<p>Basically, we&rsquo;d send a message that came from, say, <code>no-reply@0d5750699dc7544052930c0a90fdd273.mail.healthcheck.getgophish.com</code>. When the mail server received this message, it would send various DNS queries for the domain <code>d5750699dc7544052930c0a90fdd273.mail.healthcheck.getgophish.com</code>. If I had a DNS server I could control dynamically, I could extract the message ID, look up what tests the user requested, and send back the right DNS response like <strong>magic</strong>.</p>
-
-<p><img src="https://media.giphy.com/media/12NUbkX6p4xOO4/giphy.gif" alt="" class="pure-img" >
-
-<br></p>
-
-<p>But first, I needed to find a DNS server that can build responses on-the-fly. Fortunately for us, this exact DNS server exists, and it&rsquo;s written in Go!</p>
-
-<p><a href="https://coredns.io/">CoreDNS</a> is a DNS server that works by running each query through <a href="https://coredns.io/plugins/">plugins</a>. It&rsquo;s built on the foundation of the awesome <a href="https://caddyserver.com/">Caddy</a> project and has a familiar syntax.</p>
-
-<p>This is perfect for us. We can write a CoreDNS plugin that will catch the DNS requests and send back the right response - no gigantic list of hardcoded subdomains needed!</p>
-
-<h3 id="writing-a-coredns-plugin">Writing a CoreDNS Plugin</h3>
-
-<p>Going into this, I hadn&rsquo;t written a CoreDNS plugin. In fact, I hadn&rsquo;t done much DNS work in Golang at all. Fortunately, CoreDNS has a great <a href="https://coredns.io/2017/03/01/how-to-add-plugins-to-coredns/">introductory blog post</a> showing how to build a plugin from scratch.</p>
-
-<p>I won&rsquo;t repeat all the steps here, so let&rsquo;s just cover the important stuff. There&rsquo;s two things we need to do:</p>
-
-<ul>
-<li>Register the plugin using <code>caddy.RegisterPlugin</code> and set a few options</li>
-<li>Implement the <code>ServeDNS()</code> and <code>Name()</code> methods</li>
-</ul>
-
-<h4 id="registering-the-plugin">Registering the Plugin</h4>
-
-<p>This is the easiest part. We&rsquo;ll just make a new file called <code>setup.go</code> and create a new plugin we&rsquo;ll call <code>healthcheck</code>. This starts with the <code>init</code> function:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
-	<span class="nx">caddy</span><span class="p">.</span><span class="nx">RegisterPlugin</span><span class="p">(</span><span class="s">&#34;healthcheck&#34;</span><span class="p">,</span> <span class="nx">caddy</span><span class="p">.</span><span class="nx">Plugin</span><span class="p">{</span>
-		<span class="nx">ServerType</span><span class="p">:</span> <span class="s">&#34;dns&#34;</span><span class="p">,</span>
-		<span class="nx">Action</span><span class="p">:</span>     <span class="nx">setup</span><span class="p">,</span>
-	<span class="p">})</span>
-<span class="p">}</span></code></pre></div>
-<p>This expects to call a function called <code>setup</code> when the plugin is created. This function will set up our local app config and establish a connection to the database so we can look up messages later. Finally, it registers an instance of <code>HealthCheckPlugin</code> (we&rsquo;ll define that later) to the global list of plugins:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="nx">setup</span><span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">caddy</span><span class="p">.</span><span class="nx">Controller</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">c</span><span class="p">.</span><span class="nx">Next</span><span class="p">()</span> <span class="c1">// healthcheck
-</span><span class="c1"></span>    
- 	<span class="c1">// Load our configuration file
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="o">:=</span> <span class="nx">config</span><span class="p">.</span><span class="nx">LoadConfig</span><span class="p">(</span><span class="s">&#34;./config.json&#34;</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="c1">// Set up the database, running migrations if needed
-</span><span class="c1"></span>	<span class="c1">// and get a handle to the database so we can look
-</span><span class="c1"></span> 	<span class="c1">// up messages later.
-</span><span class="c1"></span>	<span class="nx">err</span> <span class="p">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">Setup</span><span class="p">()</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">err</span>
-	<span class="p">}</span>
-
-	<span class="c1">// Register the plugin with CoreDNS
-</span><span class="c1"></span>	<span class="nx">dnsserver</span><span class="p">.</span><span class="nx">GetConfig</span><span class="p">(</span><span class="nx">c</span><span class="p">).</span><span class="nx">AddPlugin</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">next</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span><span class="p">)</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">HealthCheckPlugin</span><span class="p">{</span>
-			<span class="nx">Next</span><span class="p">:</span> <span class="nx">next</span><span class="p">,</span>
-		<span class="p">}</span>
-	<span class="p">})</span>
-
-	<span class="k">return</span> <span class="kc">nil</span>
-<span class="p">}</span></code></pre></div>
-<p>Piece of cake.</p>
-
-<p>So now CoreDNS knows that our plugin exists, but it still doesn&rsquo;t know what our plugin actually does. To build out the plugin, we can create a file (uncreatively) named <code>plugin.go</code>.</p>
-
-<p>The first step is to make our plugin struct:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// HealthCheckPlugin is a CoreDNS plugin that emulates various email
-</span><span class="c1">// authentication states.
-</span><span class="c1"></span><span class="kd">type</span> <span class="nx">HealthCheckPlugin</span> <span class="kd">struct</span> <span class="p">{</span>
-	<span class="nx">Next</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">Handler</span>
-<span class="p">}</span></code></pre></div>
-<p>The real magic happens in the <code>ServeDNS</code> function. This function takes a DNS request and a DNS response writer. The general idea is that, if the request is something we&rsquo;re interested in, we can return a response. Otherwise, we can just move on to the next plugin (or in our case, fail).</p>
-
-<p>For the rest of this section, we&rsquo;ll be implementing a function that looks like this:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">hc</span> <span class="nx">HealthCheckPlugin</span><span class="p">)</span> <span class="nx">ServeDNS</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">w</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">r</span> <span class="o">*</span><span class="nx">dns</span><span class="p">.</span><span class="nx">Msg</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-
-	<span class="c1">// TODO: ✨MAGIC✨ HAPPENS
-</span><span class="c1"></span>
-	<span class="c1">// Return a status telling CoreDNS we processed this request
-</span><span class="c1"></span>	<span class="k">return</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">RcodeSuccess</span><span class="p">,</span> <span class="kc">nil</span></code></pre></div>
-<p>The general structure of the <code>ServeDNS</code> function is pretty simple, we can just check to make sure the request type is one we support and, if so, we can process it. For our case, we only care to support MX and TXT requests. We&rsquo;ll also be nice and support the deprecated SPF request type. Here&rsquo;s an example of the type of <code>switch</code> statement we can do to process the request based on it&rsquo;s type:</p>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">a</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">dns</span><span class="p">.</span><span class="nx">Msg</span><span class="p">)</span>
-<span class="c1">// Fill in the response based on the result of us processing the request
-</span><span class="c1"></span><span class="k">switch</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QType</span><span class="p">()</span> <span class="p">{</span>
-<span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeTXT</span><span class="p">:</span>
-	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processTXTRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeMX</span><span class="p">:</span>
-	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processMXRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="c1">// This is really only supported for odd legacy issues. Per RFC 7208, SPF
-</span><span class="c1">// records must be TXT records
-</span><span class="c1"></span><span class="k">case</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeSPF</span><span class="p">:</span>
-	<span class="nx">a</span><span class="p">.</span><span class="nx">Answer</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">processSPFRecord</span><span class="p">(</span><span class="nx">state</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">plugin</span><span class="p">.</span><span class="nx">NextOrFailure</span><span class="p">(</span><span class="nx">hc</span><span class="p">.</span><span class="nx">Name</span><span class="p">(),</span> <span class="nx">hc</span><span class="p">.</span><span class="nx">Next</span><span class="p">,</span> <span class="nx">ctx</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">r</span><span class="p">)</span>
-	<span class="p">}</span>
-<span class="p">}</span></code></pre></div>
-<p>The flow of each <code>process*Record</code> function is simple. It goes something like this:</p>
-
-<ul>
-<li>Parse out the message ID and look it up from the database</li>
-<li>Create a DNS response based on what options were set up for that message</li>
-<li>Return that DNS response</li>
-</ul>
-
-<p>Let&rsquo;s use <code>processMXRecord</code> as the example, since it&rsquo;s the shortest. While MX records are technically for receiving mail, some mail servers look this up as an input to their reputation engines. In this case, we have three options:</p>
-
-<ul>
-<li><strong>No MX record</strong> - Don&rsquo;t return an MX record</li>
-<li><strong>Invalid MX record</strong> - Return <code>invalid.mail.healthcheck.getgophish.com</code></li>
-<li><strong>Valid MX record</strong> - Return the hostname of our email service, <code>mail.healthcheck.getgophish.com</code></li>
-</ul>
-<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">hc</span> <span class="nx">HealthCheckPlugin</span><span class="p">)</span> <span class="nx">processMXRecord</span><span class="p">(</span><span class="nx">state</span> <span class="nx">request</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">([]</span><span class="nx">dns</span><span class="p">.</span><span class="nx">RR</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">rrs</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">dns</span><span class="p">.</span><span class="nx">RR</span><span class="p">{}</span>
-	<span class="c1">// Get our message
-</span><span class="c1"></span>	<span class="nx">messageID</span> <span class="o">:=</span> <span class="nx">strings</span><span class="p">.</span><span class="nx">Split</span><span class="p">(</span><span class="nx">state</span><span class="p">.</span><span class="nx">QName</span><span class="p">(),</span> <span class="s">&#34;.&#34;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-	<span class="nx">message</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">GetMessage</span><span class="p">(</span><span class="nx">messageID</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="nx">err</span>
-	<span class="p">}</span>
-	<span class="c1">// Create our DNS response
-</span><span class="c1"></span>	<span class="nx">rr</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">dns</span><span class="p">.</span><span class="nx">MX</span><span class="p">)</span>
-	<span class="nx">rr</span><span class="p">.</span><span class="nx">Hdr</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">RR_Header</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QName</span><span class="p">(),</span> <span class="nx">Rrtype</span><span class="p">:</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">TypeMX</span><span class="p">,</span> <span class="nx">Class</span><span class="p">:</span> <span class="nx">state</span><span class="p">.</span><span class="nx">QClass</span><span class="p">()}</span>
-	<span class="nx">rr</span><span class="p">.</span><span class="nx">Preference</span> <span class="p">=</span> <span class="mi">10</span>
-	<span class="c1">// Fill in the response based on the requested configuration
-</span><span class="c1"></span>	<span class="k">switch</span> <span class="nx">message</span><span class="p">.</span><span class="nx">MessageConfiguration</span><span class="p">.</span><span class="nx">MX</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">None</span><span class="p">:</span>
-		<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="kc">nil</span>
-	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">HardFail</span><span class="p">:</span>
-		<span class="nx">rr</span><span class="p">.</span><span class="nx">Mx</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">Fqdn</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Sprintf</span><span class="p">(</span><span class="s">&#34;invalid.%s&#34;</span><span class="p">,</span> <span class="nx">config</span><span class="p">.</span><span class="nx">Config</span><span class="p">.</span><span class="nx">EmailHostname</span><span class="p">))</span>
-	<span class="k">case</span> <span class="nx">db</span><span class="p">.</span><span class="nx">Pass</span><span class="p">:</span>
-		<span class="nx">rr</span><span class="p">.</span><span class="nx">Mx</span> <span class="p">=</span> <span class="nx">dns</span><span class="p">.</span><span class="nx">Fqdn</span><span class="p">(</span><span class="nx">config</span><span class="p">.</span><span class="nx">Config</span><span class="p">.</span><span class="nx">EmailHostname</span><span class="p">)</span>
-	<span class="p">}</span>
-	<span class="nx">rrs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">rrs</span><span class="p">,</span> <span class="nx">rr</span><span class="p">)</span>
-	<span class="k">return</span> <span class="nx">rrs</span><span class="p">,</span> <span class="kc">nil</span>
-<span class="p">}</span></code></pre></div>
-<h4 id="compiling-the-binary">Compiling the Binary</h4>
-
-<p>After implementing the other functions, we&rsquo;re ready to compile our instance of the <code>coredns</code> binary. The first step is to edit the <code>plugin.cfg</code> file in the <code>github.com/coredns/coredns</code> directory to include our <code>healthcheck</code> plugin:</p>
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt">healthcheck<span class="o">:</span>github<span class="p">.</span>com/gophish/healthcheck/dns</code></pre></div>
-<p>In that same directory, we can build our new binary using <code>make</code>. We can move this binary into our <code>github.com/gophish/healthcheck</code> directory.</p>
-
-<p>Finally, we need to write a <code>Corefile</code>, which is the configuration used by the <code>coredns</code> binary. Our <code>Corefile</code> is simple, and can be found here:</p>
-<div class="highlight"><pre class="chroma"><code class="language-txt" data-lang="txt"><span class="p">.</span> <span class="ss">{</span>
-    healthcheck
-<span class="ss">}</span></code></pre></div>
-<p>And that&rsquo;s it! We can run our <code>coredns</code> binary, and it will automatically find and use our <code>Corefile</code>:</p>
-<div class="highlight"><pre class="chroma"><code class="language-raw" data-lang="raw">$ ./coredns -dns.port=1053
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta property="og:title" content="Building Gophish Healthcheck: Part One &#183; Jordan Wright"><meta property="og:site_name" content="Jordan Wright"><meta property="og:url" content="https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/"><meta property="og:type" content="article"><meta property="og:article:published_time" content="2018-09-02T22:01:01-05:00"><meta property="og:article:tag" content="gophish"><meta property="og:article:tag" content="healthcheck"><meta property="og:article:tag" content="go"><title>Building Gophish Healthcheck: Part One &#183; Jordan Wright</title><meta name=description content="Security and Programming Blog"><meta name=HandheldFriendly content="True"><meta name=viewport content="width=device-width,initial-scale=1"><link rel="shortcut icon" href=https://jordan-wright.com/blog/images/favicon.ico><link rel=apple-touch-icon href=https://jordan-wright.com/blog/images/apple-touch-icon.png><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/screen.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/highlight.css><link rel=stylesheet type=text/css href=https://jordan-wright.com/blog/css/nav.css><link rel=stylesheet type=text/css href="//fonts.googleapis.com/css?family=Lora:ital,wght@0,400;0,700;1,400;1,700|Open+Sans:700,400|Inconsolata"><link href=https://jordan-wright.com/blog/index.xml rel=alternate type=application/rss+xml title="Jordan Wright"><meta name=generator content="Hugo 0.154.5"><link rel=canonical href=https://jordan-wright.com/blog/post/2018-09-02-building-email-healthcheck/><script>(function(e,t,n,s,o,i,a){e.GoogleAnalyticsObject=o,e[o]=e[o]||function(){(e[o].q=e[o].q||[]).push(arguments)},e[o].l=1*new Date,i=t.createElement(n),a=t.getElementsByTagName(n)[0],i.async=1,i.src=s,a.parentNode.insertBefore(i,a)})(window,document,"script","//www.google-analytics.com/analytics.js","ga"),ga("create","UA-44718701-1","auto"),ga("send","pageview")</script></head><body class=nav-closed><div class=nav><h3 class=nav-title>Menu</h3><a href=# class=nav-close><span class=hidden>Close</span></a><ul><li class=nav-opened role=presentation><a href=https://jordan-wright.com/>Home</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/contact/>Contact</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/projects/>Projects</a></li><li class=nav-opened role=presentation><a href=https://jordan-wright.com/blog/>Blog</a></li><li class=nav-opened role=presentation><a href=https://raidersec.blogspot.com>Raidersec</a></li></ul><a class="subscribe-button icon-feed" href=https://jordan-wright.com/blog/index.xml>Subscribe</a></div><span class=nav-cover></span><div class=site-wrapper><header class="main-header post-head no-cover"><nav class="main-nav clearfix"><a class=menu-button href=#><span class=burger>&#9776;</span><span class=word>Menu</span></a></nav></header><main class=content role=main><article class="post post"><header class=post-header><h1 class=post-title>Building Gophish Healthcheck: Part One</h1><small></small><section class=post-meta><time class=post-date datetime=2018-09-02T22:01:01-05:00>Sep 2, 2018
+</time><span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/gophish/>#gophish</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/healthcheck/>#healthcheck</a></span>
+<span class="post-tag small"><a href=https://jordan-wright.com/blog/tags/go/>#go</a></span></section></header><section class=post-content><img src=/blog/images/headers/gophish_healthcheck.png alt class=pure-img><p>One of the questions I see most often from Gophish users is &ldquo;how do I get past my spam filter?&rdquo; Generally, my answer to this is something along the lines of &ldquo;just whitelist the IP address,&rdquo; since it&rsquo;s my opinion that phishing simulations should be a test of the <em>people</em> and <em>processes</em>, not the email infrastructure.</p><p><strong>But what if we do want to test the email infrastructure?</strong></p><p>This post is the first in a two-part series about how I&rsquo;m creating the <a href=https://github.com/gophish/healthcheck>email healthcheck</a> service for Gophish. This post talks about how I handle DNS programmatically, and the next post will describe the actual architecture being used.</p><h3 id=its-all-just-dns>It&rsquo;s All Just DNS</h3><p>The first version of the project is simple. I want users to be able to send themselves emails that have either invalid or valid settings for:</p><ul><li>SPF Records</li><li>DKIM Records</li><li>DMARC Policies</li><li>MX Records</li></ul><p>All of these are handled through DNS. When a mail server receives an email, it will perform DNS queries to fetch things like the SPF record for the sending domain and use that record to see if the email is properly authenticated.</p><p>The big question I had to answer is: <em>how do I set up DNS to support all the possible options?</em></p><p>The initial answer might be to try and set up subdomains for all the possible combinations. Then, I could use the right subdomain when sending the email. The problem is that this gets overwhelming <em>fast</em>, and I plan to support <a href=https://github.com/gophish/healthcheck/issues>many more types of healthchecks</a> in the future.</p><p>We need a different plan.</p><h3 id=say-hello-to-coredns>Say Hello to CoreDNS</h3><p>Right now, each message we send out will get a unique 16-byte hex-encoded ID that looks like this: <code>0d5750699dc7544052930c0a90fdd273</code>.</p><p>This sparked an idea: <strong>What if we could use this message ID to somehow dynamically return DNS responses based on the settings the user chose?</strong></p><p>Basically, we&rsquo;d send a message that came from, say, <code>no-reply@0d5750699dc7544052930c0a90fdd273.mail.healthcheck.getgophish.com</code>. When the mail server received this message, it would send various DNS queries for the domain <code>d5750699dc7544052930c0a90fdd273.mail.healthcheck.getgophish.com</code>. If I had a DNS server I could control dynamically, I could extract the message ID, look up what tests the user requested, and send back the right DNS response like <strong>magic</strong>.</p><p><img src=https://media.giphy.com/media/12NUbkX6p4xOO4/giphy.gif alt class=pure-img><br></p><p>But first, I needed to find a DNS server that can build responses on-the-fly. Fortunately for us, this exact DNS server exists, and it&rsquo;s written in Go!</p><p><a href=https://coredns.io/>CoreDNS</a> is a DNS server that works by running each query through <a href=https://coredns.io/plugins/>plugins</a>. It&rsquo;s built on the foundation of the awesome <a href=https://caddyserver.com/>Caddy</a> project and has a familiar syntax.</p><p>This is perfect for us. We can write a CoreDNS plugin that will catch the DNS requests and send back the right response - no gigantic list of hardcoded subdomains needed!</p><h3 id=writing-a-coredns-plugin>Writing a CoreDNS Plugin</h3><p>Going into this, I hadn&rsquo;t written a CoreDNS plugin. In fact, I hadn&rsquo;t done much DNS work in Golang at all. Fortunately, CoreDNS has a great <a href=https://coredns.io/2017/03/01/how-to-add-plugins-to-coredns/>introductory blog post</a> showing how to build a plugin from scratch.</p><p>I won&rsquo;t repeat all the steps here, so let&rsquo;s just cover the important stuff. There&rsquo;s two things we need to do:</p><ul><li>Register the plugin using <code>caddy.RegisterPlugin</code> and set a few options</li><li>Implement the <code>ServeDNS()</code> and <code>Name()</code> methods</li></ul><h4 id=registering-the-plugin>Registering the Plugin</h4><p>This is the easiest part. We&rsquo;ll just make a new file called <code>setup.go</code> and create a new plugin we&rsquo;ll call <code>healthcheck</code>. This starts with the <code>init</code> function:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>init</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>caddy</span><span class=p>.</span><span class=nf>RegisterPlugin</span><span class=p>(</span><span class=s>&#34;healthcheck&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>caddy</span><span class=p>.</span><span class=nx>Plugin</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>ServerType</span><span class=p>:</span><span class=w> </span><span class=s>&#34;dns&#34;</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>Action</span><span class=p>:</span><span class=w>     </span><span class=nx>setup</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>This expects to call a function called <code>setup</code> when the plugin is created. This function will set up our local app config and establish a connection to the database so we can look up messages later. Finally, it registers an instance of <code>HealthCheckPlugin</code> (we&rsquo;ll define that later) to the global list of plugins:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=nf>setup</span><span class=p>(</span><span class=nx>c</span><span class=w> </span><span class=o>*</span><span class=nx>caddy</span><span class=p>.</span><span class=nx>Controller</span><span class=p>)</span><span class=w> </span><span class=kt>error</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>c</span><span class=p>.</span><span class=nf>Next</span><span class=p>()</span><span class=w> </span><span class=c1>// healthcheck</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w> 	</span><span class=c1>// Load our configuration file</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nf>LoadConfig</span><span class=p>(</span><span class=s>&#34;./config.json&#34;</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>err</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Set up the database, running migrations if needed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// and get a handle to the database so we can look</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w> 	</span><span class=c1>// up messages later.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>db</span><span class=p>.</span><span class=nf>Setup</span><span class=p>()</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>err</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Register the plugin with CoreDNS</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>dnsserver</span><span class=p>.</span><span class=nf>GetConfig</span><span class=p>(</span><span class=nx>c</span><span class=p>).</span><span class=nf>AddPlugin</span><span class=p>(</span><span class=kd>func</span><span class=p>(</span><span class=nx>next</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nx>Handler</span><span class=p>)</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nx>Handler</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>HealthCheckPlugin</span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>			</span><span class=nx>Next</span><span class=p>:</span><span class=w> </span><span class=nx>next</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>})</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>Piece of cake.</p><p>So now CoreDNS knows that our plugin exists, but it still doesn&rsquo;t know what our plugin actually does. To build out the plugin, we can create a file (uncreatively) named <code>plugin.go</code>.</p><p>The first step is to make our plugin struct:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=c1>// HealthCheckPlugin is a CoreDNS plugin that emulates various email</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// authentication states.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=kd>type</span><span class=w> </span><span class=nx>HealthCheckPlugin</span><span class=w> </span><span class=kd>struct</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>Next</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nx>Handler</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>The real magic happens in the <code>ServeDNS</code> function. This function takes a DNS request and a DNS response writer. The general idea is that, if the request is something we&rsquo;re interested in, we can return a response. Otherwise, we can just move on to the next plugin (or in our case, fail).</p><p>For the rest of this section, we&rsquo;ll be implementing a function that looks like this:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>hc</span><span class=w> </span><span class=nx>HealthCheckPlugin</span><span class=p>)</span><span class=w> </span><span class=nf>ServeDNS</span><span class=p>(</span><span class=nx>ctx</span><span class=w> </span><span class=nx>context</span><span class=p>.</span><span class=nx>Context</span><span class=p>,</span><span class=w> </span><span class=nx>w</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>ResponseWriter</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=w> </span><span class=o>*</span><span class=nx>dns</span><span class=p>.</span><span class=nx>Msg</span><span class=p>)</span><span class=w> </span><span class=p>(</span><span class=kt>int</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// TODO: ✨MAGIC✨ HAPPENS</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Return a status telling CoreDNS we processed this request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>RcodeSuccess</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span></code></pre></div><p>The general structure of the <code>ServeDNS</code> function is pretty simple, we can just check to make sure the request type is one we support and, if so, we can process it. For our case, we only care to support MX and TXT requests. We&rsquo;ll also be nice and support the deprecated SPF request type. Here&rsquo;s an example of the type of <code>switch</code> statement we can do to process the request based on it&rsquo;s type:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=nx>a</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>new</span><span class=p>(</span><span class=nx>dns</span><span class=p>.</span><span class=nx>Msg</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// Fill in the response based on the result of us processing the request</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>switch</span><span class=w> </span><span class=nx>state</span><span class=p>.</span><span class=nf>QType</span><span class=p>()</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>TypeTXT</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>a</span><span class=p>.</span><span class=nx>Answer</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nf>processTXTRecord</span><span class=p>(</span><span class=nx>state</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nf>NextOrFailure</span><span class=p>(</span><span class=nx>hc</span><span class=p>.</span><span class=nf>Name</span><span class=p>(),</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nx>Next</span><span class=p>,</span><span class=w> </span><span class=nx>ctx</span><span class=p>,</span><span class=w> </span><span class=nx>w</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>TypeMX</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>a</span><span class=p>.</span><span class=nx>Answer</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nf>processMXRecord</span><span class=p>(</span><span class=nx>state</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nf>NextOrFailure</span><span class=p>(</span><span class=nx>hc</span><span class=p>.</span><span class=nf>Name</span><span class=p>(),</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nx>Next</span><span class=p>,</span><span class=w> </span><span class=nx>ctx</span><span class=p>,</span><span class=w> </span><span class=nx>w</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// This is really only supported for odd legacy issues. Per RFC 7208, SPF</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c1>// records must be TXT records</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=k>case</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>TypeSPF</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>a</span><span class=p>.</span><span class=nx>Answer</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nf>processSPFRecord</span><span class=p>(</span><span class=nx>state</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>plugin</span><span class=p>.</span><span class=nf>NextOrFailure</span><span class=p>(</span><span class=nx>hc</span><span class=p>.</span><span class=nf>Name</span><span class=p>(),</span><span class=w> </span><span class=nx>hc</span><span class=p>.</span><span class=nx>Next</span><span class=p>,</span><span class=w> </span><span class=nx>ctx</span><span class=p>,</span><span class=w> </span><span class=nx>w</span><span class=p>,</span><span class=w> </span><span class=nx>r</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><p>The flow of each <code>process*Record</code> function is simple. It goes something like this:</p><ul><li>Parse out the message ID and look it up from the database</li><li>Create a DNS response based on what options were set up for that message</li><li>Return that DNS response</li></ul><p>Let&rsquo;s use <code>processMXRecord</code> as the example, since it&rsquo;s the shortest. While MX records are technically for receiving mail, some mail servers look this up as an input to their reputation engines. In this case, we have three options:</p><ul><li><strong>No MX record</strong> - Don&rsquo;t return an MX record</li><li><strong>Invalid MX record</strong> - Return <code>invalid.mail.healthcheck.getgophish.com</code></li><li><strong>Valid MX record</strong> - Return the hostname of our email service, <code>mail.healthcheck.getgophish.com</code></li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-go data-lang=go><span class=line><span class=cl><span class=kd>func</span><span class=w> </span><span class=p>(</span><span class=nx>hc</span><span class=w> </span><span class=nx>HealthCheckPlugin</span><span class=p>)</span><span class=w> </span><span class=nf>processMXRecord</span><span class=p>(</span><span class=nx>state</span><span class=w> </span><span class=nx>request</span><span class=p>.</span><span class=nx>Request</span><span class=p>)</span><span class=w> </span><span class=p>([]</span><span class=nx>dns</span><span class=p>.</span><span class=nx>RR</span><span class=p>,</span><span class=w> </span><span class=kt>error</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>rrs</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=p>[]</span><span class=nx>dns</span><span class=p>.</span><span class=nx>RR</span><span class=p>{}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Get our message</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>messageID</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>strings</span><span class=p>.</span><span class=nf>Split</span><span class=p>(</span><span class=nx>state</span><span class=p>.</span><span class=nf>QName</span><span class=p>(),</span><span class=w> </span><span class=s>&#34;.&#34;</span><span class=p>)[</span><span class=mi>0</span><span class=p>]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>message</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nx>db</span><span class=p>.</span><span class=nf>GetMessage</span><span class=p>(</span><span class=nx>messageID</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>if</span><span class=w> </span><span class=nx>err</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=kc>nil</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>rrs</span><span class=p>,</span><span class=w> </span><span class=nx>err</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Create our DNS response</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>rr</span><span class=w> </span><span class=o>:=</span><span class=w> </span><span class=nb>new</span><span class=p>(</span><span class=nx>dns</span><span class=p>.</span><span class=nx>MX</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>rr</span><span class=p>.</span><span class=nx>Hdr</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>RR_Header</span><span class=p>{</span><span class=nx>Name</span><span class=p>:</span><span class=w> </span><span class=nx>state</span><span class=p>.</span><span class=nf>QName</span><span class=p>(),</span><span class=w> </span><span class=nx>Rrtype</span><span class=p>:</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nx>TypeMX</span><span class=p>,</span><span class=w> </span><span class=nx>Class</span><span class=p>:</span><span class=w> </span><span class=nx>state</span><span class=p>.</span><span class=nf>QClass</span><span class=p>()}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>rr</span><span class=p>.</span><span class=nx>Preference</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=mi>10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=c1>// Fill in the response based on the requested configuration</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>switch</span><span class=w> </span><span class=nx>message</span><span class=p>.</span><span class=nx>MessageConfiguration</span><span class=p>.</span><span class=nx>MX</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>case</span><span class=w> </span><span class=nx>db</span><span class=p>.</span><span class=nx>None</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=k>return</span><span class=w> </span><span class=nx>rrs</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>case</span><span class=w> </span><span class=nx>db</span><span class=p>.</span><span class=nx>HardFail</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>rr</span><span class=p>.</span><span class=nx>Mx</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nf>Fqdn</span><span class=p>(</span><span class=nx>fmt</span><span class=p>.</span><span class=nf>Sprintf</span><span class=p>(</span><span class=s>&#34;invalid.%s&#34;</span><span class=p>,</span><span class=w> </span><span class=nx>config</span><span class=p>.</span><span class=nx>Config</span><span class=p>.</span><span class=nx>EmailHostname</span><span class=p>))</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>case</span><span class=w> </span><span class=nx>db</span><span class=p>.</span><span class=nx>Pass</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>		</span><span class=nx>rr</span><span class=p>.</span><span class=nx>Mx</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nx>dns</span><span class=p>.</span><span class=nf>Fqdn</span><span class=p>(</span><span class=nx>config</span><span class=p>.</span><span class=nx>Config</span><span class=p>.</span><span class=nx>EmailHostname</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=nx>rrs</span><span class=w> </span><span class=p>=</span><span class=w> </span><span class=nb>append</span><span class=p>(</span><span class=nx>rrs</span><span class=p>,</span><span class=w> </span><span class=nx>rr</span><span class=p>)</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>	</span><span class=k>return</span><span class=w> </span><span class=nx>rrs</span><span class=p>,</span><span class=w> </span><span class=kc>nil</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 id=compiling-the-binary>Compiling the Binary</h4><p>After implementing the other functions, we&rsquo;re ready to compile our instance of the <code>coredns</code> binary. The first step is to edit the <code>plugin.cfg</code> file in the <code>github.com/coredns/coredns</code> directory to include our <code>healthcheck</code> plugin:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt><span class=line><span class=cl>healthcheck:github.com/gophish/healthcheck/dns
+</span></span></code></pre></div><p>In that same directory, we can build our new binary using <code>make</code>. We can move this binary into our <code>github.com/gophish/healthcheck</code> directory.</p><p>Finally, we need to write a <code>Corefile</code>, which is the configuration used by the <code>coredns</code> binary. Our <code>Corefile</code> is simple, and can be found here:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-txt data-lang=txt><span class=line><span class=cl>. {
+</span></span><span class=line><span class=cl>    healthcheck
+</span></span><span class=line><span class=cl>}
+</span></span></code></pre></div><p>And that&rsquo;s it! We can run our <code>coredns</code> binary, and it will automatically find and use our <code>Corefile</code>:</p><pre tabindex=0><code class=language-raw data-lang=raw>$ ./coredns -dns.port=1053
 goose: no migrations to run. current version: 20180620193535
 .:1053
 2018/09/02 18:27:05 [INFO] CoreDNS-1.1.4
 2018/09/02 18:27:05 [INFO] darwin/amd64, go1.10.2, 9c2dc7a1-dirty
 CoreDNS-1.1.4
-darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
-<p>Making a request, we can see the valid MX record being returned:</p>
-<div class="highlight"><pre class="chroma"><code class="language-raw" data-lang="raw">$ dig @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
+darwin/amd64, go1.10.2, 9c2dc7a1-dirty
+</code></pre><p>Making a request, we can see the valid MX record being returned:</p><pre tabindex=0><code class=language-raw data-lang=raw>$ dig @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
 
 ; &lt;&lt;&gt;&gt; DiG 9.10.6 &lt;&lt;&gt;&gt; @localhost -p 1053 mx 2ee7320f5339b71d8b953e73b025d4ad.mail.healthcheck.getgophish.com
 ; (2 servers found)
@@ -386,76 +120,10 @@ darwin/amd64, go1.10.2, 9c2dc7a1-dirty</code></pre></div>
 
 ;; Query time: 2 msec
 ;; SERVER: ::1#1053(::1)
-;; WHEN: Sun Sep 02 18</code></pre></div>
-<h3 id="moving-forward">Moving Forward</h3>
-
-<p>Getting programmatic DNS to work was a huge hurdle to overcome, and I&rsquo;m really excited with the results. With this in place, I can start building out the various handlers, making sure the right responses are returned.</p>
-
-<p>In the next post, I&rsquo;ll talk about the architecture of the project, showing how the overall Gophish infrastructure is organized. There&rsquo;s a lot of moving parts to this project, so expect more magic coming soon!</p>
-    </section>
-
-
-  <footer class="post-footer">
-
-
-    
-    <figure class="author-image">
-        <a class="img" href="https://jordan-wright.com/blog/" style="background-image: url(https://jordan-wright.com/blog/images/jordan-profile.jpg)"><span class="hidden">Jordan Wright's Picture</span></a>
-    </figure>
-    
-
-    
-
-
-
-
-
-<section class="author">
-  <h4><a href="https://jordan-wright.com/blog/">Jordan Wright</a></h4>
-  
-  <p>Security Researcher, Open-Source Developer.</p>
-  
-  <div class="author-meta">
-    <span class="author-location icon-location">San Antonio, Texas</span>
-    
-  </div>
-</section>
-
-
-
-    
-<section class="share">
-  <h4>Share this post</h4>
-  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Building%20Gophish%20Healthcheck%3a%20Part%20One&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f"
-      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-      <span class="hidden">Twitter</span>
-  </a>
-  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f"
-      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-      <span class="hidden">Facebook</span>
-  </a>
-  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f"
-     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-      <span class="hidden">Google+</span>
-  </a>
-</section>
-
-
-
-    
-
-
-
-
-  </footer>
-</article>
-
-</main>
-    </div>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/jquery.fitvids.js"></script>
-    <script type="text/javascript" src="https://jordan-wright.com/blog/js/index.js"></script>
-    
-</body>
-</html>
-
+;; WHEN: Sun Sep 02 18
+</code></pre><h3 id=moving-forward>Moving Forward</h3><p>Getting programmatic DNS to work was a huge hurdle to overcome, and I&rsquo;m really excited with the results. With this in place, I can start building out the various handlers, making sure the right responses are returned.</p><p>In the next post, I&rsquo;ll talk about the architecture of the project, showing how the overall Gophish infrastructure is organized. There&rsquo;s a lot of moving parts to this project, so expect more magic coming soon!</p></section><footer class=post-footer><figure class=author-image><a class=img href=https://jordan-wright.com/blog/ style=background-image:url(https://jordan-wright.com/blog/images/jordan-profile.jpg)><span class=hidden>Jordan Wright's Picture</span></a></figure><section class=author><h4><a href=https://jordan-wright.com/blog/>Jordan Wright</a></h4><p>Security Researcher, Open-Source Developer.</p><div class=author-meta><span class="author-location icon-location">Texas</span></div></section><section class=share><h4>Share this post</h4><a class=share-link href="https://twitter.com/intent/tweet?text=Building%20Gophish%20Healthcheck%3a%20Part%20One&nbsp;-&nbsp;Jordan%20Wright&amp;url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f" onclick='return window.open(this.href,"x-share","width=550,height=235"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18.244 2.25h3.308l-7.227 8.26 8.503 11.24h-6.68l-5.23-6.84-6.02 6.84H1.59l7.73-8.812L1.16 2.25h6.85l4.73 6.25 5.504-6.25zm-1.16 17.52h1.833L6.71 4.126H4.745L17.084 19.77z"/></svg>
+<span class=hidden>X</span>
+</a><a class=share-link href="https://news.ycombinator.com/submitlink?u=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f&amp;t=Building%20Gophish%20Healthcheck%3a%20Part%20One" onclick='return window.open(this.href,"hn-share","width=600,height=400"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M0 24V0h24v24H0zM6.951 5.896l4.112 7.708v5.064h1.583v-4.972l4.148-7.799h-1.749l-2.457 4.875c-.372.745-.688 1.434-.688 1.434s-.297-.708-.651-1.434L8.831 5.896h-1.88z"/></svg>
+<span class=hidden>Hacker News</span>
+</a><a class=share-link href="https://www.linkedin.com/sharing/share-offsite/?url=https%3a%2f%2fjordan-wright.com%2fblog%2fpost%2f2018-09-02-building-email-healthcheck%2f" onclick='return window.open(this.href,"linkedin-share","width=600,height=500"),!1'><svg class="share-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853.0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.6.0 4.264 2.37 4.264 5.455v6.286zM5.337 7.433a2.062 2.062.0 110-4.123 2.062 2.062.0 010 4.123zM6.814 20.452H3.861V9h2.953v11.452zM22.225.0H1.771C.792.0.0.774.0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2.0 22.222.0z"/></svg>
+<span class=hidden>LinkedIn</span></a></section></footer></article></main></div><script type=text/javascript src=https://jordan-wright.com/blog/js/jquery.js></script><script type=text/javascript src=https://jordan-wright.com/blog/js/index.js></script></body></html>
