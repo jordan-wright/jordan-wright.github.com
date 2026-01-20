@@ -1629,6 +1629,24 @@ body:not(.post-template) .post-title {
    ========================================================================== */
 
 @media only screen and (max-width: 900px) {
+    .post-content img {
+        max-width: 100%;
+        margin: 1.6em 0;
+        left: 0;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none;
+    }
+
+    .post-content object[type="image/svg+xml"] {
+        width: 100%;
+        max-width: 100%;
+        margin: 1.6em 0;
+        left: 0;
+        -webkit-transform: none;
+        -ms-transform: none;
+        transform: none;
+    }
     :root {
         --type-xxl: 3.8rem;
         --type-xl: 2.8rem;
