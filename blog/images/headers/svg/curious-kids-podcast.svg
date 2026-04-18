@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000px" height="300px" viewBox="0 0 1000 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>curious-kids-podcast</title>
+    <g id="curious-kids-podcast" stroke="none" fill="none" fill-rule="evenodd" stroke-width="1">
+        <g id="yoto_podcast">
+            <rect id="rect3955" fill="#F45436" x="0" y="0" width="1000" height="300" rx="5"></rect>
+            <rect id="Rectangle-3" stroke="#FFFFFF" stroke-width="2" x="484" y="97" width="33" height="15" rx="3"></rect>
+            <path d="M500,50.00029 L412.5,100.00029 L412.5,200.00029 L500,250.0003 L587.5,200.00029 L587.5,100.00029 L500,50.00029 Z M499.38037,64.6323 L574.60589,107.6376 L574.60589,193.6189 L499.38037,236.6095 L424.15486,193.6189 L424.15486,107.6376 L499.38037,64.6323 L499.38037,64.6323 Z" id="path3075" fill="#FFFFFF" fill-rule="nonzero"></path>
+            <rect id="Rectangle" fill="#FFFFFF" x="460" y="110" width="80" height="80" rx="10"></rect>
+            <rect id="Rectangle-2" fill="#F45436" x="508" y="158" width="20" height="20" rx="3"></rect>
+            <circle id="Oval" fill="#F45436" cx="517.5" cy="138.5" r="11.5"></circle>
+            <circle id="Oval" fill="#F45436" cx="483.5" cy="138.5" r="11.5"></circle>
+            <g id="Group" transform="translate(471, 158)" fill="#F45436">
+                <g id="Speaker-row" transform="translate(22.7273, 1.5)">
+                    <ellipse id="Oval" cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                </g>
+                <g id="Speaker-row" transform="translate(0, 1.5)">
+                    <ellipse id="Oval" cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                </g>
+                <g id="Oval" transform="translate(18.9394, 0)">
+                    <ellipse cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse cx="1.13636364" cy="19.875" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                </g>
+                <g transform="translate(11.3636, 0)">
+                    <g id="Speaker-row" transform="translate(3.7879, 1.5)">
+                        <ellipse id="Oval" cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                    </g>
+                    <g id="Oval">
+                        <ellipse cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="19.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                    </g>
+                </g>
+                <g transform="translate(3.7879, 0)">
+                    <g id="Speaker-row" transform="translate(3.7879, 1.5)">
+                        <ellipse id="Oval" cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse id="Oval" cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                    </g>
+                    <g id="Oval">
+                        <ellipse cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="19.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                        <ellipse cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                    </g>
+                </g>
+                <g id="Speaker-row" transform="translate(18.9394, 0)">
+                    <ellipse id="Oval" cx="1.13636364" cy="16.125" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="12.375" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="8.625" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="4.875" rx="1.13636364" ry="1.125"></ellipse>
+                    <ellipse id="Oval" cx="1.13636364" cy="1.125" rx="1.13636364" ry="1.125"></ellipse>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

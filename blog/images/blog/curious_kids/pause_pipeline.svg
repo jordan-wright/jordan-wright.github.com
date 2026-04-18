@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="540" viewBox="0 0 1200 540">
+  <defs>
+    <style>
+      .label { font: 16px "Trebuchet MS", "Arial", sans-serif; fill: #1f2937; }
+      .small { font: 14px "Trebuchet MS", "Arial", sans-serif; fill: #1f2937; }
+      .mono { font: 13px "Trebuchet MS", "Arial", sans-serif; fill: #1f2937; }
+      .box { fill: #fff7e6; stroke: #2f2f2f; stroke-width: 2; }
+      .box-alt { fill: #e9f5ff; stroke: #2f2f2f; stroke-width: 2; }
+      .box-green { fill: #eaf7ee; stroke: #2f2f2f; stroke-width: 2; }
+      .box-gray { fill: #f3f4f6; stroke: #2f2f2f; stroke-width: 2; }
+      .arrow { stroke: #2f2f2f; stroke-width: 2; fill: none; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f2f2f" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="540" fill="#ffffff" />
+
+  <rect class="box" x="60" y="40" width="1080" height="100" rx="14" />
+  <text class="label" x="90" y="72">Input sentence:</text>
+  <text class="mono" x="90" y="100">[playful][curious] If you could use a starlight time machine to visit any moment in space, what would you want to see?</text>
+<text class="mono" x="90" y="122">[long pause] [excited] That sounds amazing—I love your choice!</text>
+
+  <line class="arrow" x1="600" y1="140" x2="230" y2="180" marker-end="url(#arrow)" />
+  <line class="arrow" x1="600" y1="140" x2="600" y2="180" marker-end="url(#arrow)" />
+  <line class="arrow" x1="600" y1="140" x2="970" y2="180" marker-end="url(#arrow)" />
+
+  <rect class="box-alt" x="60" y="180" width="340" height="80" rx="14" />
+  <text class="small" x="230" y="215" text-anchor="middle">Chunk 1 (text)</text>
+  <text class="small" x="230" y="238" text-anchor="middle">Question sentence</text>
+
+  <rect class="box-gray" x="430" y="180" width="340" height="80" rx="14" />
+  <text class="small" x="600" y="215" text-anchor="middle">Chunk 2 (pause)</text>
+  <text class="small" x="600" y="238" text-anchor="middle">pause6s.mp3</text>
+
+  <rect class="box-alt" x="800" y="180" width="340" height="80" rx="14" />
+  <text class="small" x="970" y="215" text-anchor="middle">Chunk 3 (text)</text>
+  <text class="small" x="970" y="238" text-anchor="middle">Affirmation</text>
+
+  <line class="arrow" x1="230" y1="260" x2="230" y2="300" marker-end="url(#arrow)" />
+  <line class="arrow" x1="970" y1="260" x2="970" y2="300" marker-end="url(#arrow)" />
+
+  <rect class="box-green" x="80" y="310" width="300" height="80" rx="14" />
+  <text class="small" x="230" y="345" text-anchor="middle">ElevenLabs TTS</text>
+  <text class="small" x="230" y="368" text-anchor="middle">Chunk 1 audio</text>
+
+  <rect class="box-green" x="820" y="310" width="300" height="80" rx="14" />
+  <text class="small" x="970" y="345" text-anchor="middle">ElevenLabs TTS</text>
+  <text class="small" x="970" y="368" text-anchor="middle">Chunk 3 audio</text>
+
+  <line class="arrow" x1="230" y1="390" x2="230" y2="430" marker-end="url(#arrow)" />
+  <line class="arrow" x1="600" y1="260" x2="600" y2="430" marker-end="url(#arrow)" />
+  <line class="arrow" x1="970" y1="390" x2="970" y2="430" marker-end="url(#arrow)" />
+
+  <rect class="box" x="200" y="430" width="800" height="80" rx="14" />
+  <text class="label" x="600" y="465" text-anchor="middle">Stitch audio together</text>
+  <text class="small" x="600" y="488" text-anchor="middle">Chunk 1 MP3 + pause6s.mp3 + Chunk 3 MP3</text>
+</svg>

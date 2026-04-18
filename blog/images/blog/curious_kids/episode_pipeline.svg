@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <defs>
+    <style>
+      .label { font: 16px "Trebuchet MS", "Arial", sans-serif; fill: #1f2937; }
+      .small { font: 14px "Trebuchet MS", "Arial", sans-serif; fill: #1f2937; }
+      .box { fill: #fff7e6; stroke: #2f2f2f; stroke-width: 2; }
+      .box-alt { fill: #e9f5ff; stroke: #2f2f2f; stroke-width: 2; }
+      .box-green { fill: #eaf7ee; stroke: #2f2f2f; stroke-width: 2; }
+      .arrow { stroke: #2f2f2f; stroke-width: 2; fill: none; }
+      .sketch { stroke: #2f2f2f; stroke-width: 2; fill: none; opacity: 0.35; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f2f2f" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="520" fill="#ffffff" />
+
+  <!-- Topic selection -->
+  <rect class="box" x="40" y="60" width="200" height="80" rx="14" />
+  <text class="label" x="140" y="95" text-anchor="middle">OpenAI picks</text>
+  <text class="label" x="140" y="118" text-anchor="middle">today's topic</text>
+
+  <line class="arrow" x1="240" y1="100" x2="320" y2="100" marker-end="url(#arrow)" />
+
+  <!-- Generate sections -->
+  <rect class="box-alt" x="320" y="60" width="220" height="90" rx="14" />
+  <text class="label" x="430" y="90" text-anchor="middle">Generate</text>
+  <text class="label" x="430" y="112" text-anchor="middle">sections using</text>
+  <text class="label" x="430" y="134" text-anchor="middle">OpenAI</text>
+
+  <!-- Fan out -->
+
+  <rect class="box" x="250" y="200" width="160" height="60" rx="12" />
+  <text class="small" x="330" y="235" text-anchor="middle">Introduction</text>
+
+  <rect class="box" x="430" y="200" width="160" height="60" rx="12" />
+  <text class="small" x="510" y="235" text-anchor="middle">Deep-Dive</text>
+
+  <rect class="box" x="610" y="200" width="160" height="60" rx="12" />
+  <text class="small" x="690" y="235" text-anchor="middle">Brain game</text>
+
+  <rect class="box" x="790" y="200" width="160" height="60" rx="12" />
+  <text class="small" x="870" y="235" text-anchor="middle">Outro</text>
+
+  <line class="arrow" x1="430" y1="150" x2="330" y2="200" marker-end="url(#arrow)" />
+  <line class="arrow" x1="430" y1="150" x2="510" y2="200" marker-end="url(#arrow)" />
+  <line class="arrow" x1="430" y1="150" x2="690" y2="200" marker-end="url(#arrow)" />
+  <line class="arrow" x1="430" y1="150" x2="870" y2="200" marker-end="url(#arrow)" />
+
+  <!-- TTS per section -->
+  <line class="arrow" x1="330" y1="260" x2="330" y2="310" marker-end="url(#arrow)" />
+  <line class="arrow" x1="510" y1="260" x2="510" y2="310" marker-end="url(#arrow)" />
+  <line class="arrow" x1="690" y1="260" x2="690" y2="310" marker-end="url(#arrow)" />
+  <line class="arrow" x1="870" y1="260" x2="870" y2="310" marker-end="url(#arrow)" />
+
+  <rect class="box-green" x="300" y="320" width="640" height="70" rx="14" />
+  <text class="label" x="620" y="355" text-anchor="middle">Text-to-speech from ElevenLabs for each section</text>
+  <text class="small" x="620" y="377" text-anchor="middle">(four MP3s)</text>
+
+  <!-- Assemble audio -->
+  <line class="arrow" x1="620" y1="390" x2="620" y2="420" marker-end="url(#arrow)" />
+
+  <rect class="box" x="430" y="430" width="380" height="70" rx="14" />
+  <text class="label" x="620" y="462" text-anchor="middle">Assemble audio</text>
+  <text class="small" x="620" y="484" text-anchor="middle">intro music + sections + outro music</text>
+
+  <!-- Final MP3 -->
+  <line class="arrow" x1="810" y1="465" x2="1030" y2="465" marker-end="url(#arrow)" />
+  <rect class="box-alt" x="1030" y="430" width="140" height="70" rx="14" />
+  <text class="label" x="1100" y="454" text-anchor="middle">Upload final</text>
+  <text class="label" x="1100" y="476" text-anchor="middle">episode MP3</text>
+</svg>
