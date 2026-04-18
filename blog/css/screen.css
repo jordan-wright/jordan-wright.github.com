@@ -599,6 +599,14 @@ body.nav-opened .site-wrapper {
 
 .home-template .main-header {
     text-align: left;
+    height: 60vh;
+    min-height: 320px;
+}
+
+.home-template .main-header.no-cover {
+    height: auto;
+    min-height: 0;
+    padding: 5rem 0 4rem 0;
 }
 
 .home-template .main-header-content {
